@@ -1,14 +1,15 @@
 package gargoyle.ct;
 
 import java.io.Serializable;
+import java.text.MessageFormat;
 import java.util.concurrent.TimeUnit;
 
 public class CTConfig implements Serializable {
 	private static final long serialVersionUID = -898699928298432564L;
-
 	private long whole;
 	private long block;
 	private long warn;
+	private String name;
 
 	public CTConfig(final long whole, final long block, final long warn) {
 		super();
@@ -19,6 +20,7 @@ public class CTConfig implements Serializable {
 
 	public CTConfig(final TimeUnit unit, final long whole, final long block, final long warn) {
 		this(CTUtil.toMillis(unit, whole), CTUtil.toMillis(unit, block), CTUtil.toMillis(unit, warn));
+		this.name = MessageFormat.format("{0,number,00}/{1,number,00}", this.getWhole(unit), this.getBlock(unit));
 	}
 
 	@Override
@@ -51,6 +53,10 @@ public class CTConfig implements Serializable {
 
 	public long getBlock(final TimeUnit unit) {
 		return CTUtil.fromMillis(unit, this.block);
+	}
+
+	public String getName() {
+		return this.name;
 	}
 
 	public long getWarn() {

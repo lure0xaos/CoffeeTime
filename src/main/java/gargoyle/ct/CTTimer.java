@@ -6,9 +6,9 @@ public class CTTimer {
 	private final Timer timer;
 	private final CTTimerTask timerTask;
 
-	public CTTimer() {
+	public CTTimer(final CTTaskUpdatable... updatables) {
 		this.timer = new Timer(CTTimer.class.getName(), true);
-		this.timerTask = new CTTimerTask();
+		this.timerTask = new CTTimerTask(updatables);
 		this.timer.scheduleAtFixedRate(this.timerTask, 100, 500);
 	}
 

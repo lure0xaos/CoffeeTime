@@ -12,7 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JWindow;
 import javax.swing.SwingConstants;
 
-public class CTBlocker extends JWindow {
+public class CTBlocker extends JWindow implements CTTaskUpdatable {
 	private static final long serialVersionUID = 1L;
 	private final JLabel lblMain;
 	private final JLabel lblInfo;
@@ -45,6 +45,7 @@ public class CTBlocker extends JWindow {
 		return label;
 	}
 
+	@SuppressWarnings("static-method")
 	private JLabel createMainLabel() {
 		final JLabel label = new JLabel();
 		label.setOpaque(true);
@@ -67,6 +68,27 @@ public class CTBlocker extends JWindow {
 	}
 
 	@Override
+	public void doUpdate(final CTTask task) {
+		this.lblInfo.setText(CTUtil.formatHHMMSS(CTUtil.currentTimeMillis()));
+		if (task.isReady()) {
+			final long currentMillis = CTUtil.currentTimeMillis();
+			if (task.isBlocked(currentMillis)) {
+				this.setVisible(true);
+				this.setForeground(Color.WHITE);
+				this.setText(CTUtil.formatMMSS(CTUtil.timeRemainsTo(currentMillis, task.getBlockEnd(currentMillis))));
+			}
+			if (task.isWarn(currentMillis)) {
+				this.setVisible(true);
+				this.setForeground(Color.GREEN);
+				this.setText(CTUtil.formatMMSS(CTUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis))));
+			}
+			if (task.isSleeping(currentMillis)) {
+				this.setVisible(false);
+			}
+		}
+	}
+
+	@Override
 	public void setBackground(final Color color) {
 		this.lblMain.setBackground(color);
 	}
@@ -78,7 +100,12 @@ public class CTBlocker extends JWindow {
 
 	public void setText(final String text) {
 		this.lblMain.setText(text);
-		this.lblInfo.setText(CTUtil.formatHHMMSS(CTUtil.currentTimeMillis()));
 		this.repaint();
+	}
+
+	@Override
+	public void setVisible(final boolean b) {
+		super.setVisible(b);
+		this.toFront();
 	}
 }
