@@ -6,6 +6,11 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public final class CTUtil {
+	private static final String SS = "ss";
+	private static final String MM_SS = "mm:ss";
+	private static final String MM = "mm";
+	private static final String HH_MM_SS = "HH:mm:ss";
+
 	public static final long currentTimeMillis() {
 		return new Date().getTime();
 	}
@@ -19,19 +24,19 @@ public final class CTUtil {
 	}
 
 	public static String formatHHMMSS(final long currentMillis) {
-		return CTUtil.format("hh:mm:ss", currentMillis);
+		return CTUtil.format(CTUtil.HH_MM_SS, currentMillis);
 	}
 
 	public static String formatMM(final long currentMillis) {
-		return CTUtil.format("mm", currentMillis);
+		return CTUtil.format(MM, currentMillis);
 	}
 
 	public static String formatMMSS(final long currentMillis) {
-		return CTUtil.format("mm:ss", currentMillis);
+		return CTUtil.format(MM_SS, currentMillis);
 	}
 
 	public static String formatSS(final long currentMillis) {
-		return CTUtil.format("ss", currentMillis);
+		return CTUtil.format(SS, currentMillis);
 	}
 
 	public static long fromMillis(final TimeUnit unit, final long millis) {
@@ -45,6 +50,10 @@ public final class CTUtil {
 	public static boolean isBetween(final TimeUnit unit, final long currentMillis, final long start, final long end) {
 		return (CTUtil.fromMillis(unit, currentMillis) >= CTUtil.fromMillis(unit, start))
 				&& (CTUtil.fromMillis(unit, currentMillis) <= CTUtil.fromMillis(unit, end));
+	}
+
+	public static boolean isInPeriod(final TimeUnit unit, final long currentMillis, final int period, final int delay) {
+		return (CTUtil.fromMillis(unit, currentMillis) % period) < delay;
 	}
 
 	public static long make() {
@@ -62,8 +71,9 @@ public final class CTUtil {
 		return calendar.getTimeInMillis();
 	}
 
-	public static boolean isInPeriod(final TimeUnit unit, final long currentMillis, final int period, final int delay) {
-		return CTUtil.fromMillis(unit, currentMillis) % period < delay;
+	public static long parseHHMMSS(final String string) {
+		final String[] pair = string.split(":");
+		return CTUtil.make(Integer.parseInt(pair[0]), Integer.parseInt(pair[1]), Integer.parseInt(pair[2]));
 	}
 
 	public static long timeElapsedFrom(final long currentMillis, final long begin) {

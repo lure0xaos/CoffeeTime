@@ -2,13 +2,13 @@ package gargoyle.ct;
 
 import java.util.Timer;
 
-public class CTTimer implements FakeTime {
+public class CTTimer {
 	private final Timer timer;
 	private final CTTimerTask timerTask;
 
-	public CTTimer(final CTTaskUpdatable... updatables) {
+	public CTTimer(final TimeHelper timeHelper, final CTTaskUpdatable... updatables) {
 		this.timer = new Timer(CTTimer.class.getName(), true);
-		this.timerTask = new CTTimerTask(updatables);
+		this.timerTask = new CTTimerTask(timeHelper, updatables);
 		this.timer.scheduleAtFixedRate(this.timerTask, 100, 500);
 	}
 
@@ -16,16 +16,6 @@ public class CTTimer implements FakeTime {
 		final CTTask task = this.timerTask.getTask();
 		task.setConfig(config);
 		task.setStarted(currentMillis);
-	}
-
-	@Override
-	public long getFakeTime() {
-		return this.timerTask.getFakeTime();
-	}
-
-	@Override
-	public void setFakeTime(final long fakeTime) {
-		this.timerTask.setFakeTime(fakeTime);
 	}
 
 	public void terminate() {

@@ -5,29 +5,35 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class CT implements CTApp, FakeTime {
+public class CT implements CTApp {
 	public static void main(final String[] args) {
-		new CT().start();
+		final CT app = new CT();
+		if ((args != null) && (args.length == 1)) {
+			app.setFakeTime(CTUtil.parseHHMMSS(args[0]));
+			app.blocker.debug(true);
+		}
+		app.start();
 	}
 
 	private final CTTimer timer;
 	private final CTControlActions control;
 	private final CTBlocker blocker;
 	private final ResourceBundle messages;
-	private final long fakeTime = 0;
+	private final TimeHelper timeHelper;
 
 	private CT() {
+		this.timeHelper = new CTTimeHelper();
 		this.messages = ResourceBundle.getBundle("messages");
 		final CTBlocker pBlocker = new CTBlocker(this);
 		final CTControl pControl = new CTControl(this);
-		this.timer = new CTTimer(pBlocker, pControl);
+		this.timer = new CTTimer(this.timeHelper, pBlocker, pControl);
 		this.blocker = pBlocker;
 		this.control = pControl;
 	}
 
 	@Override
 	public void arm(final CTConfig config) {
-		this.timer.arm(config, this.fakeTime == 0 ? CTUtil.currentTimeMillis() : this.fakeTime);
+		this.timer.arm(config, this.timeHelper.currentTimeMillis());
 	}
 
 	@Override
@@ -43,17 +49,17 @@ public class CT implements CTApp, FakeTime {
 	}
 
 	@Override
-	public long getFakeTime() {
-		return 0;
-	}
-
-	@Override
 	public String getMessage(final String message, final Object... args) {
-		return MessageFormat.format(this.messages.getString(message), args);
+		final String pattern = this.messages.getString(message);
+		try {
+			return MessageFormat.format(pattern, args);
+		} catch (final IllegalArgumentException ex) {
+			throw new RuntimeException("can't parse message:" + message + "->" + pattern + "(" + args + ")", ex);
+		}
 	}
 
-	@Override
-	public void setFakeTime(final long fakeTime) {
+	private void setFakeTime(final long fakeTime) {
+		this.timeHelper.setFakeTime(fakeTime);
 	}
 
 	private void start() {

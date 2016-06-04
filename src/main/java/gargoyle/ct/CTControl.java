@@ -166,6 +166,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
 		} else {
 			this.controlWindow.setToolTipText(CTUtil.formatHHMMSS(currentMillis));
 		}
+		System.out.println(CTUtil.formatHHMMSS(currentMillis));
 	}
 
 	@Override
