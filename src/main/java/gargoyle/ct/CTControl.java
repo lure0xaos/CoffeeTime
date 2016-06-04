@@ -12,7 +12,6 @@ import java.awt.event.MouseMotionAdapter;
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
@@ -21,6 +20,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -54,6 +54,14 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
 		private final JLabel label;
 
 		public CTControlWindow(final URL imageURL, final JPopupMenu menu) {
+			super(new JFrame() {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public boolean isShowing() {
+					return true;
+				}
+			});
 			if (imageURL == null) {
 				throw new IllegalArgumentException("image not found");
 			}
@@ -100,14 +108,12 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
 	private static final String STR_EXIT = "exit";
 	private static final String URL_ICON = "/icon64.png";
 	private final ButtonGroup group;
-	final CTControlActions app;
-	private final ResourceBundle messages;
+	final CTApp app;
 	private final CTControlWindow controlWindow;
 
-	public CTControl(final CTControlActions app) {
+	public CTControl(final CTApp app) {
 		this.app = app;
 		this.group = new ButtonGroup();
-		this.messages = ResourceBundle.getBundle("messages");
 		this.controlWindow = new CTControlWindow(CTControl.class.getResource(CTControl.URL_ICON),
 				this.createMenu(app.getConfigs()));
 		this.controlWindow.setVisible(true);
@@ -131,7 +137,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
 			menu.add(menuItem);
 		}
 		menu.add(new JSeparator(SwingConstants.HORIZONTAL));
-		menu.add(new JMenuItem(new AbstractAction(this.messages.getString(CTControl.STR_EXIT)) {
+		menu.add(new JMenuItem(new AbstractAction(this.app.getMessage(CTControl.STR_EXIT)) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

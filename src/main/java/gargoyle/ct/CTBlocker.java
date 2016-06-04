@@ -7,12 +7,15 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JLabel;
 import javax.swing.JWindow;
 import javax.swing.SwingConstants;
 
 public class CTBlocker extends JWindow implements CTTaskUpdatable {
+	private static final String MSG_WARN = "warn_w";
+	private static final String MSG_BLOCKED = "blocked_w";
 	private static final long serialVersionUID = 1L;
 	private final JLabel lblMain;
 	private final JLabel lblInfo;
@@ -23,8 +26,10 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
 			CTBlocker.this.dispose();
 		}
 	};
+	private final MessageProvider app;
 
-	public CTBlocker() {
+	public CTBlocker(final MessageProvider app) {
+		this.app = app;
 		this.setAlwaysOnTop(true);
 		// this.setType(Type.UTILITY);
 		this.setBounds(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
@@ -34,6 +39,7 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
 		this.getContentPane().add(this.lblInfo = this.createInfoLabel(), BorderLayout.SOUTH);
 	}
 
+	@SuppressWarnings("static-method")
 	private JLabel createInfoLabel() {
 		final JLabel label = new JLabel();
 		label.setOpaque(true);
@@ -75,12 +81,14 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
 			if (task.isBlocked(currentMillis)) {
 				this.setVisible(true);
 				this.setForeground(Color.WHITE);
-				this.setText(CTUtil.formatMMSS(CTUtil.timeRemainsTo(currentMillis, task.getBlockEnd(currentMillis))));
+				this.setText(this.app.getMessage(CTBlocker.MSG_BLOCKED,
+						CTUtil.formatMMSS(CTUtil.timeRemainsTo(currentMillis, task.getBlockEnd(currentMillis)))));
 			}
 			if (task.isWarn(currentMillis)) {
-				this.setVisible(true);
+				this.setVisible(CTUtil.isInPeriod(TimeUnit.SECONDS, currentMillis, 60, 3));
 				this.setForeground(Color.GREEN);
-				this.setText(CTUtil.formatMMSS(CTUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis))));
+				this.setText(this.app.getMessage(CTBlocker.MSG_WARN,
+						CTUtil.formatMMSS(CTUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis)))));
 			}
 			if (task.isSleeping(currentMillis)) {
 				this.setVisible(false);

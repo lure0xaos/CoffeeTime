@@ -20,7 +20,8 @@ public class CTConfig implements Serializable {
 
 	public CTConfig(final TimeUnit unit, final long whole, final long block, final long warn) {
 		this(CTUtil.toMillis(unit, whole), CTUtil.toMillis(unit, block), CTUtil.toMillis(unit, warn));
-		this.name = MessageFormat.format("{0,number,00}/{1,number,00}", this.getWhole(unit), this.getBlock(unit));
+		this.name = MessageFormat.format("{0,number,00}/{1,number,00}", Long.valueOf(this.getWhole(unit)),
+				Long.valueOf(this.getBlock(unit)));
 	}
 
 	@Override

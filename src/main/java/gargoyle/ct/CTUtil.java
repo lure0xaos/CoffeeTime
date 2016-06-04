@@ -42,6 +42,11 @@ public final class CTUtil {
 		return (currentMillis >= start) && (currentMillis <= end);
 	}
 
+	public static boolean isBetween(final TimeUnit unit, final long currentMillis, final long start, final long end) {
+		return (CTUtil.fromMillis(unit, currentMillis) >= CTUtil.fromMillis(unit, start))
+				&& (CTUtil.fromMillis(unit, currentMillis) <= CTUtil.fromMillis(unit, end));
+	}
+
 	public static long make() {
 		final Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.MILLISECOND, 0);
@@ -55,6 +60,10 @@ public final class CTUtil {
 		calendar.set(Calendar.SECOND, seconds);
 		calendar.set(Calendar.MILLISECOND, 0);
 		return calendar.getTimeInMillis();
+	}
+
+	public static boolean isInPeriod(final TimeUnit unit, final long currentMillis, final int period, final int delay) {
+		return CTUtil.fromMillis(unit, currentMillis) % period < delay;
 	}
 
 	public static long timeElapsedFrom(final long currentMillis, final long begin) {
