@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class CT implements CTApp {
+public class CT implements CTApp, FakeTime {
 	public static void main(final String[] args) {
 		new CT().start();
 	}
@@ -14,6 +14,7 @@ public class CT implements CTApp {
 	private final CTControlActions control;
 	private final CTBlocker blocker;
 	private final ResourceBundle messages;
+	private final long fakeTime = 0;
 
 	private CT() {
 		this.messages = ResourceBundle.getBundle("messages");
@@ -26,7 +27,7 @@ public class CT implements CTApp {
 
 	@Override
 	public void arm(final CTConfig config) {
-		this.timer.arm(config);
+		this.timer.arm(config, this.fakeTime == 0 ? CTUtil.currentTimeMillis() : this.fakeTime);
 	}
 
 	@Override
@@ -42,8 +43,17 @@ public class CT implements CTApp {
 	}
 
 	@Override
+	public long getFakeTime() {
+		return 0;
+	}
+
+	@Override
 	public String getMessage(final String message, final Object... args) {
 		return MessageFormat.format(this.messages.getString(message), args);
+	}
+
+	@Override
+	public void setFakeTime(final long fakeTime) {
 	}
 
 	private void start() {

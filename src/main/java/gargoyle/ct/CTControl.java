@@ -149,9 +149,8 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
 	}
 
 	@Override
-	public void doUpdate(final CTTask task) {
+	public void doUpdate(final CTTask task, final long currentMillis) {
 		if (task.isReady()) {
-			final long currentMillis = CTUtil.currentTimeMillis();
 			if (task.isBlocked(currentMillis)) {
 				this.controlWindow.setToolTipText(
 						CTUtil.formatMMSS(CTUtil.timeRemainsTo(currentMillis, task.getBlockEnd(currentMillis))));
@@ -165,7 +164,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
 						CTUtil.formatMMSS(CTUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis))));
 			}
 		} else {
-			this.controlWindow.setToolTipText(CTUtil.formatHHMMSS(CTUtil.currentTimeMillis()));
+			this.controlWindow.setToolTipText(CTUtil.formatHHMMSS(currentMillis));
 		}
 	}
 

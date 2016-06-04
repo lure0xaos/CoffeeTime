@@ -74,10 +74,9 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
 	}
 
 	@Override
-	public void doUpdate(final CTTask task) {
-		this.lblInfo.setText(CTUtil.formatHHMMSS(CTUtil.currentTimeMillis()));
+	public void doUpdate(final CTTask task, final long currentMillis) {
+		this.lblInfo.setText(CTUtil.formatHHMMSS(currentMillis));
 		if (task.isReady()) {
-			final long currentMillis = CTUtil.currentTimeMillis();
 			if (task.isBlocked(currentMillis)) {
 				this.setVisible(true);
 				this.setForeground(Color.WHITE);
