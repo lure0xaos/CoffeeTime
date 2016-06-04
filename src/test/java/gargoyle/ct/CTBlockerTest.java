@@ -19,7 +19,7 @@ public class CTBlockerTest implements MessageProvider {
 
 	@Override
 	public String getMessage(final String message, final Object... args) {
-		return MessageFormat.format(this.messages.getString(message), args);
+		return this.messages == null ? null : MessageFormat.format(this.messages.getString(message), args);
 	}
 
 	@Before
@@ -35,9 +35,11 @@ public class CTBlockerTest implements MessageProvider {
 
 	@Test
 	public void testBlocker() {
-		this.blocker.debug(true);
-		this.blocker.setText("00:00");
-		this.blocker.setVisible(true);
-		this.blocker.toFront();
+		if (this.blocker != null) {
+			this.blocker.debug(true);
+			this.blocker.setText("00:00");
+			this.blocker.setVisible(true);
+			this.blocker.toFront();
+		}
 	}
 }

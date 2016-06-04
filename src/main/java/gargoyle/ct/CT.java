@@ -54,7 +54,8 @@ public class CT implements CTApp {
 		try {
 			return MessageFormat.format(pattern, args);
 		} catch (final IllegalArgumentException ex) {
-			throw new RuntimeException("can't parse message:" + message + "->" + pattern + "(" + args + ")", ex);
+			throw new RuntimeException(
+					"can't parse message:" + message + "->" + pattern + "(" + Arrays.toString(args) + ")", ex);
 		}
 	}
 

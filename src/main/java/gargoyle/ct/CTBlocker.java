@@ -19,14 +19,14 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
 	private static final long serialVersionUID = 1L;
 	private final JLabel lblMain;
 	private final JLabel lblInfo;
-	private final MouseAdapter disposer = new MouseAdapter() {
+	private transient MouseAdapter disposer = new MouseAdapter() {
 		@Override
 		public void mouseClicked(final MouseEvent e) {
 			CTBlocker.this.setVisible(false);
 			CTBlocker.this.dispose();
 		}
 	};
-	private final MessageProvider app;
+	private transient MessageProvider app;
 
 	public CTBlocker(final MessageProvider app) {
 		this.app = app;

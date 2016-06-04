@@ -6,9 +6,6 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +24,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import javax.swing.JWindow;
 import javax.swing.SwingConstants;
-import javax.swing.ToolTipManager;
 
 public class CTControl implements CTControlActions, CTTaskUpdatable {
 	private final class ConfigAction extends AbstractAction {
@@ -49,7 +45,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
 		}
 	}
 
-	private final class CTControlWindow extends JWindow {
+	private static final class CTControlWindow extends JWindow {
 		private static final long serialVersionUID = 1L;
 		private final JLabel label;
 
@@ -70,23 +66,23 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
 			final Container pane = window.getContentPane();
 			pane.setLayout(new BorderLayout());
 			this.label = new JLabel(new ImageIcon(imageURL));
-			ToolTipManager.sharedInstance().setEnabled(true);
-			ToolTipManager.sharedInstance().setLightWeightPopupEnabled(true);
-			ToolTipManager.sharedInstance().setInitialDelay(100);
-			ToolTipManager.sharedInstance().setReshowDelay(100);
-			ToolTipManager.sharedInstance().setDismissDelay(10000);
-			this.label.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseEntered(final MouseEvent e) {
-					ToolTipManager.sharedInstance().mouseEntered(e);
-				}
-			});
-			this.label.addMouseMotionListener(new MouseMotionAdapter() {
-				@Override
-				public void mouseMoved(final MouseEvent e) {
-					ToolTipManager.sharedInstance().mouseMoved(e);
-				}
-			});
+			// ToolTipManager.sharedInstance().setEnabled(true);
+			// ToolTipManager.sharedInstance().setLightWeightPopupEnabled(true);
+			// ToolTipManager.sharedInstance().setInitialDelay(100);
+			// ToolTipManager.sharedInstance().setReshowDelay(100);
+			// ToolTipManager.sharedInstance().setDismissDelay(10000);
+			// this.label.addMouseListener(new MouseAdapter() {
+			// @Override
+			// public void mouseEntered(final MouseEvent e) {
+			// ToolTipManager.sharedInstance().mouseEntered(e);
+			// }
+			// });
+			// this.label.addMouseMotionListener(new MouseMotionAdapter() {
+			// @Override
+			// public void mouseMoved(final MouseEvent e) {
+			// ToolTipManager.sharedInstance().mouseMoved(e);
+			// }
+			// });
 			pane.add(this.label, BorderLayout.CENTER);
 			this.label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 			window.pack();
