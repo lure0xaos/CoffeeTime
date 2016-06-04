@@ -11,7 +11,7 @@ public class CTTask {
 				this.getConfig().getWhole());
 	}
 
-	private long getBlockStart(final long currentMillis) {
+	public long getBlockStart(final long currentMillis) {
 		return this.getBlockEnd(currentMillis) - this.getConfig().getBlock();
 	}
 
@@ -32,7 +32,7 @@ public class CTTask {
 		return CTUtil.fromMillis(unit, this.started);
 	}
 
-	private long getWarnStart(final long currentMillis) {
+	public long getWarnStart(final long currentMillis) {
 		return this.getBlockStart(currentMillis) - this.getConfig().getWarn();
 	}
 
