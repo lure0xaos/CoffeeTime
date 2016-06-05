@@ -19,7 +19,8 @@ public class CTBlockerTest implements MessageProvider {
 
 	@Override
 	public String getMessage(final String message, final Object... args) {
-		return this.messages == null ? null : MessageFormat.format(this.messages.getString(message), args);
+		assert this.messages != null;
+		return MessageFormat.format(this.messages.getString(message), args);
 	}
 
 	@Before
