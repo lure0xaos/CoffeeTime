@@ -29,12 +29,34 @@ public class CTUtilTest {
 	}
 
 	@Test
+	public void testBetweenEagerSec() {
+		final TimeUnit unit = TimeUnit.SECONDS;
+		final long current = CTUtil.make();
+		final long start = CTUtil.downTo(current, CTUtil.toMillis(TimeUnit.HOURS, 1));
+		final long end = CTUtil.upTo(current, CTUtil.toMillis(TimeUnit.HOURS, 1));
+		final long eager = start - CTUtil.toMillis(unit, 1);
+		Assert.assertFalse(CTUtil.isBetween(unit, CTUtil.fromMillis(unit, eager), CTUtil.fromMillis(unit, start),
+				CTUtil.fromMillis(unit, end)));
+	}
+
+	@Test
 	public void testBetweenLate() {
 		final long current = CTUtil.make();
 		final long start = CTUtil.downTo(current, CTUtil.toMillis(TimeUnit.HOURS, 1));
 		final long end = CTUtil.upTo(current, CTUtil.toMillis(TimeUnit.HOURS, 1));
-		final long eager = end + 100;
-		Assert.assertFalse(CTUtil.isBetween(eager, start, end));
+		final long late = end + 100;
+		Assert.assertFalse(CTUtil.isBetween(late, start, end));
+	}
+
+	@Test
+	public void testBetweenLateSec() {
+		final TimeUnit unit = TimeUnit.SECONDS;
+		final long current = CTUtil.make();
+		final long start = CTUtil.downTo(current, CTUtil.toMillis(TimeUnit.HOURS, 1));
+		final long end = CTUtil.upTo(current, CTUtil.toMillis(TimeUnit.HOURS, 1));
+		final long late = end + CTUtil.toMillis(unit, 1);
+		Assert.assertFalse(CTUtil.isBetween(unit, CTUtil.fromMillis(unit, late), CTUtil.fromMillis(unit, start),
+				CTUtil.fromMillis(unit, end)));
 	}
 
 	@Test
@@ -43,6 +65,16 @@ public class CTUtilTest {
 		final long start = CTUtil.downTo(current, CTUtil.toMillis(TimeUnit.HOURS, 1));
 		final long end = CTUtil.upTo(current, CTUtil.toMillis(TimeUnit.HOURS, 1));
 		Assert.assertTrue(CTUtil.isBetween(current, start, end));
+	}
+
+	@Test
+	public void testBetweenTrueSec() {
+		final TimeUnit unit = TimeUnit.SECONDS;
+		final long current = CTUtil.make();
+		final long start = CTUtil.downTo(current, CTUtil.toMillis(TimeUnit.HOURS, 1));
+		final long end = CTUtil.upTo(current, CTUtil.toMillis(TimeUnit.HOURS, 1));
+		Assert.assertTrue(CTUtil.isBetween(unit, CTUtil.fromMillis(unit, current), CTUtil.fromMillis(unit, start),
+				CTUtil.fromMillis(unit, end)));
 	}
 
 	@Test
@@ -63,6 +95,24 @@ public class CTUtilTest {
 	@Test
 	public void testFromMillis() {
 		Assert.assertEquals(1, CTUtil.fromMillis(TimeUnit.SECONDS, 1000));
+	}
+
+	@Test
+	public void testInPeriodFalse() {
+		final TimeUnit unit = TimeUnit.MINUTES;
+		final long currentMillis = CTUtil.toMillis(unit, 10);
+		final int period = 60;
+		final int delay = 3;
+		Assert.assertFalse(CTUtil.isInPeriod(unit, currentMillis, period, delay));
+	}
+
+	@Test
+	public void testInPeriodTrue() {
+		final TimeUnit unit = TimeUnit.MINUTES;
+		final long currentMillis = CTUtil.toMillis(unit, 2);
+		final int period = 60;
+		final int delay = 3;
+		Assert.assertTrue(CTUtil.isInPeriod(unit, currentMillis, period, delay));
 	}
 
 	@Test

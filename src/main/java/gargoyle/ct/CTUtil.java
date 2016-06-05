@@ -43,13 +43,13 @@ public final class CTUtil {
 		return unit.convert(millis, TimeUnit.MILLISECONDS);
 	}
 
-	public static boolean isBetween(final long currentMillis, final long start, final long end) {
-		return (currentMillis >= start) && (currentMillis <= end);
+	public static boolean isBetween(final long currentMillis, final long startMillis, final long endMillis) {
+		return (currentMillis >= startMillis) && (currentMillis <= endMillis);
 	}
 
-	public static boolean isBetween(final TimeUnit unit, final long currentMillis, final long start, final long end) {
-		return (CTUtil.fromMillis(unit, currentMillis) >= CTUtil.fromMillis(unit, start))
-				&& (CTUtil.fromMillis(unit, currentMillis) <= CTUtil.fromMillis(unit, end));
+	public static boolean isBetween(final TimeUnit unit, final long current, final long start, final long end) {
+		return (CTUtil.toMillis(unit, current) >= CTUtil.toMillis(unit, start))
+				&& (CTUtil.toMillis(unit, current) <= CTUtil.toMillis(unit, end));
 	}
 
 	public static boolean isInPeriod(final TimeUnit unit, final long currentMillis, final int period, final int delay) {

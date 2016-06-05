@@ -80,8 +80,8 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
 					.getSize();
 			this.setLocation(screenSize.width - this.getWidth(), screenSize.height - this.getHeight());
 			final int snap = 20;
-			DragUtil.makeDraggable(this.label, snap);
-			DragUtil.makeDraggable(this, snap);
+			DragHelper.makeDraggable(this.label, snap);
+			DragHelper.makeDraggable(this, snap);
 			ToolTipManager.sharedInstance().setDismissDelay(1000);
 			ToolTipManager.sharedInstance().setInitialDelay(100);
 			ToolTipManager.sharedInstance().setReshowDelay(100);

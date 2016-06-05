@@ -5,7 +5,6 @@ import java.util.ResourceBundle;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 
 public class CTBlockerTest implements MessageProvider {
 	public static void main(final String[] args) throws Exception {
@@ -34,7 +33,7 @@ public class CTBlockerTest implements MessageProvider {
 		this.blocker = null;
 	}
 
-	@Test
+	// @Test
 	public void testBlocker() {
 		if (this.blocker != null) {
 			this.blocker.debug(true);

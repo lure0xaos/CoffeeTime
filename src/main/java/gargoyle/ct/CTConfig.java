@@ -13,6 +13,9 @@ public class CTConfig implements Serializable {
 
 	public CTConfig(final long whole, final long block, final long warn) {
 		super();
+		if (!this.isValid(whole, block, warn)) {
+			throw new IllegalArgumentException();
+		}
 		this.whole = whole;
 		this.block = block;
 		this.warn = warn;
@@ -87,7 +90,11 @@ public class CTConfig implements Serializable {
 	}
 
 	public boolean isValid() {
-		return (this.whole > this.block) && (this.block > this.warn);
+		return this.isValid(this.whole, this.block, this.warn);
+	}
+
+	protected boolean isValid(final long wholeMillis, final long blockMillis, final long warnMillis) {
+		return (wholeMillis > blockMillis) && (blockMillis > warnMillis);
 	}
 
 	public void setBlock(final long block) {

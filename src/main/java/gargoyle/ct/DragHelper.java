@@ -13,7 +13,7 @@ import javax.swing.JComponent;
 import javax.swing.JWindow;
 import javax.swing.SwingUtilities;
 
-public class DragUtil {
+public class DragHelper {
 	public static void makeDraggable(final JComponent comp, final int snap) {
 		final Point mouseDownCompCoords = new Point();
 		comp.addMouseListener(new MouseAdapter() {
@@ -33,7 +33,7 @@ public class DragUtil {
 				final Point currCoords = e.getLocationOnScreen();
 				final Point p = new Point(currCoords.x - mouseDownCompCoords.x, currCoords.y - mouseDownCompCoords.y);
 				final Window win = SwingUtilities.getWindowAncestor(comp);
-				DragUtil.snap(p, win.getSize(), snap);
+				DragHelper.snap(p, win.getSize(), snap);
 				win.setLocation(p);
 			}
 		});
@@ -57,7 +57,7 @@ public class DragUtil {
 			public void mouseDragged(final MouseEvent e) {
 				final Point currCoords = e.getLocationOnScreen();
 				final Point p = new Point(currCoords.x - mouseDownCompCoords.x, currCoords.y - mouseDownCompCoords.y);
-				DragUtil.snap(p, win.getSize(), snap);
+				DragHelper.snap(p, win.getSize(), snap);
 				win.setLocation(p);
 			}
 		});
