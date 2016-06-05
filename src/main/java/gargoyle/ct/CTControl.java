@@ -51,9 +51,9 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
 
 	private static final class CTControlWindow extends JWindow {
 		private static final long serialVersionUID = 1L;
+		private volatile boolean disposing = false;
 		private final JLabel label;
 		volatile boolean reshow;
-		private volatile boolean disposing = false;
 
 		public CTControlWindow(final URL imageURL, final JPopupMenu menu) {
 			super(new JFrame() {
@@ -129,9 +129,9 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
 
 	private static final String STR_EXIT = "exit";
 	private static final String URL_ICON = "/icon64.png";
-	private final ButtonGroup group;
 	final CTApp app;
 	private final CTControlWindow controlWindow;
+	private final ButtonGroup group;
 
 	public CTControl(final CTApp app) {
 		this.app = app;

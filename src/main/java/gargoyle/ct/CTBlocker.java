@@ -14,11 +14,10 @@ import javax.swing.JWindow;
 import javax.swing.SwingConstants;
 
 public class CTBlocker extends JWindow implements CTTaskUpdatable {
-	private static final String MSG_WARN = "warn_w";
 	private static final String MSG_BLOCKED = "blocked_w";
+	private static final String MSG_WARN = "warn_w";
 	private static final long serialVersionUID = 1L;
-	private final JLabel lblMain;
-	private final JLabel lblInfo;
+	private transient MessageProvider app;
 	private transient MouseAdapter disposer = new MouseAdapter() {
 		@Override
 		public void mouseClicked(final MouseEvent e) {
@@ -26,7 +25,8 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
 			CTBlocker.this.dispose();
 		}
 	};
-	private transient MessageProvider app;
+	private final JLabel lblInfo;
+	private final JLabel lblMain;
 
 	public CTBlocker(final MessageProvider app) {
 		this.app = app;

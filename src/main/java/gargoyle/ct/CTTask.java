@@ -3,8 +3,8 @@ package gargoyle.ct;
 import java.util.concurrent.TimeUnit;
 
 public class CTTask {
-	private long started;
 	private CTConfig config;
+	private long started;
 
 	public long getBlockEnd(final long currentMillis) {
 		return CTUtil.upTo(CTUtil.toBase(this.getStarted(), currentMillis, this.getConfig().getWhole()),

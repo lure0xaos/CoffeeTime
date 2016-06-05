@@ -6,10 +6,10 @@ import java.util.concurrent.TimeUnit;
 
 public class CTConfig implements Serializable {
 	private static final long serialVersionUID = -898699928298432564L;
-	private long whole;
 	private long block;
-	private long warn;
 	private String name;
+	private long warn;
+	private long whole;
 
 	public CTConfig(final long whole, final long block, final long warn) {
 		super();

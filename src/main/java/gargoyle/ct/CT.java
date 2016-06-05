@@ -15,11 +15,11 @@ public class CT implements CTApp {
 		app.start();
 	}
 
-	private final CTTimer timer;
-	private final CTControlActions control;
 	private final CTBlocker blocker;
+	private final CTControlActions control;
 	private final ResourceBundle messages;
 	private final TimeHelper timeHelper;
+	private final CTTimer timer;
 
 	private CT() {
 		this.timeHelper = new CTTimeHelper();

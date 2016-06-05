@@ -1,8 +1,8 @@
 package gargoyle.ct;
 
 public class CTTimeHelper implements TimeHelper {
-	private long fakeTime;
 	private long delta = 0;
+	private long fakeTime;
 
 	public CTTimeHelper() {
 	}

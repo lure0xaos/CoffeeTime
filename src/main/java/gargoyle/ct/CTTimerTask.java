@@ -4,8 +4,8 @@ import java.util.TimerTask;
 
 public class CTTimerTask extends TimerTask {
 	private final CTTask task = new CTTask();
-	private final CTTaskUpdatable[] updatables;
 	private final TimeHelper timeHelper;
+	private final CTTaskUpdatable[] updatables;
 
 	public CTTimerTask(final TimeHelper cTTimeHelper, final CTTaskUpdatable... updatables) {
 		this.updatables = updatables;

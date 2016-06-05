@@ -6,10 +6,10 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public final class CTUtil {
-	private static final String SS = "ss";
-	private static final String MM_SS = "mm:ss";
-	private static final String MM = "mm";
 	private static final String HH_MM_SS = "HH:mm:ss";
+	private static final String MM = "mm";
+	private static final String MM_SS = "mm:ss";
+	private static final String SS = "ss";
 
 	public static final long currentTimeMillis() {
 		return new Date().getTime();
