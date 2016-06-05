@@ -17,7 +17,6 @@ import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -50,14 +49,6 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
 		private final JLabel label;
 
 		public CTControlWindow(final URL imageURL, final JPopupMenu menu) {
-			super(new JFrame() {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public boolean isShowing() {
-					return true;
-				}
-			});
 			if (imageURL == null) {
 				throw new IllegalArgumentException("image not found");
 			}
@@ -90,6 +81,9 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
 			final Dimension screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds()
 					.getSize();
 			window.setLocation(screenSize.width - window.getWidth(), screenSize.height - window.getHeight());
+			final int snap = 20;
+			DragUtil.makeDraggable(this.label, snap);
+			DragUtil.makeDraggable(this, snap);
 		}
 
 		public void setComponentPopupMenu(final JPopupMenu menu) {
