@@ -28,15 +28,15 @@ public final class CTUtil {
 	}
 
 	public static String formatMM(final long currentMillis) {
-		return CTUtil.format(MM, currentMillis);
+		return CTUtil.format(CTUtil.MM, currentMillis);
 	}
 
 	public static String formatMMSS(final long currentMillis) {
-		return CTUtil.format(MM_SS, currentMillis);
+		return CTUtil.format(CTUtil.MM_SS, currentMillis);
 	}
 
 	public static String formatSS(final long currentMillis) {
-		return CTUtil.format(SS, currentMillis);
+		return CTUtil.format(CTUtil.SS, currentMillis);
 	}
 
 	public static long fromMillis(final TimeUnit unit, final long millis) {
