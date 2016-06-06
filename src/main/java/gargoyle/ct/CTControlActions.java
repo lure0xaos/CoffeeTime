@@ -1,13 +1,11 @@
 package gargoyle.ct;
 
-import java.util.List;
-
 public interface CTControlActions {
 	void arm(CTConfig config);
 
 	void exit();
 
-	List<CTConfig> getConfigs();
+	CTConfigs getConfigs();
 
 	void unarm();
 }

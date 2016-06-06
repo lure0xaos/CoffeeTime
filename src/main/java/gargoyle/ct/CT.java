@@ -2,7 +2,6 @@ package gargoyle.ct;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class CT implements CTApp {
@@ -43,9 +42,8 @@ public class CT implements CTApp {
 	}
 
 	@Override
-	public List<CTConfig> getConfigs() {
-		return Arrays.asList(new CTConfig[] { CTStandardConfigs.get6010Config(), CTStandardConfigs.get3005Config(),
-				CTStandardConfigs.get12020Config() });
+	public CTConfigs getConfigs() {
+		return new CTStandardConfigs();
 	}
 
 	@Override

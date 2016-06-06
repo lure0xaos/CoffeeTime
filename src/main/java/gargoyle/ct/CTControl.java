@@ -10,7 +10,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.util.Collections;
-import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
@@ -141,6 +140,18 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
 		this.controlWindow.setVisible(true);
 	}
 
+	private void addConfig(final JPopupMenu menu, final CTConfig config) {
+		final JCheckBoxMenuItem menuItem = new JCheckBoxMenuItem(new ConfigAction(config));
+		this.group.add(menuItem);
+		menu.add(menuItem);
+	}
+
+	private void addConfigs(final JPopupMenu menu, final CTConfigs configs) {
+		for (final CTConfig config : configs.getConfigs()) {
+			this.addConfig(menu, config);
+		}
+	}
+
 	@Override
 	public void arm(final CTConfig config) {
 		final AbstractButton item = this.findItem(config);
@@ -151,13 +162,9 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
 		}
 	}
 
-	private JPopupMenu createMenu(final List<CTConfig> configs) {
+	private JPopupMenu createMenu(final CTConfigs configs) {
 		final JPopupMenu menu = new JPopupMenu();
-		for (final CTConfig config : configs) {
-			final JCheckBoxMenuItem menuItem = new JCheckBoxMenuItem(new ConfigAction(config));
-			this.group.add(menuItem);
-			menu.add(menuItem);
-		}
+		this.addConfigs(menu, configs);
 		menu.add(new JSeparator(SwingConstants.HORIZONTAL));
 		menu.add(new JMenuItem(new AbstractAction(this.app.getMessage(CTControl.STR_EXIT)) {
 			private static final long serialVersionUID = 1L;
@@ -203,8 +210,8 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
 			final Action action = button.getAction();
 			if ((action != null) && (action instanceof ConfigAction)) {
 				final ConfigAction configAction = (ConfigAction) action;
-				final CTConfig config2 = configAction.getConfig();
-				if ((config2 != null) && config2.equals(config)) {
+				final CTConfig cfg = configAction.getConfig();
+				if ((cfg != null) && cfg.equals(config)) {
 					return button;
 				}
 			}
@@ -213,7 +220,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
 	}
 
 	@Override
-	public List<CTConfig> getConfigs() {
+	public CTConfigs getConfigs() {
 		return null;
 	}
 

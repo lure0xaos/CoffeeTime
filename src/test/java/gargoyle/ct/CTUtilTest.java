@@ -78,6 +78,12 @@ public class CTUtilTest {
 	}
 
 	@Test
+	public void testConvert() {
+		final long actual = CTUtil.convert(TimeUnit.SECONDS, TimeUnit.MINUTES, 1);
+		Assert.assertEquals(60, actual);
+	}
+
+	@Test
 	public void testDownTo() {
 		final long currentMillis = CTUtil.currentTimeMillis();
 		final long baseMillis = CTUtil.toMillis(TimeUnit.HOURS, 1);

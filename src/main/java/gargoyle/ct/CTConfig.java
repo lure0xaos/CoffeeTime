@@ -1,15 +1,29 @@
 package gargoyle.ct;
 
-import java.io.Serializable;
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.InvalidObjectException;
+import java.io.ObjectInput;
+import java.io.ObjectInputValidation;
+import java.io.ObjectOutput;
 import java.text.MessageFormat;
 import java.util.concurrent.TimeUnit;
 
-public class CTConfig implements Serializable {
+public class CTConfig implements Externalizable, ObjectInputValidation {
 	private static final long serialVersionUID = -898699928298432564L;
+
+	public static CTConfig parse(final String line) {
+		return new CTConfig(line);
+	}
+
 	private long block;
 	private String name;
 	private long warn;
 	private long whole;
+
+	public CTConfig() {
+		;
+	}
 
 	public CTConfig(final long whole, final long block, final long warn) {
 		super();
@@ -19,12 +33,16 @@ public class CTConfig implements Serializable {
 		this.whole = whole;
 		this.block = block;
 		this.warn = warn;
+		this.name(TimeUnit.MINUTES);
+	}
+
+	public CTConfig(final String line) {
+		this.read(line);
 	}
 
 	public CTConfig(final TimeUnit unit, final long whole, final long block, final long warn) {
 		this(CTUtil.toMillis(unit, whole), CTUtil.toMillis(unit, block), CTUtil.toMillis(unit, warn));
-		this.name = MessageFormat.format("{0,number,00}/{1,number,00}", Long.valueOf(this.getWhole(unit)),
-				Long.valueOf(this.getBlock(unit)));
+		this.name = this.name(unit);
 	}
 
 	@Override
@@ -49,6 +67,11 @@ public class CTConfig implements Serializable {
 			return false;
 		}
 		return true;
+	}
+
+	public String format() {
+		return CTConfigDataConverter.getInstance().format(TimeUnit.MINUTES,
+				new long[] { this.whole, this.block, this.warn });
 	}
 
 	public long getBlock() {
@@ -97,6 +120,24 @@ public class CTConfig implements Serializable {
 		return (wholeMillis > blockMillis) && (blockMillis > warnMillis);
 	}
 
+	private String name(final TimeUnit unit) {
+		return MessageFormat.format("{0,number,00}/{1,number,00}", Long.valueOf(this.getWhole(unit)),
+				Long.valueOf(this.getBlock(unit)));
+	}
+
+	private void read(final String line) {
+		final long[] data = CTConfigDataConverter.getInstance().parse(line);
+		this.whole = data[0];
+		this.block = data[1];
+		this.warn = data[2];
+		this.name = this.name(TimeUnit.MINUTES);
+	}
+
+	@Override
+	public void readExternal(final ObjectInput in) throws IOException, ClassNotFoundException {
+		this.read(in.readLine());
+	}
+
 	public void setBlock(final long block) {
 		this.block = block;
 	}
@@ -123,6 +164,19 @@ public class CTConfig implements Serializable {
 
 	@Override
 	public String toString() {
-		return "CTConfig [whole=" + this.whole + ", block=" + this.block + ", warn=" + this.warn + "]";
+		return MessageFormat.format("CTConfig [name={0}, whole={1}, block={2}, warn={3}]", this.name,
+				Long.valueOf(this.whole), Long.valueOf(this.block), Long.valueOf(this.warn));
+	}
+
+	@Override
+	public void validateObject() throws InvalidObjectException {
+		if (!this.isValid()) {
+			throw new InvalidObjectException("invalid configuration");
+		}
+	}
+
+	@Override
+	public void writeExternal(final ObjectOutput out) throws IOException {
+		out.writeBytes(this.format());
 	}
 }

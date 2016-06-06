@@ -11,6 +11,11 @@ public final class CTUtil {
 	private static final String MM_SS = "mm:ss";
 	private static final String SS = "ss";
 
+	public static long convert(final TimeUnit unitTo, final TimeUnit unitFrom, final long cnt) {
+		// return fromMillis(unitTo, toMillis(unitFrom, cnt));
+		return unitTo.convert(unitFrom.toMillis(cnt), TimeUnit.MILLISECONDS);
+	}
+
 	public static final long currentTimeMillis() {
 		return new Date().getTime();
 	}
