@@ -64,7 +64,7 @@ public final class CTConfigDataConverter implements Converter<long[]> {
 			if (groupCount != 6) {
 				throw new IllegalArgumentException("Cannot parse line: " + line);// XXX
 			}
-			for (int g = 1; g <= (groupCount / 2); g += 2) {
+			for (int g = 1; g <= (groupCount); g += 2) {
 				final String q = m.group(g);
 				final String u = m.group(g + 1);
 				TimeUnit unit;
