@@ -25,7 +25,7 @@ public class CTConfigs implements Externalizable, ObjectInputValidation {
 			try {
 				configs.add(new CTConfig(data[i]));
 			} catch (final IllegalArgumentException ex) {
-				// throw new RuntimeException(ex); // TODO log
+				Log.error("skip invalid config line: {0}", data[i]);
 			}
 		}
 		return configs.toArray(new CTConfig[configs.size()]);

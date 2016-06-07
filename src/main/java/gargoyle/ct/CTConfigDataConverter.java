@@ -36,7 +36,7 @@ public final class CTConfigDataConverter implements Converter<long[]> {
 			unitChar = CTConfigDataConverter.UNIT_SECONDS;
 			break;
 		default:
-			throw new UnsupportedOperationException(unit.name());
+			throw new UnsupportedOperationException("Cannot parse line, invalid time unit " + unit.name());
 		}
 		return CTUtil.fromMillis(unit, data[0]) + unitChar + "/" + CTUtil.fromMillis(unit, data[1]) + unitChar + "/"
 				+ CTUtil.fromMillis(unit, data[2]) + unitChar;
@@ -45,14 +45,14 @@ public final class CTConfigDataConverter implements Converter<long[]> {
 	@Override
 	public long[] parse(final String line) {
 		if ((line == null) || line.isEmpty()) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Empty line");
 		}
 		final String tline = line.trim();
 		if (tline.isEmpty()) {
-			throw new IllegalArgumentException(line);
+			throw new IllegalArgumentException("Empty line: " + line);
 		}
 		if (CTConfigDataConverter.COMMENTS.contains(tline.substring(0, 1))) {
-			throw new IllegalArgumentException(line);
+			throw new IllegalArgumentException("Commented line: " + line);
 		}
 		final long[] data = new long[3];
 		final Pattern p = Pattern.compile(
@@ -62,7 +62,7 @@ public final class CTConfigDataConverter implements Converter<long[]> {
 		if (m.find()) {
 			final int groupCount = m.groupCount();
 			if (groupCount != 6) {
-				throw new IllegalArgumentException(line);
+				throw new IllegalArgumentException("Cannot parse line: " + line);// XXX
 			}
 			for (int g = 1; g <= (groupCount / 2); g += 2) {
 				final String q = m.group(g);
@@ -79,12 +79,12 @@ public final class CTConfigDataConverter implements Converter<long[]> {
 					unit = TimeUnit.SECONDS;
 					break;
 				default:
-					throw new IllegalArgumentException(String.valueOf(u));
+					throw new IllegalArgumentException("Cannot parse line: " + line + ", invalid time unit " + u);
 				}
 				try {
 					data[g / 2] = CTUtil.toMillis(unit, Long.parseLong(q));
 				} catch (final NumberFormatException ex) {
-					throw new IllegalArgumentException(line, ex);
+					throw new IllegalArgumentException("Cannot parse line: " + line, ex);
 				}
 			}
 		} else {

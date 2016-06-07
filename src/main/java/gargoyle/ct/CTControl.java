@@ -120,7 +120,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
 					ToolTipManager.sharedInstance().mouseMoved(new MouseEvent(this.label, MouseEvent.MOUSE_MOVED,
 							CTUtil.currentTimeMillis(), 0, this.getWidth(), this.getHeight(), 0, false));
 				} catch (final RuntimeException ex) {
-					// throw new RuntimeException(ex);
+					// IGNORE
 				}
 			}
 		}

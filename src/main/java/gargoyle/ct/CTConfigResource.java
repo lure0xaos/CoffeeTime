@@ -43,7 +43,7 @@ public class CTConfigResource implements Resource {
 			try {
 				curl = new URL(root, name);
 			} catch (final MalformedURLException ex) {
-				throw new RuntimeException(ex);
+				throw new RuntimeException("Cannot use " + root + " as root", ex);
 			}
 			if (CTConfigResource.exists(curl)) {
 				return new CTConfigResource(curl);
@@ -62,7 +62,7 @@ public class CTConfigResource implements Resource {
 					new File(System.getProperty("user.dir", ".")).toURI().toURL(),
 					new File(System.getProperty("user.home", ".")).toURI().toURL() };
 		} catch (final MalformedURLException ex) {
-			throw new RuntimeException(ex);
+			throw new RuntimeException("Cannot create roots", ex);
 		}
 	}
 
@@ -93,5 +93,10 @@ public class CTConfigResource implements Resource {
 	@Override
 	public URL getURL() {
 		return this.url;
+	}
+
+	@Override
+	public String toString() {
+		return "CTConfigResource [url=" + this.url + "]";
 	}
 }
