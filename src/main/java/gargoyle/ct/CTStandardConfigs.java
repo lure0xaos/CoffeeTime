@@ -3,24 +3,8 @@ package gargoyle.ct;
 import java.util.concurrent.TimeUnit;
 
 public class CTStandardConfigs extends CTConfigs {
-	private static final long serialVersionUID = 1L;
-	private static CTConfig config12020 = new CTConfig(TimeUnit.MINUTES, 120, 20, 3);
-	private static CTConfig config3005 = new CTConfig(TimeUnit.MINUTES, 30, 5, 3);
-	private static CTConfig config6010 = new CTConfig(TimeUnit.MINUTES, 60, 10, 3);
-
-	public static CTConfig get12020Config() {
-		return CTStandardConfigs.config12020;
-	}
-
-	public static CTConfig get3005Config() {
-		return CTStandardConfigs.config3005;
-	}
-
-	public static CTConfig get6010Config() {
-		return CTStandardConfigs.config6010;
-	}
-
 	public CTStandardConfigs() {
-		super(CTStandardConfigs.config6010, CTStandardConfigs.config3005, CTStandardConfigs.config12020);
+		super(new CTConfig(TimeUnit.MINUTES, 120, 20, 3), new CTConfig(TimeUnit.MINUTES, 30, 5, 3),
+				new CTConfig(TimeUnit.MINUTES, 60, 10, 3));
 	}
 }

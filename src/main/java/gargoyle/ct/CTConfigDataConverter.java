@@ -1,9 +1,14 @@
 package gargoyle.ct;
 
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class CTConfigDataConverter implements Converter<long[]> {
+	private static final String COMMENTS = "#;'/";
+	private static final String UNIT_HOURS = "H";
+	private static final String UNIT_MINUTES = "M";
+	private static final String UNIT_SECONDS = "S";
 	private static CTConfigDataConverter instance;
 
 	public static synchronized CTConfigDataConverter getInstance() {
@@ -22,13 +27,13 @@ public final class CTConfigDataConverter implements Converter<long[]> {
 		String unitChar;
 		switch (unit) {
 		case HOURS:
-			unitChar = "H";
+			unitChar = CTConfigDataConverter.UNIT_HOURS;
 			break;
 		case MINUTES:
-			unitChar = "M";
+			unitChar = CTConfigDataConverter.UNIT_MINUTES;
 			break;
 		case SECONDS:
-			unitChar = "S";
+			unitChar = CTConfigDataConverter.UNIT_SECONDS;
 			break;
 		default:
 			throw new UnsupportedOperationException(unit.name());
@@ -39,26 +44,51 @@ public final class CTConfigDataConverter implements Converter<long[]> {
 
 	@Override
 	public long[] parse(final String line) {
+		if ((line == null) || line.isEmpty()) {
+			throw new IllegalArgumentException();
+		}
+		final String tline = line.trim();
+		if (tline.isEmpty()) {
+			throw new IllegalArgumentException(line);
+		}
+		if (CTConfigDataConverter.COMMENTS.contains(tline.substring(0, 1))) {
+			throw new IllegalArgumentException(line);
+		}
 		final long[] data = new long[3];
-		final String[] parts = line.split(Pattern.quote("/"), 3);
-		for (int i = 0; i < parts.length; i++) {
-			final String part = parts[i];
-			final char u = part.charAt(part.length() - 1);
-			TimeUnit unit;
-			switch (u) {
-			case 'H':
-				unit = TimeUnit.HOURS;
-				break;
-			case 'M':
-				unit = TimeUnit.MINUTES;
-				break;
-			case 'S':
-				unit = TimeUnit.SECONDS;
-				break;
-			default:
-				throw new IllegalArgumentException(String.valueOf(u));
+		final Pattern p = Pattern.compile(
+				"(?:([0-9]+)([a-zA-Z]+))\\/(?:([0-9]+)([a-zA-Z]+))[^a-zA-Z0-9]+(?:([0-9]+)([a-zA-Z]+))",
+				Pattern.CASE_INSENSITIVE);
+		final Matcher m = p.matcher(tline);
+		if (m.find()) {
+			final int groupCount = m.groupCount();
+			if (groupCount != 6) {
+				throw new IllegalArgumentException(line);
 			}
-			data[i] = CTUtil.toMillis(unit, Long.parseLong(part.substring(0, part.length() - 1)));
+			for (int g = 1; g <= (groupCount / 2); g += 2) {
+				final String q = m.group(g);
+				final String u = m.group(g + 1);
+				TimeUnit unit;
+				switch (u) {
+				case UNIT_HOURS:
+					unit = TimeUnit.HOURS;
+					break;
+				case UNIT_MINUTES:
+					unit = TimeUnit.MINUTES;
+					break;
+				case UNIT_SECONDS:
+					unit = TimeUnit.SECONDS;
+					break;
+				default:
+					throw new IllegalArgumentException(String.valueOf(u));
+				}
+				try {
+					data[g / 2] = CTUtil.toMillis(unit, Long.parseLong(q));
+				} catch (final NumberFormatException ex) {
+					throw new IllegalArgumentException(line, ex);
+				}
+			}
+		} else {
+			throw new IllegalArgumentException(line);
 		}
 		return data;
 	}

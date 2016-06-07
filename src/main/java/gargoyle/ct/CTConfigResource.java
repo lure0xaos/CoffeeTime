@@ -11,15 +11,18 @@ import java.net.URL;
 import java.net.URLConnection;
 
 public class CTConfigResource implements Resource {
+	private static final String USER_AGENT = "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2 (.NET CLR 3.5.30729)";
+	private static final String PROP_UA = "User-Agent";
+	private static final String METHOD_HEAD = "HEAD";
+
 	public static boolean exists(final URL url) {
 		try {
 			final URLConnection connection = url.openConnection();
 			if (connection instanceof HttpURLConnection) {
 				final HttpURLConnection huc = (HttpURLConnection) connection;
 				huc.setInstanceFollowRedirects(false);
-				huc.setRequestMethod("HEAD");
-				huc.setRequestProperty("User-Agent",
-						"Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2 (.NET CLR 3.5.30729)");
+				huc.setRequestMethod(CTConfigResource.METHOD_HEAD);
+				huc.setRequestProperty(CTConfigResource.PROP_UA, CTConfigResource.USER_AGENT);
 				huc.connect();
 				return huc.getResponseCode() == HttpURLConnection.HTTP_OK;
 			}

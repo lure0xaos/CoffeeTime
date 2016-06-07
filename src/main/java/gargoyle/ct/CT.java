@@ -1,10 +1,25 @@
 package gargoyle.ct;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 
 public class CT implements CTApp {
+	private static final String CONFIG_NAME = "CT.cfg";
+
+	private static String convertStreamToString(final InputStream is) {
+		try (Scanner scanner = new Scanner(is, StandardCharsets.US_ASCII.name())) {
+			final Scanner s = scanner.useDelimiter("\\A");
+			return s.hasNext() ? s.next() : "";
+		} catch (final Exception ex) {
+			throw new RuntimeException(ex);
+		}
+	}
+
 	public static void main(final String[] args) {
 		final CT app = new CT();
 		if ((args != null) && (args.length == 1)) {
@@ -43,7 +58,23 @@ public class CT implements CTApp {
 
 	@Override
 	public CTConfigs getConfigs() {
-		return new CTStandardConfigs();
+		CTConfigs configs;
+		final CTConfigResource configResource = CTConfigResource.findLocal(CT.CONFIG_NAME);
+		if (configResource.exists()) {
+			try (InputStream stream = (configResource.getInputStream())) {
+				configs = CTConfigs.parse(CT.convertStreamToString(stream));
+				if (configs.getConfigs().isEmpty()) {
+					configs = new CTStandardConfigs();
+				}
+			} catch (final IOException ex) {
+				Log.error(ex, "Cannot load {0}", configResource);
+				configs = new CTStandardConfigs();
+			}
+		} else {
+			Log.warn("Not found {0}", configResource);
+			configs = new CTStandardConfigs();
+		}
+		return configs;
 	}
 
 	@Override
@@ -62,7 +93,7 @@ public class CT implements CTApp {
 	}
 
 	private void start() {
-		this.control.arm(CTStandardConfigs.get6010Config());
+		this.control.arm(this.getConfigs().getConfigs().iterator().next());
 	}
 
 	@Override

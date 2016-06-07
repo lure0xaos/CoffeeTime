@@ -15,17 +15,20 @@ import java.util.concurrent.TimeUnit;
 
 public class CTConfigs implements Externalizable, ObjectInputValidation {
 	public static CTConfigs parse(final String line) {
-		final CTConfig[] configss = CTConfigs.read(line);
-		return new CTConfigs(configss);
+		return new CTConfigs(CTConfigs.read(line));
 	}
 
 	private static CTConfig[] read(final String line) {
 		final String[] data = CTConfigsDataConverter.getInstance().parse(line);
-		final CTConfig[] configss = new CTConfig[data.length];
+		final List<CTConfig> configs = new LinkedList<CTConfig>();
 		for (int i = 0; i < data.length; i++) {
-			configss[i] = new CTConfig(data[i]);
+			try {
+				configs.add(new CTConfig(data[i]));
+			} catch (final IllegalArgumentException ex) {
+				// throw new RuntimeException(ex); // TODO log
+			}
 		}
-		return configss;
+		return configs.toArray(new CTConfig[configs.size()]);
 	}
 
 	private final LinkedHashMap<String, CTConfig> configs;
