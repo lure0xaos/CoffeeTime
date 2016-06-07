@@ -27,6 +27,10 @@ public class CT implements CTApp {
 			app.setFakeTime(CTUtil.parseHHMMSS(args[0]));
 			app.blocker.debug(true);
 		}
+		if ((args != null) && (args.length == 2)) {
+			app.setFakeTime(CTUtil.parseHHMMSS(args[0]));
+			app.blocker.debug(Boolean.parseBoolean(args[1]));
+		}
 		app.start();
 	}
 

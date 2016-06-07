@@ -99,6 +99,15 @@ public class CTUtilTest {
 	}
 
 	@Test
+	public void testFormat() {
+		final long currentMillis = CTUtil.make(10, 5, 30);
+		Assert.assertEquals("10:05:30", CTUtil.formatHHMMSS(currentMillis));
+		Assert.assertEquals("05:30", CTUtil.formatMMSS(currentMillis));
+		Assert.assertEquals("05", CTUtil.formatMM(currentMillis));
+		Assert.assertEquals("30", CTUtil.formatSS(currentMillis));
+	}
+
+	@Test
 	public void testFromMillis() {
 		Assert.assertEquals(1, CTUtil.fromMillis(TimeUnit.SECONDS, 1000));
 	}
@@ -133,6 +142,14 @@ public class CTUtilTest {
 		Assert.assertEquals(min, calendar.get(Calendar.MINUTE));
 		Assert.assertEquals(sec, calendar.get(Calendar.SECOND));
 		Assert.assertEquals(0, calendar.get(Calendar.MILLISECOND));
+	}
+
+	@Test
+	public void testParse() {
+		final String string = "11:12:13";
+		final long started = CTUtil.parseHHMMSS(string);
+		final String formatted = CTUtil.formatHHMMSS(started);
+		Assert.assertEquals(string, formatted);
 	}
 
 	@Test

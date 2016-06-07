@@ -7,6 +7,8 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JLabel;
@@ -37,6 +39,18 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
 		this.getContentPane().setLayout(new BorderLayout());
 		this.getContentPane().add(this.lblMain = this.createMainLabel(), BorderLayout.CENTER);
 		this.getContentPane().add(this.lblInfo = this.createInfoLabel(), BorderLayout.SOUTH);
+		this.addWindowFocusListener(new WindowFocusListener() {
+			@Override
+			public void windowGainedFocus(final WindowEvent e) {
+			}
+
+			@Override
+			public void windowLostFocus(final WindowEvent e) {
+				if (CTBlocker.this.isVisible()) {
+					e.getWindow().requestFocus();
+				}
+			}
+		});
 	}
 
 	@SuppressWarnings("static-method")

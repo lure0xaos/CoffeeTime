@@ -9,6 +9,7 @@ import org.junit.Test;
 
 public class CTTaskTest {
 	private CTTask task;
+	private long actual;
 
 	@Before
 	public void setUp() throws Exception {
@@ -22,8 +23,9 @@ public class CTTaskTest {
 
 	@Test
 	public void testBlockedFalse() {
-		this.task.setConfig(new CTConfig(TimeUnit.MINUTES, 60, 10, 3));
 		final long current = CTUtil.make(10, 45, 10);
+		Assert.assertFalse(this.task.isBlocked(current));
+		this.task.setConfig(new CTConfig(TimeUnit.MINUTES, 60, 10, 3));
 		final long started = CTUtil.downTo(current, CTUtil.toMillis(TimeUnit.HOURS, 1));
 		this.task.setStarted(started);
 		Assert.assertFalse("testBlocked failed: " + CTUtil.formatHHMMSS(current) + " " + CTUtil.formatHHMMSS(started),
@@ -42,8 +44,9 @@ public class CTTaskTest {
 
 	@Test
 	public void testSleepingFalse() {
-		this.task.setConfig(new CTConfig(TimeUnit.MINUTES, 60, 10, 3));
 		final long current = CTUtil.make(10, 51, 10);
+		Assert.assertFalse(this.task.isWarn(current));
+		this.task.setConfig(new CTConfig(TimeUnit.MINUTES, 60, 10, 3));
 		final long started = CTUtil.downTo(current, CTUtil.toMillis(TimeUnit.HOURS, 1));
 		this.task.setStarted(started);
 		Assert.assertFalse("testSleeping failed: " + CTUtil.formatHHMMSS(current) + " " + CTUtil.formatHHMMSS(started),
@@ -58,6 +61,23 @@ public class CTTaskTest {
 		this.task.setStarted(started);
 		Assert.assertTrue("testSleeping failed: " + CTUtil.formatHHMMSS(current) + " " + CTUtil.formatHHMMSS(started),
 				this.task.isSleeping(current));
+	}
+
+	@Test
+	public void testStarted() {
+		final long started = CTUtil.make();
+		this.task.setStarted(started);
+		this.actual = this.task.getStarted();
+		Assert.assertEquals(started, this.actual);
+	}
+
+	@Test
+	public void testStartedUnits() {
+		final long started = CTUtil.make();
+		final TimeUnit unit = TimeUnit.SECONDS;
+		this.task.setStarted(unit, started);
+		this.actual = this.task.getStarted(unit);
+		Assert.assertEquals(started, this.actual);
 	}
 
 	@Test
