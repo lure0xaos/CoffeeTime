@@ -6,13 +6,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class Log {
+	private static final String LOCATION_ERRORS = "errors";
+
 	private static void _log(final Level level, final Exception exception, final String pattern,
 			final StackTraceElement ste, final Object... arguments) {
 		final String sourceClass = ste.getClassName();
 		final Logger logger = Logger.getLogger(sourceClass);
 		if (logger.isLoggable(level)) {
 			final String sourceMethod = ste.getMethodName();
-			final ResourceBundle bundle = ResourceBundle.getBundle("errors", Locale.getDefault(),
+			final ResourceBundle bundle = ResourceBundle.getBundle(Log.LOCATION_ERRORS, Locale.getDefault(),
 					Thread.currentThread().getContextClassLoader());
 			logger.logrb(level, sourceClass, sourceMethod, bundle, pattern, arguments, exception);
 		}

@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import java.util.Scanner;
 
 public class CT implements CTApp {
+	private static final String LOC_MESSAGES = "messages";
 	private static final String CONFIG_NAME = "CT.cfg";
 
 	private static String convertStreamToString(final InputStream is) {
@@ -37,7 +38,7 @@ public class CT implements CTApp {
 
 	private CT() {
 		this.timeHelper = new CTTimeHelper();
-		this.messages = ResourceBundle.getBundle("messages");
+		this.messages = ResourceBundle.getBundle(CT.LOC_MESSAGES);
 		final CTBlocker pBlocker = new CTBlocker(this);
 		final CTControl pControl = new CTControl(this);
 		this.timer = new CTTimer(this.timeHelper, pBlocker, pControl);
