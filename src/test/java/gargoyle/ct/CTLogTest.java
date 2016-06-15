@@ -18,10 +18,12 @@ public class CTLogTest {
 		Logger.getLogger(CTLogTest.class.getName()).addHandler(new Handler() {
 			@Override
 			public void close() throws SecurityException {
+				//
 			}
 
 			@Override
 			public void flush() {
+				//
 			}
 
 			@Override

@@ -8,6 +8,9 @@ import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 public class CT implements CTApp {
 	private static final String LOC_MESSAGES = "messages";
 	private static final String CONFIG_NAME = "CT.cfg";
@@ -22,16 +25,41 @@ public class CT implements CTApp {
 	}
 
 	public static void main(final String[] args) {
+		boolean debug = false;
+		if (args != null) {
+			if (args.length == 1) {
+				debug = true;
+			}
+			if (args.length == 2) {
+				debug = Boolean.parseBoolean(args[1]);
+			}
+		}
+		if (!debug && !CTMutex.acquire()) {
+			Log.error("App already running");
+			return;
+		}
+		CT.setSystemLookAndFeel();
 		final CT app = new CT();
-		if ((args != null) && (args.length == 1)) {
-			app.setFakeTime(CTUtil.parseHHMMSS(args[0]));
-			app.blocker.debug(true);
+		if ((args != null) && (args.length != 0)) {
+			final long fakeTime = CTUtil.parseHHMMSS(args[0]);
+			app.setFakeTime(fakeTime);
 		}
-		if ((args != null) && (args.length == 2)) {
-			app.setFakeTime(CTUtil.parseHHMMSS(args[0]));
-			app.blocker.debug(Boolean.parseBoolean(args[1]));
-		}
+		app.blocker.debug(debug);
 		app.start();
+	}
+
+	private static void setSystemLookAndFeel() {
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (final ClassNotFoundException ex) {
+			throw new RuntimeException(ex);
+		} catch (final InstantiationException ex) {
+			throw new RuntimeException(ex);
+		} catch (final IllegalAccessException ex) {
+			throw new RuntimeException(ex);
+		} catch (final UnsupportedLookAndFeelException ex) {
+			throw new RuntimeException(ex);
+		}
 	}
 
 	private final CTBlocker blocker;
@@ -59,6 +87,7 @@ public class CT implements CTApp {
 	public void exit() {
 		this.blocker.dispose();
 		this.timer.terminate();
+		CTMutex.release();
 	}
 
 	@Override

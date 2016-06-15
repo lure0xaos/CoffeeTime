@@ -22,7 +22,7 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
 	private long whole;
 
 	public CTConfig() {
-		;
+		this(0, 0, 0);
 	}
 
 	public CTConfig(final long whole, final long block, final long warn) {
