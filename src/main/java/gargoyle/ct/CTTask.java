@@ -7,7 +7,7 @@ public class CTTask {
 	private long started;
 
 	public long getBlockEnd(final long currentMillis) {
-		return CTUtil.upTo(CTUtil.toBase(this.getStarted(), currentMillis, this.getConfig().getWhole()),
+		return CTTimeUtil.upTo(CTTimeUtil.toBase(this.getStarted(), currentMillis, this.getConfig().getWhole()),
 				this.getConfig().getWhole());
 	}
 
@@ -20,7 +20,7 @@ public class CTTask {
 	}
 
 	public long getCycleStart(final long currentMillis) {
-		return CTUtil.downTo(CTUtil.toBase(this.getStarted(), currentMillis, this.getConfig().getWhole()),
+		return CTTimeUtil.downTo(CTTimeUtil.toBase(this.getStarted(), currentMillis, this.getConfig().getWhole()),
 				this.getConfig().getWhole());
 	}
 
@@ -29,7 +29,7 @@ public class CTTask {
 	}
 
 	public long getStarted(final TimeUnit unit) {
-		return CTUtil.fromMillis(unit, this.started);
+		return CTTimeUtil.fromMillis(unit, this.started);
 	}
 
 	public long getWarnStart(final long currentMillis) {
@@ -40,7 +40,7 @@ public class CTTask {
 		if (!this.isReady()) {
 			return false;
 		}
-		return CTUtil.isBetween(currentMillis, this.getBlockStart(currentMillis), this.getBlockEnd(currentMillis));
+		return CTTimeUtil.isBetween(currentMillis, this.getBlockStart(currentMillis), this.getBlockEnd(currentMillis));
 	}
 
 	public boolean isReady() {
@@ -48,14 +48,14 @@ public class CTTask {
 	}
 
 	public boolean isSleeping(final long currentMillis) {
-		return CTUtil.isBetween(currentMillis, this.getCycleStart(currentMillis), this.getWarnStart(currentMillis));
+		return CTTimeUtil.isBetween(currentMillis, this.getCycleStart(currentMillis), this.getWarnStart(currentMillis));
 	}
 
 	public boolean isWarn(final long currentMillis) {
 		if (!this.isReady()) {
 			return false;
 		}
-		return CTUtil.isBetween(currentMillis, this.getWarnStart(currentMillis), this.getBlockStart(currentMillis));
+		return CTTimeUtil.isBetween(currentMillis, this.getWarnStart(currentMillis), this.getBlockStart(currentMillis));
 	}
 
 	public void setConfig(final CTConfig config) {
@@ -67,6 +67,6 @@ public class CTTask {
 	}
 
 	public void setStarted(final TimeUnit unit, final long started) {
-		this.started = CTUtil.toMillis(unit, started);
+		this.started = CTTimeUtil.toMillis(unit, started);
 	}
 }

@@ -1,12 +1,9 @@
 package gargoyle.ct;
 
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
-
 public class CTBlockerTest implements MessageProvider {
 	public static void main(final String[] args) throws Exception {
 		final CTBlockerTest test = new CTBlockerTest();
-		test.messages = ResourceBundle.getBundle("messages");
+		test.messages = new CTMessageProvider(CT.LOC_MESSAGES);
 		test.blocker = new CTBlocker(test);
 		test.blocker.debug(true);
 		test.blocker.setText("00:00");
@@ -15,11 +12,10 @@ public class CTBlockerTest implements MessageProvider {
 	}
 
 	private CTBlocker blocker;
-	private ResourceBundle messages;
+	private CTMessageProvider messages;
 
 	@Override
 	public String getMessage(final String message, final Object... args) {
-		assert this.messages != null;
-		return MessageFormat.format(this.messages.getString(message), args);
+		return this.messages == null ? null : this.messages.getMessage(message, args);
 	}
 }

@@ -38,8 +38,8 @@ public final class CTConfigDataConverter implements Converter<long[]> {
 		default:
 			throw new UnsupportedOperationException("Cannot parse line, invalid time unit " + unit.name());
 		}
-		return CTUtil.fromMillis(unit, data[0]) + unitChar + "/" + CTUtil.fromMillis(unit, data[1]) + unitChar + "/"
-				+ CTUtil.fromMillis(unit, data[2]) + unitChar;
+		return CTTimeUtil.fromMillis(unit, data[0]) + unitChar + "/" + CTTimeUtil.fromMillis(unit, data[1]) + unitChar + "/"
+				+ CTTimeUtil.fromMillis(unit, data[2]) + unitChar;
 	}
 
 	@Override
@@ -82,7 +82,7 @@ public final class CTConfigDataConverter implements Converter<long[]> {
 					throw new IllegalArgumentException("Cannot parse line: " + line + ", invalid time unit " + u);
 				}
 				try {
-					data[g / 2] = CTUtil.toMillis(unit, Long.parseLong(q));
+					data[g / 2] = CTTimeUtil.toMillis(unit, Long.parseLong(q));
 				} catch (final NumberFormatException ex) {
 					throw new IllegalArgumentException("Cannot parse line: " + line, ex);
 				}

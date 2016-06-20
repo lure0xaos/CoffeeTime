@@ -41,7 +41,7 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
 	}
 
 	public CTConfig(final TimeUnit unit, final long whole, final long block, final long warn) {
-		this(CTUtil.toMillis(unit, whole), CTUtil.toMillis(unit, block), CTUtil.toMillis(unit, warn));
+		this(CTTimeUtil.toMillis(unit, whole), CTTimeUtil.toMillis(unit, block), CTTimeUtil.toMillis(unit, warn));
 		this.name = this.name(unit);
 	}
 
@@ -79,7 +79,7 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
 	}
 
 	public long getBlock(final TimeUnit unit) {
-		return CTUtil.fromMillis(unit, this.block);
+		return CTTimeUtil.fromMillis(unit, this.block);
 	}
 
 	public String getName() {
@@ -91,7 +91,7 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
 	}
 
 	public long getWarn(final TimeUnit unit) {
-		return CTUtil.fromMillis(unit, this.warn);
+		return CTTimeUtil.fromMillis(unit, this.warn);
 	}
 
 	public long getWhole() {
@@ -99,7 +99,7 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
 	}
 
 	public long getWhole(final TimeUnit unit) {
-		return CTUtil.fromMillis(unit, this.whole);
+		return CTTimeUtil.fromMillis(unit, this.whole);
 	}
 
 	@Override
@@ -143,7 +143,7 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
 	}
 
 	public void setBlock(final TimeUnit unit, final long block) {
-		this.block = CTUtil.toMillis(unit, block);
+		this.block = CTTimeUtil.toMillis(unit, block);
 	}
 
 	public void setWarn(final long warn) {
@@ -151,7 +151,7 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
 	}
 
 	public void setWarn(final TimeUnit unit, final long warn) {
-		this.warn = CTUtil.toMillis(unit, warn);
+		this.warn = CTTimeUtil.toMillis(unit, warn);
 	}
 
 	public void setWhole(final long whole) {
@@ -159,7 +159,7 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
 	}
 
 	public void setWhole(final TimeUnit unit, final long whole) {
-		this.whole = CTUtil.toMillis(unit, whole);
+		this.whole = CTTimeUtil.toMillis(unit, whole);
 	}
 
 	@Override

@@ -7,5 +7,7 @@ public interface CTControlActions {
 
 	CTConfigs getConfigs();
 
+	void help();
+
 	void unarm();
 }

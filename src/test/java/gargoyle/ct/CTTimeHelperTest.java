@@ -20,10 +20,10 @@ public class CTTimeHelperTest {
 
 	@Test
 	public void testFakeTime() {
-		final long fakeTime = CTUtil.currentTimeMillis();
+		final long fakeTime = CTTimeUtil.currentTimeMillis();
 		this.helper.setFakeTime(fakeTime);
 		Assert.assertEquals(fakeTime, this.helper.getFakeTime());
-		final long expected = CTUtil.currentTimeMillis();
+		final long expected = CTTimeUtil.currentTimeMillis();
 		final long actual = this.helper.currentTimeMillis();
 		Assert.assertTrue((expected - actual) <= 0);
 	}

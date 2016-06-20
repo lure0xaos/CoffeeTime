@@ -1,28 +1,22 @@
 package gargoyle.ct;
 
+import java.awt.Desktop;
+import java.awt.Desktop.Action;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.ResourceBundle;
-import java.util.Scanner;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 public class CT implements CTApp {
-	private static final String LOC_MESSAGES = "messages";
-	private static final String CONFIG_NAME = "CT.cfg";
-
-	private static String convertStreamToString(final InputStream is) {
-		try (Scanner scanner = new Scanner(is, StandardCharsets.US_ASCII.name())) {
-			final Scanner s = scanner.useDelimiter("\\A");
-			return s.hasNext() ? s.next() : "";
-		} catch (final Exception ex) {
-			throw new RuntimeException(ex);
-		}
-	}
+	public static final String DOT = ".";
+	public static final String HTML = "html";
+	public static final String HELP_PAGE = "/doc/help.html";
+	public static final String LOC_MESSAGES = "messages";
+	public static final String CONFIG_NAME = "CT.cfg";
 
 	public static void main(final String[] args) {
 		boolean debug = false;
@@ -41,7 +35,7 @@ public class CT implements CTApp {
 		CT.setSystemLookAndFeel();
 		final CT app = new CT();
 		if ((args != null) && (args.length != 0)) {
-			final long fakeTime = CTUtil.parseHHMMSS(args[0]);
+			final long fakeTime = CTTimeUtil.parseHHMMSS(args[0]);
 			app.setFakeTime(fakeTime);
 		}
 		app.blocker.debug(debug);
@@ -64,13 +58,13 @@ public class CT implements CTApp {
 
 	private final CTBlocker blocker;
 	private final CTControlActions control;
-	private final ResourceBundle messages;
 	private final TimeHelper timeHelper;
 	private final CTTimer timer;
+	private final CTMessageProvider messages;
 
 	private CT() {
+		this.messages = new CTMessageProvider(CT.LOC_MESSAGES);
 		this.timeHelper = new CTTimeHelper();
-		this.messages = ResourceBundle.getBundle(CT.LOC_MESSAGES);
 		final CTBlocker pBlocker = new CTBlocker(this);
 		final CTControl pControl = new CTControl(this);
 		this.timer = new CTTimer(this.timeHelper, pBlocker, pControl);
@@ -96,7 +90,7 @@ public class CT implements CTApp {
 		final CTConfigResource configResource = CTConfigResource.findLocal(CT.CONFIG_NAME);
 		if (configResource.exists()) {
 			try (InputStream stream = (configResource.getInputStream())) {
-				configs = CTConfigs.parse(CT.convertStreamToString(stream));
+				configs = CTConfigs.parse(CTUtil.convertStreamToString(stream));
 				if (configs.getConfigs().isEmpty()) {
 					configs = new CTStandardConfigs();
 				}
@@ -113,12 +107,24 @@ public class CT implements CTApp {
 
 	@Override
 	public String getMessage(final String message, final Object... args) {
-		final String pattern = this.messages.getString(message);
-		try {
-			return MessageFormat.format(pattern, args);
-		} catch (final IllegalArgumentException ex) {
-			throw new RuntimeException(
-					"can't parse message:" + message + "->" + pattern + "(" + Arrays.toString(args) + ")", ex);
+		return this.messages.getMessage(message, args);
+	}
+
+	@Override
+	public void help() {
+		if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Action.BROWSE)) {
+			final Resource resource = new ClasspathResource(CT.HELP_PAGE);
+			if (resource.exists()) {
+				try (InputStream stream = resource.getInputStream()) {
+					final File tempFile = File.createTempFile(CT.class.getName(), CT.DOT + CT.HTML);
+					Files.copy(stream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+					Desktop.getDesktop().browse(tempFile.toURI());
+				} catch (final IOException ex) {
+					Log.error(ex, "Page {0} not found", CT.HELP_PAGE);
+				}
+			} else {
+				Log.error("Page {0} not found", CT.HELP_PAGE);
+			}
 		}
 	}
 

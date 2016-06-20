@@ -4,13 +4,22 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.Locale;
 
 public interface Resource {
 	boolean exists();
 
-	public InputStream getInputStream() throws IOException;
+	Resource forLocale(Locale locale);
 
-	public OutputStream getOutputStream() throws IOException;
+	InputStream getInputStream() throws IOException;
 
-	public URL getURL();
+	Locale getLocale();
+
+	String getLocation();
+
+	OutputStream getOutputStream() throws IOException;
+
+	URL toURL() throws IOException;
+
+	Resource withExtension(String extension);
 }

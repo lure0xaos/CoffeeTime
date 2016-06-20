@@ -95,19 +95,19 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
 
 	@Override
 	public void doUpdate(final CTTask task, final long currentMillis) {
-		this.lblInfo.setText(CTUtil.formatHHMMSS(currentMillis));
+		this.lblInfo.setText(CTTimeUtil.formatHHMMSS(currentMillis));
 		if (task.isReady()) {
 			if (task.isBlocked(currentMillis)) {
 				this.setVisible(true);
 				this.setForeground(Color.WHITE);
 				this.setText(this.app.getMessage(CTBlocker.MSG_BLOCKED,
-						CTUtil.formatMMSS(CTUtil.timeRemainsTo(currentMillis, task.getBlockEnd(currentMillis)))));
+						CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockEnd(currentMillis)))));
 			}
 			if (task.isWarn(currentMillis)) {
-				this.setVisible(CTUtil.isInPeriod(TimeUnit.SECONDS, currentMillis, 60, 3));
+				this.setVisible(CTTimeUtil.isInPeriod(TimeUnit.SECONDS, currentMillis, 60, 3));
 				this.setForeground(Color.GREEN);
 				this.setText(this.app.getMessage(CTBlocker.MSG_WARN,
-						CTUtil.formatMMSS(CTUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis)))));
+						CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis)))));
 			}
 			if (task.isSleeping(currentMillis)) {
 				this.setVisible(false);

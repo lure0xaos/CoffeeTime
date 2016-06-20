@@ -9,7 +9,7 @@ public class CTTimeHelper implements TimeHelper {
 
 	@Override
 	public long currentTimeMillis() {
-		return CTUtil.currentTimeMillis() + this.delta;
+		return CTTimeUtil.currentTimeMillis() + this.delta;
 	}
 
 	@Override
@@ -20,6 +20,6 @@ public class CTTimeHelper implements TimeHelper {
 	@Override
 	public void setFakeTime(final long fakeTime) {
 		this.fakeTime = fakeTime;
-		this.delta = fakeTime - CTUtil.currentTimeMillis();
+		this.delta = fakeTime - CTTimeUtil.currentTimeMillis();
 	}
 }

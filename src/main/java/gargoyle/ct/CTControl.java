@@ -118,7 +118,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
 			if (this.reshow && (text != null) && !text.isEmpty()) {
 				try {
 					ToolTipManager.sharedInstance().mouseMoved(new MouseEvent(this.label, MouseEvent.MOUSE_MOVED,
-							CTUtil.currentTimeMillis(), 0, this.getWidth(), this.getHeight(), 0, false));
+							CTTimeUtil.currentTimeMillis(), 0, this.getWidth(), this.getHeight(), 0, false));
 				} catch (final RuntimeException ex) {
 					// IGNORE
 				}
@@ -127,6 +127,8 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
 	}
 
 	private static final String STR_EXIT = "exit";
+	private static final String STR_UNARM = "unarm";
+	private static final String STR_HELP = "help";
 	private static final String URL_ICON = "/icon64.png";
 	final CTApp app;
 	private final CTControlWindow controlWindow;
@@ -166,6 +168,22 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
 		final JPopupMenu menu = new JPopupMenu();
 		this.addConfigs(menu, configs);
 		menu.add(new JSeparator(SwingConstants.HORIZONTAL));
+		menu.add(new JMenuItem(new AbstractAction(this.app.getMessage(CTControl.STR_UNARM)) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				CTControl.this.unarm();
+			}
+		}));
+		menu.add(new JMenuItem(new AbstractAction(this.app.getMessage(CTControl.STR_HELP)) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				CTControl.this.help();
+			}
+		}));
 		menu.add(new JMenuItem(new AbstractAction(this.app.getMessage(CTControl.STR_EXIT)) {
 			private static final long serialVersionUID = 1L;
 
@@ -182,18 +200,18 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
 		if (task.isReady()) {
 			if (task.isBlocked(currentMillis)) {
 				this.controlWindow.setToolTipText(
-						CTUtil.formatMMSS(CTUtil.timeRemainsTo(currentMillis, task.getBlockEnd(currentMillis))));
+						CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockEnd(currentMillis))));
 			}
 			if (task.isWarn(currentMillis)) {
 				this.controlWindow.setToolTipText(
-						CTUtil.formatMMSS(CTUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis))));
+						CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis))));
 			}
 			if (task.isSleeping(currentMillis)) {
 				this.controlWindow.setToolTipText(
-						CTUtil.formatMMSS(CTUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis))));
+						CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis))));
 			}
 		} else {
-			this.controlWindow.setToolTipText(CTUtil.formatHHMMSS(currentMillis));
+			this.controlWindow.setToolTipText(CTTimeUtil.formatHHMMSS(currentMillis));
 		}
 	}
 
@@ -225,7 +243,13 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
 	}
 
 	@Override
+	public void help() {
+		this.app.help();
+	}
+
+	@Override
 	public void unarm() {
+		CTControl.this.group.clearSelection();
 		this.app.unarm();
 	}
 }
