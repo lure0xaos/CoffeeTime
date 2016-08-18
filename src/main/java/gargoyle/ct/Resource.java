@@ -7,19 +7,19 @@ import java.net.URL;
 import java.util.Locale;
 
 public interface Resource {
-	boolean exists();
+    boolean exists();
 
-	Resource forLocale(Locale locale);
+    Resource forLocale(Locale locale);
 
-	InputStream getInputStream() throws IOException;
+    InputStream getInputStream() throws IOException;
 
-	Locale getLocale();
+    Locale getLocale();
 
-	String getLocation();
+    String getLocation();
 
-	OutputStream getOutputStream() throws IOException;
+    OutputStream getOutputStream() throws IOException;
 
-	URL toURL() throws IOException;
+    URL toURL() throws IOException;
 
-	Resource withExtension(String extension);
+    Resource withExtension(String extension);
 }

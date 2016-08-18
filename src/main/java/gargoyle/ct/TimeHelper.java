@@ -1,9 +1,9 @@
 package gargoyle.ct;
 
 public interface TimeHelper {
-	long currentTimeMillis();
+    long currentTimeMillis();
 
-	long getFakeTime();
+    long getFakeTime();
 
-	void setFakeTime(long fakeTime);
+    void setFakeTime(long fakeTime);
 }

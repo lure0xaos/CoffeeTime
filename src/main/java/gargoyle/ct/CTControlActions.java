@@ -1,13 +1,13 @@
 package gargoyle.ct;
 
 public interface CTControlActions {
-	void arm(CTConfig config);
+    void arm(CTConfig config);
 
-	void exit();
+    void exit();
 
-	CTConfigs getConfigs();
+    CTConfigs getConfigs();
 
-	void help();
+    void help();
 
-	void unarm();
+    void unarm();
 }
