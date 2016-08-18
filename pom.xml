@@ -57,7 +57,7 @@
                             <goal>launch4j</goal>
                         </goals>
                         <configuration>
-                            <icon>${project.basedir}/src/main/resources/icon16.ico</icon>
+                            <icon>${project.basedir}/src/main/resources/icon128.ico</icon>
                             <headerType>gui</headerType>
                             <outfile>target/${project.build.finalName}.exe</outfile>
                             <jar>target/${project.build.finalName}.jar</jar>
