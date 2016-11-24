@@ -1,5 +1,6 @@
 package gargoyle.ct;
 
+import gargoyle.ct.util.Log;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,6 +11,7 @@ import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
+@SuppressWarnings("HardCodedStringLiteral")
 public class CTLogTest {
 
     private Deque<LogRecord> records;

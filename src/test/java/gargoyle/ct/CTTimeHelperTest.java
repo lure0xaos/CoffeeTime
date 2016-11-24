@@ -1,30 +1,33 @@
 package gargoyle.ct;
 
+import gargoyle.ct.helper.CTTimeHelper;
+import gargoyle.ct.util.CTTimeUtil;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 public class CTTimeHelperTest {
-	private CTTimeHelper helper;
 
-	@Before
-	public void setUp() {
+    private CTTimeHelper helper;
+
+    @Before
+    public void setUp() {
         helper = new CTTimeHelper();
-	}
+    }
 
-	@After
-	public void tearDown() {
+    @After
+    public void tearDown() {
         helper = null;
-	}
+    }
 
-	@Test
-	public void testFakeTime() {
-		long fakeTime = CTTimeUtil.currentTimeMillis();
+    @Test
+    public void testFakeTime() {
+        long fakeTime = CTTimeUtil.currentTimeMillis();
         helper.setFakeTime(fakeTime);
-		Assert.assertEquals(fakeTime, helper.getFakeTime());
-		long expected = CTTimeUtil.currentTimeMillis();
-		long actual = helper.currentTimeMillis();
-		Assert.assertTrue(expected - actual <= 0);
-	}
+        Assert.assertEquals(fakeTime, helper.getFakeTime());
+        long expected = CTTimeUtil.currentTimeMillis();
+        long actual = helper.currentTimeMillis();
+        Assert.assertTrue(expected - actual <= 0);
+    }
 }

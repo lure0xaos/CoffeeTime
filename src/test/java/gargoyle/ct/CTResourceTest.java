@@ -1,33 +1,46 @@
 package gargoyle.ct;
 
+import gargoyle.ct.resource.Resource;
+import gargoyle.ct.resource.internal.ClasspathResource;
+import gargoyle.ct.util.Log;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Locale;
 
 public class CTResourceTest {
-	@Test
-	public void testResourceExt() {
-		Resource resource = new ClasspathResource("rb.properties").withExtension("txt");
-		String url = resource.getLocation();
-		System.out.println(url);
-		Assert.assertTrue(url.endsWith(".txt"));
-	}
 
-	@Test
-	public void testResourceExtLocale() {
-		Resource resource = new ClasspathResource("rb.properties").withExtension("txt")
-				.forLocale(new Locale("ru"));
-		String url = resource.getLocation();
-		System.out.println(url);
-		Assert.assertTrue(url.endsWith(".txt"));
-	}
+    private static final String RB_PROPERTIES = "rb.properties";
 
-	@Test
-	public void testResourceLocale() {
-		Resource resource = new ClasspathResource("rb.properties").forLocale(new Locale("ru"));
-		String url = resource.getLocation();
-		System.out.println(url);
-		Assert.assertTrue(url.endsWith(".properties"));
-	}
+    private static final String TXT = "txt";
+
+    private static final String DOT_TXT = ".txt";
+
+    private static final String LOCALE_RU = "ru";
+
+    private static final String EXT_PROPERTIES = ".properties";
+
+    @Test
+    public void testResourceExt() {
+        Resource resource = new ClasspathResource(RB_PROPERTIES).withExtension(TXT);
+        String url = resource.getLocation();
+        Log.info(url);
+        Assert.assertTrue(url.endsWith(DOT_TXT));
+    }
+
+    @Test
+    public void testResourceExtLocale() {
+        Resource resource = new ClasspathResource(RB_PROPERTIES).withExtension(TXT).forLocale(new Locale(LOCALE_RU));
+        String url = resource.getLocation();
+        Log.info(url);
+        Assert.assertTrue(url.endsWith(DOT_TXT));
+    }
+
+    @Test
+    public void testResourceLocale() {
+        Resource resource = new ClasspathResource(RB_PROPERTIES).forLocale(new Locale(LOCALE_RU));
+        String url = resource.getLocation();
+        Log.info(url);
+        Assert.assertTrue(url.endsWith(EXT_PROPERTIES));
+    }
 }

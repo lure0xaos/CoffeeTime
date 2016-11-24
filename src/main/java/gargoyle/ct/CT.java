@@ -1,5 +1,24 @@
 package gargoyle.ct;
 
+import gargoyle.ct.config.CTConfig;
+import gargoyle.ct.config.CTConfigs;
+import gargoyle.ct.config.CTStandardConfigs;
+import gargoyle.ct.helper.CTTimeHelper;
+import gargoyle.ct.helper.TimeHelper;
+import gargoyle.ct.messages.impl.CTMessageProvider;
+import gargoyle.ct.resource.Resource;
+import gargoyle.ct.resource.impl.CTConfigResource;
+import gargoyle.ct.resource.internal.ClasspathResource;
+import gargoyle.ct.task.impl.CTTimer;
+import gargoyle.ct.ui.CTApp;
+import gargoyle.ct.ui.CTBlocker;
+import gargoyle.ct.ui.CTControl;
+import gargoyle.ct.ui.CTControlActions;
+import gargoyle.ct.util.CTMutex;
+import gargoyle.ct.util.CTTimeUtil;
+import gargoyle.ct.util.CTUtil;
+import gargoyle.ct.util.Log;
+
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import java.awt.Desktop;
@@ -22,6 +41,10 @@ public final class CT implements CTApp {
 
     private static final String CONFIG_NAME = "CT.cfg";
 
+    private static final String NOT_FOUND_0 = "Not found {0}";
+
+    private static final String PAGE_0_NOT_FOUND = "Page {0} not found";
+
     private final CTBlocker blocker;
 
     private final CTControlActions control;
@@ -42,6 +65,7 @@ public final class CT implements CTApp {
         control = pControl;
     }
 
+    @SuppressWarnings("MethodCanBeVariableArityMethod")
     public static void main(String[] args) {
         boolean debug = false;
         if (args != null) {
@@ -53,14 +77,18 @@ public final class CT implements CTApp {
             }
         }
         if (!debug && !CTMutex.acquire()) {
-            Log.error("App already running");
+            Log.error("App already running"); //NON-NLS
             return;
         }
         setSystemLookAndFeel();
         CT app = new CT();
         if (args != null && args.length != 0) {
-            long fakeTime = CTTimeUtil.parseHHMMSS(args[0]);
-            app.setFakeTime(fakeTime);
+            try {
+                long fakeTime = CTTimeUtil.parseHHMMSS(args[0]);
+                app.setFakeTime(fakeTime);
+            } catch (NumberFormatException e) {
+                Log.info("fake time not set"); //NON-NLS
+            }
         }
         app.blocker.debug(debug);
         app.start();
@@ -97,11 +125,15 @@ public final class CT implements CTApp {
                     configs = new CTStandardConfigs();
                 }
             } catch (IOException ex) {
-                Log.error(ex, "Cannot load {0}", configResource);
+                Log.error(ex, "Cannot load {0}", configResource); //NON-NLS
                 configs = new CTStandardConfigs();
             }
         } else {
-            Log.warn("Not found {0}", configResource);
+            if (configResource == null) {
+                Log.warn(NOT_FOUND_0, CONFIG_NAME); //NON-NLS
+            } else {
+                Log.warn(NOT_FOUND_0, configResource); //NON-NLS
+            }
             configs = new CTStandardConfigs();
         }
         return configs;
@@ -122,10 +154,10 @@ public final class CT implements CTApp {
                     Files.copy(stream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                     Desktop.getDesktop().browse(tempFile.toURI());
                 } catch (IOException ex) {
-                    Log.error(ex, "Page {0} not found", HELP_PAGE);
+                    Log.error(ex, PAGE_0_NOT_FOUND, HELP_PAGE); //NON-NLS
                 }
             } else {
-                Log.error("Page {0} not found", HELP_PAGE);
+                Log.error(PAGE_0_NOT_FOUND, HELP_PAGE); //NON-NLS
             }
         }
     }
