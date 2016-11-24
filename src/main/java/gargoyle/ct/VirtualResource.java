@@ -3,37 +3,40 @@ package gargoyle.ct;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.Objects;
+import java.util.ResourceBundle.Control;
 
 public class VirtualResource extends AbstractResource {
+
     private final Resource baseResource;
+
     private Locale locale;
 
-    protected VirtualResource(final Resource baseResource, final String location) {
+    protected VirtualResource(Resource baseResource, String location) {
         super(location);
         this.baseResource = baseResource;
     }
 
-    protected VirtualResource(final String location) {
+    protected VirtualResource(String location) {
         super(location);
-        this.baseResource = this;
+        baseResource = this;
     }
 
     @Override
-    protected VirtualResource createResource(final Resource base, final String location) {
+    protected VirtualResource createResource(Resource base, String location) {
         return base == null ? new VirtualResource(location) : new VirtualResource(base, location);
     }
 
     @Override
-    public Resource forLocale(final Locale locale) {
-        final ResourceBundle.Control ctrl = ResourceBundle.Control.getControl(ResourceBundle.Control.FORMAT_DEFAULT);
-        final String location = this.baseResource.getLocation();
-        final int i = location.lastIndexOf('.');
-        final String baseName = location.substring(0, i);
-        final String suffix = location.substring(i + 1);
-        for (final Locale specificLocale : ctrl.getCandidateLocales(baseName, locale)) {
-            final String loc = ctrl.toResourceName(ctrl.toBundleName(baseName, specificLocale), suffix);
-            final VirtualResource resource = this.createResource(this.baseResource, loc);
+    public Resource forLocale(Locale locale) {
+        Control ctrl = Control.getControl(Control.FORMAT_DEFAULT);
+        String location = baseResource.getLocation();
+        int i = location.lastIndexOf('.');
+        String baseName = location.substring(0, i);
+        String suffix = location.substring(i + 1);
+        for (Locale specificLocale : ctrl.getCandidateLocales(baseName, locale)) {
+            String loc = ctrl.toResourceName(ctrl.toBundleName(baseName, specificLocale), suffix);
+            VirtualResource resource = createResource(baseResource, loc);
             if (resource.exists()) {
                 resource.locale = locale;
                 return resource;
@@ -42,14 +45,15 @@ public class VirtualResource extends AbstractResource {
         return null;
     }
 
+    @Override
     public Locale getLocale() {
-        return this.locale;
+        return locale;
     }
 
     public String getRelativeLocation() {
-        final String thisLocation = this.getLocation();
-        final String baseLocation = this.baseResource.getLocation();
-        final int minLength = Math.min(thisLocation.length(), baseLocation.length());
+        String thisLocation = getLocation();
+        String baseLocation = baseResource.getLocation();
+        int minLength = Math.min(thisLocation.length(), baseLocation.length());
         for (int i = 0; i < minLength; i++) {
             if (thisLocation.charAt(i) != baseLocation.charAt(i)) {
                 return thisLocation.substring(i);
@@ -60,13 +64,13 @@ public class VirtualResource extends AbstractResource {
 
     @Override
     public URL toURL() throws IOException {
-        return this.baseResource == this ? super.toURL() : new URL(this.baseResource.toURL(), this.getLocation());
+        return Objects.equals(baseResource, this) ? super.toURL() : new URL(baseResource.toURL(), getLocation());
     }
 
     @Override
-    public Resource withExtension(final String extension) {
-        final String location = this.getLocation();
-        final String loc = location.substring(0, location.lastIndexOf('.')) + "." + extension;
-        return this.createResource(null, loc);
+    public Resource withExtension(String extension) {
+        String location = getLocation();
+        String loc = location.substring(0, location.lastIndexOf('.')) + "." + extension;
+        return createResource(null, loc);
     }
 }

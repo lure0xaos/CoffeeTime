@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.Locale;
 
 public interface Resource {
+
     boolean exists();
 
     Resource forLocale(Locale locale);

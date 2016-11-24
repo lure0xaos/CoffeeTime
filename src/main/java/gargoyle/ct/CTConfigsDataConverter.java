@@ -3,31 +3,30 @@ package gargoyle.ct;
 import java.util.concurrent.TimeUnit;
 
 public final class CTConfigsDataConverter implements Converter<String[]> {
+
     private static CTConfigsDataConverter instance;
 
-    public static synchronized CTConfigsDataConverter getInstance() {
-        if (CTConfigsDataConverter.instance == null) {
-            CTConfigsDataConverter.instance = new CTConfigsDataConverter();
-        }
-        return CTConfigsDataConverter.instance;
+    private CTConfigsDataConverter() {
     }
 
-    private CTConfigsDataConverter() {
-        super();
+    public static synchronized CTConfigsDataConverter getInstance() {
+        if (instance == null) {
+            instance = new CTConfigsDataConverter();
+        }
+        return instance;
     }
 
     @Override
-    public String format(final TimeUnit unit, final String[] data) {
-        final StringBuilder ret = new StringBuilder();
-        for (final String string : data) {
+    public String format(TimeUnit unit, String... data) {
+        StringBuilder ret = new StringBuilder();
+        for (String string : data) {
             ret.append(string).append("\n");
         }
         return ret.toString();
     }
 
     @Override
-    public String[] parse(final String line) {
-        final String[] split = line.split("\n");
-        return split;
+    public String[] parse(String line) {
+        return line.split("\n");
     }
 }

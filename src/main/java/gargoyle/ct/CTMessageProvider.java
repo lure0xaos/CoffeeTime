@@ -3,54 +3,59 @@ package gargoyle.ct;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.ResourceBundle.Control;
 
 public class CTMessageProvider implements MessageProvider {
-    private ResourceBundle messages;
+
     private final LocaleProvider localeProvider = new LocaleProvider();
 
-    public CTMessageProvider(final String baseName) {
+    private ResourceBundle messages;
+
+    public CTMessageProvider(String baseName) {
         this(baseName, Locale.getDefault());
     }
 
-    public CTMessageProvider(final String baseName, final Locale locale) {
-        this.localeProvider.setLocale(locale);
-        this.load(baseName);
+    private CTMessageProvider(String baseName, Locale locale) {
+        localeProvider.setLocale(locale);
+        load(baseName);
     }
 
     private void check() {
-        if (!this.messages.getLocale().equals(this.localeProvider.getLocale())) {
-            this.reload();
+        if (!Objects.equals(messages.getLocale(), localeProvider.getLocale())) {
+            reload();
         }
     }
 
     public Locale getLocale() {
-        return this.localeProvider.getLocale();
+        return localeProvider.getLocale();
+    }
+
+    public void setLocale(Locale locale) {
+        localeProvider.setLocale(locale);
+        reload();
     }
 
     @Override
-    public String getMessage(final String message, final Object... args) {
-        this.check();
-        final String pattern = this.messages.getString(message);
+    public String getMessage(String message, Object... args) {
+        check();
+        String pattern = messages.getString(message);
         try {
             return MessageFormat.format(pattern, args);
-        } catch (final IllegalArgumentException ex) {
+        } catch (IllegalArgumentException ex) {
             throw new RuntimeException(
-                    "can't parse message:" + message + "->" + pattern + "(" + Arrays.toString(args) + ")", ex);
+                "can't parse message:" + message + "->" + pattern + "(" + Arrays.toString(args) + ")", ex);
         }
     }
 
-    private void load(final String baseName) {
-        this.messages = ResourceBundle.getBundle(baseName, this.localeProvider.getLocale(),
-                ResourceBundle.Control.getControl(ResourceBundle.Control.FORMAT_PROPERTIES));
+    private void load(String baseName) {
+        messages =
+            ResourceBundle.getBundle(baseName, localeProvider.getLocale(),
+                Control.getControl(Control.FORMAT_PROPERTIES));
     }
 
     private void reload() {
-        this.load(this.messages.getBaseBundleName());
-    }
-
-    public void setLocale(final Locale locale) {
-        this.localeProvider.setLocale(locale);
-        this.reload();
+        load(messages.getBaseBundleName());
     }
 }

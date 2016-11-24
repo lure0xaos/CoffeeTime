@@ -3,70 +3,68 @@ package gargoyle.ct;
 import java.util.concurrent.TimeUnit;
 
 public class CTTask {
+
     private CTConfig config;
+
     private long started;
 
-    public long getBlockEnd(final long currentMillis) {
-        return CTTimeUtil.upTo(CTTimeUtil.toBase(this.getStarted(), currentMillis, this.getConfig().getWhole()),
-                this.getConfig().getWhole());
+    public long getBlockEnd(long currentMillis) {
+        return CTTimeUtil.upTo(CTTimeUtil.toBase(started, currentMillis, config.getWhole()),
+            config.getWhole());
     }
 
-    public long getBlockStart(final long currentMillis) {
-        return this.getBlockEnd(currentMillis) - this.getConfig().getBlock();
+    public long getBlockStart(long currentMillis) {
+        return getBlockEnd(currentMillis) - config.getBlock();
     }
 
     public CTConfig getConfig() {
-        return this.config;
+        return config;
     }
 
-    public long getCycleStart(final long currentMillis) {
-        return CTTimeUtil.downTo(CTTimeUtil.toBase(this.getStarted(), currentMillis, this.getConfig().getWhole()),
-                this.getConfig().getWhole());
-    }
-
-    public long getStarted() {
-        return this.started;
-    }
-
-    public long getStarted(final TimeUnit unit) {
-        return CTTimeUtil.fromMillis(unit, this.started);
-    }
-
-    public long getWarnStart(final long currentMillis) {
-        return this.getBlockStart(currentMillis) - this.getConfig().getWarn();
-    }
-
-    public boolean isBlocked(final long currentMillis) {
-        if (!this.isReady()) {
-            return false;
-        }
-        return CTTimeUtil.isBetween(currentMillis, this.getBlockStart(currentMillis), this.getBlockEnd(currentMillis));
-    }
-
-    public boolean isReady() {
-        return (this.getStarted() != 0) && (this.getConfig() != null);
-    }
-
-    public boolean isSleeping(final long currentMillis) {
-        return CTTimeUtil.isBetween(currentMillis, this.getCycleStart(currentMillis), this.getWarnStart(currentMillis));
-    }
-
-    public boolean isWarn(final long currentMillis) {
-        if (!this.isReady()) {
-            return false;
-        }
-        return CTTimeUtil.isBetween(currentMillis, this.getWarnStart(currentMillis), this.getBlockStart(currentMillis));
-    }
-
-    public void setConfig(final CTConfig config) {
+    public void setConfig(CTConfig config) {
         this.config = config;
     }
 
-    public void setStarted(final long started) {
+    private long getCycleStart(long currentMillis) {
+        return CTTimeUtil.downTo(CTTimeUtil.toBase(started, currentMillis, config.getWhole()),
+            config.getWhole());
+    }
+
+    public long getStarted() {
+        return started;
+    }
+
+    public void setStarted(long started) {
         this.started = started;
     }
 
-    public void setStarted(final TimeUnit unit, final long started) {
+    public long getStarted(TimeUnit unit) {
+        return CTTimeUtil.fromMillis(unit, started);
+    }
+
+    private long getWarnStart(long currentMillis) {
+        return getBlockStart(currentMillis) - config.getWarn();
+    }
+
+    public boolean isBlocked(long currentMillis) {
+        return isReady() &&
+            CTTimeUtil.isBetween(currentMillis, getBlockStart(currentMillis), getBlockEnd(currentMillis));
+    }
+
+    public boolean isReady() {
+        return started != 0 && config != null;
+    }
+
+    public boolean isSleeping(long currentMillis) {
+        return CTTimeUtil.isBetween(currentMillis, getCycleStart(currentMillis), getWarnStart(currentMillis));
+    }
+
+    public boolean isWarn(long currentMillis) {
+        return isReady() &&
+            CTTimeUtil.isBetween(currentMillis, getWarnStart(currentMillis), getBlockStart(currentMillis));
+    }
+
+    public void setStarted(TimeUnit unit, long started) {
         this.started = CTTimeUtil.toMillis(unit, started);
     }
 }

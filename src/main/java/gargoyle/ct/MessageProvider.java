@@ -1,5 +1,7 @@
 package gargoyle.ct;
 
+@FunctionalInterface
 public interface MessageProvider {
-    public String getMessage(String message, Object... args);
+
+    String getMessage(String message, Object... args);
 }

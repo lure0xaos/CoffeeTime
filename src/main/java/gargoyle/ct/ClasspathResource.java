@@ -4,30 +4,31 @@ import java.io.IOException;
 import java.net.URL;
 
 public class ClasspathResource extends VirtualResource {
-    private ClasspathResource(final Resource base, final String location) {
+
+    private ClasspathResource(Resource base, String location) {
         super(base, location);
     }
 
-    public ClasspathResource(final String location) {
+    public ClasspathResource(String location) {
         super(location);
     }
 
     @Override
-    protected ClasspathResource createResource(final Resource base, final String location) {
+    protected ClasspathResource createResource(Resource base, String location) {
         return base == null ? new ClasspathResource(location) : new ClasspathResource(base, location);
     }
 
     @Override
     public boolean exists() {
         try {
-            return this.exists(this.toURL());
-        } catch (final IOException ex) {
+            return exists(toURL());
+        } catch (IOException ex) {
             return false;
         }
     }
 
     @Override
     public URL toURL() throws IOException {
-        return Thread.currentThread().getContextClassLoader().getResource(this.getLocation());
+        return Thread.currentThread().getContextClassLoader().getResource(getLocation());
     }
 }

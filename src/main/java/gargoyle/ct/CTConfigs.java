@@ -1,129 +1,143 @@
 package gargoyle.ct;
 
-import java.io.*;
-import java.util.*;
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.InvalidObjectException;
+import java.io.ObjectInput;
+import java.io.ObjectInputValidation;
+import java.io.ObjectOutput;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class CTConfigs implements Externalizable, ObjectInputValidation {
-    public static CTConfigs parse(final String line) {
-        return new CTConfigs(CTConfigs.read(line));
+
+    private static final long serialVersionUID = 2320942613378643025L;
+
+    private final Map<String, CTConfig> configs;
+
+    public CTConfigs() {
+        configs = new LinkedHashMap<>();
     }
 
-    private static CTConfig[] read(final String line) {
-        final String[] data = CTConfigsDataConverter.getInstance().parse(line);
-        final List<CTConfig> configs = new LinkedList<CTConfig>();
-        for (int i = 0; i < data.length; i++) {
+    protected CTConfigs(CTConfig... configs) {
+        this(Arrays.asList(configs));
+    }
+
+    public CTConfigs(List<CTConfig> configs) {
+        this();
+        setConfigs(configs);
+    }
+
+    public static CTConfigs parse(String line) {
+        return new CTConfigs(read(line));
+    }
+
+    private static CTConfig[] read(String line) {
+        String[] data = CTConfigsDataConverter.getInstance().parse(line);
+        List<CTConfig> configs = new LinkedList<>();
+        for (String aData : data) {
             try {
-                configs.add(new CTConfig(data[i]));
-            } catch (final IllegalArgumentException ex) {
-                Log.error("skip invalid config line: {0}", data[i]);
+                configs.add(new CTConfig(aData));
+            } catch (IllegalArgumentException ex) {
+                Log.error("skip invalid config line: {0}", aData);
             }
         }
         return configs.toArray(new CTConfig[configs.size()]);
     }
 
-    private final LinkedHashMap<String, CTConfig> configs;
-
-    public CTConfigs() {
-        this.configs = new LinkedHashMap<String, CTConfig>();
-    }
-
-    public CTConfigs(final CTConfig... configs) {
-        this(Arrays.asList(configs));
-    }
-
-    public CTConfigs(final List<CTConfig> configs) {
-        this();
-        this.setConfigs(configs);
-    }
-
-    public void addConfig(final CTConfig config) {
-        final String name = config.getName();
-        if (!this.configs.containsKey(name)) {
-            this.configs.put(name, config);
+    private void addConfig(CTConfig config) {
+        String name = config.getName();
+        if (!configs.containsKey(name)) {
+            configs.put(name, config);
         }
     }
 
     @Override
-    public boolean equals(final Object obj) {
+    public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
         if (obj == null) {
             return false;
         }
-        if (this.getClass() != obj.getClass()) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        final CTConfigs other = (CTConfigs) obj;
-        if (this.configs == null) {
+        CTConfigs other = (CTConfigs) obj;
+        if (configs == null) {
             if (other.configs != null) {
                 return false;
             }
-        } else if (!this.configs.equals(other.configs)) {
+        } else if (!Objects.equals(configs, other.configs)) {
             return false;
         }
         return true;
     }
 
     public String format() {
-        final List<String> formats = new LinkedList<String>();
-        for (final CTConfig config : this.configs.values()) {
+        List<String> formats = new LinkedList<>();
+        for (CTConfig config : configs.values()) {
             formats.add(config.format());
         }
-        return CTConfigsDataConverter.getInstance().format(TimeUnit.MINUTES,
-                formats.toArray(new String[formats.size()]));
+        return CTConfigsDataConverter.getInstance()
+            .format(TimeUnit.MINUTES, formats.toArray(new String[formats.size()]));
     }
 
-    public CTConfig getConfig(final String name) {
-        return this.configs.get(name);
+    public CTConfig getConfig(String name) {
+        return configs.get(name);
     }
 
     public List<CTConfig> getConfigs() {
-        return Collections.unmodifiableList(new LinkedList<CTConfig>(this.configs.values()));
+        return Collections.unmodifiableList(new LinkedList<>(configs.values()));
+    }
+
+    private void setConfigs(List<CTConfig> configs) {
+        this.configs.clear();
+        for (CTConfig config : configs) {
+            addConfig(config);
+        }
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
+        int prime = 31;
         int result = 1;
-        result = (prime * result) + ((this.configs == null) ? 0 : this.configs.hashCode());
+        result = prime * result + (configs == null ? 0 : configs.hashCode());
         return result;
     }
 
     @Override
-    public void readExternal(final ObjectInput in) throws IOException, ClassNotFoundException {
-        final List<CTConfig> cfgs = new LinkedList<CTConfig>();
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        List<CTConfig> cfgs = new LinkedList<>();
         String line;
         while ((line = in.readLine()) != null) {
             cfgs.add(new CTConfig(line));
         }
-        this.setConfigs(cfgs);
-    }
-
-    public void setConfigs(final List<CTConfig> configs) {
-        this.configs.clear();
-        for (final CTConfig config : configs) {
-            this.addConfig(config);
-        }
+        setConfigs(cfgs);
     }
 
     @Override
     public String toString() {
-        return "CTConfigs [configs=" + this.configs + "]";
+        return "CTConfigs [configs=" + configs + "]";
     }
 
     @Override
     public void validateObject() throws InvalidObjectException {
-        for (final CTConfig config : this.configs.values()) {
-            if ((config == null) || !config.isValid()) {
+        for (CTConfig config : configs.values()) {
+            if (config == null || config.isNotValid()) {
                 throw new InvalidObjectException("not valid config: " + config);
             }
         }
     }
 
     @Override
-    public void writeExternal(final ObjectOutput out) throws IOException {
-        out.writeBytes(this.format());
+    public void writeExternal(ObjectOutput out) throws IOException {
+        out.writeBytes(format());
     }
 }

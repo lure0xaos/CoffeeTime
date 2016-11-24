@@ -1,5 +1,7 @@
 package gargoyle.ct;
 
+@FunctionalInterface
 public interface CTTaskUpdatable {
-    public void doUpdate(CTTask task, long currentMillis);
+
+    void doUpdate(CTTask task, long currentMillis);
 }

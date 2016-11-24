@@ -1,19 +1,22 @@
 package gargoyle.ct;
 
+import org.junit.Test;
+
+import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class CTConfigResourceTest {
 	@Test
-	public void testResource() throws Exception {
-		CTConfigResource resource;
-		resource = CTConfigResource.forURL(new URL("http://www.example.com/"));
-		Assert.assertTrue(resource.exists());
+	public void testResource() throws MalformedURLException {
+        CTConfigResource resource = CTConfigResource.forURL(new URL("http://www.example.com/"));
+        assertTrue(resource.exists());
 		resource = CTConfigResource.forURL(new URL("file:///"));
-		Assert.assertTrue(resource.exists());
-		resource = CTConfigResource.findLocal(("CT.cfg"));
-		Assert.assertTrue(resource.exists());
+		assertTrue(resource.exists());
+		resource = CTConfigResource.findLocal("CT.cfg");
+        assertNotNull( resource );
+        assertTrue(resource.exists());
 	}
 }

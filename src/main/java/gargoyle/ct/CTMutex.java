@@ -4,32 +4,33 @@ import java.io.IOException;
 import java.net.ServerSocket;
 
 public final class CTMutex {
+
     private static final int PORT = 34567;
+
     private static ServerSocket mutex;
+
+    private CTMutex() {
+    }
 
     public static synchronized boolean acquire() {
         try {
-            CTMutex.mutex = new ServerSocket(CTMutex.PORT);
+            mutex = new ServerSocket(PORT);
             return true;
-        } catch (final IOException ex) {
+        } catch (IOException ex) {
             return false;
         }
     }
 
     public static synchronized void release() {
         try {
-            if (CTMutex.mutex != null) {
-                if (!CTMutex.mutex.isClosed()) {
-                    CTMutex.mutex.close();
+            if (mutex != null) {
+                if (!mutex.isClosed()) {
+                    mutex.close();
                 }
-                CTMutex.mutex = null;
+                mutex = null;
             }
-        } catch (final IOException e) {
+        } catch (IOException e) {
             // ignore
         }
-    }
-
-    private CTMutex() {
-        super();
     }
 }

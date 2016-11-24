@@ -1,41 +1,45 @@
 package gargoyle.ct;
 
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.Deque;
 import java.util.LinkedList;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 public class CTLogTest {
-	LinkedList<LogRecord> records;
 
-	@Before
-	public void setUp() {
-		this.records = new LinkedList<LogRecord>();
-		Logger.getLogger(CTLogTest.class.getName()).addHandler(new Handler() {
-			@Override
-			public void close() throws SecurityException {
-				//
-			}
+    private Deque<LogRecord> records;
 
-			@Override
-			public void flush() {
-				//
-			}
+    private final Logger logger = Logger.getLogger(CTLogTest.class.getName());
 
-			@Override
-			public void publish(final LogRecord record) {
-				CTLogTest.this.records.add(record);
-			}
-		});
-	}
+    @Before
+    public void setUp() {
+        records = new LinkedList<>();
+        logger.addHandler(new Handler() {
+            @Override
+            public void close() throws SecurityException {
+                //
+            }
 
-	@Test
-	public void testLog() {
-		Log.warn("test");
-		Assert.assertEquals(CTLogTest.class.getName(), this.records.getLast().getSourceClassName());
-	}
+            @Override
+            public void flush() {
+                //
+            }
+
+            @Override
+            public void publish(LogRecord record) {
+                records.add(record);
+            }
+        });
+    }
+
+    @Test
+    public void testLog() {
+        Log.warn("test");
+        Assert.assertEquals(CTLogTest.class.getName(), records.getLast().getSourceClassName());
+    }
 }

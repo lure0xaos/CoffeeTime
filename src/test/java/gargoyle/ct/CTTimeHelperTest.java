@@ -6,25 +6,25 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class CTTimeHelperTest {
-	private CTTimeHelper helper = null;
+	private CTTimeHelper helper;
 
 	@Before
-	public void setUp() throws Exception {
-		this.helper = new CTTimeHelper();
+	public void setUp() {
+        helper = new CTTimeHelper();
 	}
 
 	@After
-	public void tearDown() throws Exception {
-		this.helper = null;
+	public void tearDown() {
+        helper = null;
 	}
 
 	@Test
 	public void testFakeTime() {
-		final long fakeTime = CTTimeUtil.currentTimeMillis();
-		this.helper.setFakeTime(fakeTime);
-		Assert.assertEquals(fakeTime, this.helper.getFakeTime());
-		final long expected = CTTimeUtil.currentTimeMillis();
-		final long actual = this.helper.currentTimeMillis();
-		Assert.assertTrue((expected - actual) <= 0);
+		long fakeTime = CTTimeUtil.currentTimeMillis();
+        helper.setFakeTime(fakeTime);
+		Assert.assertEquals(fakeTime, helper.getFakeTime());
+		long expected = CTTimeUtil.currentTimeMillis();
+		long actual = helper.currentTimeMillis();
+		Assert.assertTrue(expected - actual <= 0);
 	}
 }

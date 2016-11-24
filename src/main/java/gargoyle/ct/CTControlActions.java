@@ -1,6 +1,7 @@
 package gargoyle.ct;
 
 public interface CTControlActions {
+
     void arm(CTConfig config);
 
     void exit();

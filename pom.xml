@@ -13,16 +13,35 @@
     <organization>
         <name>Tamsos Vardu</name>
     </organization>
+    <inceptionYear>2016</inceptionYear>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
         <javafx.version>${java.version}</javafx.version>
-        <main-class>gargoyle.ct.CT</main-class>
+        <main-class>gargoyle.ps.PSApplication</main-class>
+        <timestamp>${maven.build.timestamp}</timestamp>
+        <maven.build.timestamp.format>yyyyMMdd.HHmm</maven.build.timestamp.format>
     </properties>
 
     <build>
-        <finalName>coffee-time</finalName>
+        <finalName>password-store</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>**/*.properties</exclude>
+                </excludes>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

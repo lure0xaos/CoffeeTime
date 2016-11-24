@@ -1,215 +1,145 @@
 package gargoyle.ct;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.AbstractAction;
+import javax.swing.AbstractButton;
+import javax.swing.Action;
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.JSeparator;
+import javax.swing.JWindow;
+import javax.swing.SwingConstants;
+import javax.swing.ToolTipManager;
+import javax.swing.UIManager;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.GraphicsEnvironment;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.util.Collections;
+import java.util.Objects;
 
 public class CTControl implements CTControlActions, CTTaskUpdatable {
-    private final class ConfigAction extends AbstractAction {
-        private static final long serialVersionUID = 1L;
-        private final CTConfig config;
-
-        public ConfigAction(final CTConfig config) {
-            super(config.getName());
-            this.config = config;
-        }
-
-        @Override
-        public void actionPerformed(final ActionEvent e) {
-            CTControl.this.arm(this.getConfig());
-        }
-
-        public CTConfig getConfig() {
-            return this.config;
-        }
-    }
-
-    private static final class CTControlWindow extends JWindow {
-        private static final long serialVersionUID = 1L;
-        private volatile boolean disposing = false;
-        private final JLabel label;
-        volatile boolean reshow;
-
-        public CTControlWindow(final URL imageURL, final JPopupMenu menu) {
-            super(new JFrame() {
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public boolean isShowing() {
-                    return true;
-                }
-            });
-            if (imageURL == null) {
-                throw new IllegalArgumentException("image not found");
-            }
-            UIManager.getDefaults().put("ToolTipManager.enableToolTipMode", "");
-            this.setAlwaysOnTop(true);
-            final Container pane = this.getContentPane();
-            pane.setLayout(new BorderLayout());
-            this.label = new JLabel(new ImageIcon(imageURL));
-            pane.add(this.label, BorderLayout.CENTER);
-            this.label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-            this.pack();
-            this.setComponentPopupMenu(menu);
-            final Dimension screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds()
-                    .getSize();
-            this.setLocation(screenSize.width - this.getWidth(), screenSize.height - this.getHeight());
-            final int snap = 20;
-            DragHelper.makeDraggable(this.label, snap);
-            DragHelper.makeDraggable(this, snap);
-            ToolTipManager.sharedInstance().setDismissDelay(1000);
-            ToolTipManager.sharedInstance().setInitialDelay(100);
-            ToolTipManager.sharedInstance().setReshowDelay(100);
-            ToolTipManager.sharedInstance().setEnabled(true);
-            ToolTipManager.sharedInstance().setLightWeightPopupEnabled(true);
-            this.label.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseEntered(final MouseEvent e) {
-                    CTControlWindow.this.reshow = true;
-                }
-
-                @Override
-                public void mouseExited(final MouseEvent e) {
-                    CTControlWindow.this.reshow = false;
-                }
-            });
-        }
-
-        @Override
-        public void dispose() {
-            if (!this.disposing) {
-                this.disposing = true;
-                super.dispose();
-                this.getOwner().dispose();
-                this.disposing = false;
-            }
-        }
-
-        public void setComponentPopupMenu(final JPopupMenu menu) {
-            this.label.setComponentPopupMenu(menu);
-        }
-
-        public void setToolTipText(final String text) {
-            this.label.setToolTipText(text);
-            if (this.reshow && (text != null) && !text.isEmpty()) {
-                try {
-                    ToolTipManager.sharedInstance().mouseMoved(new MouseEvent(this.label, MouseEvent.MOUSE_MOVED,
-                            CTTimeUtil.currentTimeMillis(), 0, this.getWidth(), this.getHeight(), 0, false));
-                } catch (final RuntimeException ex) {
-                    // IGNORE
-                }
-            }
-        }
-    }
 
     private static final String STR_EXIT = "exit";
+
     private static final String STR_UNARM = "unarm";
+
     private static final String STR_HELP = "help";
+
     private static final String URL_ICON = "/icon64.png";
-    final CTApp app;
+
+    private final CTApp app;
+
     private final CTControlWindow controlWindow;
+
     private final ButtonGroup group;
 
-    public CTControl(final CTApp app) {
+    public CTControl(CTApp app) {
         this.app = app;
-        this.group = new ButtonGroup();
-        this.controlWindow = new CTControlWindow(CTControl.class.getResource(CTControl.URL_ICON),
-                this.createMenu(app.getConfigs()));
-        this.controlWindow.setVisible(true);
+        group = new ButtonGroup();
+        controlWindow = new CTControlWindow(CTControl.class.getResource(URL_ICON), createMenu(app.getConfigs()));
+        controlWindow.setVisible(true);
     }
 
-    private void addConfig(final JPopupMenu menu, final CTConfig config) {
-        final JCheckBoxMenuItem menuItem = new JCheckBoxMenuItem(new ConfigAction(config));
-        this.group.add(menuItem);
+    private void addConfig(JPopupMenu menu, CTConfig config) {
+        JCheckBoxMenuItem menuItem = new JCheckBoxMenuItem(new ConfigAction(config));
+        group.add(menuItem);
         menu.add(menuItem);
     }
 
-    private void addConfigs(final JPopupMenu menu, final CTConfigs configs) {
-        for (final CTConfig config : configs.getConfigs()) {
-            this.addConfig(menu, config);
+    private void addConfigs(JPopupMenu menu, CTConfigs configs) {
+        for (CTConfig config : configs.getConfigs()) {
+            addConfig(menu, config);
         }
     }
 
     @Override
-    public void arm(final CTConfig config) {
-        final AbstractButton item = this.findItem(config);
+    public void arm(CTConfig config) {
+        AbstractButton item = findItem(config);
         if (item != null) {
-            CTControl.this.group.clearSelection();
-            CTControl.this.group.setSelected(item.getModel(), true);
-            CTControl.this.app.arm(config);
+            group.clearSelection();
+            group.setSelected(item.getModel(), true);
+            app.arm(config);
         }
     }
 
-    private JPopupMenu createMenu(final CTConfigs configs) {
-        final JPopupMenu menu = new JPopupMenu();
-        this.addConfigs(menu, configs);
+    private JPopupMenu createMenu(CTConfigs configs) {
+        JPopupMenu menu = new JPopupMenu();
+        addConfigs(menu, configs);
         menu.add(new JSeparator(SwingConstants.HORIZONTAL));
-        menu.add(new JMenuItem(new AbstractAction(this.app.getMessage(CTControl.STR_UNARM)) {
-            private static final long serialVersionUID = 1L;
+        menu.add(new JMenuItem(new AbstractAction(app.getMessage(STR_UNARM)) {
+            private static final long serialVersionUID = -4330571111080076360L;
 
             @Override
-            public void actionPerformed(final ActionEvent e) {
-                CTControl.this.unarm();
+            public void actionPerformed(ActionEvent e) {
+                unarm();
             }
         }));
-        menu.add(new JMenuItem(new AbstractAction(this.app.getMessage(CTControl.STR_HELP)) {
-            private static final long serialVersionUID = 1L;
+        menu.add(new JMenuItem(new AbstractAction(app.getMessage(STR_HELP)) {
+            private static final long serialVersionUID = 5717750136378884217L;
 
             @Override
-            public void actionPerformed(final ActionEvent e) {
-                CTControl.this.help();
+            public void actionPerformed(ActionEvent e) {
+                help();
             }
         }));
-        menu.add(new JMenuItem(new AbstractAction(this.app.getMessage(CTControl.STR_EXIT)) {
-            private static final long serialVersionUID = 1L;
+        menu.add(new JMenuItem(new AbstractAction(app.getMessage(STR_EXIT)) {
+            private static final long serialVersionUID = 6450213490024118820L;
 
             @Override
-            public void actionPerformed(final ActionEvent e) {
-                CTControl.this.exit();
+            public void actionPerformed(ActionEvent e) {
+                exit();
             }
         }));
         return menu;
     }
 
     @Override
-    public void doUpdate(final CTTask task, final long currentMillis) {
+    public void doUpdate(CTTask task, long currentMillis) {
         if (task.isReady()) {
             if (task.isBlocked(currentMillis)) {
-                this.controlWindow.setToolTipText(
-                        CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockEnd(currentMillis))));
+                controlWindow.setToolTipText(
+                    CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockEnd(currentMillis))));
             }
             if (task.isWarn(currentMillis)) {
-                this.controlWindow.setToolTipText(
-                        CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis))));
+                controlWindow.setToolTipText(
+                    CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis))));
             }
             if (task.isSleeping(currentMillis)) {
-                this.controlWindow.setToolTipText(
-                        CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis))));
+                controlWindow.setToolTipText(
+                    CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis))));
             }
         } else {
-            this.controlWindow.setToolTipText(CTTimeUtil.formatHHMMSS(currentMillis));
+            controlWindow.setToolTipText(CTTimeUtil.formatHHMMSS(currentMillis));
         }
     }
 
     @Override
     public void exit() {
-        this.controlWindow.setVisible(false);
-        this.controlWindow.dispose();
-        this.app.unarm();
-        this.app.exit();
+        controlWindow.setVisible(false);
+        controlWindow.dispose();
+        app.unarm();
+        app.exit();
     }
 
-    private AbstractButton findItem(final CTConfig config) {
-        for (final AbstractButton button : Collections.list(this.group.getElements())) {
-            final Action action = button.getAction();
-            if ((action != null) && (action instanceof ConfigAction)) {
-                final ConfigAction configAction = (ConfigAction) action;
-                final CTConfig cfg = configAction.getConfig();
-                if ((cfg != null) && cfg.equals(config)) {
+    private AbstractButton findItem(CTConfig config) {
+        for (AbstractButton button : Collections.list(group.getElements())) {
+            Action action = button.getAction();
+            if (action instanceof ConfigAction) {
+                ConfigAction configAction = (ConfigAction) action;
+                CTConfig cfg = configAction.getConfig();
+                if (Objects.equals(cfg, config)) {
                     return button;
                 }
             }
@@ -224,12 +154,121 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
 
     @Override
     public void help() {
-        this.app.help();
+        app.help();
     }
 
     @Override
     public void unarm() {
-        CTControl.this.group.clearSelection();
-        this.app.unarm();
+        group.clearSelection();
+        app.unarm();
+    }
+
+    private static final class CTControlWindow extends JWindow {
+
+        private static final long serialVersionUID = 1L;
+
+        private final JLabel label;
+
+        volatile boolean reshow;
+
+        private volatile boolean live = true;
+
+        public CTControlWindow(URL imageURL, JPopupMenu menu) {
+            super(new JShowingFrame());
+            if (imageURL == null) {
+                throw new IllegalArgumentException("image not found");
+            }
+            UIManager.getDefaults().put("ToolTipManager.enableToolTipMode", "");
+            setAlwaysOnTop(true);
+            Container pane = getContentPane();
+            pane.setLayout(new BorderLayout());
+            label = new JLabel(new ImageIcon(imageURL));
+            pane.add(label, BorderLayout.CENTER);
+            label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            pack();
+            setComponentPopupMenu(menu);
+            Dimension screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getSize();
+            setLocation(screenSize.width - getWidth(), screenSize.height - getHeight());
+            int snap = 20;
+            DragHelper.makeDraggable(label, snap);
+            DragHelper.makeDraggable(this, snap);
+            ToolTipManager.sharedInstance().setDismissDelay(1000);
+            ToolTipManager.sharedInstance().setInitialDelay(100);
+            ToolTipManager.sharedInstance().setReshowDelay(100);
+            ToolTipManager.sharedInstance().setEnabled(true);
+            ToolTipManager.sharedInstance().setLightWeightPopupEnabled(true);
+            label.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    reshow = true;
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    reshow = false;
+                }
+            });
+        }
+
+        @Override
+        public void dispose() {
+            if (live) {
+                live = false;
+                super.dispose();
+                getOwner().dispose();
+                live = true;
+            }
+        }
+
+        public void setComponentPopupMenu(JPopupMenu menu) {
+            label.setComponentPopupMenu(menu);
+        }
+
+        public void setToolTipText(String text) {
+            label.setToolTipText(text);
+            if (reshow && text != null && !text.isEmpty()) {
+                try {
+                    ToolTipManager.sharedInstance()
+                        .mouseMoved(
+                            new MouseEvent(label, MouseEvent.MOUSE_MOVED, CTTimeUtil.currentTimeMillis(), 0, getWidth(),
+                                getHeight(), 0, false));
+                } catch (RuntimeException ex) {
+                    // IGNORE
+                }
+            }
+        }
+
+        private static class JShowingFrame extends JFrame {
+
+            private static final long serialVersionUID = 1L;
+
+            public JShowingFrame() throws HeadlessException {}
+
+            @Override
+            public boolean isShowing() {
+                return true;
+            }
+        }
+    }
+
+    private final class ConfigAction extends AbstractAction {
+
+        private static final long serialVersionUID = 1L;
+
+        private final CTConfig config;
+
+        public ConfigAction(CTConfig config) {
+            super(config.getName());
+            this.config = config;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            arm(config);
+        }
+
+        public CTConfig getConfig() {
+            return config;
+        }
     }
 }

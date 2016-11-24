@@ -1,79 +1,84 @@
 package gargoyle.ct;
 
 import java.util.Locale;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class Log {
+
     private static final String LOCATION_ERRORS = "errors";
 
-    private static void _log(final Level level, final Exception exception, final String pattern,
-                             final Object... arguments) {
-        final StackTraceElement ste = Log.findCaller();
-        final String sourceClass = ste.getClassName();
-        final Logger logger = Logger.getLogger(sourceClass);
-        if (logger.isLoggable(level)) {
-            final String sourceMethod = ste.getMethodName();
-            final ResourceBundle bundle = ResourceBundle.getBundle(Log.LOCATION_ERRORS, Locale.getDefault(),
-                    Thread.currentThread().getContextClassLoader());
-            logger.logrb(level, sourceClass, sourceMethod, bundle, pattern, arguments, exception);
+    private Log() {
+    }
+
+    private static void _log(Level level, Exception exception, String pattern,
+                             Object... arguments) {
+        StackTraceElement ste = findCaller();
+        if (ste != null) {
+            String sourceClass = ste.getClassName();
+            Logger logger = Logger.getLogger(sourceClass);
+            if (logger.isLoggable(level)) {
+                String sourceMethod = ste.getMethodName();
+                ResourceBundle
+                    bundle =
+                    ResourceBundle.getBundle(LOCATION_ERRORS, Locale.getDefault(),
+                        Thread.currentThread().getContextClassLoader());
+                logger.logrb(level, sourceClass, sourceMethod, bundle, pattern, arguments, exception);
+            }
         }
     }
 
-    public static void debug(final Exception exception, final String pattern, final Object... arguments) {
-        Log._log(Level.FINE, exception, pattern, arguments);
+    public static void debug(Exception exception, String pattern, Object... arguments) {
+        _log(Level.FINE, exception, pattern, arguments);
     }
 
-    public static void debug(final String pattern, final Object... arguments) {
-        Log._log(Level.FINE, null, pattern, arguments);
+    public static void debug(String pattern, Object... arguments) {
+        _log(Level.FINE, null, pattern, arguments);
     }
 
-    public static void error(final Exception exception, final String pattern, final Object... arguments) {
-        Log._log(Level.SEVERE, exception, pattern, arguments);
+    public static void error(Exception exception, String pattern, Object... arguments) {
+        _log(Level.SEVERE, exception, pattern, arguments);
     }
 
-    public static void error(final String pattern, final Object... arguments) {
-        Log._log(Level.SEVERE, null, pattern, arguments);
+    public static void error(String pattern, Object... arguments) {
+        _log(Level.SEVERE, null, pattern, arguments);
     }
 
     private static StackTraceElement findCaller() {
-        final StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+        StackTraceElement[] trace = Thread.currentThread().getStackTrace();
         for (int i = 1; i < trace.length; i++) {
-            final StackTraceElement ste = trace[i];
-            if (!Log.class.getName().equals(ste.getClassName())) {
+            StackTraceElement ste = trace[i];
+            if (!Objects.equals(Log.class.getName(), ste.getClassName())) {
                 return ste;
             }
         }
         return null;
     }
 
-    public static void info(final Exception exception, final String pattern, final Object... arguments) {
-        Log._log(Level.INFO, exception, pattern, arguments);
+    public static void info(Exception exception, String pattern, Object... arguments) {
+        _log(Level.INFO, exception, pattern, arguments);
     }
 
-    public static void info(final String pattern, final Object... arguments) {
-        Log._log(Level.INFO, null, pattern, arguments);
+    public static void info(String pattern, Object... arguments) {
+        _log(Level.INFO, null, pattern, arguments);
     }
 
-    public static void log(final Level level, final Exception exception, final String pattern,
-                           final Object... arguments) {
-        Log._log(level, exception, pattern, arguments);
+    public static void log(Level level, Exception exception, String pattern,
+                           Object... arguments) {
+        _log(level, exception, pattern, arguments);
     }
 
-    public static void log(final Level level, final String pattern, final Object... arguments) {
-        Log._log(level, null, pattern, arguments);
+    public static void log(Level level, String pattern, Object... arguments) {
+        _log(level, null, pattern, arguments);
     }
 
-    public static void warn(final Exception exception, final String pattern, final Object... arguments) {
-        Log._log(Level.WARNING, exception, pattern, arguments);
+    public static void warn(Exception exception, String pattern, Object... arguments) {
+        _log(Level.WARNING, exception, pattern, arguments);
     }
 
-    public static void warn(final String pattern, final Object... arguments) {
-        Log._log(Level.WARNING, null, pattern, arguments);
-    }
-
-    private Log() {
-        super();
+    public static void warn(String pattern, Object... arguments) {
+        _log(Level.WARNING, null, pattern, arguments);
     }
 }

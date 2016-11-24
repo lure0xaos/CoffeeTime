@@ -1,8 +1,8 @@
 package gargoyle.ct;
 
 public class CTBlockerTest implements MessageProvider {
-	public static void main(final String[] args) throws Exception {
-		final CTBlockerTest test = new CTBlockerTest();
+	public static void main(String[] args) {
+		CTBlockerTest test = new CTBlockerTest();
 		test.messages = new CTMessageProvider(CT.LOC_MESSAGES);
 		test.blocker = new CTBlocker(test);
 		test.blocker.debug(true);
@@ -15,7 +15,7 @@ public class CTBlockerTest implements MessageProvider {
 	private CTMessageProvider messages;
 
 	@Override
-	public String getMessage(final String message, final Object... args) {
-		return this.messages == null ? null : this.messages.getMessage(message, args);
+	public String getMessage(String message, Object... args) {
+		return messages == null ? null : messages.getMessage(message, args);
 	}
 }
