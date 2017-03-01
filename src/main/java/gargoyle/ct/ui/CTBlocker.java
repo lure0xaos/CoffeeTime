@@ -24,23 +24,19 @@ import java.util.concurrent.TimeUnit;
 
 public class CTBlocker extends JWindow implements CTTaskUpdatable {
 
-    private static final String MSG_BLOCKED = "blocked_w";
-
-    private static final String MSG_WARN = "warn_w";
-
-    private static final long serialVersionUID = 1L;
-
     private static final float ALIGNMENT_CENTER = .5f;
-
-    private static final int PERIOD = 60;
 
     private static final int DELAY = 3;
 
     private static final int FONT_SCALING = 30;
 
-    private final JLabel lblInfo;
+    private static final String MSG_BLOCKED = "blocked_w";
 
-    private final JLabel lblMain;
+    private static final String MSG_WARN = "warn_w";
+
+    private static final int PERIOD = 60;
+
+    private static final long serialVersionUID = 1L;
 
     private final transient MessageProvider app;
 
@@ -51,6 +47,10 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
             dispose();
         }
     };
+
+    private final JLabel lblInfo;
+
+    private final JLabel lblMain;
 
     @SuppressWarnings("AbsoluteAlignmentInUserInterface")
     public CTBlocker(MessageProvider app) {

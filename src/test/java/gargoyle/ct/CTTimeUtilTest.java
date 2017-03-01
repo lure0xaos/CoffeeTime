@@ -1,37 +1,26 @@
 package gargoyle.ct;
 
 import gargoyle.ct.util.CTTimeUtil;
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.text.MessageFormat;
 import java.util.Calendar;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("MagicNumber")
 public class CTTimeUtilTest {
 
-    private static final String DOWN_TO_FAILED_0_1 = "downTo failed: {0} {1}";
-
-    private static final String BASE_FAILED_0_1 = "Base failed:{0} {1}";
-
     private static final String BASE_2_FAILED_0_1 = "Base(2) failed:{0} {1}";
 
     private static final String BASE_3_FAILED_0_1 = "Base(3) failed:{0} {1}";
 
+    private static final String BASE_FAILED_0_1 = "Base failed:{0} {1}";
+
+    private static final String DOWN_TO_FAILED_0_1 = "downTo failed: {0} {1}";
+
     private static final String UP_TO_FAILED_0_1 = "upTo failed: {0} {1}";
-
-    @Before
-    public void setUp() {
-        CTTimeUtil.class.getName();
-    }
-
-    @After
-    public void tearDown() {
-        CTTimeUtil.class.getName();
-    }
 
     @Test
     public void testBetweenEager() {
@@ -157,6 +146,7 @@ public class CTTimeUtilTest {
         int sec = 10;
         long current = CTTimeUtil.make(hour, min, sec);
         Calendar calendar = Calendar.getInstance();
+        calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
         calendar.setTimeInMillis(current);
         Assert.assertEquals(hour, calendar.get(Calendar.HOUR_OF_DAY));
         Assert.assertEquals(min, calendar.get(Calendar.MINUTE));

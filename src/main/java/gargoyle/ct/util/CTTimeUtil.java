@@ -1,12 +1,12 @@
 package gargoyle.ct.util;
 
-import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public final class CTTimeUtil {
@@ -36,7 +36,7 @@ public final class CTTimeUtil {
     }
 
     private static String format(String format, long currentMillis) {
-        return new SimpleDateFormat(format, Locale.getDefault()).format(new Date(currentMillis));
+        return Instant.ofEpochMilli(currentMillis).atOffset(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern(format));
     }
 
     public static String formatHHMMSS(long currentMillis) {
@@ -72,7 +72,7 @@ public final class CTTimeUtil {
     }
 
     public static long make() {
-        return LocalDateTime.now().withNano(0).toEpochSecond(ZoneOffset.UTC);
+        return LocalDateTime.now().withNano(0).toInstant(ZoneOffset.UTC).toEpochMilli();
         //        Calendar calendar = Calendar.getInstance();
         //        calendar.set(Calendar.MILLISECOND, 0);
         //        return calendar.getTimeInMillis();
@@ -81,7 +81,8 @@ public final class CTTimeUtil {
     public static long make(int hours, int minutes, int seconds) {
         return LocalDateTime.of(LocalDate.now(), LocalTime.of(hours, minutes, seconds))
             .withNano(0)
-            .toEpochSecond(ZoneOffset.UTC);
+            .toInstant(ZoneOffset.UTC)
+            .toEpochMilli();
         //        Calendar calendar = Calendar.getInstance();
         //        calendar.set(Calendar.HOUR_OF_DAY, hours);
         //        calendar.set(Calendar.MINUTE, minutes);

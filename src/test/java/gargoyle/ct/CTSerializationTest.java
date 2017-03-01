@@ -3,16 +3,11 @@ package gargoyle.ct;
 import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.config.CTConfigs;
 import gargoyle.ct.config.CTStandardConfigs;
+import gargoyle.ct.util.SerializationUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
 import java.util.concurrent.TimeUnit;
 
 import static gargoyle.ct.config.CTStandardConfigs.BLOCK_10M;
@@ -21,38 +16,17 @@ import static gargoyle.ct.config.CTStandardConfigs.WHOLE_1H;
 
 public class CTSerializationTest {
 
-    @SuppressWarnings({"unchecked", "MethodCanBeVariableArityMethod"})
-    private static <T> T deserialize(byte[] bytes) throws ClassNotFoundException, IOException {
-        try (final ObjectInput ois = new ObjectInputStream(new ByteArrayInputStream(bytes))) {
-            return (T) ois.readObject();
-        }
-    }
-
-    private static <T> T pipe(T orig) throws ClassNotFoundException, IOException {
-        byte[] serialized = serialize(orig);
-        // System.out.println(new String(serialized));
-        return deserialize(serialized);
-    }
-
-    private static <T> byte[] serialize(T o) throws IOException {
-        try (ByteArrayOutputStream out = new ByteArrayOutputStream();
-             final ObjectOutput oos = new ObjectOutputStream(out)) {
-            oos.writeObject(o);
-            return out.toByteArray();
-        }
-    }
-
     @Test
     public void testConfigSerialization() throws IOException, ClassNotFoundException {
         CTConfig orig = new CTConfig(TimeUnit.MINUTES, WHOLE_1H, BLOCK_10M, WARN_3M);
-        CTConfig restored = pipe(orig);
+        CTConfig restored = SerializationUtils.pipe(orig);
         Assert.assertEquals(orig, restored);
     }
 
     @Test
     public void testConfigsSerialization() throws IOException, ClassNotFoundException {
         CTConfigs orig = new CTStandardConfigs();
-        CTConfigs restored = pipe(orig);
+        CTConfigs restored = SerializationUtils.pipe(orig);
         Assert.assertEquals(orig, restored);
     }
 

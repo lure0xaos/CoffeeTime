@@ -38,15 +38,15 @@ import java.util.Objects;
 
 public class CTControl implements CTControlActions, CTTaskUpdatable {
 
-    private static final String STR_EXIT = "exit";
+    private static final int SNAP = 20;
 
-    private static final String STR_UNARM = "unarm";
+    private static final String STR_EXIT = "exit";
 
     private static final String STR_HELP = "help";
 
-    private static final String URL_ICON = "/icon64.png";
+    private static final String STR_UNARM = "unarm";
 
-    private static final int SNAP = 20;
+    private static final String URL_ICON = "/icon64.png";
 
     private final CTApp app;
 
@@ -175,9 +175,9 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
 
     private static final class CTControlWindow extends JWindow {
 
-        private static final long serialVersionUID = 1L;
-
         private static final String TOOL_TIP_MANAGER_ENABLE_TOOL_TIP_MODE = "ToolTipManager.enableToolTipMode";
+
+        private static final long serialVersionUID = 1L;
 
         private final JLabel label;
 

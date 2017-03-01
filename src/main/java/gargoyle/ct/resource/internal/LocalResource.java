@@ -7,13 +7,13 @@ import java.text.MessageFormat;
 
 public class LocalResource extends VirtualResource {
 
-    private static final String USER_DIR = "user.dir";
-
-    private static final String USER_HOME = "user.home";
+    private static final String CANNOT_CREATE_ROOTS = "Cannot create roots";
 
     private static final String CANNOT_USE_0_AS_ROOT = "Cannot use {0} as root";
 
-    private static final String CANNOT_CREATE_ROOTS = "Cannot create roots";
+    private static final String USER_DIR = "user.dir";
+
+    private static final String USER_HOME = "user.home";
 
     protected LocalResource(URL url) {
         super(url.toExternalForm());
@@ -38,7 +38,8 @@ public class LocalResource extends VirtualResource {
         try {
             return new URL[]{new File(".").toURI().toURL(),
                 new File(System.getProperty(USER_DIR, ".")).toURI().toURL(),
-                new File(System.getProperty(USER_HOME, ".")).toURI().toURL()};
+                new File(System.getProperty(USER_HOME, ".")).toURI().toURL(),
+                LocalResource.class.getResource("/")};
         } catch (MalformedURLException ex) {
             throw new RuntimeException(CANNOT_CREATE_ROOTS, ex);
         }

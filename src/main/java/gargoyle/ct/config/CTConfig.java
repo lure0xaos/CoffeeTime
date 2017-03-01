@@ -14,9 +14,9 @@ import java.util.concurrent.TimeUnit;
 
 public class CTConfig implements Externalizable, ObjectInputValidation {
 
-    private static final long serialVersionUID = -898699928298432564L;
-
     private static final String FORMAT_NAME = "{0,number,00}/{1,number,00}";
+
+    private static final long serialVersionUID = -898699928298432564L;
 
     private long block;
 
@@ -27,7 +27,10 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
     private long whole;
 
     public CTConfig() {
-        this(0, 0, 0);
+        whole = 0;
+        block = 0;
+        warn = 0;
+        name = "invalid";
     }
 
     private CTConfig(long whole, long block, long warn) {
@@ -37,7 +40,7 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
         this.whole = whole;
         this.block = block;
         this.warn = warn;
-        name(TimeUnit.MINUTES);
+        name = name(TimeUnit.MINUTES);
     }
 
     private CTConfig(String line) {

@@ -6,6 +6,10 @@ import gargoyle.ct.ui.CTBlocker;
 
 public class CTBlockerTest implements MessageProvider {
 
+    private CTBlocker blocker;
+
+    private CTMessageProvider messages;
+
     @SuppressWarnings("MethodCanBeVariableArityMethod")
     public static void main(String[] args) {
         CTBlockerTest test = new CTBlockerTest();
@@ -16,10 +20,6 @@ public class CTBlockerTest implements MessageProvider {
         test.blocker.setVisible(true);
         test.blocker.toFront();
     }
-
-    private CTBlocker blocker;
-
-    private CTMessageProvider messages;
 
     @Override
     public String getMessage(String message, Object... args) {

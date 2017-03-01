@@ -24,9 +24,9 @@ public class CTTaskTest {
 
     private static final String TEST_WARN_FAILED_0_1 = "testWarn failed: {0} {1}";
 
-    private CTTask task;
-
     private long actual;
+
+    private CTTask task;
 
     @Before
     public void setUp() {

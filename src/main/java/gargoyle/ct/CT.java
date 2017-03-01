@@ -31,15 +31,15 @@ import java.nio.file.StandardCopyOption;
 
 public final class CT implements CTApp {
 
-    private static final String DOT = ".";
-
-    private static final String HTML = "html";
-
-    private static final String HELP_PAGE = "/doc/help.html";
-
     public static final String LOC_MESSAGES = "messages";
 
     private static final String CONFIG_NAME = "CT.cfg";
+
+    private static final String DOT = ".";
+
+    private static final String HELP_PAGE = "/doc/help.html";
+
+    private static final String HTML = "html";
 
     private static final String NOT_FOUND_0 = "Not found {0}";
 
@@ -49,11 +49,11 @@ public final class CT implements CTApp {
 
     private final CTControlActions control;
 
+    private final CTMessageProvider messages;
+
     private final TimeHelper timeHelper;
 
     private final CTTimer timer;
-
-    private final CTMessageProvider messages;
 
     private CT() {
         messages = new CTMessageProvider(LOC_MESSAGES);

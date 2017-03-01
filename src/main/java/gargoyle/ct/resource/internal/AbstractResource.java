@@ -14,15 +14,15 @@ import java.text.MessageFormat;
 
 abstract class AbstractResource implements Resource {
 
-    private static final String
-        USER_AGENT =
-        "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2 (.NET CLR 3.5.30729)";
+    private static final String METHOD_HEAD = "HEAD";
 
     private static final String PROP_UA = "User-Agent";
 
-    private static final String METHOD_HEAD = "HEAD";
-
     private static final String SCHEME_FILE = "file";
+
+    private static final String
+        USER_AGENT =
+        "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2 (.NET CLR 3.5.30729)";
 
     private final String location;
 

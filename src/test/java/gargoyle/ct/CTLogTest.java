@@ -14,9 +14,9 @@ import java.util.logging.Logger;
 @SuppressWarnings("HardCodedStringLiteral")
 public class CTLogTest {
 
-    private Deque<LogRecord> records;
-
     private final Logger logger = Logger.getLogger(CTLogTest.class.getName());
+
+    private Deque<LogRecord> records;
 
     @Before
     public void setUp() {

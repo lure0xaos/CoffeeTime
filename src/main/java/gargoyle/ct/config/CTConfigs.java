@@ -4,6 +4,7 @@ import gargoyle.ct.config.convert.CTConfigsDataConverter;
 import gargoyle.ct.util.Log;
 
 import java.io.InvalidObjectException;
+import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collections;
@@ -14,7 +15,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-public class CTConfigs {
+public class CTConfigs implements Serializable {
 
     private static final String MSG_NOT_VALID_CONVERT_0 = "not valid convert: {0}";
 
