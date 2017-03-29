@@ -10,6 +10,7 @@ import gargoyle.ct.resource.Resource;
 import gargoyle.ct.resource.impl.CTConfigResource;
 import gargoyle.ct.resource.internal.ClasspathResource;
 import gargoyle.ct.resource.internal.LocalResource;
+import gargoyle.ct.task.CTTaskUpdatable;
 import gargoyle.ct.task.impl.CTTimer;
 import gargoyle.ct.ui.CTApp;
 import gargoyle.ct.ui.CTBlocker;
@@ -29,25 +30,21 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public final class CT implements CTApp {
 
     public static final String LOC_MESSAGES = "messages";
-
+    public static final String SLASH = "/";
     private static final String CONFIG_NAME = "CT.cfg";
-
     private static final String DOT = ".";
-
     private static final String HELP_PAGE = "doc/help.html";
-
     private static final String HTML = "html";
-
     private static final String NOT_FOUND_0 = "Not found {0}";
-
     private static final String PAGE_0_NOT_FOUND = "Page {0} not found";
-
-    private final CTBlocker blocker;
+    private final List<CTBlocker> blockers;
 
     private final CTControlActions control;
 
@@ -60,11 +57,13 @@ public final class CT implements CTApp {
     private CT() {
         messages = new CTMessageProvider(LOC_MESSAGES);
         timeHelper = new CTTimeHelper();
-        CTBlocker pBlocker = new CTBlocker(this);
+        List<CTBlocker> pBlockers = CTBlocker.forAllDevices(this);
+        blockers = pBlockers;
+        List<CTTaskUpdatable> updatables = new ArrayList<>(pBlockers);
         CTControl pControl = new CTControl(this);
-        timer = new CTTimer(timeHelper, pBlocker, pControl);
-        blocker = pBlocker;
         control = pControl;
+        updatables.add(pControl);
+        timer = new CTTimer(timeHelper, updatables);
     }
 
     @SuppressWarnings("MethodCanBeVariableArityMethod")
@@ -92,7 +91,9 @@ public final class CT implements CTApp {
                 Log.info("fake time not set");
             }
         }
-        app.blocker.debug(debug);
+        for (CTBlocker blocker : app.blockers) {
+            blocker.debug(debug);
+        }
         app.start();
     }
 
@@ -111,7 +112,9 @@ public final class CT implements CTApp {
 
     @Override
     public void exit() {
-        blocker.dispose();
+        for (CTBlocker blocker : this.blockers) {
+            blocker.dispose();
+        }
         timer.terminate();
         CTMutex.release();
     }
@@ -155,19 +158,27 @@ public final class CT implements CTApp {
     @Override
     public void help() {
         if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Action.BROWSE)) {
-            Resource resource = new ClasspathResource(HELP_PAGE).forLocale(Locale.getDefault());
-            if (resource.exists()) {
-                try (InputStream stream = resource.getInputStream()) {
-                    File tempFile = File.createTempFile(CT.class.getName(), DOT + HTML);
-                    Files.copy(stream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                    Desktop.getDesktop().browse(tempFile.toURI());
-                    tempFile.deleteOnExit();
-                } catch (IOException ex) {
-                    Log.error(ex, PAGE_0_NOT_FOUND, HELP_PAGE);
+            ClassLoader loader = CT.class.getClassLoader();
+            Locale locale = Locale.getDefault();
+            for (Resource resource : new Resource[]{
+                    new ClasspathResource(loader, HELP_PAGE).forLocale(locale),
+                    new ClasspathResource(loader, SLASH + HELP_PAGE).forLocale(locale)
+            }) {
+                if (resource != null && resource.exists()) {
+                    try (InputStream stream = resource.getInputStream()) {
+                        File tempFile = File.createTempFile(CT.class.getName(), DOT + HTML);
+                        Files.copy(stream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                        Desktop.getDesktop().browse(tempFile.toURI());
+                        tempFile.deleteOnExit();
+                    } catch (IOException ex) {
+                        Log.error(ex, PAGE_0_NOT_FOUND, HELP_PAGE);
+                    }
+                    return;
+                } else {
+                    Log.debug(PAGE_0_NOT_FOUND, HELP_PAGE + ": " + (resource != null ? resource.getLocation() : null));
                 }
-            } else {
-                Log.error(PAGE_0_NOT_FOUND, HELP_PAGE);
             }
+            Log.error(PAGE_0_NOT_FOUND, HELP_PAGE);
         }
     }
 

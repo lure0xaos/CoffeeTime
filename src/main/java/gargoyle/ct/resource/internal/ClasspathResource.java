@@ -7,17 +7,32 @@ import java.net.URL;
 
 public class ClasspathResource extends VirtualResource {
 
-    private ClasspathResource(Resource base, String location) {
+    private final ClassLoader loader;
+
+    private ClasspathResource(ClassLoader loader, Resource base, String location) {
         super(base, location);
+        this.loader = loader;
     }
 
     public ClasspathResource(String location) {
+        this(ClasspathResource.class.getClassLoader(), location);
+    }
+
+    public ClasspathResource(ClassLoader loader, String location) {
         super(location);
+        this.loader = loader;
     }
 
     @Override
     protected ClasspathResource createResource(Resource base, String location) {
-        return base == null ? new ClasspathResource(location) : new ClasspathResource(base, location);
+        return base == null ? new ClasspathResource(loader, location) : new ClasspathResource(getLoader(base), base, location);
+    }
+
+    private ClassLoader getLoader(Resource resource) {
+        if (resource instanceof ClasspathResource) {
+            return ((ClasspathResource) resource).loader;
+        }
+        return loader;
     }
 
     @Override
@@ -31,6 +46,6 @@ public class ClasspathResource extends VirtualResource {
 
     @Override
     public URL toURL() throws IOException {
-        return getClass().getClassLoader().getResource(getLocation());
+        return loader.getResource(getLocation());
     }
 }
