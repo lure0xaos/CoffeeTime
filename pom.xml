@@ -25,7 +25,7 @@
     </properties>
 
     <build>
-        <finalName>password-store</finalName>
+        <finalName>coffee-time</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
