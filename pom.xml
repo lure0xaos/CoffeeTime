@@ -19,13 +19,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
         <javafx.version>${java.version}</javafx.version>
-        <main-class>gargoyle.ps.PSApplication</main-class>
+        <main-class>gargoyle.ct.CT</main-class>
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>yyyyMMdd.HHmm</maven.build.timestamp.format>
     </properties>
 
     <build>
-        <finalName>password-store</finalName>
+        <finalName>coffee-time</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
