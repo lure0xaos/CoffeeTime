@@ -31,6 +31,6 @@ public class ClasspathResource extends VirtualResource {
 
     @Override
     public URL toURL() throws IOException {
-        return Thread.currentThread().getContextClassLoader().getResource(getLocation());
+        return getClass().getClassLoader().getResource(getLocation());
     }
 }

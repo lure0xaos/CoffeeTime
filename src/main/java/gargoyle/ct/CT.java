@@ -37,7 +37,7 @@ public final class CT implements CTApp {
 
     private static final String DOT = ".";
 
-    private static final String HELP_PAGE = "/doc/help.html";
+    private static final String HELP_PAGE = "doc/help.html";
 
     private static final String HTML = "html";
 
