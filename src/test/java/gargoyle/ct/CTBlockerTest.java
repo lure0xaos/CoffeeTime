@@ -4,9 +4,11 @@ import gargoyle.ct.messages.MessageProvider;
 import gargoyle.ct.messages.impl.CTMessageProvider;
 import gargoyle.ct.ui.CTBlocker;
 
+import java.util.List;
+
 public class CTBlockerTest implements MessageProvider {
 
-    private CTBlocker blocker;
+    private List<CTBlocker> blockers;
 
     private CTMessageProvider messages;
 
@@ -14,11 +16,13 @@ public class CTBlockerTest implements MessageProvider {
     public static void main(String[] args) {
         CTBlockerTest test = new CTBlockerTest();
         test.messages = new CTMessageProvider(CT.LOC_MESSAGES);
-        test.blocker = new CTBlocker(test);
-        test.blocker.debug(true);
-        test.blocker.setText("00:00");
-        test.blocker.setVisible(true);
-        test.blocker.toFront();
+        test.blockers = CTBlocker.forAllDevices(test);
+        for (CTBlocker blocker : test.blockers) {
+            blocker.debug(true);
+            blocker.setText("00:00");
+            blocker.setVisible(true);
+            blocker.toFront();
+        }
     }
 
     @Override

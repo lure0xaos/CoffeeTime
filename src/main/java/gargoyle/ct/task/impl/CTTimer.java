@@ -4,6 +4,7 @@ import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.helper.TimeHelper;
 import gargoyle.ct.task.CTTaskUpdatable;
 
+import java.util.Arrays;
 import java.util.Timer;
 
 public class CTTimer {
@@ -17,6 +18,10 @@ public class CTTimer {
     private final CTTimerTask timerTask;
 
     public CTTimer(TimeHelper timeHelper, CTTaskUpdatable... updatables) {
+        this(timeHelper, Arrays.asList(updatables));
+    }
+
+    public CTTimer(TimeHelper timeHelper, Iterable<CTTaskUpdatable> updatables) {
         timer = new Timer(CTTimer.class.getName(), true);
         timerTask = new CTTimerTask(timeHelper, updatables);
         timer.scheduleAtFixedRate(timerTask, CHECK_DELAY, CHECK_PERIOD);

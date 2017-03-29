@@ -1,10 +1,11 @@
 package gargoyle.ct.resource.internal;
 
+import gargoyle.ct.util.Log;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.MessageFormat;
-import java.util.logging.Logger;
 
 public class LocalResource extends VirtualResource {
 
@@ -24,7 +25,7 @@ public class LocalResource extends VirtualResource {
     protected static LocalResource findLocal(String name) {
         for (URL root : getLocations()) {
             if (root == null) {
-                Logger.getLogger(LocalResource.class.getName()).warning("some location is null");
+                Log.warn("some location is null");
                 continue;
             }
             try {

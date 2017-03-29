@@ -1,14 +1,30 @@
 package gargoyle.ct.util;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 public final class Log {
 
+    private static final String LOGGING_PROPERTIES = "/logging.properties";
     private static final String LOCATION_ERRORS = "errors";
+
+    static {
+        InputStream stream = Log.class.getResourceAsStream(LOGGING_PROPERTIES);
+        if (stream == null) {
+            System.err.println(LOGGING_PROPERTIES + " not found");
+        }
+        try {
+            LogManager.getLogManager().readConfiguration(stream);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
     private Log() {
     }
@@ -21,9 +37,9 @@ public final class Log {
             if (logger.isLoggable(level)) {
                 String sourceMethod = ste.getMethodName();
                 ResourceBundle
-                    bundle =
-                    ResourceBundle.getBundle(LOCATION_ERRORS, Locale.getDefault(),
-                        Thread.currentThread().getContextClassLoader());
+                        bundle =
+                        ResourceBundle.getBundle(LOCATION_ERRORS, Locale.getDefault(),
+                                Log.class.getClassLoader());
                 if (exception == null) {
                     logger.logrb(level, sourceClass, sourceMethod, bundle, pattern, arguments);
                 } else {

@@ -1,6 +1,7 @@
 package gargoyle.ct.resource.internal;
 
 import gargoyle.ct.resource.Resource;
+import gargoyle.ct.util.Log;
 
 import java.io.IOException;
 import java.net.URL;
@@ -41,12 +42,14 @@ public class VirtualResource extends AbstractResource {
         String suffix = location.substring(i + 1);
         for (Locale specificLocale : ctrl.getCandidateLocales(baseName, locale)) {
             String loc = ctrl.toResourceName(ctrl.toBundleName(baseName, specificLocale), suffix);
+            Log.debug("trying location {0}", loc);
             VirtualResource resource = createResource(baseResource, loc);
             if (resource.exists()) {
                 resource.locale = locale;
                 return resource;
             }
         }
+        Log.debug("{0} not found, returning null");
         return null;
     }
 
@@ -77,11 +80,11 @@ public class VirtualResource extends AbstractResource {
     public Resource withExtension(String extension) {
         String location = getLocation();
         String
-            loc =
-            new StringBuilder().append(location.substring(0, location.lastIndexOf(CHAR_DOT)))
-                .append(".")
-                .append(extension)
-                .toString();
+                loc =
+                new StringBuilder().append(location.substring(0, location.lastIndexOf(CHAR_DOT)))
+                        .append(".")
+                        .append(extension)
+                        .toString();
         return createResource(null, loc);
     }
 }

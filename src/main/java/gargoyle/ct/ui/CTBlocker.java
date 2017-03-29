@@ -5,21 +5,12 @@ import gargoyle.ct.task.CTTaskUpdatable;
 import gargoyle.ct.task.impl.CTTask;
 import gargoyle.ct.util.CTTimeUtil;
 
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
-import javax.swing.JWindow;
-import javax.swing.SwingConstants;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Font;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class CTBlocker extends JWindow implements CTTaskUpdatable {
@@ -37,9 +28,6 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
     private static final int PERIOD = 60;
 
     private static final long serialVersionUID = 1L;
-
-    private final transient MessageProvider app;
-
     private final transient MouseListener disposer = new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -47,16 +35,33 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
             dispose();
         }
     };
+    private transient MessageProvider app;
+    private JLabel lblInfo;
 
-    private final JLabel lblInfo;
-
-    private final JLabel lblMain;
+    private JLabel lblMain;
 
     @SuppressWarnings("AbsoluteAlignmentInUserInterface")
     public CTBlocker(MessageProvider app) {
+        init(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice(), app);
+    }
+
+    @SuppressWarnings("AbsoluteAlignmentInUserInterface")
+    public CTBlocker(GraphicsDevice device, MessageProvider app) {
+        init(device, app);
+    }
+
+    public static List<CTBlocker> forAllDevices(MessageProvider app) {
+        List<CTBlocker> devices = new ArrayList<>();
+        for (GraphicsDevice device : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
+            devices.add(new CTBlocker(device, app));
+        }
+        return Collections.unmodifiableList(devices);
+    }
+
+    private void init(GraphicsDevice device, MessageProvider app) {
         this.app = app;
+        setBounds(device.getDefaultConfiguration().getBounds());
         setAlwaysOnTop(true);
-        setBounds(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
         toFront();
         Container container = getContentPane();
         container.setLayout(new BorderLayout());
@@ -88,7 +93,7 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
         label.setBorder(BorderFactory.createEmptyBorder(gap, gap, gap, gap));
         label.setHorizontalAlignment(SwingConstants.RIGHT);
         label.setFont(new Font(Font.MONOSPACED, Font.PLAIN,
-            (int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() / FONT_SCALING)));
+                (int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() / FONT_SCALING)));
         return label;
     }
 
@@ -101,7 +106,7 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
         label.setAlignmentX(ALIGNMENT_CENTER);
         label.setHorizontalAlignment(SwingConstants.CENTER);
         label.setFont(new Font(Font.MONOSPACED, Font.PLAIN,
-            (int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 10)));
+                (int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 10)));
         return label;
     }
 
@@ -122,13 +127,13 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
                 setVisible(true);
                 setForeground(Color.WHITE);
                 setText(app.getMessage(MSG_BLOCKED,
-                    CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockEnd(currentMillis)))));
+                        CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockEnd(currentMillis)))));
             }
             if (task.isWarn(currentMillis)) {
                 setVisible(CTTimeUtil.isInPeriod(TimeUnit.SECONDS, currentMillis, PERIOD, DELAY));
                 setForeground(Color.GREEN);
                 setText(app.getMessage(MSG_WARN,
-                    CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis)))));
+                        CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis)))));
             }
             if (task.isSleeping(currentMillis)) {
                 setVisible(false);

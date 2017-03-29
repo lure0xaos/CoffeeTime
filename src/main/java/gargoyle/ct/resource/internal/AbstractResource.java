@@ -1,14 +1,11 @@
 package gargoyle.ct.resource.internal;
 
 import gargoyle.ct.resource.Resource;
+import gargoyle.ct.util.Log;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.*;
 import java.text.MessageFormat;
-import java.util.logging.Logger;
 
 abstract class AbstractResource implements Resource {
 
@@ -20,7 +17,6 @@ abstract class AbstractResource implements Resource {
     private static final String
             USER_AGENT =
             "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2 (.NET CLR 3.5.30729)";
-    protected final Logger logger = Logger.getLogger(getClass().getName());
     private final String location;
 
     protected AbstractResource(String location) {
@@ -42,23 +38,45 @@ abstract class AbstractResource implements Resource {
         if (url != null) {
             try {
                 URLConnection connection = url.openConnection();
+                Log.debug("check if exists {0}({1}) at {2}", connection, url.getProtocol(), url);
                 if (connection instanceof HttpURLConnection) {
                     HttpURLConnection huc = (HttpURLConnection) connection;
                     huc.setInstanceFollowRedirects(false);
                     huc.setRequestMethod(METHOD_HEAD);
                     huc.setRequestProperty(PROP_UA, USER_AGENT);
                     huc.connect();
-                    return huc.getResponseCode() == HttpURLConnection.HTTP_OK;
+                    boolean exists = huc.getResponseCode() == HttpURLConnection.HTTP_OK;
+                    if (exists) {
+                        Log.debug("{0} found", url);
+                    }
+                    return exists;
+                }
+                if (connection instanceof JarURLConnection) {
+                    JarURLConnection juc = (JarURLConnection) connection;
+                    juc.setRequestProperty(PROP_UA, USER_AGENT);
+                    juc.connect();
+                    boolean exists = juc.getJarFile() != null;
+                    if (exists) {
+                        Log.debug("{0} found", url);
+                    }
+                    return exists;
                 }
                 //noinspection CallToStringEqualsIgnoreCase
                 if (SCHEME_FILE.equalsIgnoreCase(url.getProtocol())) {
-                    return new File(url.toURI()).exists();
+                    boolean exists = new File(url.toURI()).exists();
+                    if (exists) {
+                        Log.debug("{0} found", url);
+                    }
+                    return exists;
                 }
             } catch (IOException | URISyntaxException ex) {
+                Log.debug("{0} not found", url);
                 return false;
             }
+            Log.debug("{0} not found", url);
             return false;
         }
+        Log.debug("{0} not found", url);
         return false;
     }
 
