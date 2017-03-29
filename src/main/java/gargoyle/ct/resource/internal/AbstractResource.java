@@ -11,6 +11,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.MessageFormat;
+import java.util.logging.Logger;
 
 abstract class AbstractResource implements Resource {
 
@@ -25,6 +26,8 @@ abstract class AbstractResource implements Resource {
         "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2 (.NET CLR 3.5.30729)";
 
     private final String location;
+
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     protected AbstractResource(String location) {
         this.location = location;

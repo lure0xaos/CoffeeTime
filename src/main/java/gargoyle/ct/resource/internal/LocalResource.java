@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.MessageFormat;
+import java.util.logging.Logger;
 
 public class LocalResource extends VirtualResource {
 
@@ -22,6 +23,10 @@ public class LocalResource extends VirtualResource {
     @SuppressWarnings("ObjectAllocationInLoop")
     protected static LocalResource findLocal(String name) {
         for (URL root : getLocations()) {
+            if(root==null) {
+                Logger.getLogger(VirtualResource.class.getName()).warning("some location is null");
+                continue;
+            }
             try {
                 LocalResource resource = new LocalResource(new URL(root, name));
                 if (resource.exists()) {
