@@ -1,6 +1,6 @@
 package gargoyle.ct.util;
 
-import java.io.InputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
@@ -16,6 +16,14 @@ public final class CTUtil {
              final Scanner s = scanner.useDelimiter(DELIMITER)) {
             return s.hasNext() ? s.next() : "";
         } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public static void write(OutputStream stream, String content) {
+        try(BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(stream, StandardCharsets.US_ASCII))) {
+            writer.write(content);
+        } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
     }

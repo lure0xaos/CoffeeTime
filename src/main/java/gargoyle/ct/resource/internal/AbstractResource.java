@@ -2,10 +2,7 @@ package gargoyle.ct.resource.internal;
 
 import gargoyle.ct.resource.Resource;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -15,19 +12,16 @@ import java.util.logging.Logger;
 
 abstract class AbstractResource implements Resource {
 
+    public static final String PROTOCOL_FILE = "file";
+    public static final String COLON_SLASH = ":/";
     private static final String METHOD_HEAD = "HEAD";
-
     private static final String PROP_UA = "User-Agent";
-
-    private static final String SCHEME_FILE = "file";
-
+    private static final String SCHEME_FILE = PROTOCOL_FILE;
     private static final String
-        USER_AGENT =
-        "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2 (.NET CLR 3.5.30729)";
-
-    private final String location;
-
+            USER_AGENT =
+            "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2 (.NET CLR 3.5.30729)";
     protected final Logger logger = Logger.getLogger(getClass().getName());
+    private final String location;
 
     protected AbstractResource(String location) {
         this.location = location;
@@ -70,7 +64,12 @@ abstract class AbstractResource implements Resource {
 
     @Override
     public InputStream getInputStream() throws IOException {
-        return toURL().openConnection().getInputStream();
+        URL url = toURL();
+//        String protocol = url.getProtocol();
+//        if (PROTOCOL_FILE.equals(protocol)) {
+//            return new FileInputStream(location.startsWith(PROTOCOL_FILE + COLON_SLASH) ? location.substring(protocol.length() + 2) : location);
+//        }
+        return url.openConnection().getInputStream();
     }
 
     @Override
@@ -80,7 +79,12 @@ abstract class AbstractResource implements Resource {
 
     @Override
     public OutputStream getOutputStream() throws IOException {
-        return toURL().openConnection().getOutputStream();
+        URL url = toURL();
+        String protocol = url.getProtocol();
+        if (PROTOCOL_FILE.equals(protocol)) {
+            return new FileOutputStream(location.startsWith(PROTOCOL_FILE + ":/") ? location.substring(protocol.length() + 2) : location);
+        }
+        return url.openConnection().getOutputStream();
     }
 
     @Override

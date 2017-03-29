@@ -9,6 +9,7 @@ import gargoyle.ct.messages.impl.CTMessageProvider;
 import gargoyle.ct.resource.Resource;
 import gargoyle.ct.resource.impl.CTConfigResource;
 import gargoyle.ct.resource.internal.ClasspathResource;
+import gargoyle.ct.resource.internal.LocalResource;
 import gargoyle.ct.task.impl.CTTimer;
 import gargoyle.ct.ui.CTApp;
 import gargoyle.ct.ui.CTBlocker;
@@ -19,15 +20,16 @@ import gargoyle.ct.util.CTTimeUtil;
 import gargoyle.ct.util.CTUtil;
 import gargoyle.ct.util.Log;
 
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import java.awt.Desktop;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.Desktop.Action;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.Locale;
 
 public final class CT implements CTApp {
 
@@ -77,7 +79,7 @@ public final class CT implements CTApp {
             }
         }
         if (!debug && !CTMutex.acquire()) {
-            Log.error("App already running"); //NON-NLS
+            Log.error("App already running");
             return;
         }
         setSystemLookAndFeel();
@@ -87,7 +89,7 @@ public final class CT implements CTApp {
                 long fakeTime = CTTimeUtil.parseHHMMSS(args[0]);
                 app.setFakeTime(fakeTime);
             } catch (NumberFormatException e) {
-                Log.info("fake time not set"); //NON-NLS
+                Log.info("fake time not set");
             }
         }
         app.blocker.debug(debug);
@@ -125,16 +127,22 @@ public final class CT implements CTApp {
                     configs = new CTStandardConfigs();
                 }
             } catch (IOException ex) {
-                Log.error(ex, "Cannot load {0}", configResource); //NON-NLS
+                Log.error(ex, "Cannot load {0}", configResource);
                 configs = new CTStandardConfigs();
             }
         } else {
             if (configResource == null) {
-                Log.warn(NOT_FOUND_0, CONFIG_NAME); //NON-NLS
+                Log.warn(NOT_FOUND_0, CONFIG_NAME);
             } else {
-                Log.warn(NOT_FOUND_0, configResource); //NON-NLS
+                Log.warn(NOT_FOUND_0, configResource);
             }
             configs = new CTStandardConfigs();
+            configResource = CTConfigResource.forURL(LocalResource.getHomeDirectoryLocation(), CONFIG_NAME);
+            try (OutputStream stream = configResource.getOutputStream()) {
+                CTUtil.write(stream, configs.format());
+            } catch (IOException ex) {
+                Log.warn(NOT_FOUND_0, configResource);
+            }
         }
         return configs;
     }
@@ -147,17 +155,18 @@ public final class CT implements CTApp {
     @Override
     public void help() {
         if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Action.BROWSE)) {
-            Resource resource = new ClasspathResource(HELP_PAGE);
+            Resource resource = new ClasspathResource(HELP_PAGE).forLocale(Locale.getDefault());
             if (resource.exists()) {
                 try (InputStream stream = resource.getInputStream()) {
                     File tempFile = File.createTempFile(CT.class.getName(), DOT + HTML);
                     Files.copy(stream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                     Desktop.getDesktop().browse(tempFile.toURI());
+                    tempFile.deleteOnExit();
                 } catch (IOException ex) {
-                    Log.error(ex, PAGE_0_NOT_FOUND, HELP_PAGE); //NON-NLS
+                    Log.error(ex, PAGE_0_NOT_FOUND, HELP_PAGE);
                 }
             } else {
-                Log.error(PAGE_0_NOT_FOUND, HELP_PAGE); //NON-NLS
+                Log.error(PAGE_0_NOT_FOUND, HELP_PAGE);
             }
         }
     }

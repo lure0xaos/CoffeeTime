@@ -102,7 +102,7 @@ public class CTTimeUtilTest {
         calendar.set(Calendar.MINUTE, 0);
         long expected = calendar.getTimeInMillis();
         Assert.assertEquals(MessageFormat.format(DOWN_TO_FAILED_0_1, CTTimeUtil.formatHHMMSS(expected),
-            CTTimeUtil.formatHHMMSS(actual)), //NON-NLS
+            CTTimeUtil.formatHHMMSS(actual)),
             expected, actual);
     }
 
@@ -187,15 +187,15 @@ public class CTTimeUtilTest {
         long base3 = CTTimeUtil.toBase(expected + baseMillis * 2, current, baseMillis);
         Assert.assertEquals(
             MessageFormat.format(BASE_FAILED_0_1, CTTimeUtil.formatHHMMSS(current), CTTimeUtil.formatHHMMSS(base)),
-            expected, //NON-NLS
+            expected,
             base);
         Assert.assertEquals(
             MessageFormat.format(BASE_2_FAILED_0_1, CTTimeUtil.formatHHMMSS(current), CTTimeUtil.formatHHMMSS(base2)),
-            //NON-NLS
+
             expected, base2);
         Assert.assertEquals(
             MessageFormat.format(BASE_3_FAILED_0_1, CTTimeUtil.formatHHMMSS(current), CTTimeUtil.formatHHMMSS(base3)),
-            //NON-NLS
+
             expected, base3);
     }
 
@@ -219,7 +219,7 @@ public class CTTimeUtilTest {
         long expected = calendar.getTimeInMillis();
         Assert.assertEquals(
             MessageFormat.format(UP_TO_FAILED_0_1, CTTimeUtil.formatHHMMSS(expected), CTTimeUtil.formatHHMMSS(actual)),
-            //NON-NLS
+
             expected, actual);
     }
 }

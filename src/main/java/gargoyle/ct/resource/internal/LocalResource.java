@@ -23,8 +23,8 @@ public class LocalResource extends VirtualResource {
     @SuppressWarnings("ObjectAllocationInLoop")
     protected static LocalResource findLocal(String name) {
         for (URL root : getLocations()) {
-            if(root==null) {
-                Logger.getLogger(VirtualResource.class.getName()).warning("some location is null");
+            if (root == null) {
+                Logger.getLogger(LocalResource.class.getName()).warning("some location is null");
                 continue;
             }
             try {
@@ -39,14 +39,42 @@ public class LocalResource extends VirtualResource {
         return null;
     }
 
-    private static URL[] getLocations() {
+    public static URL[] getLocations() {
         try {
-            return new URL[]{new File(".").toURI().toURL(),
-                new File(System.getProperty(USER_DIR, ".")).toURI().toURL(),
-                new File(System.getProperty(USER_HOME, ".")).toURI().toURL(),
-                LocalResource.class.getResource("/")};
-        } catch (MalformedURLException ex) {
+            return new URL[]{getCurrentDirectoryLocation(),
+                    getProgramDirectoryLocation(),
+                    getHomeDirectoryLocation(),
+                    getClasspathLocation()};
+        } catch (RuntimeException ex) {
             throw new RuntimeException(CANNOT_CREATE_ROOTS, ex);
+        }
+    }
+
+    public static URL getClasspathLocation() {
+        return LocalResource.class.getResource("/");
+    }
+
+    public static URL getHomeDirectoryLocation() {
+        try {
+            return new File(System.getProperty(USER_HOME, ".")).toURI().toURL();
+        } catch (MalformedURLException ex) {
+            throw new RuntimeException(MessageFormat.format(CANNOT_USE_0_AS_ROOT, USER_HOME), ex);
+        }
+    }
+
+    public static URL getProgramDirectoryLocation() {
+        try {
+            return new File(System.getProperty(USER_DIR, ".")).toURI().toURL();
+        } catch (MalformedURLException ex) {
+            throw new RuntimeException(MessageFormat.format(CANNOT_USE_0_AS_ROOT, USER_DIR), ex);
+        }
+    }
+
+    public static URL getCurrentDirectoryLocation() {
+        try {
+            return new File(".").toURI().toURL();
+        } catch (MalformedURLException ex) {
+            throw new RuntimeException(MessageFormat.format(CANNOT_USE_0_AS_ROOT, "."), ex);
         }
     }
 }

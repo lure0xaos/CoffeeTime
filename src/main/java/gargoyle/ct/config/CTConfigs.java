@@ -40,7 +40,7 @@ public class CTConfigs implements Serializable {
             try {
                 configs.add(CTConfig.parse(aData));
             } catch (IllegalArgumentException ex) {
-                Log.error("skip invalid convert line: {0}", aData); //NON-NLS
+                Log.error("skip invalid convert line: {0}", aData);
             }
         }
         return configs.toArray(new CTConfig[configs.size()]);

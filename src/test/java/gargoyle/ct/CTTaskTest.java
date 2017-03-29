@@ -46,7 +46,7 @@ public class CTTaskTest {
         long started = CTTimeUtil.downTo(current, CTTimeUtil.toMillis(TimeUnit.HOURS, 1));
         task.setStarted(started);
         Assert.assertFalse(MessageFormat.format(TEST_BLOCKED_FAILED_0_1, CTTimeUtil.formatHHMMSS(current),
-            CTTimeUtil.formatHHMMSS(started)), //NON-NLS
+            CTTimeUtil.formatHHMMSS(started)),
             task.isBlocked(current));
     }
 
@@ -57,7 +57,7 @@ public class CTTaskTest {
         long started = CTTimeUtil.downTo(current, CTTimeUtil.toMillis(TimeUnit.HOURS, 1));
         task.setStarted(started);
         Assert.assertTrue(MessageFormat.format(TEST_BLOCKED_FAILED_0_1, CTTimeUtil.formatHHMMSS(current),
-            CTTimeUtil.formatHHMMSS(started)), //NON-NLS
+            CTTimeUtil.formatHHMMSS(started)),
             task.isBlocked(current));
     }
 
@@ -69,7 +69,7 @@ public class CTTaskTest {
         long started = CTTimeUtil.downTo(current, CTTimeUtil.toMillis(TimeUnit.HOURS, 1));
         task.setStarted(started);
         Assert.assertFalse(MessageFormat.format(TEST_SLEEPING_FAILED_0_1, CTTimeUtil.formatHHMMSS(current),
-            CTTimeUtil.formatHHMMSS(started)), //NON-NLS
+            CTTimeUtil.formatHHMMSS(started)),
             task.isSleeping(current));
     }
 
@@ -80,7 +80,7 @@ public class CTTaskTest {
         long started = CTTimeUtil.downTo(current, CTTimeUtil.toMillis(TimeUnit.HOURS, 1));
         task.setStarted(started);
         Assert.assertTrue(MessageFormat.format(TEST_SLEEPING_FAILED_0_1, CTTimeUtil.formatHHMMSS(current),
-            CTTimeUtil.formatHHMMSS(started)), //NON-NLS
+            CTTimeUtil.formatHHMMSS(started)),
             task.isSleeping(current));
     }
 
@@ -108,7 +108,7 @@ public class CTTaskTest {
         long started = CTTimeUtil.downTo(current, CTTimeUtil.toMillis(TimeUnit.HOURS, 1));
         task.setStarted(started);
         Assert.assertFalse(MessageFormat.format(TEST_WARN_FAILED_0_1, CTTimeUtil.formatHHMMSS(current),
-            CTTimeUtil.formatHHMMSS(started)), //NON-NLS
+            CTTimeUtil.formatHHMMSS(started)),
             task.isWarn(current));
     }
 
@@ -119,7 +119,7 @@ public class CTTaskTest {
         long started = CTTimeUtil.downTo(current, CTTimeUtil.toMillis(TimeUnit.HOURS, 1));
         task.setStarted(started);
         Assert.assertTrue(MessageFormat.format(TEST_WARN_FAILED_0_1, CTTimeUtil.formatHHMMSS(current),
-            CTTimeUtil.formatHHMMSS(started)), //NON-NLS
+            CTTimeUtil.formatHHMMSS(started)),
             task.isWarn(current));
     }
 }
