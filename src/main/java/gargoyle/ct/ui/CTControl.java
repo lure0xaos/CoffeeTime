@@ -7,28 +7,8 @@ import gargoyle.ct.task.CTTaskUpdatable;
 import gargoyle.ct.task.impl.CTTask;
 import gargoyle.ct.util.CTTimeUtil;
 
-import javax.swing.AbstractAction;
-import javax.swing.AbstractButton;
-import javax.swing.Action;
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.JSeparator;
-import javax.swing.JWindow;
-import javax.swing.SwingConstants;
-import javax.swing.ToolTipManager;
-import javax.swing.UIManager;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.GraphicsEnvironment;
-import java.awt.HeadlessException;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -44,6 +24,8 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
 
     private static final String STR_HELP = "help";
 
+    private static final String STR_NEW_CONFIG = "new-config";
+
     private static final String STR_UNARM = "unarm";
 
     private static final String URL_ICON = "/icon64.png";
@@ -57,14 +39,14 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
     public CTControl(CTApp app) {
         this.app = app;
         group = new ButtonGroup();
-        controlWindow = new CTControlWindow(CTControl.class.getResource(URL_ICON), createMenu(app.getConfigs()));
+        controlWindow = new CTControlWindow(CTControl.class.getResource(URL_ICON), createMenu(app.loadConfigs(false)));
         controlWindow.setVisible(true);
     }
 
     private void addConfig(JPopupMenu menu, CTConfig config) {
-        JCheckBoxMenuItem menuItem = new JCheckBoxMenuItem(new ConfigAction(config));
+        CTConfigMenuItem menuItem = new CTConfigMenuItem(new ConfigAction(config));
         group.add(menuItem);
-        menu.add(menuItem);
+        menu.insert(menuItem, group.getButtonCount() - 1);
     }
 
     private void addConfigs(JPopupMenu menu, CTConfigs configs) {
@@ -87,6 +69,14 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
     private JPopupMenu createMenu(CTConfigs configs) {
         JPopupMenu menu = new JPopupMenu();
         addConfigs(menu, configs);
+        menu.add(new JSeparator(SwingConstants.HORIZONTAL));
+        menu.add(new JMenuItem(new AbstractAction(app.getMessage(STR_NEW_CONFIG)) {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onNewConfig(configs, menu);
+            }
+        }));
         menu.add(new JSeparator(SwingConstants.HORIZONTAL));
         menu.add(new JMenuItem(new AbstractAction(app.getMessage(STR_UNARM)) {
             private static final long serialVersionUID = -4330571111080076360L;
@@ -115,20 +105,27 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
         return menu;
     }
 
+    private void onNewConfig(CTConfigs configs, JPopupMenu menu) {
+        CTConfig config = newConfig(controlWindow, app.getMessage(STR_NEW_CONFIG));
+        configs.addConfig(config);
+        addConfig(menu, config);
+        saveConfigs(configs);
+    }
+
     @Override
     public void doUpdate(CTTask task, long currentMillis) {
         if (task.isReady()) {
             if (task.isBlocked(currentMillis)) {
                 controlWindow.setToolTipText(
-                    CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockEnd(currentMillis))));
+                        CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockEnd(currentMillis))));
             }
             if (task.isWarn(currentMillis)) {
                 controlWindow.setToolTipText(
-                    CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis))));
+                        CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis))));
             }
             if (task.isSleeping(currentMillis)) {
                 controlWindow.setToolTipText(
-                    CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis))));
+                        CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis))));
             }
         } else {
             controlWindow.setToolTipText(CTTimeUtil.formatHHMMSS(currentMillis));
@@ -158,13 +155,23 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
     }
 
     @Override
-    public CTConfigs getConfigs() {
+    public CTConfigs loadConfigs(boolean reload) {
         return null;
     }
 
     @Override
     public void help() {
         app.help();
+    }
+
+    @Override
+    public CTConfig newConfig(Component owner, String title) {
+        return app.newConfig(owner, app.getMessage(STR_NEW_CONFIG));
+    }
+
+    @Override
+    public void saveConfigs(CTConfigs configs) {
+        app.saveConfigs(configs);
     }
 
     @Override
@@ -240,9 +247,9 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
             if (reshow && text != null && !text.isEmpty()) {
                 try {
                     ToolTipManager.sharedInstance()
-                        .mouseMoved(
-                            new MouseEvent(label, MouseEvent.MOUSE_MOVED, CTTimeUtil.currentTimeMillis(), 0, getWidth(),
-                                getHeight(), 0, false));
+                            .mouseMoved(
+                                    new MouseEvent(label, MouseEvent.MOUSE_MOVED, CTTimeUtil.currentTimeMillis(), 0, getWidth(),
+                                            getHeight(), 0, false));
                 } catch (RuntimeException ex) {
                     // IGNORE
                 }
@@ -253,7 +260,8 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
 
             private static final long serialVersionUID = 1L;
 
-            public JShowingFrame() throws HeadlessException {}
+            public JShowingFrame() throws HeadlessException {
+            }
 
             @Override
             public boolean isShowing() {
@@ -283,4 +291,11 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
             return config;
         }
     }
+
+    private final class CTConfigMenuItem extends JCheckBoxMenuItem {
+        public CTConfigMenuItem(ConfigAction configAction) {
+            super(configAction);
+        }
+    }
+
 }

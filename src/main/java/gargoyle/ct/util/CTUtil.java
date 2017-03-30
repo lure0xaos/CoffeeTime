@@ -21,7 +21,7 @@ public final class CTUtil {
     }
 
     public static void write(OutputStream stream, String content) {
-        try(BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(stream, StandardCharsets.US_ASCII))) {
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(stream, StandardCharsets.US_ASCII))) {
             writer.write(content);
         } catch (IOException ex) {
             throw new RuntimeException(ex);

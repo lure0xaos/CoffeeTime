@@ -51,14 +51,14 @@ public class CTMessageProvider implements MessageProvider {
             return MessageFormat.format(pattern, args);
         } catch (IllegalArgumentException ex) {
             throw new RuntimeException(
-                MessageFormat.format(CAN_T_PARSE_MESSAGE_0_1_2, message, pattern, Arrays.toString(args)), ex);
+                    MessageFormat.format(CAN_T_PARSE_MESSAGE_0_1_2, message, pattern, Arrays.toString(args)), ex);
         }
     }
 
     private void load(String baseName) {
         messages =
-            ResourceBundle.getBundle(baseName, localeProvider.getLocale(),
-                Control.getControl(Control.FORMAT_PROPERTIES));
+                ResourceBundle.getBundle(baseName, localeProvider.getLocale(),
+                        Control.getControl(Control.FORMAT_PROPERTIES));
     }
 
     private void reload() {

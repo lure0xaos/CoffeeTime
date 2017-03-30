@@ -49,7 +49,7 @@ public class CTTask {
 
     public boolean isBlocked(long currentMillis) {
         return isReady() &&
-            CTTimeUtil.isBetween(currentMillis, getBlockStart(currentMillis), getBlockEnd(currentMillis));
+                CTTimeUtil.isBetween(currentMillis, getBlockStart(currentMillis), getBlockEnd(currentMillis));
     }
 
     public boolean isReady() {
@@ -62,7 +62,7 @@ public class CTTask {
 
     public boolean isWarn(long currentMillis) {
         return isReady() &&
-            CTTimeUtil.isBetween(currentMillis, getWarnStart(currentMillis), getBlockStart(currentMillis));
+                CTTimeUtil.isBetween(currentMillis, getWarnStart(currentMillis), getBlockStart(currentMillis));
     }
 
     public void setStarted(TimeUnit unit, long started) {

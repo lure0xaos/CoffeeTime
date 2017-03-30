@@ -10,13 +10,13 @@ import java.util.regex.Pattern;
 
 public final class CTConfigDataConverter implements Converter<long[]> {
 
-    private static final String COMMENTS = "#;'/";
+    private static final String COMMENTS = "#;'";
 
     private static final String MSG_CANNOT_PARSE_LINE_0 = "Cannot parse line: {0}";
 
     private static final String
-        MSG_CANNOT_PARSE_LINE_0_INVALID_TIME_UNIT_1 =
-        "Cannot parse line: {0}, invalid time unit {1}";
+            MSG_CANNOT_PARSE_LINE_0_INVALID_TIME_UNIT_1 =
+            "Cannot parse line: {0}, invalid time unit {1}";
 
     private static final String MSG_CANNOT_PARSE_LINE_INVALID_TIME_UNIT_0 = "Cannot parse line, invalid time unit {0}";
 
@@ -57,10 +57,10 @@ public final class CTConfigDataConverter implements Converter<long[]> {
                 break;
             default:
                 throw new UnsupportedOperationException(
-                    MessageFormat.format(MSG_CANNOT_PARSE_LINE_INVALID_TIME_UNIT_0, unit.name()));
+                        MessageFormat.format(MSG_CANNOT_PARSE_LINE_INVALID_TIME_UNIT_0, unit.name()));
         }
         return MessageFormat.format("{0}{1}/{2}{3}/{4}{5}", CTTimeUtil.fromMillis(unit, data[0]), unitChar,
-            CTTimeUtil.fromMillis(unit, data[1]), unitChar, CTTimeUtil.fromMillis(unit, data[2]), unitChar);
+                CTTimeUtil.fromMillis(unit, data[1]), unitChar, CTTimeUtil.fromMillis(unit, data[2]), unitChar);
     }
 
     @Override
@@ -77,9 +77,9 @@ public final class CTConfigDataConverter implements Converter<long[]> {
         }
         long[] data = new long[3];
         Pattern
-            p =
-            Pattern.compile("(?:([0-9]+)([a-zA-Z]+))/(?:([0-9]+)([a-zA-Z]+))[^a-zA-Z0-9]+(?:([0-9]+)([a-zA-Z]+))",
-                Pattern.CASE_INSENSITIVE);
+                p =
+                Pattern.compile("(?:([0-9]+)([a-zA-Z]+))/(?:([0-9]+)([a-zA-Z]+))[^a-zA-Z0-9]+(?:([0-9]+)([a-zA-Z]+))",
+                        Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(trimmedLine);
         if (m.find()) {
             int groupCount = m.groupCount();
@@ -102,7 +102,7 @@ public final class CTConfigDataConverter implements Converter<long[]> {
                         break;
                     default:
                         throw new IllegalArgumentException(
-                            MessageFormat.format(MSG_CANNOT_PARSE_LINE_0_INVALID_TIME_UNIT_1, line, u));
+                                MessageFormat.format(MSG_CANNOT_PARSE_LINE_0_INVALID_TIME_UNIT_1, line, u));
                 }
                 try {
                     data[g / 2] = CTTimeUtil.toMillis(unit, Long.parseLong(q));

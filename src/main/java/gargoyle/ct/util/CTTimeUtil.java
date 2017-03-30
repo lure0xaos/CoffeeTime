@@ -1,10 +1,6 @@
 package gargoyle.ct.util;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -80,9 +76,9 @@ public final class CTTimeUtil {
 
     public static long make(int hours, int minutes, int seconds) {
         return LocalDateTime.of(LocalDate.now(), LocalTime.of(hours, minutes, seconds))
-            .withNano(0)
-            .toInstant(ZoneOffset.UTC)
-            .toEpochMilli();
+                .withNano(0)
+                .toInstant(ZoneOffset.UTC)
+                .toEpochMilli();
         //        Calendar calendar = Calendar.getInstance();
         //        calendar.set(Calendar.HOUR_OF_DAY, hours);
         //        calendar.set(Calendar.MINUTE, minutes);
