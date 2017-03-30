@@ -6,13 +6,7 @@ import gargoyle.ct.util.Log;
 import java.io.InvalidObjectException;
 import java.io.Serializable;
 import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class CTConfigs implements Serializable {
@@ -46,11 +40,15 @@ public class CTConfigs implements Serializable {
         return configs.toArray(new CTConfig[configs.size()]);
     }
 
-    private void addConfig(CTConfig config) {
+    public void addConfig(CTConfig config) {
         String name = config.getName();
         if (!configs.containsKey(name)) {
             configs.put(name, config);
         }
+    }
+
+    public boolean hasConfig(CTConfig config) {
+        return configs.containsKey(config.getName());
     }
 
     @Override
@@ -81,7 +79,7 @@ public class CTConfigs implements Serializable {
             formats.add(config.format());
         }
         return CTConfigsDataConverter.getInstance()
-            .format(TimeUnit.MINUTES, formats.toArray(new String[formats.size()]));
+                .format(TimeUnit.MINUTES, formats.toArray(new String[formats.size()]));
     }
 
     public CTConfig getConfig(String name) {

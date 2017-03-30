@@ -3,12 +3,7 @@ package gargoyle.ct.config;
 import gargoyle.ct.convert.impl.CTConfigDataConverter;
 import gargoyle.ct.util.CTTimeUtil;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.InvalidObjectException;
-import java.io.ObjectInput;
-import java.io.ObjectInputValidation;
-import java.io.ObjectOutput;
+import java.io.*;
 import java.text.MessageFormat;
 import java.util.concurrent.TimeUnit;
 
@@ -131,7 +126,11 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
     }
 
     private boolean isNotValid(long wholeMillis, long blockMillis, long warnMillis) {
-        return wholeMillis <= blockMillis || blockMillis <= warnMillis;
+        return !isValid(wholeMillis, blockMillis, warnMillis);
+    }
+
+    private boolean isValid(long wholeMillis, long blockMillis, long warnMillis) {
+        return wholeMillis > blockMillis && blockMillis > warnMillis;
     }
 
     private String name(TimeUnit unit) {
@@ -178,5 +177,9 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeBytes(format());
+    }
+
+    public boolean isValid() {
+        return isValid(whole, block, warn);
     }
 }

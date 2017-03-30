@@ -12,10 +12,7 @@ import gargoyle.ct.resource.internal.ClasspathResource;
 import gargoyle.ct.resource.internal.LocalResource;
 import gargoyle.ct.task.CTTaskUpdatable;
 import gargoyle.ct.task.impl.CTTimer;
-import gargoyle.ct.ui.CTApp;
-import gargoyle.ct.ui.CTBlocker;
-import gargoyle.ct.ui.CTControl;
-import gargoyle.ct.ui.CTControlActions;
+import gargoyle.ct.ui.*;
 import gargoyle.ct.util.CTMutex;
 import gargoyle.ct.util.CTTimeUtil;
 import gargoyle.ct.util.CTUtil;
@@ -53,6 +50,7 @@ public final class CT implements CTApp {
     private final TimeHelper timeHelper;
 
     private final CTTimer timer;
+    private CTConfigResource configResource;
 
     private CT() {
         messages = new CTMessageProvider(LOC_MESSAGES);
@@ -120,31 +118,40 @@ public final class CT implements CTApp {
     }
 
     @Override
-    public CTConfigs getConfigs() {
+    public CTConfigs loadConfigs(boolean reload) {
         CTConfigs configs;
-        CTConfigResource configResource = CTConfigResource.findLocal(CONFIG_NAME);
-        if (configResource != null && configResource.exists()) {
-            try (InputStream stream = configResource.getInputStream()) {
-                configs = CTConfigs.parse(CTUtil.convertStreamToString(stream));
-                if (configs.getConfigs().isEmpty()) {
+        if (configResource == null || reload) {
+            CTConfigResource configResource = CTConfigResource.findLocal(CONFIG_NAME);
+            if (configResource != null && configResource.exists()) {
+                try (InputStream stream = configResource.getInputStream()) {
+                    configs = CTConfigs.parse(CTUtil.convertStreamToString(stream));
+                    if (configs.getConfigs().isEmpty()) {
+                        configs = new CTStandardConfigs();
+                    }
+                } catch (IOException ex) {
+                    Log.error(ex, "Cannot load {0}", configResource);
                     configs = new CTStandardConfigs();
                 }
-            } catch (IOException ex) {
-                Log.error(ex, "Cannot load {0}", configResource);
-                configs = new CTStandardConfigs();
-            }
-        } else {
-            if (configResource == null) {
-                Log.warn(NOT_FOUND_0, CONFIG_NAME);
             } else {
-                Log.warn(NOT_FOUND_0, configResource);
+                if (configResource == null) {
+                    Log.warn(NOT_FOUND_0, CONFIG_NAME);
+                } else {
+                    Log.warn(NOT_FOUND_0, configResource);
+                }
+                configs = new CTStandardConfigs();
+                configResource = CTConfigResource.forURL(LocalResource.getHomeDirectoryLocation(), CONFIG_NAME);
+                try (OutputStream stream = configResource.getOutputStream()) {
+                    CTUtil.write(stream, configs.format());
+                } catch (IOException ex) {
+                    Log.warn(NOT_FOUND_0, configResource);
+                }
             }
-            configs = new CTStandardConfigs();
-            configResource = CTConfigResource.forURL(LocalResource.getHomeDirectoryLocation(), CONFIG_NAME);
-            try (OutputStream stream = configResource.getOutputStream()) {
-                CTUtil.write(stream, configs.format());
+            this.configResource = configResource;
+        } else {
+            try (InputStream stream = configResource.getInputStream()) {
+                configs = CTConfigs.parse(CTUtil.convertStreamToString(stream));
             } catch (IOException ex) {
-                Log.warn(NOT_FOUND_0, configResource);
+                throw new RuntimeException(ex);
             }
         }
         return configs;
@@ -182,12 +189,33 @@ public final class CT implements CTApp {
         }
     }
 
+    @Override
+    public CTConfig newConfig(Component owner, String title) {
+        try {
+            return CTNewConfigDialog.showConfigDialog(owner, title);
+        } catch (IllegalArgumentException e) {
+            Log.error(e.getMessage());
+        }
+        return null;
+    }
+
+    @Override
+    public void saveConfigs(CTConfigs configs) {
+        if (configResource != null) {
+            try (OutputStream stream = configResource.getOutputStream()) {
+                CTUtil.write(stream, configs.format());
+            } catch (IOException ex) {
+                Log.warn(NOT_FOUND_0, configResource);
+            }
+        }
+    }
+
     private void setFakeTime(long fakeTime) {
         timeHelper.setFakeTime(fakeTime);
     }
 
     private void start() {
-        control.arm(getConfigs().getConfigs().iterator().next());
+        control.arm(loadConfigs(false).getConfigs().iterator().next());
     }
 
     @Override

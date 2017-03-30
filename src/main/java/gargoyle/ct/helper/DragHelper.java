@@ -1,13 +1,7 @@
 package gargoyle.ct.helper;
 
-import javax.swing.JComponent;
-import javax.swing.JWindow;
-import javax.swing.SwingUtilities;
-import java.awt.Dimension;
-import java.awt.GraphicsEnvironment;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Window;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
