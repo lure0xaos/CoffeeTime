@@ -18,6 +18,7 @@ public class CTStandardConfigs extends CTConfigs {
     public static final int WHOLE_2H = 120;
 
     public static final int WHOLE_30M = 30;
+    private static final long serialVersionUID = -2778482225848242583L;
 
     public CTStandardConfigs() {
         super(new CTConfig(TimeUnit.MINUTES, WHOLE_1H, BLOCK_10M, WARN_3M),

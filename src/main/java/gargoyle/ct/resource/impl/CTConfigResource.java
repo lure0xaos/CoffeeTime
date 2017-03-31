@@ -8,7 +8,7 @@ import java.net.URL;
 
 public final class CTConfigResource extends LocalResource {
 
-    public static final String SLASH = "/";
+    private static final String SLASH = "/";
 
     private CTConfigResource(URL url) {
         super(url);

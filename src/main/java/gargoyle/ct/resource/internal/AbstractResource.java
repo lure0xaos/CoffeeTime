@@ -9,8 +9,8 @@ import java.text.MessageFormat;
 
 abstract class AbstractResource implements Resource {
 
-    public static final String PROTOCOL_FILE = "file";
     public static final String COLON_SLASH = ":/";
+    private static final String PROTOCOL_FILE = "file";
     private static final String METHOD_HEAD = "HEAD";
     private static final String PROP_UA = "User-Agent";
     private static final String SCHEME_FILE = PROTOCOL_FILE;
@@ -34,7 +34,7 @@ abstract class AbstractResource implements Resource {
         }
     }
 
-    protected boolean exists(URL url) {
+    boolean exists(URL url) {
         if (url != null) {
             try {
                 URLConnection connection = url.openConnection();

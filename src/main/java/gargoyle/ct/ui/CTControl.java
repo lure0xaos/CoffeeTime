@@ -72,6 +72,8 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
         menu.add(new JSeparator(SwingConstants.HORIZONTAL));
         menu.add(new JMenuItem(new AbstractAction(app.getMessage(STR_NEW_CONFIG)) {
 
+            private static final long serialVersionUID = 1121004649381891357L;
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 onNewConfig(configs, menu);
@@ -272,6 +274,14 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
         }
     }
 
+    private static final class CTConfigMenuItem extends JCheckBoxMenuItem {
+        private static final long serialVersionUID = -2199156620390967976L;
+
+        public CTConfigMenuItem(ConfigAction configAction) {
+            super(configAction);
+        }
+    }
+
     @SuppressWarnings({"CloneableClassWithoutClone", "SerializableInnerClassWithNonSerializableOuterClass"})
     private final class ConfigAction extends AbstractAction {
 
@@ -291,12 +301,6 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
 
         public CTConfig getConfig() {
             return config;
-        }
-    }
-
-    private final class CTConfigMenuItem extends JCheckBoxMenuItem {
-        public CTConfigMenuItem(ConfigAction configAction) {
-            super(configAction);
         }
     }
 

@@ -34,7 +34,7 @@ import java.util.Locale;
 public final class CT implements CTApp {
 
     public static final String LOC_MESSAGES = "messages";
-    public static final String SLASH = "/";
+    private static final String SLASH = "/";
     private static final String CONFIG_NAME = "CT.cfg";
     private static final String DOT = ".";
     private static final String HELP_PAGE = "doc/help.html";
@@ -110,7 +110,7 @@ public final class CT implements CTApp {
 
     @Override
     public void exit() {
-        for (CTBlocker blocker : this.blockers) {
+        for (CTBlocker blocker : blockers) {
             blocker.dispose();
         }
         timer.terminate();

@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 public class CTBlocker extends JWindow implements CTTaskUpdatable {
 
-    private static final float ALIGNMENT_CENTER = .5f;
+    private static final float ALIGNMENT_CENTER = 0.5f;
 
     private static final int DELAY = 3;
 
@@ -65,8 +65,10 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
         toFront();
         Container container = getContentPane();
         container.setLayout(new BorderLayout());
-        container.add(lblMain = createMainLabel(), BorderLayout.CENTER);
-        container.add(lblInfo = createInfoLabel(), BorderLayout.SOUTH);
+        lblMain = createMainLabel();
+        container.add(lblMain, BorderLayout.CENTER);
+        lblInfo = createInfoLabel();
+        container.add(lblInfo, BorderLayout.SOUTH);
         addWindowFocusListener(new WindowFocusListener() {
             @Override
             public void windowGainedFocus(WindowEvent e) {

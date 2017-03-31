@@ -11,7 +11,7 @@ import static org.junit.Assert.assertFalse;
 
 public class CTConfigTest {
 
-    public static final String CONFIG = "60M/10M/3M";
+    private static final String CONFIG = "60M/10M/3M";
 
     private CTConfig config;
 

@@ -1,6 +1,7 @@
 package gargoyle.ct.ui;
 
 import gargoyle.ct.config.CTConfig;
+import gargoyle.ct.util.Log;
 
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
@@ -27,7 +28,7 @@ public class CTNewConfigDialog {
                     try {
                         return CTConfig.parse(String.valueOf(formattedTextField.getValue()));
                     } catch (IllegalArgumentException ex) {
-                        ex.printStackTrace();
+                        Log.debug(ex, ex.getMessage());
                     }
                 }
             } catch (ParseException ex) {
