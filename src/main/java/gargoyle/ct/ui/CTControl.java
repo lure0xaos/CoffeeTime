@@ -65,12 +65,11 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
         }
     }
 
-    @SuppressWarnings({"CloneableClassWithoutClone", "SerializableInnerClassWithNonSerializableOuterClass"})
     private JPopupMenu createMenu(CTConfigs configs) {
         JPopupMenu menu = new JPopupMenu();
         addConfigs(menu, configs);
         menu.add(new JSeparator(SwingConstants.HORIZONTAL));
-        menu.add(new CTMenuItem(new AbstractAction(app.getMessage(STR_NEW_CONFIG)) {
+        menu.add(new CTMenuItem(new CTAction(app.getMessage(STR_NEW_CONFIG)) {
 
             private static final long serialVersionUID = 1121004649381891357L;
 
@@ -80,7 +79,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
             }
         }));
         menu.add(new JSeparator(SwingConstants.HORIZONTAL));
-        menu.add(new CTMenuItem(new AbstractAction(app.getMessage(STR_UNARM)) {
+        menu.add(new CTMenuItem(new CTAction(app.getMessage(STR_UNARM)) {
             private static final long serialVersionUID = -4330571111080076360L;
 
             @Override
@@ -88,7 +87,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
                 unarm();
             }
         }));
-        menu.add(new CTMenuItem(new AbstractAction(app.getMessage(STR_HELP)) {
+        menu.add(new CTMenuItem(new CTAction(app.getMessage(STR_HELP)) {
             private static final long serialVersionUID = 5717750136378884217L;
 
             @Override
@@ -96,7 +95,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
                 help();
             }
         }));
-        menu.add(new CTMenuItem(new AbstractAction(app.getMessage(STR_EXIT)) {
+        menu.add(new CTMenuItem(new CTAction(app.getMessage(STR_EXIT)) {
             private static final long serialVersionUID = 6450213490024118820L;
 
             @Override
@@ -277,57 +276,95 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
     private static final class CTMenuItem extends JMenuItem {
         private static final long serialVersionUID = -5435250463745762683L;
 
-        public CTMenuItem(Action action) {
-            String text = String.valueOf(action.getValue(Action.NAME));
-            setAction(action);
-            setText(text);
-            setToolTipText(text);
-            setIconFromAction(action);
+        public CTMenuItem(CTAction action) {
+            action.init(this);
         }
 
-        private void setIconFromAction(Action action) {
-            Icon icon = (Icon) action.getValue(Action.LARGE_ICON_KEY);
-            if (icon == null) {
-                icon = (Icon) action.getValue(Action.SMALL_ICON);
-            }
-            if (icon != null) {
-                setIcon(icon);
-            }
-        }
     }
 
     private static final class CTConfigMenuItem extends JCheckBoxMenuItem {
         private static final long serialVersionUID = -2199156620390967976L;
 
         public CTConfigMenuItem(ConfigAction action) {
-            String text = action.getConfig().getName();
-            setAction(action);
-            setText(text);
-            setToolTipText(text);
-            setIconFromAction(action);
+            super(action);
         }
 
-        private void setIconFromAction(ConfigAction action) {
-            Icon icon = (Icon) action.getValue(Action.LARGE_ICON_KEY);
-            if (icon == null) {
-                icon = (Icon) action.getValue(Action.SMALL_ICON);
-            }
-            if (icon != null) {
-                setIcon(icon);
-            }
-        }
     }
 
-    @SuppressWarnings({"CloneableClassWithoutClone", "SerializableInnerClassWithNonSerializableOuterClass"})
-    private final class ConfigAction extends AbstractAction {
+    private abstract static class CTAction extends AbstractAction {
 
-        private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = -5252756701531090882L;
 
+        protected CTAction() {
+        }
+
+        public CTAction(String text) {
+            setText(text);
+            setTooltipText(text);
+        }
+
+        public CTAction(String text, Icon icon) {
+            setText(text);
+            setTooltipText(text);
+            setIcon(icon);
+        }
+
+        public CTAction(String text, String tooltipText, Icon icon) {
+            setText(text);
+            setTooltipText(tooltipText);
+            setIcon(icon);
+        }
+
+        protected String getText() {
+            return String.valueOf(getValue(Action.NAME));
+        }
+
+        protected void setText(String text) {
+            putValue(Action.NAME, text);
+        }
+
+        protected String getTooltipText() {
+            return String.valueOf(getValue(Action.SHORT_DESCRIPTION));
+        }
+
+        protected void setTooltipText(String text) {
+            putValue(Action.SHORT_DESCRIPTION, text);
+        }
+
+        protected Icon getIcon() {
+            return (Icon) getValue(Action.SMALL_ICON);
+        }
+
+        protected void setIcon(Icon icon) {
+            putValue(Action.SMALL_ICON, icon);
+        }
+
+        public CTAction clone() throws CloneNotSupportedException {
+            return (CTAction) super.clone();
+        }
+
+        public void init(AbstractButton menuItem) {
+            menuItem.setAction(this);
+            menuItem.setText(getText());
+            menuItem.setToolTipText(getTooltipText());
+            Icon icon = getIcon();
+            if (icon != null) {
+                menuItem.setIcon(icon);
+            }
+        }
+
+    }
+
+    private final class ConfigAction extends CTAction {
+
+        private static final long serialVersionUID = 8001396484814809015L;
         private final CTConfig config;
 
         public ConfigAction(CTConfig config) {
-            super(config.getName());
             this.config = config;
+            String text = config.getName();
+            setText(text);
+            setTooltipText(text);
         }
 
         @Override
@@ -337,6 +374,10 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
 
         public CTConfig getConfig() {
             return config;
+        }
+
+        public ConfigAction clone() throws CloneNotSupportedException {
+            return (ConfigAction) super.clone();
         }
     }
 

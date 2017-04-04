@@ -12,13 +12,17 @@ import gargoyle.ct.resource.internal.ClasspathResource;
 import gargoyle.ct.resource.internal.LocalResource;
 import gargoyle.ct.task.CTTaskUpdatable;
 import gargoyle.ct.task.impl.CTTimer;
-import gargoyle.ct.ui.*;
+import gargoyle.ct.ui.CTApp;
+import gargoyle.ct.ui.CTBlocker;
+import gargoyle.ct.ui.CTControl;
+import gargoyle.ct.ui.CTControlActions;
 import gargoyle.ct.util.CTMutex;
 import gargoyle.ct.util.CTTimeUtil;
 import gargoyle.ct.util.CTUtil;
 import gargoyle.ct.util.Log;
 
 import javax.swing.*;
+import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.Desktop.Action;
 import java.io.File;
@@ -27,6 +31,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -100,6 +105,29 @@ public final class CT implements CTApp {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException ex) {
             throw new RuntimeException(ex);
+        }
+    }
+
+    public static CTConfig showConfigDialog(Component owner, String title) {
+        while (true) {
+            try {
+                JFormattedTextField formattedTextField = new JFormattedTextField(new MaskFormatter("##U/##U/##U"));
+                int result = JOptionPane.showConfirmDialog(owner,
+                        formattedTextField,
+                        title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (result == JOptionPane.CANCEL_OPTION) {
+                    return null;
+                }
+                if (result == JOptionPane.OK_OPTION) {
+                    try {
+                        return CTConfig.parse(String.valueOf(formattedTextField.getValue()));
+                    } catch (IllegalArgumentException ex) {
+                        Log.debug(ex, ex.getMessage());
+                    }
+                }
+            } catch (ParseException ex) {
+                return null;
+            }
         }
     }
 
@@ -192,7 +220,7 @@ public final class CT implements CTApp {
     @Override
     public CTConfig newConfig(Component owner, String title) {
         try {
-            return CTNewConfigDialog.showConfigDialog(owner, title);
+            return showConfigDialog(owner, title);
         } catch (IllegalArgumentException e) {
             Log.error(e.getMessage());
         }

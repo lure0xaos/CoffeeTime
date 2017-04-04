@@ -68,7 +68,8 @@ public final class Log {
 
     private static StackTraceElement findCaller() {
         StackTraceElement[] trace = Thread.currentThread().getStackTrace();
-        for (int i = 1; i < trace.length; i++) {
+        int length = trace.length;
+        for (int i = 1; i < length; i++) {
             StackTraceElement ste = trace[i];
             if (!Objects.equals(Log.class.getName(), ste.getClassName())) {
                 return ste;

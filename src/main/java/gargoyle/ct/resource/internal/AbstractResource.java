@@ -6,10 +6,13 @@ import gargoyle.ct.util.Log;
 import java.io.*;
 import java.net.*;
 import java.text.MessageFormat;
+import java.util.jar.JarFile;
 
 abstract class AbstractResource implements Resource {
 
     public static final String COLON_SLASH = ":/";
+    public static final String MSG_FOUND = "{0} found";
+    public static final String MSG_NOT_FOUND = "{0} not found";
     private static final String PROTOCOL_FILE = "file";
     private static final String METHOD_HEAD = "HEAD";
     private static final String PROP_UA = "User-Agent";
@@ -47,7 +50,7 @@ abstract class AbstractResource implements Resource {
                     huc.connect();
                     boolean exists = huc.getResponseCode() == HttpURLConnection.HTTP_OK;
                     if (exists) {
-                        Log.debug("{0} found", url);
+                        Log.debug(MSG_FOUND, url);
                     }
                     return exists;
                 }
@@ -55,28 +58,29 @@ abstract class AbstractResource implements Resource {
                     JarURLConnection juc = (JarURLConnection) connection;
                     juc.setRequestProperty(PROP_UA, USER_AGENT);
                     juc.connect();
-                    boolean exists = juc.getJarFile() != null;
-                    if (exists) {
-                        Log.debug("{0} found", url);
+                    try (JarFile jar = juc.getJarFile()) {
+                        if (jar != null) {
+                            Log.debug(MSG_FOUND, url);
+                        }
                     }
-                    return exists;
+                    return false;
                 }
                 //noinspection CallToStringEqualsIgnoreCase
                 if (SCHEME_FILE.equalsIgnoreCase(url.getProtocol())) {
                     boolean exists = new File(url.toURI()).exists();
                     if (exists) {
-                        Log.debug("{0} found", url);
+                        Log.debug(MSG_FOUND, url);
                     }
                     return exists;
                 }
             } catch (IOException | URISyntaxException ex) {
-                Log.debug("{0} not found", url);
+                Log.debug(MSG_NOT_FOUND, url);
                 return false;
             }
-            Log.debug("{0} not found", url);
+            Log.debug(MSG_NOT_FOUND, url);
             return false;
         }
-        Log.debug("{0} not found", url);
+        Log.debug(MSG_NOT_FOUND, "");
         return false;
     }
 

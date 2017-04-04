@@ -8,6 +8,9 @@ import java.awt.event.MouseMotionAdapter;
 
 public final class DragHelper {
 
+    private DragHelper() {
+    }
+
     @SuppressWarnings("SameParameterValue")
     public static void makeDraggable(JComponent comp, int snap) {
         Point mouseDownCompCoords = new Point();
