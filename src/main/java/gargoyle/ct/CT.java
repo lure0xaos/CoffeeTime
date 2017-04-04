@@ -6,16 +6,15 @@ import gargoyle.ct.config.CTStandardConfigs;
 import gargoyle.ct.helper.CTTimeHelper;
 import gargoyle.ct.helper.TimeHelper;
 import gargoyle.ct.messages.impl.CTMessageProvider;
+import gargoyle.ct.pref.CTPreferences;
+import gargoyle.ct.pref.CTPreferencesImpl;
 import gargoyle.ct.resource.Resource;
 import gargoyle.ct.resource.impl.CTConfigResource;
 import gargoyle.ct.resource.internal.ClasspathResource;
 import gargoyle.ct.resource.internal.LocalResource;
 import gargoyle.ct.task.CTTaskUpdatable;
 import gargoyle.ct.task.impl.CTTimer;
-import gargoyle.ct.ui.CTApp;
-import gargoyle.ct.ui.CTBlocker;
-import gargoyle.ct.ui.CTControl;
-import gargoyle.ct.ui.CTControlActions;
+import gargoyle.ct.ui.*;
 import gargoyle.ct.util.CTMutex;
 import gargoyle.ct.util.CTTimeUtil;
 import gargoyle.ct.util.CTUtil;
@@ -25,6 +24,7 @@ import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.Desktop.Action;
+import java.awt.Dialog.ModalityType;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,10 +55,12 @@ public final class CT implements CTApp {
     private final TimeHelper timeHelper;
 
     private final CTTimer timer;
+    private final CTPreferences preferences;
     private CTConfigResource configResource;
 
     private CT() {
         messages = new CTMessageProvider(LOC_MESSAGES);
+        preferences = new CTPreferencesImpl(this);
         timeHelper = new CTTimeHelper();
         List<CTBlocker> pBlockers = CTBlocker.forAllDevices(this);
         blockers = pBlockers;
@@ -108,7 +110,7 @@ public final class CT implements CTApp {
         }
     }
 
-    public static CTConfig showConfigDialog(Component owner, String title) {
+    private static CTConfig showConfigDialog(Component owner, String title) {
         while (true) {
             try {
                 JFormattedTextField formattedTextField = new JFormattedTextField(new MaskFormatter("##U/##U/##U"));
@@ -186,6 +188,12 @@ public final class CT implements CTApp {
     }
 
     @Override
+    public void showPreferences(Window owner, String title) {
+        CTPreferencesDialog dialog = new CTPreferencesDialog(this, owner, title, ModalityType.MODELESS);
+        dialog.setVisible(true);
+    }
+
+    @Override
     public String getMessage(String message, Object... args) {
         return messages.getMessage(message, args);
     }
@@ -249,5 +257,10 @@ public final class CT implements CTApp {
     @Override
     public void unarm() {
         timer.unarm();
+    }
+
+    @Override
+    public CTPreferences preferences() {
+        return preferences;
     }
 }

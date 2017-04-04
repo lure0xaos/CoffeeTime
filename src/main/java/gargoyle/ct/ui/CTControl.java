@@ -3,9 +3,11 @@ package gargoyle.ct.ui;
 import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.config.CTConfigs;
 import gargoyle.ct.helper.DragHelper;
+import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.task.CTTaskUpdatable;
 import gargoyle.ct.task.impl.CTTask;
 import gargoyle.ct.util.CTTimeUtil;
+import gargoyle.ct.util.Log;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,6 +28,8 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
 
     private static final String STR_NEW_CONFIG = "new-config";
 
+    private static final String STR_PREFERENCES = "preferences";
+
     private static final String STR_UNARM = "unarm";
 
     private static final String URL_ICON = "/icon64.png";
@@ -39,7 +43,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
     public CTControl(CTApp app) {
         this.app = app;
         group = new ButtonGroup();
-        controlWindow = new CTControlWindow(CTControl.class.getResource(URL_ICON), createMenu(app.loadConfigs(false)));
+        controlWindow = new CTControlWindow(app, CTControl.class.getResource(URL_ICON), createMenu(app.loadConfigs(false)));
         controlWindow.setVisible(true);
     }
 
@@ -85,6 +89,13 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
             @Override
             public void actionPerformed(ActionEvent e) {
                 unarm();
+            }
+        }));
+        menu.add(new CTMenuItem(new CTAction(app.getMessage(STR_PREFERENCES)) {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showPreferences(controlWindow.getOwner(), app.getMessage(STR_PREFERENCES));
             }
         }));
         menu.add(new CTMenuItem(new CTAction(app.getMessage(STR_HELP)) {
@@ -147,9 +158,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
         for (AbstractButton button : Collections.list(group.getElements())) {
             Action action = button.getAction();
             if (action instanceof ConfigAction) {
-                ConfigAction configAction = (ConfigAction) action;
-                CTConfig cfg = configAction.getConfig();
-                if (Objects.equals(cfg, config)) {
+                if (Objects.equals(((ConfigAction) action).getConfig(), config)) {
                     return button;
                 }
             }
@@ -162,6 +171,10 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
         return null;
     }
 
+    @Override
+    public void showPreferences(Window owner, String title) {
+        app.showPreferences(owner, title);
+    }
     @Override
     public void help() {
         app.help();
@@ -183,11 +196,18 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
         app.unarm();
     }
 
+    @Override
+    public CTPreferences preferences() {
+        return app.preferences();
+    }
+
     private static final class CTControlWindow extends JWindow {
 
         private static final String TOOL_TIP_MANAGER_ENABLE_TOOL_TIP_MODE = "ToolTipManager.enableToolTipMode";
 
         private static final long serialVersionUID = 1L;
+
+        private final transient CTApp app;
 
         private final JLabel label;
 
@@ -195,8 +215,9 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
 
         private volatile boolean live = true;
 
-        public CTControlWindow(URL imageURL, JPopupMenu menu) {
+        public CTControlWindow(CTApp app, URL imageURL, JPopupMenu menu) {
             super(new JShowingFrame());
+            this.app = app;
             if (imageURL == null) {
                 throw new IllegalArgumentException("image not found");
             }
@@ -213,22 +234,34 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
             setLocation(screenSize.width - getWidth(), screenSize.height - getHeight());
             DragHelper.makeDraggable(label, SNAP);
             DragHelper.makeDraggable(this, SNAP);
-            ToolTipManager.sharedInstance().setDismissDelay(1000);
-            ToolTipManager.sharedInstance().setInitialDelay(100);
-            ToolTipManager.sharedInstance().setReshowDelay(100);
-            ToolTipManager.sharedInstance().setEnabled(true);
-            ToolTipManager.sharedInstance().setLightWeightPopupEnabled(true);
+            ToolTipManager toolTipManager = ToolTipManager.sharedInstance();
+            toolTipManager.setDismissDelay(1000);
+            toolTipManager.setInitialDelay(100);
+            toolTipManager.setReshowDelay(100);
+            toolTipManager.setEnabled(true);
+            toolTipManager.setLightWeightPopupEnabled(true);
             label.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseEntered(MouseEvent e) {
                     reshow = true;
+                    transparency(false);
                 }
 
                 @Override
                 public void mouseExited(MouseEvent e) {
                     reshow = false;
+                    transparency(true);
                 }
             });
+        }
+
+        private void transparency(boolean transparent) {
+            CTPreferences preferences = app.preferences();
+            try {
+                setOpacity(preferences.isTransparencyEnabled() && transparent ? preferences.getTransparency() : 1);
+            } catch (UnsupportedOperationException e) {
+                Log.warn(e, "transparency not supported");
+            }
         }
 
         @Override
