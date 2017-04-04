@@ -70,7 +70,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
         JPopupMenu menu = new JPopupMenu();
         addConfigs(menu, configs);
         menu.add(new JSeparator(SwingConstants.HORIZONTAL));
-        menu.add(new JMenuItem(new AbstractAction(app.getMessage(STR_NEW_CONFIG)) {
+        menu.add(new CTMenuItem(new AbstractAction(app.getMessage(STR_NEW_CONFIG)) {
 
             private static final long serialVersionUID = 1121004649381891357L;
 
@@ -80,7 +80,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
             }
         }));
         menu.add(new JSeparator(SwingConstants.HORIZONTAL));
-        menu.add(new JMenuItem(new AbstractAction(app.getMessage(STR_UNARM)) {
+        menu.add(new CTMenuItem(new AbstractAction(app.getMessage(STR_UNARM)) {
             private static final long serialVersionUID = -4330571111080076360L;
 
             @Override
@@ -88,7 +88,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
                 unarm();
             }
         }));
-        menu.add(new JMenuItem(new AbstractAction(app.getMessage(STR_HELP)) {
+        menu.add(new CTMenuItem(new AbstractAction(app.getMessage(STR_HELP)) {
             private static final long serialVersionUID = 5717750136378884217L;
 
             @Override
@@ -96,7 +96,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
                 help();
             }
         }));
-        menu.add(new JMenuItem(new AbstractAction(app.getMessage(STR_EXIT)) {
+        menu.add(new CTMenuItem(new AbstractAction(app.getMessage(STR_EXIT)) {
             private static final long serialVersionUID = 6450213490024118820L;
 
             @Override
@@ -274,11 +274,47 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
         }
     }
 
+    private static final class CTMenuItem extends JMenuItem {
+        private static final long serialVersionUID = -5435250463745762683L;
+
+        public CTMenuItem(Action action) {
+            String text = String.valueOf(action.getValue(Action.NAME));
+            setAction(action);
+            setText(text);
+            setToolTipText(text);
+            setIconFromAction(action);
+        }
+
+        private void setIconFromAction(Action action) {
+            Icon icon = (Icon) action.getValue(Action.LARGE_ICON_KEY);
+            if (icon == null) {
+                icon = (Icon) action.getValue(Action.SMALL_ICON);
+            }
+            if (icon != null) {
+                setIcon(icon);
+            }
+        }
+    }
+
     private static final class CTConfigMenuItem extends JCheckBoxMenuItem {
         private static final long serialVersionUID = -2199156620390967976L;
 
-        public CTConfigMenuItem(ConfigAction configAction) {
-            super(configAction);
+        public CTConfigMenuItem(ConfigAction action) {
+            String text = action.getConfig().getName();
+            setAction(action);
+            setText(text);
+            setToolTipText(text);
+            setIconFromAction(action);
+        }
+
+        private void setIconFromAction(ConfigAction action) {
+            Icon icon = (Icon) action.getValue(Action.LARGE_ICON_KEY);
+            if (icon == null) {
+                icon = (Icon) action.getValue(Action.SMALL_ICON);
+            }
+            if (icon != null) {
+                setIcon(icon);
+            }
         }
     }
 
