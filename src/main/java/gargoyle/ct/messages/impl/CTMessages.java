@@ -6,7 +6,6 @@ import gargoyle.ct.util.Log;
 
 import java.text.MessageFormat;
 import java.util.*;
-import java.util.ResourceBundle.Control;
 
 public class CTMessages implements MessageProvider {
     private static final String MSG_NO_BUNDLE = "Can''t find bundle {0}";
@@ -73,9 +72,7 @@ public class CTMessages implements MessageProvider {
 
     private void load(String baseName) {
         try {
-            messages =
-                    ResourceBundle.getBundle(baseName, localeProvider.getLocale(),
-                            Control.getControl(Control.FORMAT_PROPERTIES));
+            messages = ResourceBundle.getBundle(baseName, localeProvider.getLocale(), UTF8Control.getControl());
         } catch (MissingResourceException ex) {
             if (parent == null) {
                 String key = ex.getKey();
