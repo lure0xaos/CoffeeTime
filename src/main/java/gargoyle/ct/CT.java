@@ -14,7 +14,10 @@ import gargoyle.ct.resource.internal.ClasspathResource;
 import gargoyle.ct.resource.internal.LocalResource;
 import gargoyle.ct.task.CTTaskUpdatable;
 import gargoyle.ct.task.impl.CTTimer;
-import gargoyle.ct.ui.*;
+import gargoyle.ct.ui.CTApp;
+import gargoyle.ct.ui.CTBlocker;
+import gargoyle.ct.ui.CTControl;
+import gargoyle.ct.ui.CTPreferencesDialog;
 import gargoyle.ct.util.CTMutex;
 import gargoyle.ct.util.CTTimeUtil;
 import gargoyle.ct.util.CTUtil;
@@ -48,15 +51,16 @@ public final class CT implements CTApp {
     private static final String PAGE_0_NOT_FOUND = "Page {0} not found";
     private final List<CTBlocker> blockers;
 
-    private final CTControlActions control;
+    private final CTControl control;
 
     private final CTMessageProvider messages;
 
     private final TimeHelper timeHelper;
 
     private final CTTimer timer;
-    private final CTPreferences preferences;
+    private final CTPreferencesImpl preferences;
     private CTConfigResource configResource;
+    private CTPreferencesDialog preferencesDialog;
 
     private CT() {
         messages = new CTMessageProvider(LOC_MESSAGES);
@@ -67,6 +71,7 @@ public final class CT implements CTApp {
         List<CTTaskUpdatable> updatables = new ArrayList<>(pBlockers);
         CTControl pControl = new CTControl(this);
         control = pControl;
+        preferences.addPreferenceChangeListener(pControl);
         updatables.add(pControl);
         timer = new CTTimer(timeHelper, updatables);
     }
@@ -145,6 +150,7 @@ public final class CT implements CTApp {
         }
         timer.terminate();
         CTMutex.release();
+        preferences.removePreferenceChangeListener(control);
     }
 
     @Override
@@ -189,8 +195,11 @@ public final class CT implements CTApp {
 
     @Override
     public void showPreferences(Window owner, String title) {
-        CTPreferencesDialog dialog = new CTPreferencesDialog(this, owner, title, ModalityType.MODELESS);
-        dialog.setVisible(true);
+        if (preferencesDialog == null) {
+            preferencesDialog = new CTPreferencesDialog(this, preferences(), owner, title, ModalityType.MODELESS);
+        }
+        preferencesDialog.setVisible(true);
+        preferencesDialog.requestFocus();
     }
 
     @Override

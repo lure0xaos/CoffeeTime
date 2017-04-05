@@ -6,9 +6,13 @@ import sun.util.logging.PlatformLogger;
 import sun.util.logging.PlatformLogger.Level;
 
 import java.util.prefs.BackingStoreException;
+import java.util.prefs.PreferenceChangeListener;
 import java.util.prefs.Preferences;
 
-public class CTPreferencesImpl implements CTPreferences {
+public class CTPreferencesImpl implements CTPreferences, CTPreferencesManager {
+
+    private static final String PREF_TRANSPARENCY_ENABLED = "transparencyEnabled";
+    private static final String PREF_TRANSPARENCY = "transparency";
 
     static {
         PlatformLogger.getLogger("java.util.prefs").setLevel(Level.OFF);
@@ -18,6 +22,16 @@ public class CTPreferencesImpl implements CTPreferences {
 
     public CTPreferencesImpl(CTApp app) {
         prefs = Preferences.userNodeForPackage(app.getClass());
+    }
+
+    @Override
+    public void addPreferenceChangeListener(PreferenceChangeListener pcl) {
+        prefs.addPreferenceChangeListener(pcl);
+    }
+
+    @Override
+    public void removePreferenceChangeListener(PreferenceChangeListener pcl) {
+        prefs.removePreferenceChangeListener(pcl);
     }
 
     private void sync() {
@@ -30,23 +44,23 @@ public class CTPreferencesImpl implements CTPreferences {
 
     @Override
     public boolean isTransparencyEnabled() {
-        return prefs.getBoolean(TRANSPARENCY_ENABLED, true);
+        return prefs.getBoolean(PREF_TRANSPARENCY_ENABLED, true);
     }
 
     @Override
     public void setTransparencyEnabled(boolean transparencyEnabled) {
-        prefs.putBoolean(TRANSPARENCY_ENABLED, transparencyEnabled);
+        prefs.putBoolean(PREF_TRANSPARENCY_ENABLED, transparencyEnabled);
         sync();
     }
 
     @Override
     public float getTransparency() {
-        return prefs.getFloat(TRANSPARENCY, 0.3f);
+        return prefs.getFloat(PREF_TRANSPARENCY, 0.3f);
     }
 
     @Override
     public void setTransparency(float transparency) {
-        prefs.putFloat(TRANSPARENCY, transparency);
+        prefs.putFloat(PREF_TRANSPARENCY, transparency);
         sync();
     }
 }

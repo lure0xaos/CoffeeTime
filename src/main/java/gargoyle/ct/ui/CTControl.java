@@ -17,8 +17,10 @@ import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Objects;
+import java.util.prefs.PreferenceChangeEvent;
+import java.util.prefs.PreferenceChangeListener;
 
-public class CTControl implements CTControlActions, CTTaskUpdatable {
+public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceChangeListener {
 
     private static final int SNAP = 20;
 
@@ -119,7 +121,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
 
     private void onNewConfig(CTConfigs configs, JPopupMenu menu) {
         CTConfig config = newConfig(controlWindow, app.getMessage(STR_NEW_CONFIG));
-        if (config.isValid() && !configs.hasConfig(config)) {
+        if (config != null && config.isValid() && !configs.hasConfig(config)) {
             configs.addConfig(config);
             addConfig(menu, config);
             saveConfigs(configs);
@@ -175,6 +177,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
     public void showPreferences(Window owner, String title) {
         app.showPreferences(owner, title);
     }
+
     @Override
     public void help() {
         app.help();
@@ -199,6 +202,11 @@ public class CTControl implements CTControlActions, CTTaskUpdatable {
     @Override
     public CTPreferences preferences() {
         return app.preferences();
+    }
+
+    @Override
+    public void preferenceChange(PreferenceChangeEvent evt) {
+        controlWindow.transparency(true);
     }
 
     private static final class CTControlWindow extends JWindow {
