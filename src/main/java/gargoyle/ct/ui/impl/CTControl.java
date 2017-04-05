@@ -24,7 +24,7 @@ import java.util.prefs.PreferenceChangeEvent;
 import java.util.prefs.PreferenceChangeListener;
 
 public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceChangeListener {
-    private static final String LOC_MESSAGES = "control";
+    private static final String LOC_MESSAGES = "messages.control";
     private static final int SNAP = 20;
     private static final String STR_EXIT = "exit";
     private static final String STR_EXIT_TOOLTIP = "exit.tooltip";

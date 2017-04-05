@@ -2,19 +2,29 @@ package gargoyle.ct.pref.impl;
 
 import gargoyle.ct.helper.Log;
 import gargoyle.ct.pref.CTPreferences;
-import sun.util.logging.PlatformLogger;
-import sun.util.logging.PlatformLogger.Level;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.PreferenceChangeListener;
 import java.util.prefs.Preferences;
 
 public class CTPreferencesImpl implements CTPreferences {
+    private static final String MSG_JAVA_UTIL_LOGGING_ERROR = "java.util.logging error";
     private static final String PREF_TRANSPARENCY = "transparency";
     private static final String PREF_TRANSPARENCY_LEVEL = "transparency-level";
 
     static {
-        PlatformLogger.getLogger("java.util.prefs").setLevel(Level.OFF); //NON-NLS
+        try {
+            Class<?> loggerClass = Class.forName("sun.util.logging.PlatformLogger");
+            Class<?> levelClass = Class.forName("sun.util.logging.PlatformLogger$Level");
+            //noinspection unchecked
+            loggerClass.getMethod("setLevel", levelClass)
+                    .invoke(loggerClass.getMethod("getLogger", String.class)
+                                    .invoke(null, "java.util.prefs"), //NON-NLS
+                            Enum.valueOf((Class<Enum>) levelClass, "OFF")); //NON-NLS
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | ClassNotFoundException e) {
+            Log.warn(e, MSG_JAVA_UTIL_LOGGING_ERROR);
+        }
     }
 
     private final Preferences prefs;

@@ -40,7 +40,7 @@ import java.util.Locale;
 public final class CT implements CTApp {
     private static final String CONFIG_NAME = "CT.cfg";
     private static final String DOT = ".";
-    private static final String HELP_PAGE = "doc/help.html";
+    private static final String HELP_PAGE = "html/help.html";
     private static final String HTML = "html";
     private static final String MSG_ALREADY_RUNNING = "App already running";
     private static final String MSG_CANNOT_LOAD_0 = "Cannot load {0}";

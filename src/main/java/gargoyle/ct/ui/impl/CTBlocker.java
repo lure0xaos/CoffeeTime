@@ -22,7 +22,7 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
     private static final float ALIGNMENT_CENTER = 0.5f;
     private static final int DELAY = 3;
     private static final int FONT_SCALING = 30;
-    private static final String LOC_MESSAGES = "blocker";
+    private static final String LOC_MESSAGES = "messages.blocker";
     private static final int PERIOD = 60;
     private static final String STR_BLOCKED = "blocked_w";
     private static final String STR_WARN = "warn_w";

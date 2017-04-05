@@ -8,7 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class CTPreferencesDialog extends JDialog {
-    private static final String LOC_MESSAGES = "preferences";
+    private static final String LOC_MESSAGES = "messages.preferences";
     private static final String STR_TRANSPARENCY = "transparency";
     private static final String STR_TRANSPARENCY_LEVEL = "transparency-level";
     private static final String STR_TRANSPARENCY_LEVEL_TOOLTIP = "transparency-level.tooltip";

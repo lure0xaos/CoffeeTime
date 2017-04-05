@@ -11,8 +11,8 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 public final class Log {
-    private static final String LOCATION_ERRORS = "errors";
-    private static final String LOGGING_PROPERTIES = "/logging.properties";
+    private static final String LOCATION_ERRORS = "messages/errors";
+    private static final String LOGGING_PROPERTIES = "/config/logging.properties";
     private static final String MSG_NOT_FOUND = "{0} not found";
 
     static {

@@ -124,7 +124,7 @@
                         </goals>
                         <configuration>
                             <descriptors>
-                                <descriptor>${project.basedir}/src/main/resources/assembly.xml</descriptor>
+                                <descriptor>src/main/resources/config/assembly.xml</descriptor>
                             </descriptors>
                         </configuration>
                     </execution>

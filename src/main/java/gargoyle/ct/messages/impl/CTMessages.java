@@ -33,9 +33,7 @@ public class CTMessages implements MessageProvider {
             messages = ResourceBundle.getBundle(baseName, getLocale(), UTF8Control.getControl());
         } catch (MissingResourceException ex) {
             if (parent == null) {
-                String key = ex.getKey();
-                String bundle = messages.getBaseBundleName();
-                throw new MissingResourceException(MessageFormat.format(MSG_NO_BUNDLE, bundle), bundle, key);
+                throw new MissingResourceException(MessageFormat.format(MSG_NO_BUNDLE, baseName), baseName, ex.getKey());
             } else {
                 Log.warn(MessageFormat.format(MSG_NO_BUNDLE, messages.getBaseBundleName()));
             }
