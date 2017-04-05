@@ -58,7 +58,7 @@ public final class CT implements CTApp {
     private CTPreferencesDialog preferencesDialog;
 
     private CT() {
-        CTPreferencesImpl preferences = new CTPreferencesImpl(CT.class);
+        CTPreferences preferences = new CTPreferencesImpl(CT.class);
         this.preferences = preferences;
         CTTimeHelper timeHelper = new CTTimeHelperImpl();
         this.timeHelper = timeHelper;
