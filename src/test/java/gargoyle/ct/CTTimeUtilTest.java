@@ -9,17 +9,11 @@ import java.util.Calendar;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
-@SuppressWarnings("MagicNumber")
 public class CTTimeUtilTest {
-
     private static final String BASE_2_FAILED_0_1 = "Base(2) failed:{0} {1}";
-
     private static final String BASE_3_FAILED_0_1 = "Base(3) failed:{0} {1}";
-
     private static final String BASE_FAILED_0_1 = "Base failed:{0} {1}";
-
     private static final String DOWN_TO_FAILED_0_1 = "downTo failed: {0} {1}";
-
     private static final String UP_TO_FAILED_0_1 = "upTo failed: {0} {1}";
 
     @Test
@@ -39,8 +33,8 @@ public class CTTimeUtilTest {
         long end = CTTimeUtil.upTo(current, CTTimeUtil.toMillis(TimeUnit.HOURS, 1));
         long eager = start - CTTimeUtil.toMillis(unit, 1);
         Assert.assertFalse(
-            CTTimeUtil.isBetween(unit, CTTimeUtil.fromMillis(unit, eager), CTTimeUtil.fromMillis(unit, start),
-                CTTimeUtil.fromMillis(unit, end)));
+                CTTimeUtil.isBetween(unit, CTTimeUtil.fromMillis(unit, eager), CTTimeUtil.fromMillis(unit, start),
+                        CTTimeUtil.fromMillis(unit, end)));
     }
 
     @Test
@@ -60,8 +54,8 @@ public class CTTimeUtilTest {
         long end = CTTimeUtil.upTo(current, CTTimeUtil.toMillis(TimeUnit.HOURS, 1));
         long late = end + CTTimeUtil.toMillis(unit, 1);
         Assert.assertFalse(
-            CTTimeUtil.isBetween(unit, CTTimeUtil.fromMillis(unit, late), CTTimeUtil.fromMillis(unit, start),
-                CTTimeUtil.fromMillis(unit, end)));
+                CTTimeUtil.isBetween(unit, CTTimeUtil.fromMillis(unit, late), CTTimeUtil.fromMillis(unit, start),
+                        CTTimeUtil.fromMillis(unit, end)));
     }
 
     @Test
@@ -79,8 +73,8 @@ public class CTTimeUtilTest {
         long start = CTTimeUtil.downTo(current, CTTimeUtil.toMillis(TimeUnit.HOURS, 1));
         long end = CTTimeUtil.upTo(current, CTTimeUtil.toMillis(TimeUnit.HOURS, 1));
         Assert.assertTrue(
-            CTTimeUtil.isBetween(unit, CTTimeUtil.fromMillis(unit, current), CTTimeUtil.fromMillis(unit, start),
-                CTTimeUtil.fromMillis(unit, end)));
+                CTTimeUtil.isBetween(unit, CTTimeUtil.fromMillis(unit, current), CTTimeUtil.fromMillis(unit, start),
+                        CTTimeUtil.fromMillis(unit, end)));
     }
 
     @Test
@@ -89,7 +83,6 @@ public class CTTimeUtilTest {
         Assert.assertEquals(60, actual);
     }
 
-    @SuppressWarnings("UseOfObsoleteDateTimeApi")
     @Test
     public void testDownTo() {
         long currentMillis = CTTimeUtil.currentTimeMillis();
@@ -102,8 +95,8 @@ public class CTTimeUtilTest {
         calendar.set(Calendar.MINUTE, 0);
         long expected = calendar.getTimeInMillis();
         Assert.assertEquals(MessageFormat.format(DOWN_TO_FAILED_0_1, CTTimeUtil.formatHHMMSS(expected),
-            CTTimeUtil.formatHHMMSS(actual)),
-            expected, actual);
+                CTTimeUtil.formatHHMMSS(actual)),
+                expected, actual);
     }
 
     @Test
@@ -138,7 +131,6 @@ public class CTTimeUtilTest {
         Assert.assertTrue(CTTimeUtil.isInPeriod(unit, currentMillis, period, delay));
     }
 
-    @SuppressWarnings("UseOfObsoleteDateTimeApi")
     @Test
     public void testMake() {
         int hour = 14;
@@ -186,17 +178,15 @@ public class CTTimeUtilTest {
         long base2 = CTTimeUtil.toBase(expected - baseMillis * 2, current, baseMillis);
         long base3 = CTTimeUtil.toBase(expected + baseMillis * 2, current, baseMillis);
         Assert.assertEquals(
-            MessageFormat.format(BASE_FAILED_0_1, CTTimeUtil.formatHHMMSS(current), CTTimeUtil.formatHHMMSS(base)),
-            expected,
-            base);
+                MessageFormat.format(BASE_FAILED_0_1, CTTimeUtil.formatHHMMSS(current), CTTimeUtil.formatHHMMSS(base)),
+                expected,
+                base);
         Assert.assertEquals(
-            MessageFormat.format(BASE_2_FAILED_0_1, CTTimeUtil.formatHHMMSS(current), CTTimeUtil.formatHHMMSS(base2)),
-
-            expected, base2);
+                MessageFormat.format(BASE_2_FAILED_0_1, CTTimeUtil.formatHHMMSS(current), CTTimeUtil.formatHHMMSS(base2)),
+                expected, base2);
         Assert.assertEquals(
-            MessageFormat.format(BASE_3_FAILED_0_1, CTTimeUtil.formatHHMMSS(current), CTTimeUtil.formatHHMMSS(base3)),
-
-            expected, base3);
+                MessageFormat.format(BASE_3_FAILED_0_1, CTTimeUtil.formatHHMMSS(current), CTTimeUtil.formatHHMMSS(base3)),
+                expected, base3);
     }
 
     @Test
@@ -204,7 +194,6 @@ public class CTTimeUtilTest {
         Assert.assertEquals(1000, CTTimeUtil.toMillis(TimeUnit.SECONDS, 1));
     }
 
-    @SuppressWarnings("UseOfObsoleteDateTimeApi")
     @Test
     public void testUpTo() {
         long currentMillis = CTTimeUtil.currentTimeMillis();
@@ -218,8 +207,7 @@ public class CTTimeUtilTest {
         calendar.add(Calendar.HOUR, 1);
         long expected = calendar.getTimeInMillis();
         Assert.assertEquals(
-            MessageFormat.format(UP_TO_FAILED_0_1, CTTimeUtil.formatHHMMSS(expected), CTTimeUtil.formatHHMMSS(actual)),
-
-            expected, actual);
+                MessageFormat.format(UP_TO_FAILED_0_1, CTTimeUtil.formatHHMMSS(expected), CTTimeUtil.formatHHMMSS(actual)),
+                expected, actual);
     }
 }

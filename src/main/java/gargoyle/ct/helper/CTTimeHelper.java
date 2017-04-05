@@ -3,9 +3,7 @@ package gargoyle.ct.helper;
 import gargoyle.ct.util.CTTimeUtil;
 
 public class CTTimeHelper implements TimeHelper {
-
     private long delta;
-
     private long fakeTime;
 
     @Override

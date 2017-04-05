@@ -1,12 +1,11 @@
 package gargoyle.ct.pref;
 
 public interface CTPreferences {
+    boolean isTransparency();
 
-    boolean isTransparencyEnabled();
+    void setTransparency(boolean transparency);
 
-    void setTransparencyEnabled(boolean transparencyEnabled);
+    float getTransparencyLevel();
 
-    float getTransparency();
-
-    void setTransparency(float transparency);
+    void setTransparencyLevel(float transparencyLevel);
 }

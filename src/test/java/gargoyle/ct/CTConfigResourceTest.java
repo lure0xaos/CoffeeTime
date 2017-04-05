@@ -10,7 +10,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 public class CTConfigResourceTest {
-
     private static final String CT_CFG = "CT.cfg";
 
     @Test

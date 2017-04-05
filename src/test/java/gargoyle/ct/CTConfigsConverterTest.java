@@ -11,7 +11,6 @@ import org.junit.Test;
 import java.util.concurrent.TimeUnit;
 
 public class CTConfigsConverterTest {
-
     private CTConfigsConverter converter;
 
     @Before

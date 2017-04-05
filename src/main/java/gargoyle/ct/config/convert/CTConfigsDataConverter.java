@@ -5,7 +5,6 @@ import gargoyle.ct.convert.Converter;
 import java.util.concurrent.TimeUnit;
 
 public final class CTConfigsDataConverter implements Converter<String[]> {
-
     private static CTConfigsDataConverter instance;
 
     private CTConfigsDataConverter() {

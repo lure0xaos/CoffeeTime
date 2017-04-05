@@ -5,7 +5,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public final class CTUtil {
-
     private static final String DELIMITER = "\\A";
 
     private CTUtil() {

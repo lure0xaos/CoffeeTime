@@ -9,27 +9,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class CTConfigDataConverter implements Converter<long[]> {
-
     private static final String COMMENTS = "#;'";
-
     private static final String MSG_CANNOT_PARSE_LINE_0 = "Cannot parse line: {0}";
-
     private static final String
             MSG_CANNOT_PARSE_LINE_0_INVALID_TIME_UNIT_1 =
             "Cannot parse line: {0}, invalid time unit {1}";
-
     private static final String MSG_CANNOT_PARSE_LINE_INVALID_TIME_UNIT_0 = "Cannot parse line, invalid time unit {0}";
-
     private static final String MSG_COMMENTED_LINE_0 = "Commented line: {0}";
-
     private static final String MSG_EMPTY_LINE = "Empty line";
-
     private static final String UNIT_HOURS = "H";
-
     private static final String UNIT_MINUTES = "M";
-
     private static final String UNIT_SECONDS = "S";
-
     private static CTConfigDataConverter instance;
 
     private CTConfigDataConverter() {

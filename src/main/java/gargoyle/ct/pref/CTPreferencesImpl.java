@@ -10,9 +10,8 @@ import java.util.prefs.PreferenceChangeListener;
 import java.util.prefs.Preferences;
 
 public class CTPreferencesImpl implements CTPreferences, CTPreferencesManager {
-
-    private static final String PREF_TRANSPARENCY_ENABLED = "transparencyEnabled";
     private static final String PREF_TRANSPARENCY = "transparency";
+    private static final String PREF_TRANSPARENCY_LEVEL = "transparency-level";
 
     static {
         PlatformLogger.getLogger("java.util.prefs").setLevel(Level.OFF);
@@ -43,24 +42,24 @@ public class CTPreferencesImpl implements CTPreferences, CTPreferencesManager {
     }
 
     @Override
-    public boolean isTransparencyEnabled() {
-        return prefs.getBoolean(PREF_TRANSPARENCY_ENABLED, true);
+    public boolean isTransparency() {
+        return prefs.getBoolean(PREF_TRANSPARENCY, true);
     }
 
     @Override
-    public void setTransparencyEnabled(boolean transparencyEnabled) {
-        prefs.putBoolean(PREF_TRANSPARENCY_ENABLED, transparencyEnabled);
+    public void setTransparency(boolean transparency) {
+        prefs.putBoolean(PREF_TRANSPARENCY, transparency);
         sync();
     }
 
     @Override
-    public float getTransparency() {
-        return prefs.getFloat(PREF_TRANSPARENCY, 0.3f);
+    public float getTransparencyLevel() {
+        return prefs.getFloat(PREF_TRANSPARENCY_LEVEL, 0.3f);
     }
 
     @Override
-    public void setTransparency(float transparency) {
-        prefs.putFloat(PREF_TRANSPARENCY, transparency);
+    public void setTransparencyLevel(float transparencyLevel) {
+        prefs.putFloat(PREF_TRANSPARENCY_LEVEL, transparencyLevel);
         sync();
     }
 }

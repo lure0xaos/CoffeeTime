@@ -9,15 +9,10 @@ import org.junit.Test;
 import java.util.Locale;
 
 public class CTResourceTest {
-
     private static final String DOT_TXT = ".txt";
-
     private static final String EXT_PROPERTIES = ".properties";
-
     private static final String LOCALE_RU = "ru";
-
     private static final String RB_PROPERTIES = "rb.properties";
-
     private static final String TXT = "txt";
 
     @Test

@@ -10,9 +10,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 public class CTConfigTest {
-
     private static final String CONFIG = "60M/10M/3M";
-
     private CTConfig config;
 
     @Test

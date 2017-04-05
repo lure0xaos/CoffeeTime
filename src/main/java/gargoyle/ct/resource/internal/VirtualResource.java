@@ -10,11 +10,8 @@ import java.util.Objects;
 import java.util.ResourceBundle.Control;
 
 public class VirtualResource extends AbstractResource {
-
     private static final char CHAR_DOT = '.';
-
     private final Resource baseResource;
-
     private Locale locale;
 
     protected VirtualResource(Resource baseResource, String location) {
@@ -27,7 +24,6 @@ public class VirtualResource extends AbstractResource {
         baseResource = this;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     protected VirtualResource createResource(Resource base, String location) {
         return base == null ? new VirtualResource(location) : new VirtualResource(base, location);
@@ -75,7 +71,6 @@ public class VirtualResource extends AbstractResource {
         return Objects.equals(baseResource, this) ? super.toURL() : new URL(baseResource.toURL(), getLocation());
     }
 
-    @SuppressWarnings("StringBufferReplaceableByString")
     @Override
     public Resource withExtension(String extension) {
         String location = getLocation();

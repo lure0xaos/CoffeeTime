@@ -8,17 +8,11 @@ import java.text.MessageFormat;
 import java.util.concurrent.TimeUnit;
 
 public class CTConfig implements Externalizable, ObjectInputValidation {
-
     private static final String FORMAT_NAME = "{0,number,00}/{1,number,00}";
-
     private static final long serialVersionUID = -898699928298432564L;
-
     private long block;
-
     private String name;
-
     private long warn;
-
     private long whole;
 
     public CTConfig() {
@@ -42,7 +36,6 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
         read(line);
     }
 
-    @SuppressWarnings("SameParameterValue")
     public CTConfig(TimeUnit unit, long whole, long block, long warn) {
         this(CTTimeUtil.toMillis(unit, whole), CTTimeUtil.toMillis(unit, block), CTTimeUtil.toMillis(unit, warn));
         name = name(unit);

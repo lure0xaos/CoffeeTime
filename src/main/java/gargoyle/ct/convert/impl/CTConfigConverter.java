@@ -6,7 +6,6 @@ import gargoyle.ct.convert.Converter;
 import java.util.concurrent.TimeUnit;
 
 public final class CTConfigConverter implements Converter<CTConfig> {
-
     private static CTConfigConverter instance;
 
     private CTConfigConverter() {

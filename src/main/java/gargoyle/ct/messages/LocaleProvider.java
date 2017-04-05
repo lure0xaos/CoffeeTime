@@ -3,7 +3,6 @@ package gargoyle.ct.messages;
 import java.util.Locale;
 
 public class LocaleProvider {
-
     private Locale locale;
 
     public LocaleProvider() {

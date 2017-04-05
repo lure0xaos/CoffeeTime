@@ -10,10 +10,8 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class CTConfigs implements Serializable {
-
     private static final String MSG_NOT_VALID_CONVERT_0 = "not valid convert: {0}";
     private static final long serialVersionUID = 2024075953874239351L;
-
     private final Map<String, CTConfig> configs = new LinkedHashMap<>();
 
     protected CTConfigs(CTConfig... configs) {
@@ -91,7 +89,6 @@ public class CTConfigs implements Serializable {
         return Collections.unmodifiableList(new LinkedList<>(configs.values()));
     }
 
-    @SuppressWarnings("TypeMayBeWeakened")
     private void setConfigs(List<CTConfig> configs) {
         this.configs.clear();
         for (CTConfig config : configs) {

@@ -6,9 +6,7 @@ import gargoyle.ct.util.CTTimeUtil;
 import java.util.concurrent.TimeUnit;
 
 public class CTTask {
-
     private CTConfig config;
-
     private long started;
 
     public long getBlockEnd(long currentMillis) {

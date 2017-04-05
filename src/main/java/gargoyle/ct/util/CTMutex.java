@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 
 public final class CTMutex {
-
     private static final int PORT = 34567;
-
     private static ServerSocket mutex;
 
     private CTMutex() {

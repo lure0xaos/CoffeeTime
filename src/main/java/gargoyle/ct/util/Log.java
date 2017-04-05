@@ -10,7 +10,6 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 public final class Log {
-
     private static final String LOGGING_PROPERTIES = "/logging.properties";
     private static final String LOCATION_ERRORS = "errors";
 
@@ -98,7 +97,6 @@ public final class Log {
         _log(Level.WARNING, exception, pattern, arguments);
     }
 
-    @SuppressWarnings("SameParameterValue")
     public static void warn(String pattern, Object... arguments) {
         _log(Level.WARNING, null, pattern, arguments);
     }

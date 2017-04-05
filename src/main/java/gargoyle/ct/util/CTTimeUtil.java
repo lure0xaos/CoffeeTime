@@ -6,19 +6,14 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public final class CTTimeUtil {
-
     private static final String HH_MM_SS = "HH:mm:ss";
-
     private static final String MM = "mm";
-
     private static final String MM_SS = "mm:ss";
-
     private static final String SS = "ss";
 
     private CTTimeUtil() {
     }
 
-    @SuppressWarnings("SameParameterValue")
     public static long convert(TimeUnit unitTo, TimeUnit unitFrom, long cnt) {
         return unitTo.convert(unitFrom.toMillis(cnt), TimeUnit.MILLISECONDS);
     }
@@ -96,7 +91,6 @@ public final class CTTimeUtil {
         return currentMillis - begin;
     }
 
-    @SuppressWarnings("SameParameterValue")
     public static long timeElapsedFrom(TimeUnit unit, long currentMillis, long begin) {
         return fromMillis(unit, timeElapsedFrom(currentMillis, begin));
     }
@@ -105,7 +99,6 @@ public final class CTTimeUtil {
         return end - currentMillis;
     }
 
-    @SuppressWarnings("SameParameterValue")
     public static long timeRemainsTo(TimeUnit unit, long currentMillis, long end) {
         return fromMillis(unit, timeRemainsTo(currentMillis, end));
     }

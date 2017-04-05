@@ -11,21 +11,13 @@ import org.junit.Test;
 import java.text.MessageFormat;
 import java.util.concurrent.TimeUnit;
 
-import static gargoyle.ct.config.CTStandardConfigs.BLOCK_10M;
-import static gargoyle.ct.config.CTStandardConfigs.WARN_3M;
-import static gargoyle.ct.config.CTStandardConfigs.WHOLE_1H;
+import static gargoyle.ct.config.CTStandardConfigs.*;
 
-@SuppressWarnings("MagicNumber")
 public class CTTaskTest {
-
     private static final String TEST_BLOCKED_FAILED_0_1 = "testBlocked failed: {0} {1}";
-
     private static final String TEST_SLEEPING_FAILED_0_1 = "testSleeping failed: {0} {1}";
-
     private static final String TEST_WARN_FAILED_0_1 = "testWarn failed: {0} {1}";
-
     private long actual;
-
     private CTTask task;
 
     @Before
@@ -46,8 +38,8 @@ public class CTTaskTest {
         long started = CTTimeUtil.downTo(current, CTTimeUtil.toMillis(TimeUnit.HOURS, 1));
         task.setStarted(started);
         Assert.assertFalse(MessageFormat.format(TEST_BLOCKED_FAILED_0_1, CTTimeUtil.formatHHMMSS(current),
-            CTTimeUtil.formatHHMMSS(started)),
-            task.isBlocked(current));
+                CTTimeUtil.formatHHMMSS(started)),
+                task.isBlocked(current));
     }
 
     @Test
@@ -57,8 +49,8 @@ public class CTTaskTest {
         long started = CTTimeUtil.downTo(current, CTTimeUtil.toMillis(TimeUnit.HOURS, 1));
         task.setStarted(started);
         Assert.assertTrue(MessageFormat.format(TEST_BLOCKED_FAILED_0_1, CTTimeUtil.formatHHMMSS(current),
-            CTTimeUtil.formatHHMMSS(started)),
-            task.isBlocked(current));
+                CTTimeUtil.formatHHMMSS(started)),
+                task.isBlocked(current));
     }
 
     @Test
@@ -69,8 +61,8 @@ public class CTTaskTest {
         long started = CTTimeUtil.downTo(current, CTTimeUtil.toMillis(TimeUnit.HOURS, 1));
         task.setStarted(started);
         Assert.assertFalse(MessageFormat.format(TEST_SLEEPING_FAILED_0_1, CTTimeUtil.formatHHMMSS(current),
-            CTTimeUtil.formatHHMMSS(started)),
-            task.isSleeping(current));
+                CTTimeUtil.formatHHMMSS(started)),
+                task.isSleeping(current));
     }
 
     @Test
@@ -80,8 +72,8 @@ public class CTTaskTest {
         long started = CTTimeUtil.downTo(current, CTTimeUtil.toMillis(TimeUnit.HOURS, 1));
         task.setStarted(started);
         Assert.assertTrue(MessageFormat.format(TEST_SLEEPING_FAILED_0_1, CTTimeUtil.formatHHMMSS(current),
-            CTTimeUtil.formatHHMMSS(started)),
-            task.isSleeping(current));
+                CTTimeUtil.formatHHMMSS(started)),
+                task.isSleeping(current));
     }
 
     @Test
@@ -108,8 +100,8 @@ public class CTTaskTest {
         long started = CTTimeUtil.downTo(current, CTTimeUtil.toMillis(TimeUnit.HOURS, 1));
         task.setStarted(started);
         Assert.assertFalse(MessageFormat.format(TEST_WARN_FAILED_0_1, CTTimeUtil.formatHHMMSS(current),
-            CTTimeUtil.formatHHMMSS(started)),
-            task.isWarn(current));
+                CTTimeUtil.formatHHMMSS(started)),
+                task.isWarn(current));
     }
 
     @Test
@@ -119,7 +111,7 @@ public class CTTaskTest {
         long started = CTTimeUtil.downTo(current, CTTimeUtil.toMillis(TimeUnit.HOURS, 1));
         task.setStarted(started);
         Assert.assertTrue(MessageFormat.format(TEST_WARN_FAILED_0_1, CTTimeUtil.formatHHMMSS(current),
-            CTTimeUtil.formatHHMMSS(started)),
-            task.isWarn(current));
+                CTTimeUtil.formatHHMMSS(started)),
+                task.isWarn(current));
     }
 }

@@ -9,12 +9,9 @@ import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
 
-import static gargoyle.ct.config.CTStandardConfigs.BLOCK_10M;
-import static gargoyle.ct.config.CTStandardConfigs.WARN_3M;
-import static gargoyle.ct.config.CTStandardConfigs.WHOLE_1H;
+import static gargoyle.ct.config.CTStandardConfigs.*;
 
 public class CTConfigConverterTest {
-
     private CTConfigConverter converter;
 
     @Before

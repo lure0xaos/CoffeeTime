@@ -5,7 +5,6 @@ import gargoyle.ct.config.CTConfigs;
 import gargoyle.ct.config.CTStandardConfigs;
 import gargoyle.ct.helper.CTTimeHelper;
 import gargoyle.ct.helper.TimeHelper;
-import gargoyle.ct.messages.impl.CTMessageProvider;
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.pref.CTPreferencesImpl;
 import gargoyle.ct.resource.Resource;
@@ -40,8 +39,6 @@ import java.util.List;
 import java.util.Locale;
 
 public final class CT implements CTApp {
-
-    public static final String LOC_MESSAGES = "messages";
     private static final String SLASH = "/";
     private static final String CONFIG_NAME = "CT.cfg";
     private static final String DOT = ".";
@@ -50,33 +47,28 @@ public final class CT implements CTApp {
     private static final String NOT_FOUND_0 = "Not found {0}";
     private static final String PAGE_0_NOT_FOUND = "Page {0} not found";
     private final List<CTBlocker> blockers;
-
     private final CTControl control;
-
-    private final CTMessageProvider messages;
-
     private final TimeHelper timeHelper;
-
     private final CTTimer timer;
     private final CTPreferencesImpl preferences;
     private CTConfigResource configResource;
     private CTPreferencesDialog preferencesDialog;
 
     private CT() {
-        messages = new CTMessageProvider(LOC_MESSAGES);
-        preferences = new CTPreferencesImpl(this);
-        timeHelper = new CTTimeHelper();
-        List<CTBlocker> pBlockers = CTBlocker.forAllDevices(this);
-        blockers = pBlockers;
-        List<CTTaskUpdatable> updatables = new ArrayList<>(pBlockers);
-        CTControl pControl = new CTControl(this);
-        control = pControl;
-        preferences.addPreferenceChangeListener(pControl);
-        updatables.add(pControl);
+        CTPreferencesImpl preferences = new CTPreferencesImpl(this);
+        this.preferences = preferences;
+        CTTimeHelper timeHelper = new CTTimeHelper();
+        this.timeHelper = timeHelper;
+        List<CTBlocker> blockers = CTBlocker.forAllDevices();
+        this.blockers = blockers;
+        List<CTTaskUpdatable> updatables = new ArrayList<>(blockers);
+        CTControl control = new CTControl(this);
+        this.control = control;
+        preferences.addPreferenceChangeListener(control);
+        updatables.add(control);
         timer = new CTTimer(timeHelper, updatables);
     }
 
-    @SuppressWarnings("MethodCanBeVariableArityMethod")
     public static void main(String[] args) {
         boolean debug = false;
         if (args != null) {
@@ -118,16 +110,14 @@ public final class CT implements CTApp {
     private static CTConfig showConfigDialog(Component owner, String title) {
         while (true) {
             try {
-                JFormattedTextField formattedTextField = new JFormattedTextField(new MaskFormatter("##U/##U/##U"));
-                int result = JOptionPane.showConfirmDialog(owner,
-                        formattedTextField,
-                        title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+                JFormattedTextField field = new JFormattedTextField(new MaskFormatter("##U/##U/##U"));
+                int result = JOptionPane.showConfirmDialog(owner, field, title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (result == JOptionPane.CANCEL_OPTION) {
                     return null;
                 }
                 if (result == JOptionPane.OK_OPTION) {
                     try {
-                        return CTConfig.parse(String.valueOf(formattedTextField.getValue()));
+                        return CTConfig.parse(String.valueOf(field.getValue()));
                     } catch (IllegalArgumentException ex) {
                         Log.debug(ex, ex.getMessage());
                     }
@@ -196,15 +186,9 @@ public final class CT implements CTApp {
     @Override
     public void showPreferences(Window owner, String title) {
         if (preferencesDialog == null) {
-            preferencesDialog = new CTPreferencesDialog(this, preferences(), owner, title, ModalityType.MODELESS);
+            preferencesDialog = new CTPreferencesDialog(preferences(), owner, title, ModalityType.MODELESS);
         }
-        preferencesDialog.setVisible(true);
-        preferencesDialog.requestFocus();
-    }
-
-    @Override
-    public String getMessage(String message, Object... args) {
-        return messages.getMessage(message, args);
+        preferencesDialog.showMe();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package gargoyle.ct.ui;
 
 import gargoyle.ct.messages.MessageProvider;
+import gargoyle.ct.messages.impl.CTMessages;
 import gargoyle.ct.task.CTTaskUpdatable;
 import gargoyle.ct.task.impl.CTTask;
 import gargoyle.ct.util.CTTimeUtil;
@@ -14,20 +15,14 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class CTBlocker extends JWindow implements CTTaskUpdatable {
-
     private static final float ALIGNMENT_CENTER = 0.5f;
-
     private static final int DELAY = 3;
-
     private static final int FONT_SCALING = 30;
-
     private static final String MSG_BLOCKED = "blocked_w";
-
     private static final String MSG_WARN = "warn_w";
-
     private static final int PERIOD = 60;
-
     private static final long serialVersionUID = 1L;
+    private static final String LOC_MESSAGES = "blocker";
     private final transient MouseListener disposer = new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -35,31 +30,29 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
             dispose();
         }
     };
-    private transient MessageProvider app;
+    private transient MessageProvider messages;
     private JLabel lblInfo;
-
     private JLabel lblMain;
 
-    @SuppressWarnings("AbsoluteAlignmentInUserInterface")
-    public CTBlocker(MessageProvider app) {
-        init(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice(), app);
+    public CTBlocker(MessageProvider messages) {
+        init(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice(), messages);
     }
 
-    @SuppressWarnings("AbsoluteAlignmentInUserInterface")
-    public CTBlocker(GraphicsDevice device, MessageProvider app) {
-        init(device, app);
+    public CTBlocker(GraphicsDevice device, MessageProvider messages) {
+        init(device, messages);
     }
 
-    public static List<CTBlocker> forAllDevices(MessageProvider app) {
+    public static List<CTBlocker> forAllDevices() {
+        MessageProvider messages = new CTMessages(LOC_MESSAGES);
         List<CTBlocker> devices = new ArrayList<>();
         for (GraphicsDevice device : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
-            devices.add(new CTBlocker(device, app));
+            devices.add(new CTBlocker(device, messages));
         }
         return Collections.unmodifiableList(devices);
     }
 
-    private void init(GraphicsDevice device, MessageProvider app) {
-        this.app = app;
+    private void init(GraphicsDevice device, MessageProvider messages) {
+        this.messages = messages;
         setBounds(device.getDefaultConfiguration().getBounds());
         setAlwaysOnTop(true);
         toFront();
@@ -84,7 +77,6 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
         });
     }
 
-    @SuppressWarnings("static-method")
     private JLabel createInfoLabel() {
         JLabel label = new JLabel();
         label.setOpaque(true);
@@ -99,7 +91,6 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
         return label;
     }
 
-    @SuppressWarnings("static-method")
     private JLabel createMainLabel() {
         JLabel label = new JLabel();
         label.setOpaque(true);
@@ -128,13 +119,13 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
             if (task.isBlocked(currentMillis)) {
                 setVisible(true);
                 setForeground(Color.WHITE);
-                setText(app.getMessage(MSG_BLOCKED,
+                setText(messages.getMessage(MSG_BLOCKED,
                         CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockEnd(currentMillis)))));
             }
             if (task.isWarn(currentMillis)) {
                 setVisible(CTTimeUtil.isInPeriod(TimeUnit.SECONDS, currentMillis, PERIOD, DELAY));
                 setForeground(Color.GREEN);
-                setText(app.getMessage(MSG_WARN,
+                setText(messages.getMessage(MSG_WARN,
                         CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis)))));
             }
             if (task.isSleeping(currentMillis)) {

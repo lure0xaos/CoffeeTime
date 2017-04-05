@@ -7,7 +7,6 @@ import gargoyle.ct.pref.CTPreferences;
 import java.awt.*;
 
 public interface CTControlActions {
-
     void arm(CTConfig config);
 
     void exit();

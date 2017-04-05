@@ -7,11 +7,8 @@ import java.util.Arrays;
 import java.util.TimerTask;
 
 public class CTTimerTask extends TimerTask {
-
     private final CTTask task = new CTTask();
-
     private final TimeHelper timeHelper;
-
     private final Iterable<CTTaskUpdatable> updatables;
 
     public CTTimerTask(TimeHelper cTTimeHelper, CTTaskUpdatable... updatables) {

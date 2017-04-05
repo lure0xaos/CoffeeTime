@@ -10,12 +10,9 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import static gargoyle.ct.config.CTStandardConfigs.BLOCK_10M;
-import static gargoyle.ct.config.CTStandardConfigs.WARN_3M;
-import static gargoyle.ct.config.CTStandardConfigs.WHOLE_1H;
+import static gargoyle.ct.config.CTStandardConfigs.*;
 
 public class CTSerializationTest {
-
     @Test
     public void testConfigSerialization() throws IOException, ClassNotFoundException {
         CTConfig orig = new CTConfig(TimeUnit.MINUTES, WHOLE_1H, BLOCK_10M, WARN_3M);

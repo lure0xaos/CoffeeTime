@@ -7,11 +7,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
 public final class DragHelper {
-
     private DragHelper() {
     }
 
-    @SuppressWarnings("SameParameterValue")
     public static void makeDraggable(JComponent comp, int snap) {
         Point mouseDownCompCoords = new Point();
         comp.addMouseListener(new MouseAdapter() {
@@ -37,7 +35,6 @@ public final class DragHelper {
         });
     }
 
-    @SuppressWarnings("SameParameterValue")
     public static void makeDraggable(JWindow win, int snap) {
         Point mouseDownCompCoords = new Point();
         win.addMouseListener(new MouseAdapter() {

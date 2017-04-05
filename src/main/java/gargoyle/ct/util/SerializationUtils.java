@@ -3,7 +3,6 @@ package gargoyle.ct.util;
 import java.io.*;
 
 public final class SerializationUtils {
-
     private SerializationUtils() {
     }
 

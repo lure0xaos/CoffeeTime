@@ -3,6 +3,8 @@ package gargoyle.ct.ui;
 import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.config.CTConfigs;
 import gargoyle.ct.helper.DragHelper;
+import gargoyle.ct.messages.MessageProvider;
+import gargoyle.ct.messages.impl.CTMessages;
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.task.CTTaskUpdatable;
 import gargoyle.ct.task.impl.CTTask;
@@ -21,29 +23,23 @@ import java.util.prefs.PreferenceChangeEvent;
 import java.util.prefs.PreferenceChangeListener;
 
 public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceChangeListener {
-
     private static final int SNAP = 20;
-
     private static final String STR_EXIT = "exit";
-
     private static final String STR_HELP = "help";
-
     private static final String STR_NEW_CONFIG = "new-config";
-
+    private static final String STR_TITLE = "title";
     private static final String STR_PREFERENCES = "preferences";
-
     private static final String STR_UNARM = "unarm";
-
     private static final String URL_ICON = "/icon64.png";
-
+    private static final String LOC_MESSAGES = "control";
     private final CTApp app;
-
     private final CTControlWindow controlWindow;
-
     private final ButtonGroup group;
+    private final MessageProvider messages;
 
     public CTControl(CTApp app) {
         this.app = app;
+        messages = new CTMessages(LOC_MESSAGES);
         group = new ButtonGroup();
         controlWindow = new CTControlWindow(app, CTControl.class.getResource(URL_ICON), createMenu(app.loadConfigs(false)));
         controlWindow.setVisible(true);
@@ -75,8 +71,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
         JPopupMenu menu = new JPopupMenu();
         addConfigs(menu, configs);
         menu.add(new JSeparator(SwingConstants.HORIZONTAL));
-        menu.add(new CTMenuItem(new CTAction(app.getMessage(STR_NEW_CONFIG)) {
-
+        menu.add(new CTMenuItem(new CTAction(messages.getMessage(STR_NEW_CONFIG)) {
             private static final long serialVersionUID = 1121004649381891357L;
 
             @Override
@@ -85,7 +80,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
             }
         }));
         menu.add(new JSeparator(SwingConstants.HORIZONTAL));
-        menu.add(new CTMenuItem(new CTAction(app.getMessage(STR_UNARM)) {
+        menu.add(new CTMenuItem(new CTAction(messages.getMessage(STR_UNARM)) {
             private static final long serialVersionUID = -4330571111080076360L;
 
             @Override
@@ -93,14 +88,13 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
                 unarm();
             }
         }));
-        menu.add(new CTMenuItem(new CTAction(app.getMessage(STR_PREFERENCES)) {
-
+        menu.add(new CTMenuItem(new CTAction(messages.getMessage(STR_PREFERENCES)) {
             @Override
             public void actionPerformed(ActionEvent e) {
-                showPreferences(controlWindow.getOwner(), app.getMessage(STR_PREFERENCES));
+                showPreferences(controlWindow.getOwner(), messages.getMessage(STR_PREFERENCES));
             }
         }));
-        menu.add(new CTMenuItem(new CTAction(app.getMessage(STR_HELP)) {
+        menu.add(new CTMenuItem(new CTAction(messages.getMessage(STR_HELP)) {
             private static final long serialVersionUID = 5717750136378884217L;
 
             @Override
@@ -108,7 +102,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
                 help();
             }
         }));
-        menu.add(new CTMenuItem(new CTAction(app.getMessage(STR_EXIT)) {
+        menu.add(new CTMenuItem(new CTAction(messages.getMessage(STR_EXIT)) {
             private static final long serialVersionUID = 6450213490024118820L;
 
             @Override
@@ -120,7 +114,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
     }
 
     private void onNewConfig(CTConfigs configs, JPopupMenu menu) {
-        CTConfig config = newConfig(controlWindow, app.getMessage(STR_NEW_CONFIG));
+        CTConfig config = newConfig(controlWindow, messages.getMessage(STR_TITLE));
         if (config != null && config.isValid() && !configs.hasConfig(config)) {
             configs.addConfig(config);
             addConfig(menu, config);
@@ -185,7 +179,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
 
     @Override
     public CTConfig newConfig(Component owner, String title) {
-        return app.newConfig(owner, app.getMessage(STR_NEW_CONFIG));
+        return app.newConfig(owner, title);
     }
 
     @Override
@@ -210,17 +204,11 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
     }
 
     private static final class CTControlWindow extends JWindow {
-
         private static final String TOOL_TIP_MANAGER_ENABLE_TOOL_TIP_MODE = "ToolTipManager.enableToolTipMode";
-
         private static final long serialVersionUID = 1L;
-
         private final transient CTApp app;
-
         private final JLabel label;
-
         volatile boolean reshow;
-
         private volatile boolean live = true;
 
         public CTControlWindow(CTApp app, URL imageURL, JPopupMenu menu) {
@@ -240,6 +228,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
             setComponentPopupMenu(menu);
             Dimension screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getSize();
             setLocation(screenSize.width - getWidth(), screenSize.height - getHeight());
+            getOwner().setLocation(getLocation());
             DragHelper.makeDraggable(label, SNAP);
             DragHelper.makeDraggable(this, SNAP);
             ToolTipManager toolTipManager = ToolTipManager.sharedInstance();
@@ -266,7 +255,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
         private void transparency(boolean transparent) {
             CTPreferences preferences = app.preferences();
             try {
-                setOpacity(preferences.isTransparencyEnabled() && transparent ? preferences.getTransparency() : 1);
+                setOpacity(preferences.isTransparency() && transparent ? preferences.getTransparencyLevel() : 1);
             } catch (UnsupportedOperationException e) {
                 Log.warn(e, "transparency not supported");
             }
@@ -301,7 +290,6 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
         }
 
         private static class JShowingFrame extends JFrame {
-
             private static final long serialVersionUID = 1L;
 
             public JShowingFrame() throws HeadlessException {
@@ -320,7 +308,6 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
         public CTMenuItem(CTAction action) {
             action.init(this);
         }
-
     }
 
     private static final class CTConfigMenuItem extends JCheckBoxMenuItem {
@@ -329,11 +316,9 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
         public CTConfigMenuItem(ConfigAction action) {
             super(action);
         }
-
     }
 
     private abstract static class CTAction extends AbstractAction {
-
         private static final long serialVersionUID = -5252756701531090882L;
 
         protected CTAction() {
@@ -393,11 +378,9 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
                 menuItem.setIcon(icon);
             }
         }
-
     }
 
     private final class ConfigAction extends CTAction {
-
         private static final long serialVersionUID = 8001396484814809015L;
         private final CTConfig config;
 
@@ -421,5 +404,4 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
             return (ConfigAction) super.clone();
         }
     }
-
 }

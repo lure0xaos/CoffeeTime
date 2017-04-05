@@ -9,7 +9,6 @@ import java.text.MessageFormat;
 import java.util.jar.JarFile;
 
 abstract class AbstractResource implements Resource {
-
     public static final String COLON_SLASH = ":/";
     public static final String MSG_FOUND = "{0} found";
     public static final String MSG_NOT_FOUND = "{0} not found";
