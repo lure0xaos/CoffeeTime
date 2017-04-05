@@ -1,7 +1,7 @@
 package gargoyle.ct;
 
 import gargoyle.ct.config.CTConfig;
-import gargoyle.ct.convert.impl.CTConfigConverter;
+import gargoyle.ct.config.convert.CTConfigConverter;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

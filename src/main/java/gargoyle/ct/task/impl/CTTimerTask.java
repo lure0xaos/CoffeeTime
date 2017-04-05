@@ -1,6 +1,6 @@
 package gargoyle.ct.task.impl;
 
-import gargoyle.ct.helper.TimeHelper;
+import gargoyle.ct.helper.CTTimeHelper;
 import gargoyle.ct.task.CTTaskUpdatable;
 
 import java.util.Arrays;
@@ -8,16 +8,16 @@ import java.util.TimerTask;
 
 public class CTTimerTask extends TimerTask {
     private final CTTask task = new CTTask();
-    private final TimeHelper timeHelper;
+    private final CTTimeHelper timeHelper;
     private final Iterable<CTTaskUpdatable> updatables;
 
-    public CTTimerTask(TimeHelper cTTimeHelper, CTTaskUpdatable... updatables) {
-        this(cTTimeHelper, Arrays.asList(updatables));
+    public CTTimerTask(CTTimeHelper timeHelper, CTTaskUpdatable... updatables) {
+        this(timeHelper, Arrays.asList(updatables));
     }
 
-    public CTTimerTask(TimeHelper cTTimeHelper, Iterable<CTTaskUpdatable> updatables) {
+    public CTTimerTask(CTTimeHelper timeHelper, Iterable<CTTaskUpdatable> updatables) {
         this.updatables = updatables;
-        timeHelper = cTTimeHelper;
+        this.timeHelper = timeHelper;
     }
 
     public CTTask getTask() {

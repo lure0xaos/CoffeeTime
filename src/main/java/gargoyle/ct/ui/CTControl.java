@@ -2,7 +2,7 @@ package gargoyle.ct.ui;
 
 import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.config.CTConfigs;
-import gargoyle.ct.helper.DragHelper;
+import gargoyle.ct.helper.CTDragHelper;
 import gargoyle.ct.messages.MessageProvider;
 import gargoyle.ct.messages.impl.CTMessages;
 import gargoyle.ct.pref.CTPreferences;
@@ -119,7 +119,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
     }
 
     private void onNewConfig(CTConfigs configs, JPopupMenu menu) {
-        CTConfig config = newConfig(controlWindow, messages.getMessage(STR_TITLE));
+        CTConfig config = newConfig(controlWindow.getOwner(), messages.getMessage(STR_TITLE));
         if (config != null && config.isValid() && !configs.hasConfig(config)) {
             configs.addConfig(config);
             addConfig(menu, config);
@@ -183,7 +183,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
     }
 
     @Override
-    public CTConfig newConfig(Component owner, String title) {
+    public CTConfig newConfig(Window owner, String title) {
         return app.newConfig(owner, title);
     }
 
@@ -234,8 +234,8 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
             Dimension screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getSize();
             setLocation(screenSize.width - getWidth(), screenSize.height - getHeight());
             getOwner().setLocation(getLocation());
-            DragHelper.makeDraggable(label, SNAP);
-            DragHelper.makeDraggable(this, SNAP);
+            CTDragHelper.makeDraggable(label, SNAP);
+            CTDragHelper.makeDraggable(this, SNAP);
             ToolTipManager toolTipManager = ToolTipManager.sharedInstance();
             toolTipManager.setDismissDelay(1000);
             toolTipManager.setInitialDelay(100);

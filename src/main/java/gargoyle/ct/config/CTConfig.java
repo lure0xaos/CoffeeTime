@@ -1,6 +1,6 @@
 package gargoyle.ct.config;
 
-import gargoyle.ct.convert.impl.CTConfigDataConverter;
+import gargoyle.ct.config.convert.CTConfigDataConverter;
 import gargoyle.ct.util.CTTimeUtil;
 
 import java.io.*;

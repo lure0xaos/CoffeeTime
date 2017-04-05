@@ -1,4 +1,4 @@
-package gargoyle.ct.convert.impl;
+package gargoyle.ct.config.convert;
 
 import gargoyle.ct.convert.Converter;
 import gargoyle.ct.util.CTTimeUtil;

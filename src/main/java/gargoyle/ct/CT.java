@@ -4,7 +4,7 @@ import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.config.CTConfigs;
 import gargoyle.ct.config.CTStandardConfigs;
 import gargoyle.ct.helper.CTTimeHelper;
-import gargoyle.ct.helper.TimeHelper;
+import gargoyle.ct.helper.CTTimeHelperImpl;
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.pref.CTPreferencesImpl;
 import gargoyle.ct.resource.Resource;
@@ -48,7 +48,7 @@ public final class CT implements CTApp {
     private static final String PAGE_0_NOT_FOUND = "Page {0} not found";
     private final List<CTBlocker> blockers;
     private final CTControl control;
-    private final TimeHelper timeHelper;
+    private final CTTimeHelper timeHelper;
     private final CTTimer timer;
     private final CTPreferencesImpl preferences;
     private CTConfigResource configResource;
@@ -57,7 +57,7 @@ public final class CT implements CTApp {
     private CT() {
         CTPreferencesImpl preferences = new CTPreferencesImpl(this);
         this.preferences = preferences;
-        CTTimeHelper timeHelper = new CTTimeHelper();
+        CTTimeHelperImpl timeHelper = new CTTimeHelperImpl();
         this.timeHelper = timeHelper;
         List<CTBlocker> blockers = CTBlocker.forAllDevices();
         this.blockers = blockers;
@@ -219,7 +219,7 @@ public final class CT implements CTApp {
     }
 
     @Override
-    public CTConfig newConfig(Component owner, String title) {
+    public CTConfig newConfig(Window owner, String title) {
         try {
             return showConfigDialog(owner, title);
         } catch (IllegalArgumentException e) {

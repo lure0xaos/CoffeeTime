@@ -17,7 +17,7 @@ public interface CTControlActions {
 
     void help();
 
-    CTConfig newConfig(Component owner, String title);
+    CTConfig newConfig(Window owner, String title);
 
     void saveConfigs(CTConfigs configs);
 

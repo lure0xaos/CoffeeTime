@@ -1,7 +1,7 @@
 package gargoyle.ct.task.impl;
 
 import gargoyle.ct.config.CTConfig;
-import gargoyle.ct.helper.TimeHelper;
+import gargoyle.ct.helper.CTTimeHelper;
 import gargoyle.ct.task.CTTaskUpdatable;
 
 import java.util.Arrays;
@@ -13,11 +13,11 @@ public class CTTimer {
     private final Timer timer;
     private final CTTimerTask timerTask;
 
-    public CTTimer(TimeHelper timeHelper, CTTaskUpdatable... updatables) {
+    public CTTimer(CTTimeHelper timeHelper, CTTaskUpdatable... updatables) {
         this(timeHelper, Arrays.asList(updatables));
     }
 
-    public CTTimer(TimeHelper timeHelper, Iterable<CTTaskUpdatable> updatables) {
+    public CTTimer(CTTimeHelper timeHelper, Iterable<CTTaskUpdatable> updatables) {
         timer = new Timer(CTTimer.class.getName(), true);
         timerTask = new CTTimerTask(timeHelper, updatables);
         timer.scheduleAtFixedRate(timerTask, CHECK_DELAY, CHECK_PERIOD);

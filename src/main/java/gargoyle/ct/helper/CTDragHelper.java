@@ -6,8 +6,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
-public final class DragHelper {
-    private DragHelper() {
+public final class CTDragHelper {
+    private CTDragHelper() {
     }
 
     public static void makeDraggable(JComponent comp, int snap) {

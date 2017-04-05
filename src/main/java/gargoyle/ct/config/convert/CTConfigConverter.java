@@ -1,4 +1,4 @@
-package gargoyle.ct.convert.impl;
+package gargoyle.ct.config.convert;
 
 import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.convert.Converter;
