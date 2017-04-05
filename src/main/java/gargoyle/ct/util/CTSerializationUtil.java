@@ -8,8 +8,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 
-public final class SerializationUtils {
-    private SerializationUtils() {
+public final class CTSerializationUtil {
+    private CTSerializationUtil() {
     }
 
     public static <T> T pipe(T orig) throws ClassNotFoundException, IOException {

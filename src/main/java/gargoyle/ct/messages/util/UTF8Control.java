@@ -1,4 +1,4 @@
-package gargoyle.ct.messages.impl;
+package gargoyle.ct.messages.util;
 
 import java.io.IOException;
 import java.io.InputStream;

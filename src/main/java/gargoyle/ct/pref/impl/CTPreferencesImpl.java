@@ -1,6 +1,7 @@
-package gargoyle.ct.pref;
+package gargoyle.ct.pref.impl;
 
-import gargoyle.ct.util.Log;
+import gargoyle.ct.helper.Log;
+import gargoyle.ct.pref.CTPreferences;
 import sun.util.logging.PlatformLogger;
 import sun.util.logging.PlatformLogger.Level;
 
@@ -8,7 +9,7 @@ import java.util.prefs.BackingStoreException;
 import java.util.prefs.PreferenceChangeListener;
 import java.util.prefs.Preferences;
 
-public class CTPreferencesImpl implements CTPreferences, CTPreferencesManager {
+public class CTPreferencesImpl implements CTPreferences {
     private static final String PREF_TRANSPARENCY = "transparency";
     private static final String PREF_TRANSPARENCY_LEVEL = "transparency-level";
 

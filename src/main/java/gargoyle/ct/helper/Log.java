@@ -1,4 +1,4 @@
-package gargoyle.ct.util;
+package gargoyle.ct.helper;
 
 import java.io.IOException;
 import java.io.InputStream;

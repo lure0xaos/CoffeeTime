@@ -1,5 +1,6 @@
-package gargoyle.ct.helper;
+package gargoyle.ct.task.helper.impl;
 
+import gargoyle.ct.task.helper.CTTimeHelper;
 import gargoyle.ct.util.CTTimeUtil;
 
 public class CTTimeHelperImpl implements CTTimeHelper {

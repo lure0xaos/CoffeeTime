@@ -1,6 +1,6 @@
-package gargoyle.ct.config.convert;
+package gargoyle.ct.config.convert.impl;
 
-import gargoyle.ct.convert.Converter;
+import gargoyle.ct.config.convert.Converter;
 
 import java.util.concurrent.TimeUnit;
 

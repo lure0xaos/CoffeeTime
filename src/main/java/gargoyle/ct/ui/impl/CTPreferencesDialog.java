@@ -1,4 +1,4 @@
-package gargoyle.ct.ui;
+package gargoyle.ct.ui.impl;
 
 import gargoyle.ct.messages.MessageProvider;
 import gargoyle.ct.messages.impl.CTMessages;

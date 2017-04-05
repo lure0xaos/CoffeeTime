@@ -1,7 +1,7 @@
 package gargoyle.ct.task.impl;
 
-import gargoyle.ct.helper.CTTimeHelper;
 import gargoyle.ct.task.CTTaskUpdatable;
+import gargoyle.ct.task.helper.CTTimeHelper;
 
 import java.util.Arrays;
 import java.util.TimerTask;

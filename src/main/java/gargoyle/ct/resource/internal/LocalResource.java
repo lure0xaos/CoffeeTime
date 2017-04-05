@@ -1,6 +1,6 @@
 package gargoyle.ct.resource.internal;
 
-import gargoyle.ct.util.Log;
+import gargoyle.ct.helper.Log;
 
 import java.io.File;
 import java.net.MalformedURLException;

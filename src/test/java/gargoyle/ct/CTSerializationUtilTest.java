@@ -1,7 +1,7 @@
 package gargoyle.ct;
 
 import gargoyle.ct.config.CTConfig;
-import gargoyle.ct.util.SerializationUtils;
+import gargoyle.ct.util.CTSerializationUtil;
 import org.junit.Test;
 
 import java.awt.*;
@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 
-public class SerializationUtilsTest {
+public class CTSerializationUtilTest {
     @Test
     public void testPipe() throws Exception {
         test("string"); //NON-NLS
@@ -18,6 +18,6 @@ public class SerializationUtilsTest {
     }
 
     private void test(Object obj) throws Exception {
-        assertEquals(obj, SerializationUtils.pipe(obj));
+        assertEquals(obj, CTSerializationUtil.pipe(obj));
     }
 }

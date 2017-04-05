@@ -1,6 +1,6 @@
 package gargoyle.ct.pref;
 
-public interface CTPreferences {
+public interface CTPreferences extends CTPreferencesManager {
     float getTransparencyLevel();
 
     void setTransparencyLevel(float transparencyLevel);

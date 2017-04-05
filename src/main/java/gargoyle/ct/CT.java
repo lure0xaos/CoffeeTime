@@ -3,24 +3,24 @@ package gargoyle.ct;
 import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.config.CTConfigs;
 import gargoyle.ct.config.CTStandardConfigs;
-import gargoyle.ct.helper.CTTimeHelper;
-import gargoyle.ct.helper.CTTimeHelperImpl;
+import gargoyle.ct.helper.CTMutex;
+import gargoyle.ct.helper.Log;
 import gargoyle.ct.pref.CTPreferences;
-import gargoyle.ct.pref.CTPreferencesImpl;
+import gargoyle.ct.pref.impl.CTPreferencesImpl;
 import gargoyle.ct.resource.Resource;
 import gargoyle.ct.resource.impl.CTConfigResource;
 import gargoyle.ct.resource.internal.ClasspathResource;
 import gargoyle.ct.resource.internal.LocalResource;
 import gargoyle.ct.task.CTTaskUpdatable;
+import gargoyle.ct.task.helper.CTTimeHelper;
+import gargoyle.ct.task.helper.impl.CTTimeHelperImpl;
 import gargoyle.ct.task.impl.CTTimer;
 import gargoyle.ct.ui.CTApp;
-import gargoyle.ct.ui.CTBlocker;
-import gargoyle.ct.ui.CTControl;
-import gargoyle.ct.ui.CTPreferencesDialog;
-import gargoyle.ct.util.CTMutex;
+import gargoyle.ct.ui.impl.CTBlocker;
+import gargoyle.ct.ui.impl.CTControl;
+import gargoyle.ct.ui.impl.CTPreferencesDialog;
+import gargoyle.ct.util.CTStreamUtil;
 import gargoyle.ct.util.CTTimeUtil;
-import gargoyle.ct.util.CTUtil;
-import gargoyle.ct.util.Log;
 
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
@@ -51,10 +51,10 @@ public final class CT implements CTApp {
     private static final String STR_CONFIG_PATTERN = "##U/##U/##U";
     private final List<CTBlocker> blockers;
     private final CTControl control;
-    private final CTPreferencesImpl preferences;
+    private final CTPreferences preferences;
     private final CTTimeHelper timeHelper;
     private final CTTimer timer;
-    private CTConfigResource configResource;
+    private Resource configResource;
     private CTPreferencesDialog preferencesDialog;
 
     private CT() {
@@ -167,7 +167,7 @@ public final class CT implements CTApp {
             CTConfigResource configResource = CTConfigResource.findLocalConfig(CONFIG_NAME);
             if (configResource != null && configResource.exists()) {
                 try (InputStream stream = configResource.getInputStream()) {
-                    configs = CTConfigs.parse(CTUtil.convertStreamToString(stream));
+                    configs = CTConfigs.parse(CTStreamUtil.convertStreamToString(stream));
                     if (configs.getConfigs().isEmpty()) {
                         configs = new CTStandardConfigs();
                     }
@@ -184,7 +184,7 @@ public final class CT implements CTApp {
                 configs = new CTStandardConfigs();
                 configResource = CTConfigResource.forURL(LocalResource.getHomeDirectoryLocation(), CONFIG_NAME);
                 try (OutputStream stream = configResource.getOutputStream()) {
-                    CTUtil.write(stream, configs.format());
+                    CTStreamUtil.write(stream, configs.format());
                 } catch (IOException ex) {
                     Log.warn(NOT_FOUND_0, configResource);
                 }
@@ -192,7 +192,7 @@ public final class CT implements CTApp {
             this.configResource = configResource;
         } else {
             try (InputStream stream = configResource.getInputStream()) {
-                configs = CTConfigs.parse(CTUtil.convertStreamToString(stream));
+                configs = CTConfigs.parse(CTStreamUtil.convertStreamToString(stream));
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -240,7 +240,7 @@ public final class CT implements CTApp {
     public void saveConfigs(CTConfigs configs) {
         if (configResource != null) {
             try (OutputStream stream = configResource.getOutputStream()) {
-                CTUtil.write(stream, configs.format());
+                CTStreamUtil.write(stream, configs.format());
             } catch (IOException ex) {
                 Log.warn(NOT_FOUND_0, configResource);
             }

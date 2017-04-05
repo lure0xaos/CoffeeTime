@@ -1,7 +1,7 @@
 package gargoyle.ct;
 
 import gargoyle.ct.config.CTConfig;
-import gargoyle.ct.config.convert.CTConfigConverter;
+import gargoyle.ct.config.convert.impl.CTConfigConverter;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -9,7 +9,9 @@ import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
 
-import static gargoyle.ct.config.CTStandardConfigs.*;
+import static gargoyle.ct.config.CTStandardConfigs.BLOCK_10M;
+import static gargoyle.ct.config.CTStandardConfigs.WARN_3M;
+import static gargoyle.ct.config.CTStandardConfigs.WHOLE_1H;
 
 public class CTConfigConverterTest {
     private CTConfigConverter converter;

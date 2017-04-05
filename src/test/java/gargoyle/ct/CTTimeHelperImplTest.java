@@ -1,7 +1,7 @@
 package gargoyle.ct;
 
-import gargoyle.ct.helper.CTTimeHelper;
-import gargoyle.ct.helper.CTTimeHelperImpl;
+import gargoyle.ct.task.helper.CTTimeHelper;
+import gargoyle.ct.task.helper.impl.CTTimeHelperImpl;
 import gargoyle.ct.util.CTTimeUtil;
 import org.junit.After;
 import org.junit.Assert;

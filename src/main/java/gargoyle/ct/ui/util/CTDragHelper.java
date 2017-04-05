@@ -1,4 +1,4 @@
-package gargoyle.ct.helper;
+package gargoyle.ct.ui.util;
 
 import javax.swing.*;
 import java.awt.*;

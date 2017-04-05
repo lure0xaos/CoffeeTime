@@ -170,7 +170,7 @@ public class CTTimeUtilTest {
 
     @Test
     public void testToBase() {
-        // final long current = CTUtil.make(14, 20, 10);
+        // final long current = CTStreamUtil.make(14, 20, 10);
         long current = CTTimeUtil.make();
         long baseMillis = CTTimeUtil.toMillis(TimeUnit.HOURS, 1);
         long expected = CTTimeUtil.downTo(current, baseMillis);

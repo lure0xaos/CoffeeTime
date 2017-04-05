@@ -1,6 +1,6 @@
 package gargoyle.ct;
 
-import gargoyle.ct.ui.CTBlocker;
+import gargoyle.ct.ui.impl.CTBlocker;
 
 import java.util.List;
 

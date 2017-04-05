@@ -1,15 +1,16 @@
-package gargoyle.ct.ui;
+package gargoyle.ct.ui.impl;
 
 import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.config.CTConfigs;
-import gargoyle.ct.helper.CTDragHelper;
+import gargoyle.ct.helper.Log;
 import gargoyle.ct.messages.MessageProvider;
 import gargoyle.ct.messages.impl.CTMessages;
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.task.CTTaskUpdatable;
 import gargoyle.ct.task.impl.CTTask;
+import gargoyle.ct.ui.CTControlActions;
+import gargoyle.ct.ui.util.CTDragHelper;
 import gargoyle.ct.util.CTTimeUtil;
-import gargoyle.ct.util.Log;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,7 +37,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
     private static final String STR_TITLE = "title";
     private static final String STR_UNARM = "unarm";
     private static final String STR_UNARM_TOOLTIP = "unarm.tooltip";
-    private static final String URL_ICON = "/icon64.png";
+    private static final String URL_ICON = "/icon/64/icon64.png";
     private final CTControlActions app;
     private final CTControlWindow controlWindow;
     private final ButtonGroup group;
@@ -187,22 +188,19 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
 
     @Override
     public void doUpdate(CTTask task, long currentMillis) {
+        String toolTipText = CTTimeUtil.formatHHMMSS(currentMillis);
         if (task.isReady()) {
             if (task.isBlocked(currentMillis)) {
-                controlWindow.setToolTipText(
-                        CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockEnd(currentMillis))));
+                toolTipText = CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockEnd(currentMillis)));
             }
             if (task.isWarn(currentMillis)) {
-                controlWindow.setToolTipText(
-                        CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis))));
+                toolTipText = CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis)));
             }
             if (task.isSleeping(currentMillis)) {
-                controlWindow.setToolTipText(
-                        CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis))));
+                toolTipText = CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis)));
             }
-        } else {
-            controlWindow.setToolTipText(CTTimeUtil.formatHHMMSS(currentMillis));
         }
+        controlWindow.setToolTipText(toolTipText);
     }
 
     @Override
@@ -416,9 +414,5 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
         public void actionPerformed(ActionEvent e) {
             arm(config);
         }
-
-
-
-
     }
 }

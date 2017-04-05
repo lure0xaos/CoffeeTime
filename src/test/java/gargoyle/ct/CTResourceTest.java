@@ -1,8 +1,8 @@
 package gargoyle.ct;
 
+import gargoyle.ct.helper.Log;
 import gargoyle.ct.resource.Resource;
 import gargoyle.ct.resource.internal.ClasspathResource;
-import gargoyle.ct.util.Log;
 import org.junit.Assert;
 import org.junit.Test;
 

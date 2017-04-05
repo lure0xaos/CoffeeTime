@@ -3,7 +3,7 @@ package gargoyle.ct;
 import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.config.CTConfigs;
 import gargoyle.ct.config.CTStandardConfigs;
-import gargoyle.ct.util.SerializationUtils;
+import gargoyle.ct.util.CTSerializationUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -18,14 +18,14 @@ public class CTSerializationTest {
     @Test
     public void testConfigSerialization() throws IOException, ClassNotFoundException {
         CTConfig orig = new CTConfig(TimeUnit.MINUTES, WHOLE_1H, BLOCK_10M, WARN_3M);
-        CTConfig restored = SerializationUtils.pipe(orig);
+        CTConfig restored = CTSerializationUtil.pipe(orig);
         Assert.assertEquals(orig, restored);
     }
 
     @Test
     public void testConfigsSerialization() throws IOException, ClassNotFoundException {
         CTConfigs orig = new CTStandardConfigs();
-        CTConfigs restored = SerializationUtils.pipe(orig);
+        CTConfigs restored = CTSerializationUtil.pipe(orig);
         Assert.assertEquals(orig, restored);
     }
 

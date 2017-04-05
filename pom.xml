@@ -84,7 +84,7 @@
                             <goal>launch4j</goal>
                         </goals>
                         <configuration>
-                            <icon>${project.basedir}/src/main/resources/icon128.ico</icon>
+                            <icon>src/main/resources/icon/128/icon128.ico</icon>
                             <headerType>gui</headerType>
                             <!--<headerType>console</headerType>-->
                             <outfile>target/${project.build.finalName}.exe</outfile>
@@ -133,13 +133,6 @@
         </plugins>
     </build>
     <dependencies>
-        <!--<dependency>-->
-        <!--<groupId>com.oracle</groupId>-->
-        <!--<artifactId>javafx</artifactId>-->
-        <!--<version>${javafx.version}</version>-->
-        <!--<systemPath>${java.home}/lib/ext/jfxrt.jar</systemPath>-->
-        <!--<scope>system</scope>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
