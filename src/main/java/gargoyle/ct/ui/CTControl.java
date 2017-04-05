@@ -30,6 +30,11 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
     private static final String STR_TITLE = "title";
     private static final String STR_PREFERENCES = "preferences";
     private static final String STR_UNARM = "unarm";
+    private static final String STR_EXIT_TOOLTIP = "exit.tooltip";
+    private static final String STR_HELP_TOOLTIP = "help.tooltip";
+    private static final String STR_NEW_CONFIG_TOOLTIP = "new-config.tooltip";
+    private static final String STR_PREFERENCES_TOOLTIP = "preferences.tooltip";
+    private static final String STR_UNARM_TOOLTIP = "unarm.tooltip";
     private static final String URL_ICON = "/icon64.png";
     private static final String LOC_MESSAGES = "control";
     private final CTApp app;
@@ -71,7 +76,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
         JPopupMenu menu = new JPopupMenu();
         addConfigs(menu, configs);
         menu.add(new JSeparator(SwingConstants.HORIZONTAL));
-        menu.add(new CTMenuItem(new CTAction(messages.getMessage(STR_NEW_CONFIG)) {
+        menu.add(new CTMenuItem(new CTAction(messages.getMessage(STR_NEW_CONFIG), messages.getMessage(STR_NEW_CONFIG_TOOLTIP)) {
             private static final long serialVersionUID = 1121004649381891357L;
 
             @Override
@@ -80,7 +85,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
             }
         }));
         menu.add(new JSeparator(SwingConstants.HORIZONTAL));
-        menu.add(new CTMenuItem(new CTAction(messages.getMessage(STR_UNARM)) {
+        menu.add(new CTMenuItem(new CTAction(messages.getMessage(STR_UNARM), messages.getMessage(STR_UNARM_TOOLTIP)) {
             private static final long serialVersionUID = -4330571111080076360L;
 
             @Override
@@ -88,13 +93,13 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
                 unarm();
             }
         }));
-        menu.add(new CTMenuItem(new CTAction(messages.getMessage(STR_PREFERENCES)) {
+        menu.add(new CTMenuItem(new CTAction(messages.getMessage(STR_PREFERENCES), messages.getMessage(STR_PREFERENCES_TOOLTIP)) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 showPreferences(controlWindow.getOwner(), messages.getMessage(STR_PREFERENCES));
             }
         }));
-        menu.add(new CTMenuItem(new CTAction(messages.getMessage(STR_HELP)) {
+        menu.add(new CTMenuItem(new CTAction(messages.getMessage(STR_HELP), messages.getMessage(STR_HELP_TOOLTIP)) {
             private static final long serialVersionUID = 5717750136378884217L;
 
             @Override
@@ -102,7 +107,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
                 help();
             }
         }));
-        menu.add(new CTMenuItem(new CTAction(messages.getMessage(STR_EXIT)) {
+        menu.add(new CTMenuItem(new CTAction(messages.getMessage(STR_EXIT), messages.getMessage(STR_EXIT_TOOLTIP)) {
             private static final long serialVersionUID = 6450213490024118820L;
 
             @Override
@@ -339,6 +344,11 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
             setText(text);
             setTooltipText(tooltipText);
             setIcon(icon);
+        }
+
+        public CTAction(String text, String tooltipText) {
+            setText(text);
+            setTooltipText(tooltipText);
         }
 
         protected String getText() {
