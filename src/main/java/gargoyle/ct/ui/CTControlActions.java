@@ -11,17 +11,17 @@ public interface CTControlActions {
 
     void exit();
 
-    CTConfigs loadConfigs(boolean reload);
-
-    void showPreferences(Window owner, String title);
-
     void help();
+
+    CTConfigs loadConfigs(boolean reload);
 
     CTConfig newConfig(Window owner, String title);
 
+    CTPreferences preferences();
+
     void saveConfigs(CTConfigs configs);
 
-    void unarm();
+    void showPreferences(Window owner, String title);
 
-    CTPreferences preferences();
+    void unarm();
 }

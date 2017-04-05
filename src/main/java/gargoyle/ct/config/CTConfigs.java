@@ -6,7 +6,13 @@ import gargoyle.ct.util.Log;
 import java.io.InvalidObjectException;
 import java.io.Serializable;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class CTConfigs implements Serializable {
@@ -39,39 +45,6 @@ public class CTConfigs implements Serializable {
         return configs.toArray(new CTConfig[configs.size()]);
     }
 
-    public void addConfig(CTConfig config) {
-        String name = config.getName();
-        if (!configs.containsKey(name)) {
-            configs.put(name, config);
-        }
-    }
-
-    public boolean hasConfig(CTConfig config) {
-        return configs.containsKey(config.getName());
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        CTConfigs other = (CTConfigs) obj;
-        if (configs == null) {
-            if (other.configs != null) {
-                return false;
-            }
-        } else if (!Objects.equals(configs, other.configs)) {
-            return false;
-        }
-        return true;
-    }
-
     public String format() {
         List<String> formats = new LinkedList<>();
         for (CTConfig config : configs.values()) {
@@ -96,12 +69,45 @@ public class CTConfigs implements Serializable {
         }
     }
 
+    public void addConfig(CTConfig config) {
+        String name = config.getName();
+        if (!configs.containsKey(name)) {
+            configs.put(name, config);
+        }
+    }
+
+    public boolean hasConfig(CTConfig config) {
+        return configs.containsKey(config.getName());
+    }
+
     @Override
     public int hashCode() {
         int prime = 31;
         int result = 1;
         result = prime * result + (configs == null ? 0 : configs.hashCode());
         return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        CTConfigs other = (CTConfigs) obj;
+        if (configs == null) {
+            if (other.configs != null) {
+                return false;
+            }
+        } else if (!Objects.equals(configs, other.configs)) {
+            return false;
+        }
+        return true;
     }
 
     @Override

@@ -35,16 +35,16 @@ public class ClasspathResource extends VirtualResource {
     }
 
     @Override
+    public URL toURL() throws IOException {
+        return loader.getResource(getLocation());
+    }
+
+    @Override
     public boolean exists() {
         try {
             return exists(toURL());
         } catch (IOException ex) {
             return false;
         }
-    }
-
-    @Override
-    public URL toURL() throws IOException {
-        return loader.getResource(getLocation());
     }
 }

@@ -3,7 +3,12 @@ package gargoyle.ct.config;
 import gargoyle.ct.config.convert.CTConfigDataConverter;
 import gargoyle.ct.util.CTTimeUtil;
 
-import java.io.*;
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.InvalidObjectException;
+import java.io.ObjectInput;
+import java.io.ObjectInputValidation;
+import java.io.ObjectOutput;
 import java.text.MessageFormat;
 import java.util.concurrent.TimeUnit;
 
@@ -36,6 +41,26 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
         read(line);
     }
 
+    private void read(String line) {
+        long[] data = CTConfigDataConverter.getInstance().parse(line);
+        whole = data[0];
+        block = data[1];
+        warn = data[2];
+        name = name(TimeUnit.MINUTES);
+    }
+
+    private String name(TimeUnit unit) {
+        return MessageFormat.format(FORMAT_NAME, getWhole(unit), getBlock(unit));
+    }
+
+    private long getBlock(TimeUnit unit) {
+        return CTTimeUtil.fromMillis(unit, block);
+    }
+
+    private long getWhole(TimeUnit unit) {
+        return CTTimeUtil.fromMillis(unit, whole);
+    }
+
     public CTConfig(TimeUnit unit, long whole, long block, long warn) {
         this(CTTimeUtil.toMillis(unit, whole), CTTimeUtil.toMillis(unit, block), CTTimeUtil.toMillis(unit, warn));
         name = name(unit);
@@ -45,35 +70,12 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
         return new CTConfig(line);
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        CTConfig other = (CTConfig) obj;
-        return block == other.block && warn == other.warn && whole == other.whole;
-    }
-
-    public String format() {
-        return CTConfigDataConverter.getInstance().format(TimeUnit.MINUTES, whole, block, warn);
-    }
-
     public long getBlock() {
         return block;
     }
 
     public void setBlock(long block) {
         this.block = block;
-    }
-
-    private long getBlock(TimeUnit unit) {
-        return CTTimeUtil.fromMillis(unit, block);
     }
 
     public String getName() {
@@ -100,10 +102,6 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
         this.whole = whole;
     }
 
-    private long getWhole(TimeUnit unit) {
-        return CTTimeUtil.fromMillis(unit, whole);
-    }
-
     @Override
     public int hashCode() {
         int prime = 31;
@@ -114,33 +112,32 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
         return result;
     }
 
-    public boolean isNotValid() {
-        return isNotValid(whole, block, warn);
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        CTConfig other = (CTConfig) obj;
+        return block == other.block && warn == other.warn && whole == other.whole;
     }
 
-    private boolean isNotValid(long wholeMillis, long blockMillis, long warnMillis) {
-        return !isValid(wholeMillis, blockMillis, warnMillis);
+    @Override
+    public String toString() {
+        return MessageFormat.format("CTConfig [name={0}, whole={1}, block={2}, warn={3}]", name, whole, block, warn);
+    }
+
+    public boolean isValid() {
+        return isValid(whole, block, warn);
     }
 
     private boolean isValid(long wholeMillis, long blockMillis, long warnMillis) {
         return wholeMillis > blockMillis && blockMillis > warnMillis;
-    }
-
-    private String name(TimeUnit unit) {
-        return MessageFormat.format(FORMAT_NAME, getWhole(unit), getBlock(unit));
-    }
-
-    private void read(String line) {
-        long[] data = CTConfigDataConverter.getInstance().parse(line);
-        whole = data[0];
-        block = data[1];
-        warn = data[2];
-        name = name(TimeUnit.MINUTES);
-    }
-
-    @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        read(in.readLine());
     }
 
     public void setBlock(TimeUnit unit, long block) {
@@ -156,15 +153,18 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
     }
 
     @Override
-    public String toString() {
-        return MessageFormat.format("CTConfig [name={0}, whole={1}, block={2}, warn={3}]", name, whole, block, warn);
-    }
-
-    @Override
     public void validateObject() throws InvalidObjectException {
         if (isNotValid()) {
             throw new InvalidObjectException("invalid configuration");
         }
+    }
+
+    public boolean isNotValid() {
+        return isNotValid(whole, block, warn);
+    }
+
+    private boolean isNotValid(long wholeMillis, long blockMillis, long warnMillis) {
+        return !isValid(wholeMillis, blockMillis, warnMillis);
     }
 
     @Override
@@ -172,7 +172,12 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
         out.writeBytes(format());
     }
 
-    public boolean isValid() {
-        return isValid(whole, block, warn);
+    public String format() {
+        return CTConfigDataConverter.getInstance().format(TimeUnit.MINUTES, whole, block, warn);
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        read(in.readLine());
     }
 }

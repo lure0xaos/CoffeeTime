@@ -1,9 +1,21 @@
 package gargoyle.ct.util;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 
 public final class SerializationUtils {
     private SerializationUtils() {
+    }
+
+    public static <T> T pipe(T orig) throws ClassNotFoundException, IOException {
+        byte[] serialized = serialize(orig);
+        // System.out.println(new String(serialized));
+        return deserialize(serialized);
     }
 
     @SuppressWarnings({"unchecked", "MethodCanBeVariableArityMethod"})
@@ -11,12 +23,6 @@ public final class SerializationUtils {
         try (final ObjectInput ois = new ObjectInputStream(new ByteArrayInputStream(bytes))) {
             return (T) ois.readObject();
         }
-    }
-
-    public static <T> T pipe(T orig) throws ClassNotFoundException, IOException {
-        byte[] serialized = serialize(orig);
-        // System.out.println(new String(serialized));
-        return deserialize(serialized);
     }
 
     public static <T> byte[] serialize(T o) throws IOException {

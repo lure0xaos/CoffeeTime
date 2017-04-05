@@ -39,23 +39,23 @@ import java.util.List;
 import java.util.Locale;
 
 public final class CT implements CTApp {
-    private static final String SLASH = "/";
     private static final String CONFIG_NAME = "CT.cfg";
     private static final String DOT = ".";
     private static final String HELP_PAGE = "doc/help.html";
     private static final String HTML = "html";
     private static final String NOT_FOUND_0 = "Not found {0}";
     private static final String PAGE_0_NOT_FOUND = "Page {0} not found";
+    private static final String SLASH = "/";
     private final List<CTBlocker> blockers;
     private final CTControl control;
+    private final CTPreferencesImpl preferences;
     private final CTTimeHelper timeHelper;
     private final CTTimer timer;
-    private final CTPreferencesImpl preferences;
     private CTConfigResource configResource;
     private CTPreferencesDialog preferencesDialog;
 
     private CT() {
-        CTPreferencesImpl preferences = new CTPreferencesImpl(this);
+        CTPreferencesImpl preferences = new CTPreferencesImpl(CT.class);
         this.preferences = preferences;
         CTTimeHelperImpl timeHelper = new CTTimeHelperImpl();
         this.timeHelper = timeHelper;
@@ -107,25 +107,12 @@ public final class CT implements CTApp {
         }
     }
 
-    private static CTConfig showConfigDialog(Component owner, String title) {
-        while (true) {
-            try {
-                JFormattedTextField field = new JFormattedTextField(new MaskFormatter("##U/##U/##U"));
-                int result = JOptionPane.showConfirmDialog(owner, field, title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-                if (result == JOptionPane.CANCEL_OPTION) {
-                    return null;
-                }
-                if (result == JOptionPane.OK_OPTION) {
-                    try {
-                        return CTConfig.parse(String.valueOf(field.getValue()));
-                    } catch (IllegalArgumentException ex) {
-                        Log.debug(ex, ex.getMessage());
-                    }
-                }
-            } catch (ParseException ex) {
-                return null;
-            }
-        }
+    private void setFakeTime(long fakeTime) {
+        timeHelper.setFakeTime(fakeTime);
+    }
+
+    private void start() {
+        control.arm(loadConfigs(false).getConfigs().iterator().next());
     }
 
     @Override
@@ -141,6 +128,33 @@ public final class CT implements CTApp {
         timer.terminate();
         CTMutex.release();
         preferences.removePreferenceChangeListener(control);
+    }
+
+    @Override
+    public void help() {
+        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Action.BROWSE)) {
+            ClassLoader loader = CT.class.getClassLoader();
+            Locale locale = Locale.getDefault();
+            for (Resource resource : new Resource[]{
+                    new ClasspathResource(loader, HELP_PAGE).forLocale(locale),
+                    new ClasspathResource(loader, SLASH + HELP_PAGE).forLocale(locale)
+            }) {
+                if (resource != null && resource.exists()) {
+                    try (InputStream stream = resource.getInputStream()) {
+                        File tempFile = File.createTempFile(CT.class.getName(), DOT + HTML);
+                        Files.copy(stream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                        Desktop.getDesktop().browse(tempFile.toURI());
+                        tempFile.deleteOnExit();
+                    } catch (IOException ex) {
+                        Log.error(ex, PAGE_0_NOT_FOUND, HELP_PAGE);
+                    }
+                    return;
+                } else {
+                    Log.debug(PAGE_0_NOT_FOUND, HELP_PAGE + ": " + (resource != null ? resource.getLocation() : null));
+                }
+            }
+            Log.error(PAGE_0_NOT_FOUND, HELP_PAGE);
+        }
     }
 
     @Override
@@ -184,41 +198,6 @@ public final class CT implements CTApp {
     }
 
     @Override
-    public void showPreferences(Window owner, String title) {
-        if (preferencesDialog == null) {
-            preferencesDialog = new CTPreferencesDialog(preferences(), owner, title, ModalityType.MODELESS);
-        }
-        preferencesDialog.showMe();
-    }
-
-    @Override
-    public void help() {
-        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Action.BROWSE)) {
-            ClassLoader loader = CT.class.getClassLoader();
-            Locale locale = Locale.getDefault();
-            for (Resource resource : new Resource[]{
-                    new ClasspathResource(loader, HELP_PAGE).forLocale(locale),
-                    new ClasspathResource(loader, SLASH + HELP_PAGE).forLocale(locale)
-            }) {
-                if (resource != null && resource.exists()) {
-                    try (InputStream stream = resource.getInputStream()) {
-                        File tempFile = File.createTempFile(CT.class.getName(), DOT + HTML);
-                        Files.copy(stream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                        Desktop.getDesktop().browse(tempFile.toURI());
-                        tempFile.deleteOnExit();
-                    } catch (IOException ex) {
-                        Log.error(ex, PAGE_0_NOT_FOUND, HELP_PAGE);
-                    }
-                    return;
-                } else {
-                    Log.debug(PAGE_0_NOT_FOUND, HELP_PAGE + ": " + (resource != null ? resource.getLocation() : null));
-                }
-            }
-            Log.error(PAGE_0_NOT_FOUND, HELP_PAGE);
-        }
-    }
-
-    @Override
     public CTConfig newConfig(Window owner, String title) {
         try {
             return showConfigDialog(owner, title);
@@ -226,6 +205,32 @@ public final class CT implements CTApp {
             Log.error(e.getMessage());
         }
         return null;
+    }
+
+    private static CTConfig showConfigDialog(Component owner, String title) {
+        while (true) {
+            try {
+                JFormattedTextField field = new JFormattedTextField(new MaskFormatter("##U/##U/##U"));
+                int result = JOptionPane.showConfirmDialog(owner, field, title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (result == JOptionPane.CANCEL_OPTION) {
+                    return null;
+                }
+                if (result == JOptionPane.OK_OPTION) {
+                    try {
+                        return CTConfig.parse(String.valueOf(field.getValue()));
+                    } catch (IllegalArgumentException ex) {
+                        Log.debug(ex, ex.getMessage());
+                    }
+                }
+            } catch (ParseException ex) {
+                return null;
+            }
+        }
+    }
+
+    @Override
+    public CTPreferences preferences() {
+        return preferences;
     }
 
     @Override
@@ -239,21 +244,16 @@ public final class CT implements CTApp {
         }
     }
 
-    private void setFakeTime(long fakeTime) {
-        timeHelper.setFakeTime(fakeTime);
-    }
-
-    private void start() {
-        control.arm(loadConfigs(false).getConfigs().iterator().next());
+    @Override
+    public void showPreferences(Window owner, String title) {
+        if (preferencesDialog == null) {
+            preferencesDialog = new CTPreferencesDialog(preferences(), owner, title, ModalityType.MODELESS);
+        }
+        preferencesDialog.showMe();
     }
 
     @Override
     public void unarm() {
         timer.unarm();
-    }
-
-    @Override
-    public CTPreferences preferences() {
-        return preferences;
     }
 }

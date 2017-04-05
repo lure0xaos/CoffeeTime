@@ -3,8 +3,16 @@ package gargoyle.ct.resource.internal;
 import gargoyle.ct.resource.Resource;
 import gargoyle.ct.util.Log;
 
-import java.io.*;
-import java.net.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.JarURLConnection;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.MessageFormat;
 import java.util.jar.JarFile;
 
@@ -12,9 +20,9 @@ abstract class AbstractResource implements Resource {
     public static final String COLON_SLASH = ":/";
     public static final String MSG_FOUND = "{0} found";
     public static final String MSG_NOT_FOUND = "{0} not found";
-    private static final String PROTOCOL_FILE = "file";
     private static final String METHOD_HEAD = "HEAD";
     private static final String PROP_UA = "User-Agent";
+    private static final String PROTOCOL_FILE = "file";
     private static final String SCHEME_FILE = PROTOCOL_FILE;
     private static final String
             USER_AGENT =
@@ -109,12 +117,12 @@ abstract class AbstractResource implements Resource {
     }
 
     @Override
-    public String toString() {
-        return MessageFormat.format("AbstractResource [location={0}]", location);
+    public URL toURL() throws IOException {
+        return new URL(location);
     }
 
     @Override
-    public URL toURL() throws IOException {
-        return new URL(location);
+    public String toString() {
+        return MessageFormat.format("AbstractResource [location={0}]", location);
     }
 }

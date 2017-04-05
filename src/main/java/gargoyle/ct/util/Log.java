@@ -10,8 +10,8 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 public final class Log {
-    private static final String LOGGING_PROPERTIES = "/logging.properties";
     private static final String LOCATION_ERRORS = "errors";
+    private static final String LOGGING_PROPERTIES = "/logging.properties";
 
     static {
         InputStream stream = Log.class.getResourceAsStream(LOGGING_PROPERTIES);
@@ -26,6 +26,10 @@ public final class Log {
     }
 
     private Log() {
+    }
+
+    public static void debug(Exception exception, String pattern, Object... arguments) {
+        _log(Level.FINE, exception, pattern, arguments);
     }
 
     private static void _log(Level level, Exception exception, String pattern, Object... arguments) {
@@ -49,8 +53,16 @@ public final class Log {
         }
     }
 
-    public static void debug(Exception exception, String pattern, Object... arguments) {
-        _log(Level.FINE, exception, pattern, arguments);
+    private static StackTraceElement findCaller() {
+        StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+        int length = trace.length;
+        for (int i = 1; i < length; i++) {
+            StackTraceElement ste = trace[i];
+            if (!Objects.equals(Log.class.getName(), ste.getClassName())) {
+                return ste;
+            }
+        }
+        return null;
     }
 
     public static void debug(String pattern, Object... arguments) {
@@ -63,18 +75,6 @@ public final class Log {
 
     public static void error(String pattern, Object... arguments) {
         _log(Level.SEVERE, null, pattern, arguments);
-    }
-
-    private static StackTraceElement findCaller() {
-        StackTraceElement[] trace = Thread.currentThread().getStackTrace();
-        int length = trace.length;
-        for (int i = 1; i < length; i++) {
-            StackTraceElement ste = trace[i];
-            if (!Objects.equals(Log.class.getName(), ste.getClassName())) {
-                return ste;
-            }
-        }
-        return null;
     }
 
     public static void info(Exception exception, String pattern, Object... arguments) {

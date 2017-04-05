@@ -8,12 +8,12 @@ import javax.swing.*;
 import java.awt.*;
 
 public class CTPreferencesDialog extends JDialog {
+    private static final String LOC_MESSAGES = "preferences";
     private static final String MSG_TRANSPARENCY = "transparency";
-    private static final String MSG_TRANSPARENCY_TOOLTIP = "transparency.tooltip";
     private static final String MSG_TRANSPARENCY_LEVEL = "transparency-level";
     private static final String MSG_TRANSPARENCY_LEVEL_TOOLTIP = "transparency-level.tooltip";
+    private static final String MSG_TRANSPARENCY_TOOLTIP = "transparency.tooltip";
     private static final long serialVersionUID = 4767295798528273381L;
-    private static final String LOC_MESSAGES = "preferences";
 
     public CTPreferencesDialog(CTPreferences preferences, Window owner, String title, ModalityType modalityType) {
         super(owner, title, modalityType);

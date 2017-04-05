@@ -8,7 +8,11 @@ import gargoyle.ct.util.CTTimeUtil;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -18,11 +22,11 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
     private static final float ALIGNMENT_CENTER = 0.5f;
     private static final int DELAY = 3;
     private static final int FONT_SCALING = 30;
+    private static final String LOC_MESSAGES = "blocker";
     private static final String MSG_BLOCKED = "blocked_w";
     private static final String MSG_WARN = "warn_w";
     private static final int PERIOD = 60;
     private static final long serialVersionUID = 1L;
-    private static final String LOC_MESSAGES = "blocker";
     private final transient MouseListener disposer = new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -30,25 +34,12 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
             dispose();
         }
     };
-    private transient MessageProvider messages;
     private JLabel lblInfo;
     private JLabel lblMain;
+    private transient MessageProvider messages;
 
     public CTBlocker(MessageProvider messages) {
         init(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice(), messages);
-    }
-
-    public CTBlocker(GraphicsDevice device, MessageProvider messages) {
-        init(device, messages);
-    }
-
-    public static List<CTBlocker> forAllDevices() {
-        MessageProvider messages = new CTMessages(LOC_MESSAGES);
-        List<CTBlocker> devices = new ArrayList<>();
-        for (GraphicsDevice device : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
-            devices.add(new CTBlocker(device, messages));
-        }
-        return Collections.unmodifiableList(devices);
     }
 
     private void init(GraphicsDevice device, MessageProvider messages) {
@@ -103,6 +94,19 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
         return label;
     }
 
+    public CTBlocker(GraphicsDevice device, MessageProvider messages) {
+        init(device, messages);
+    }
+
+    public static List<CTBlocker> forAllDevices() {
+        MessageProvider messages = new CTMessages(LOC_MESSAGES);
+        List<CTBlocker> devices = new ArrayList<>();
+        for (GraphicsDevice device : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
+            devices.add(new CTBlocker(device, messages));
+        }
+        return Collections.unmodifiableList(devices);
+    }
+
     public void debug(boolean debug) {
         setAlwaysOnTop(!debug);
         if (debug) {
@@ -135,11 +139,6 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
     }
 
     @Override
-    public void setBackground(Color color) {
-        lblMain.setBackground(color);
-    }
-
-    @Override
     public void setForeground(Color color) {
         lblMain.setForeground(color);
     }
@@ -153,5 +152,10 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
     public void setVisible(boolean b) {
         super.setVisible(b);
         toFront();
+    }
+
+    @Override
+    public void setBackground(Color color) {
+        lblMain.setBackground(color);
     }
 }

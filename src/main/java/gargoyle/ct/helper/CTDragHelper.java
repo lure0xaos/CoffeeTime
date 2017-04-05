@@ -35,6 +35,22 @@ public final class CTDragHelper {
         });
     }
 
+    private static void snap(Point p, Dimension size, int snap) {
+        Rectangle bounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+        if (p.x - bounds.x < snap) {
+            p.x = bounds.x;
+        }
+        if (p.y - bounds.y < snap) {
+            p.y = bounds.y;
+        }
+        if (bounds.x + bounds.width - p.x - size.width < snap) {
+            p.x = bounds.x + bounds.width - size.width;
+        }
+        if (bounds.y + bounds.height - p.y - size.height < snap) {
+            p.y = bounds.y + bounds.height - size.height;
+        }
+    }
+
     public static void makeDraggable(JWindow win, int snap) {
         Point mouseDownCompCoords = new Point();
         win.addMouseListener(new MouseAdapter() {
@@ -57,21 +73,5 @@ public final class CTDragHelper {
                 win.setLocation(p);
             }
         });
-    }
-
-    private static void snap(Point p, Dimension size, int snap) {
-        Rectangle bounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
-        if (p.x - bounds.x < snap) {
-            p.x = bounds.x;
-        }
-        if (p.y - bounds.y < snap) {
-            p.y = bounds.y;
-        }
-        if (bounds.x + bounds.width - p.x - size.width < snap) {
-            p.x = bounds.x + bounds.width - size.width;
-        }
-        if (bounds.y + bounds.height - p.y - size.height < snap) {
-            p.y = bounds.y + bounds.height - size.height;
-        }
     }
 }

@@ -1,6 +1,5 @@
 package gargoyle.ct.pref;
 
-import gargoyle.ct.ui.CTApp;
 import gargoyle.ct.util.Log;
 import sun.util.logging.PlatformLogger;
 import sun.util.logging.PlatformLogger.Level;
@@ -19,8 +18,8 @@ public class CTPreferencesImpl implements CTPreferences, CTPreferencesManager {
 
     private final Preferences prefs;
 
-    public CTPreferencesImpl(CTApp app) {
-        prefs = Preferences.userNodeForPackage(app.getClass());
+    public CTPreferencesImpl(Class<?> clazz) {
+        prefs = Preferences.userNodeForPackage(clazz);
     }
 
     @Override
@@ -33,12 +32,15 @@ public class CTPreferencesImpl implements CTPreferences, CTPreferencesManager {
         prefs.removePreferenceChangeListener(pcl);
     }
 
-    private void sync() {
-        try {
-            prefs.flush();
-        } catch (BackingStoreException e) {
-            Log.error(e, e.getMessage());
-        }
+    @Override
+    public float getTransparencyLevel() {
+        return prefs.getFloat(PREF_TRANSPARENCY_LEVEL, 0.3f);
+    }
+
+    @Override
+    public void setTransparencyLevel(float transparencyLevel) {
+        prefs.putFloat(PREF_TRANSPARENCY_LEVEL, transparencyLevel);
+        sync();
     }
 
     @Override
@@ -52,14 +54,11 @@ public class CTPreferencesImpl implements CTPreferences, CTPreferencesManager {
         sync();
     }
 
-    @Override
-    public float getTransparencyLevel() {
-        return prefs.getFloat(PREF_TRANSPARENCY_LEVEL, 0.3f);
-    }
-
-    @Override
-    public void setTransparencyLevel(float transparencyLevel) {
-        prefs.putFloat(PREF_TRANSPARENCY_LEVEL, transparencyLevel);
-        sync();
+    private void sync() {
+        try {
+            prefs.flush();
+        } catch (BackingStoreException e) {
+            Log.error(e, e.getMessage());
+        }
     }
 }

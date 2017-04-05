@@ -13,7 +13,6 @@ import java.util.ResourceBundle;
 import java.util.ResourceBundle.Control;
 
 public final class UTF8Control extends Control {
-
     private static final String PROPERTIES = "properties";
     private static UTF8Control instance;
     private Charset charset;
@@ -37,6 +36,14 @@ public final class UTF8Control extends Control {
         return instance;
     }
 
+    public Charset getCharset() {
+        return charset;
+    }
+
+    public void setCharset(Charset charset) {
+        this.charset = charset;
+    }
+
     public ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader,
                                     boolean reload) throws IllegalAccessException, InstantiationException, IOException {
         String bundleName = toBundleName(baseName, locale);
@@ -55,7 +62,6 @@ public final class UTF8Control extends Control {
     }
 
     private InputStream getStream(ClassLoader loader, boolean reload, String resourceName) throws IOException {
-
         if (reload) {
             URL url = loader.getResource(resourceName);
             if (url != null) {
@@ -69,13 +75,5 @@ public final class UTF8Control extends Control {
             return loader.getResourceAsStream(resourceName);
         }
         return null;
-    }
-
-    public Charset getCharset() {
-        return charset;
-    }
-
-    public void setCharset(Charset charset) {
-        this.charset = charset;
     }
 }

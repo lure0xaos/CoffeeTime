@@ -23,53 +23,31 @@ import java.util.prefs.PreferenceChangeEvent;
 import java.util.prefs.PreferenceChangeListener;
 
 public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceChangeListener {
+    private static final String LOC_MESSAGES = "control";
     private static final int SNAP = 20;
     private static final String STR_EXIT = "exit";
-    private static final String STR_HELP = "help";
-    private static final String STR_NEW_CONFIG = "new-config";
-    private static final String STR_TITLE = "title";
-    private static final String STR_PREFERENCES = "preferences";
-    private static final String STR_UNARM = "unarm";
     private static final String STR_EXIT_TOOLTIP = "exit.tooltip";
+    private static final String STR_HELP = "help";
     private static final String STR_HELP_TOOLTIP = "help.tooltip";
+    private static final String STR_NEW_CONFIG = "new-config";
     private static final String STR_NEW_CONFIG_TOOLTIP = "new-config.tooltip";
+    private static final String STR_PREFERENCES = "preferences";
     private static final String STR_PREFERENCES_TOOLTIP = "preferences.tooltip";
+    private static final String STR_TITLE = "title";
+    private static final String STR_UNARM = "unarm";
     private static final String STR_UNARM_TOOLTIP = "unarm.tooltip";
     private static final String URL_ICON = "/icon64.png";
-    private static final String LOC_MESSAGES = "control";
-    private final CTApp app;
+    private final CTControlActions app;
     private final CTControlWindow controlWindow;
     private final ButtonGroup group;
     private final MessageProvider messages;
 
-    public CTControl(CTApp app) {
+    public CTControl(CTControlActions app) {
         this.app = app;
         messages = new CTMessages(LOC_MESSAGES);
         group = new ButtonGroup();
         controlWindow = new CTControlWindow(app, CTControl.class.getResource(URL_ICON), createMenu(app.loadConfigs(false)));
         controlWindow.setVisible(true);
-    }
-
-    private void addConfig(JPopupMenu menu, CTConfig config) {
-        CTConfigMenuItem menuItem = new CTConfigMenuItem(new ConfigAction(config));
-        group.add(menuItem);
-        menu.insert(menuItem, group.getButtonCount() - 1);
-    }
-
-    private void addConfigs(JPopupMenu menu, CTConfigs configs) {
-        for (CTConfig config : configs.getConfigs()) {
-            addConfig(menu, config);
-        }
-    }
-
-    @Override
-    public void arm(CTConfig config) {
-        AbstractButton item = findItem(config);
-        if (item != null) {
-            group.clearSelection();
-            group.setSelected(item.getModel(), true);
-            app.arm(config);
-        }
     }
 
     private JPopupMenu createMenu(CTConfigs configs) {
@@ -118,6 +96,18 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
         return menu;
     }
 
+    private void addConfigs(JPopupMenu menu, CTConfigs configs) {
+        for (CTConfig config : configs.getConfigs()) {
+            addConfig(menu, config);
+        }
+    }
+
+    private void addConfig(JPopupMenu menu, CTConfig config) {
+        CTConfigMenuItem menuItem = new CTConfigMenuItem(new ConfigAction(config));
+        group.add(menuItem);
+        menu.insert(menuItem, group.getButtonCount() - 1);
+    }
+
     private void onNewConfig(CTConfigs configs, JPopupMenu menu) {
         CTConfig config = newConfig(controlWindow.getOwner(), messages.getMessage(STR_TITLE));
         if (config != null && config.isValid() && !configs.hasConfig(config)) {
@@ -125,6 +115,72 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
             addConfig(menu, config);
             saveConfigs(configs);
         }
+    }
+
+    @Override
+    public void arm(CTConfig config) {
+        AbstractButton item = findItem(config);
+        if (item != null) {
+            group.clearSelection();
+            group.setSelected(item.getModel(), true);
+            app.arm(config);
+        }
+    }
+
+    @Override
+    public void exit() {
+        controlWindow.setVisible(false);
+        controlWindow.dispose();
+        app.unarm();
+        app.exit();
+    }
+
+    @Override
+    public void help() {
+        app.help();
+    }
+
+    @Override
+    public CTConfigs loadConfigs(boolean reload) {
+        return null;
+    }
+
+    @Override
+    public CTConfig newConfig(Window owner, String title) {
+        return app.newConfig(owner, title);
+    }
+
+    @Override
+    public CTPreferences preferences() {
+        return app.preferences();
+    }
+
+    @Override
+    public void saveConfigs(CTConfigs configs) {
+        app.saveConfigs(configs);
+    }
+
+    @Override
+    public void showPreferences(Window owner, String title) {
+        app.showPreferences(owner, title);
+    }
+
+    @Override
+    public void unarm() {
+        group.clearSelection();
+        app.unarm();
+    }
+
+    private AbstractButton findItem(CTConfig config) {
+        for (AbstractButton button : Collections.list(group.getElements())) {
+            Action action = button.getAction();
+            if (action instanceof ConfigAction) {
+                if (Objects.equals(((ConfigAction) action).getConfig(), config)) {
+                    return button;
+                }
+            }
+        }
+        return null;
     }
 
     @Override
@@ -148,75 +204,94 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
     }
 
     @Override
-    public void exit() {
-        controlWindow.setVisible(false);
-        controlWindow.dispose();
-        app.unarm();
-        app.exit();
-    }
-
-    private AbstractButton findItem(CTConfig config) {
-        for (AbstractButton button : Collections.list(group.getElements())) {
-            Action action = button.getAction();
-            if (action instanceof ConfigAction) {
-                if (Objects.equals(((ConfigAction) action).getConfig(), config)) {
-                    return button;
-                }
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public CTConfigs loadConfigs(boolean reload) {
-        return null;
-    }
-
-    @Override
-    public void showPreferences(Window owner, String title) {
-        app.showPreferences(owner, title);
-    }
-
-    @Override
-    public void help() {
-        app.help();
-    }
-
-    @Override
-    public CTConfig newConfig(Window owner, String title) {
-        return app.newConfig(owner, title);
-    }
-
-    @Override
-    public void saveConfigs(CTConfigs configs) {
-        app.saveConfigs(configs);
-    }
-
-    @Override
-    public void unarm() {
-        group.clearSelection();
-        app.unarm();
-    }
-
-    @Override
-    public CTPreferences preferences() {
-        return app.preferences();
-    }
-
-    @Override
     public void preferenceChange(PreferenceChangeEvent evt) {
         controlWindow.transparency(true);
+    }
+
+    private abstract static class CTAction extends AbstractAction {
+        private static final long serialVersionUID = -5252756701531090882L;
+
+        protected CTAction() {
+        }
+
+        public CTAction(String text) {
+            setText(text);
+            setTooltipText(text);
+        }
+
+        public CTAction(String text, Icon icon) {
+            setText(text);
+            setTooltipText(text);
+            setIcon(icon);
+        }
+
+        public CTAction(String text, String tooltipText, Icon icon) {
+            setText(text);
+            setTooltipText(tooltipText);
+            setIcon(icon);
+        }
+
+        public CTAction(String text, String tooltipText) {
+            setText(text);
+            setTooltipText(tooltipText);
+        }
+
+        public CTAction clone() throws CloneNotSupportedException {
+            return (CTAction) super.clone();
+        }
+
+        public void init(AbstractButton menuItem) {
+            menuItem.setAction(this);
+            menuItem.setText(getText());
+            menuItem.setToolTipText(getTooltipText());
+            Icon icon = getIcon();
+            if (icon != null) {
+                menuItem.setIcon(icon);
+            }
+        }
+
+        protected String getText() {
+            return String.valueOf(getValue(Action.NAME));
+        }
+
+        protected void setText(String text) {
+            putValue(Action.NAME, text);
+        }
+
+        protected String getTooltipText() {
+            return String.valueOf(getValue(Action.SHORT_DESCRIPTION));
+        }
+
+        protected void setTooltipText(String text) {
+            putValue(Action.SHORT_DESCRIPTION, text);
+        }
+
+        protected Icon getIcon() {
+            return (Icon) getValue(Action.SMALL_ICON);
+        }
+
+        protected void setIcon(Icon icon) {
+            putValue(Action.SMALL_ICON, icon);
+        }
+    }
+
+    private static final class CTConfigMenuItem extends JCheckBoxMenuItem {
+        private static final long serialVersionUID = -2199156620390967976L;
+
+        public CTConfigMenuItem(ConfigAction action) {
+            super(action);
+        }
     }
 
     private static final class CTControlWindow extends JWindow {
         private static final String TOOL_TIP_MANAGER_ENABLE_TOOL_TIP_MODE = "ToolTipManager.enableToolTipMode";
         private static final long serialVersionUID = 1L;
-        private final transient CTApp app;
+        private final transient CTControlActions app;
         private final JLabel label;
         volatile boolean reshow;
         private volatile boolean live = true;
 
-        public CTControlWindow(CTApp app, URL imageURL, JPopupMenu menu) {
+        public CTControlWindow(CTControlActions app, URL imageURL, JPopupMenu menu) {
             super(new JShowingFrame());
             this.app = app;
             if (imageURL == null) {
@@ -266,6 +341,10 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
             }
         }
 
+        public void setComponentPopupMenu(JPopupMenu menu) {
+            label.setComponentPopupMenu(menu);
+        }
+
         @Override
         public void dispose() {
             if (live) {
@@ -274,10 +353,6 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
                 getOwner().dispose();
                 live = true;
             }
-        }
-
-        public void setComponentPopupMenu(JPopupMenu menu) {
-            label.setComponentPopupMenu(menu);
         }
 
         public void setToolTipText(String text) {
@@ -315,81 +390,6 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
         }
     }
 
-    private static final class CTConfigMenuItem extends JCheckBoxMenuItem {
-        private static final long serialVersionUID = -2199156620390967976L;
-
-        public CTConfigMenuItem(ConfigAction action) {
-            super(action);
-        }
-    }
-
-    private abstract static class CTAction extends AbstractAction {
-        private static final long serialVersionUID = -5252756701531090882L;
-
-        protected CTAction() {
-        }
-
-        public CTAction(String text) {
-            setText(text);
-            setTooltipText(text);
-        }
-
-        public CTAction(String text, Icon icon) {
-            setText(text);
-            setTooltipText(text);
-            setIcon(icon);
-        }
-
-        public CTAction(String text, String tooltipText, Icon icon) {
-            setText(text);
-            setTooltipText(tooltipText);
-            setIcon(icon);
-        }
-
-        public CTAction(String text, String tooltipText) {
-            setText(text);
-            setTooltipText(tooltipText);
-        }
-
-        protected String getText() {
-            return String.valueOf(getValue(Action.NAME));
-        }
-
-        protected void setText(String text) {
-            putValue(Action.NAME, text);
-        }
-
-        protected String getTooltipText() {
-            return String.valueOf(getValue(Action.SHORT_DESCRIPTION));
-        }
-
-        protected void setTooltipText(String text) {
-            putValue(Action.SHORT_DESCRIPTION, text);
-        }
-
-        protected Icon getIcon() {
-            return (Icon) getValue(Action.SMALL_ICON);
-        }
-
-        protected void setIcon(Icon icon) {
-            putValue(Action.SMALL_ICON, icon);
-        }
-
-        public CTAction clone() throws CloneNotSupportedException {
-            return (CTAction) super.clone();
-        }
-
-        public void init(AbstractButton menuItem) {
-            menuItem.setAction(this);
-            menuItem.setText(getText());
-            menuItem.setToolTipText(getTooltipText());
-            Icon icon = getIcon();
-            if (icon != null) {
-                menuItem.setIcon(icon);
-            }
-        }
-    }
-
     private final class ConfigAction extends CTAction {
         private static final long serialVersionUID = 8001396484814809015L;
         private final CTConfig config;
@@ -401,17 +401,21 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
             setTooltipText(text);
         }
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            arm(config);
+        public ConfigAction clone() throws CloneNotSupportedException {
+            return (ConfigAction) super.clone();
         }
 
         public CTConfig getConfig() {
             return config;
         }
 
-        public ConfigAction clone() throws CloneNotSupportedException {
-            return (ConfigAction) super.clone();
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            arm(config);
         }
+
+
+
+
     }
 }

@@ -25,11 +25,6 @@ public class VirtualResource extends AbstractResource {
     }
 
     @Override
-    protected VirtualResource createResource(Resource base, String location) {
-        return base == null ? new VirtualResource(location) : new VirtualResource(base, location);
-    }
-
-    @Override
     public Resource forLocale(Locale locale) {
         Control ctrl = Control.getControl(Control.FORMAT_DEFAULT);
         String location = baseResource.getLocation();
@@ -50,25 +45,18 @@ public class VirtualResource extends AbstractResource {
     }
 
     @Override
-    public Locale getLocale() {
-        return locale;
-    }
-
-    public String getRelativeLocation() {
-        String thisLocation = getLocation();
-        String baseLocation = baseResource.getLocation();
-        int minLength = Math.min(thisLocation.length(), baseLocation.length());
-        for (int i = 0; i < minLength; i++) {
-            if (thisLocation.charAt(i) != baseLocation.charAt(i)) {
-                return thisLocation.substring(i);
-            }
-        }
-        return thisLocation;
+    protected VirtualResource createResource(Resource base, String location) {
+        return base == null ? new VirtualResource(location) : new VirtualResource(base, location);
     }
 
     @Override
     public URL toURL() throws IOException {
         return Objects.equals(baseResource, this) ? super.toURL() : new URL(baseResource.toURL(), getLocation());
+    }
+
+    @Override
+    public Locale getLocale() {
+        return locale;
     }
 
     @Override
@@ -81,5 +69,17 @@ public class VirtualResource extends AbstractResource {
                         .append(extension)
                         .toString();
         return createResource(null, loc);
+    }
+
+    public String getRelativeLocation() {
+        String thisLocation = getLocation();
+        String baseLocation = baseResource.getLocation();
+        int minLength = Math.min(thisLocation.length(), baseLocation.length());
+        for (int i = 0; i < minLength; i++) {
+            if (thisLocation.charAt(i) != baseLocation.charAt(i)) {
+                return thisLocation.substring(i);
+            }
+        }
+        return thisLocation;
     }
 }
