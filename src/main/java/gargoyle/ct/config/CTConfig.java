@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 public class CTConfig implements Externalizable, ObjectInputValidation {
     private static final String FORMAT_NAME = "{0,number,00}/{1,number,00}";
+    private static final String STR_INVALID = "invalid";
     private static final long serialVersionUID = -898699928298432564L;
     private long block;
     private String name;
@@ -24,7 +25,7 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
         whole = 0;
         block = 0;
         warn = 0;
-        name = "invalid";
+        name = STR_INVALID;
     }
 
     private CTConfig(long whole, long block, long warn) {

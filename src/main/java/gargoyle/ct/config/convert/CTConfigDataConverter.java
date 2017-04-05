@@ -45,6 +45,18 @@ public final class CTConfigDataConverter implements Converter<long[]> {
             case SECONDS:
                 unitChar = UNIT_SECONDS;
                 break;
+            case NANOSECONDS:
+                throw new UnsupportedOperationException(
+                        MessageFormat.format(MSG_CANNOT_PARSE_LINE_INVALID_TIME_UNIT_0, unit.name()));
+            case MICROSECONDS:
+                throw new UnsupportedOperationException(
+                        MessageFormat.format(MSG_CANNOT_PARSE_LINE_INVALID_TIME_UNIT_0, unit.name()));
+            case MILLISECONDS:
+                throw new UnsupportedOperationException(
+                        MessageFormat.format(MSG_CANNOT_PARSE_LINE_INVALID_TIME_UNIT_0, unit.name()));
+            case DAYS:
+                throw new UnsupportedOperationException(
+                        MessageFormat.format(MSG_CANNOT_PARSE_LINE_INVALID_TIME_UNIT_0, unit.name()));
             default:
                 throw new UnsupportedOperationException(
                         MessageFormat.format(MSG_CANNOT_PARSE_LINE_INVALID_TIME_UNIT_0, unit.name()));

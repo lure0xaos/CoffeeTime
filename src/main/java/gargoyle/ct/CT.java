@@ -26,7 +26,6 @@ import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.Desktop.Action;
-import java.awt.Dialog.ModalityType;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,9 +42,13 @@ public final class CT implements CTApp {
     private static final String DOT = ".";
     private static final String HELP_PAGE = "doc/help.html";
     private static final String HTML = "html";
+    private static final String MSG_ALREADY_RUNNING = "App already running";
+    private static final String MSG_CANNOT_LOAD_0 = "Cannot load {0}";
+    private static final String MSG_FAKE_TIME_INVALID = "fake time not set";
     private static final String NOT_FOUND_0 = "Not found {0}";
     private static final String PAGE_0_NOT_FOUND = "Page {0} not found";
     private static final String SLASH = "/";
+    private static final String STR_CONFIG_PATTERN = "##U/##U/##U";
     private final List<CTBlocker> blockers;
     private final CTControl control;
     private final CTPreferencesImpl preferences;
@@ -57,7 +60,7 @@ public final class CT implements CTApp {
     private CT() {
         CTPreferencesImpl preferences = new CTPreferencesImpl(CT.class);
         this.preferences = preferences;
-        CTTimeHelperImpl timeHelper = new CTTimeHelperImpl();
+        CTTimeHelper timeHelper = new CTTimeHelperImpl();
         this.timeHelper = timeHelper;
         List<CTBlocker> blockers = CTBlocker.forAllDevices();
         this.blockers = blockers;
@@ -80,7 +83,7 @@ public final class CT implements CTApp {
             }
         }
         if (!debug && !CTMutex.acquire()) {
-            Log.error("App already running");
+            Log.error(MSG_ALREADY_RUNNING);
             return;
         }
         setSystemLookAndFeel();
@@ -90,7 +93,7 @@ public final class CT implements CTApp {
                 long fakeTime = CTTimeUtil.parseHHMMSS(args[0]);
                 app.setFakeTime(fakeTime);
             } catch (NumberFormatException e) {
-                Log.info("fake time not set");
+                Log.info(MSG_FAKE_TIME_INVALID);
             }
         }
         for (CTBlocker blocker : app.blockers) {
@@ -161,7 +164,7 @@ public final class CT implements CTApp {
     public CTConfigs loadConfigs(boolean reload) {
         CTConfigs configs;
         if (configResource == null || reload) {
-            CTConfigResource configResource = CTConfigResource.findLocal(CONFIG_NAME);
+            CTConfigResource configResource = CTConfigResource.findLocalConfig(CONFIG_NAME);
             if (configResource != null && configResource.exists()) {
                 try (InputStream stream = configResource.getInputStream()) {
                     configs = CTConfigs.parse(CTUtil.convertStreamToString(stream));
@@ -169,7 +172,7 @@ public final class CT implements CTApp {
                         configs = new CTStandardConfigs();
                     }
                 } catch (IOException ex) {
-                    Log.error(ex, "Cannot load {0}", configResource);
+                    Log.error(ex, MSG_CANNOT_LOAD_0, configResource);
                     configs = new CTStandardConfigs();
                 }
             } else {
@@ -210,7 +213,7 @@ public final class CT implements CTApp {
     private static CTConfig showConfigDialog(Component owner, String title) {
         while (true) {
             try {
-                JFormattedTextField field = new JFormattedTextField(new MaskFormatter("##U/##U/##U"));
+                JFormattedTextField field = new JFormattedTextField(new MaskFormatter(STR_CONFIG_PATTERN));
                 int result = JOptionPane.showConfirmDialog(owner, field, title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (result == JOptionPane.CANCEL_OPTION) {
                     return null;
@@ -247,7 +250,7 @@ public final class CT implements CTApp {
     @Override
     public void showPreferences(Window owner, String title) {
         if (preferencesDialog == null) {
-            preferencesDialog = new CTPreferencesDialog(preferences(), owner, title, ModalityType.MODELESS);
+            preferencesDialog = new CTPreferencesDialog(preferences(), owner, title);
         }
         preferencesDialog.showMe();
     }

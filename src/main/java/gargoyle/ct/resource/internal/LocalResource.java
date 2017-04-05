@@ -10,6 +10,7 @@ import java.text.MessageFormat;
 public class LocalResource extends VirtualResource {
     private static final String CANNOT_CREATE_ROOTS = "Cannot create roots";
     private static final String CANNOT_USE_0_AS_ROOT = "Cannot use {0} as root";
+    private static final String MSG_LOCATION_IS_NULL = "some location is null";
     private static final String USER_DIR = "user.dir";
     private static final String USER_HOME = "user.home";
 
@@ -20,7 +21,7 @@ public class LocalResource extends VirtualResource {
     protected static LocalResource findLocal(String name) {
         for (URL root : getLocations()) {
             if (root == null) {
-                Log.warn("some location is null");
+                Log.warn(MSG_LOCATION_IS_NULL);
                 continue;
             }
             try {

@@ -72,6 +72,8 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
             }
         }));
         menu.add(new CTMenuItem(new CTAction(messages.getMessage(STR_PREFERENCES), messages.getMessage(STR_PREFERENCES_TOOLTIP)) {
+            private static final long serialVersionUID = 8645604731109700568L;
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 showPreferences(controlWindow.getOwner(), messages.getMessage(STR_PREFERENCES));
@@ -284,6 +286,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
     }
 
     private static final class CTControlWindow extends JWindow {
+        private static final String MSG_TRANSPARENCY_NOT_SUPPORTED = "transparency not supported";
         private static final String TOOL_TIP_MANAGER_ENABLE_TOOL_TIP_MODE = "ToolTipManager.enableToolTipMode";
         private static final long serialVersionUID = 1L;
         private final transient CTControlActions app;
@@ -337,7 +340,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
             try {
                 setOpacity(preferences.isTransparency() && transparent ? preferences.getTransparencyLevel() : 1);
             } catch (UnsupportedOperationException e) {
-                Log.warn(e, "transparency not supported");
+                Log.warn(e, MSG_TRANSPARENCY_NOT_SUPPORTED);
             }
         }
 

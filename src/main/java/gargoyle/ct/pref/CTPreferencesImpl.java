@@ -13,7 +13,7 @@ public class CTPreferencesImpl implements CTPreferences, CTPreferencesManager {
     private static final String PREF_TRANSPARENCY_LEVEL = "transparency-level";
 
     static {
-        PlatformLogger.getLogger("java.util.prefs").setLevel(Level.OFF);
+        PlatformLogger.getLogger("java.util.prefs").setLevel(Level.OFF); //NON-NLS
     }
 
     private final Preferences prefs;

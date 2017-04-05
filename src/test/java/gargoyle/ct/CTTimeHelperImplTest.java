@@ -1,5 +1,6 @@
 package gargoyle.ct;
 
+import gargoyle.ct.helper.CTTimeHelper;
 import gargoyle.ct.helper.CTTimeHelperImpl;
 import gargoyle.ct.util.CTTimeUtil;
 import org.junit.After;
@@ -8,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class CTTimeHelperImplTest {
-    private CTTimeHelperImpl helper;
+    private CTTimeHelper helper;
 
     @Before
     public void setUp() {

@@ -23,9 +23,9 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
     private static final int DELAY = 3;
     private static final int FONT_SCALING = 30;
     private static final String LOC_MESSAGES = "blocker";
-    private static final String MSG_BLOCKED = "blocked_w";
-    private static final String MSG_WARN = "warn_w";
     private static final int PERIOD = 60;
+    private static final String STR_BLOCKED = "blocked_w";
+    private static final String STR_WARN = "warn_w";
     private static final long serialVersionUID = 1L;
     private final transient MouseListener disposer = new MouseAdapter() {
         @Override
@@ -123,13 +123,13 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
             if (task.isBlocked(currentMillis)) {
                 setVisible(true);
                 setForeground(Color.WHITE);
-                setText(messages.getMessage(MSG_BLOCKED,
+                setText(messages.getMessage(STR_BLOCKED,
                         CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockEnd(currentMillis)))));
             }
             if (task.isWarn(currentMillis)) {
                 setVisible(CTTimeUtil.isInPeriod(TimeUnit.SECONDS, currentMillis, PERIOD, DELAY));
                 setForeground(Color.GREEN);
-                setText(messages.getMessage(MSG_WARN,
+                setText(messages.getMessage(STR_WARN,
                         CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis)))));
             }
             if (task.isSleeping(currentMillis)) {

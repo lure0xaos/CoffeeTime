@@ -2,6 +2,7 @@ package gargoyle.ct.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -12,11 +13,12 @@ import java.util.logging.Logger;
 public final class Log {
     private static final String LOCATION_ERRORS = "errors";
     private static final String LOGGING_PROPERTIES = "/logging.properties";
+    private static final String MSG_NOT_FOUND = "{0} not found";
 
     static {
         InputStream stream = Log.class.getResourceAsStream(LOGGING_PROPERTIES);
         if (stream == null) {
-            System.err.println(LOGGING_PROPERTIES + " not found");
+            System.err.println(MessageFormat.format(MSG_NOT_FOUND, LOGGING_PROPERTIES));
         }
         try {
             LogManager.getLogManager().readConfiguration(stream);

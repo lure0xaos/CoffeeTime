@@ -13,7 +13,7 @@ public final class CTConfigResource extends LocalResource {
         super(url);
     }
 
-    public static CTConfigResource findLocal(String name) {
+    public static CTConfigResource findLocalConfig(String name) {
         LocalResource local = LocalResource.findLocal(name);
         try {
             return local != null && local.exists() ? new CTConfigResource(local.toURL()) : null;

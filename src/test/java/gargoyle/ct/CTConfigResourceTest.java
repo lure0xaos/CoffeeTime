@@ -18,7 +18,7 @@ public class CTConfigResourceTest {
         assertTrue(resource.exists());
         resource = CTConfigResource.forURL(new URL("file:///"));
         assertTrue(resource.exists());
-        resource = CTConfigResource.findLocal(CT_CFG);
+        resource = CTConfigResource.findLocalConfig(CT_CFG);
         assertNotNull(resource);
         assertTrue(resource.exists());
     }

@@ -17,10 +17,9 @@ import java.text.MessageFormat;
 import java.util.jar.JarFile;
 
 abstract class AbstractResource implements Resource {
-    public static final String COLON_SLASH = ":/";
-    public static final String MSG_FOUND = "{0} found";
-    public static final String MSG_NOT_FOUND = "{0} not found";
     private static final String METHOD_HEAD = "HEAD";
+    private static final String MSG_FOUND = "{0} found";
+    private static final String MSG_NOT_FOUND = "{0} not found";
     private static final String PROP_UA = "User-Agent";
     private static final String PROTOCOL_FILE = "file";
     private static final String SCHEME_FILE = PROTOCOL_FILE;
@@ -94,10 +93,6 @@ abstract class AbstractResource implements Resource {
     @Override
     public InputStream getInputStream() throws IOException {
         URL url = toURL();
-//        String protocol = url.getProtocol();
-//        if (PROTOCOL_FILE.equals(protocol)) {
-//            return new FileInputStream(location.startsWith(PROTOCOL_FILE + COLON_SLASH) ? location.substring(protocol.length() + 2) : location);
-//        }
         return url.openConnection().getInputStream();
     }
 

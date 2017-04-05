@@ -16,6 +16,7 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class CTConfigs implements Serializable {
+    private static final String MSG_INVALID_CONVERT_LINE_0 = "skip invalid convert line: {0}";
     private static final String MSG_NOT_VALID_CONVERT_0 = "not valid convert: {0}";
     private static final long serialVersionUID = 2024075953874239351L;
     private final Map<String, CTConfig> configs = new LinkedHashMap<>();
@@ -39,7 +40,7 @@ public class CTConfigs implements Serializable {
             try {
                 configs.add(CTConfig.parse(aData));
             } catch (IllegalArgumentException ex) {
-                Log.error("skip invalid convert line: {0}", aData);
+                Log.error(MSG_INVALID_CONVERT_LINE_0, aData);
             }
         }
         return configs.toArray(new CTConfig[configs.size()]);

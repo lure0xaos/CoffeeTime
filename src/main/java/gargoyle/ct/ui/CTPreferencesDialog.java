@@ -9,14 +9,14 @@ import java.awt.*;
 
 public class CTPreferencesDialog extends JDialog {
     private static final String LOC_MESSAGES = "preferences";
-    private static final String MSG_TRANSPARENCY = "transparency";
-    private static final String MSG_TRANSPARENCY_LEVEL = "transparency-level";
-    private static final String MSG_TRANSPARENCY_LEVEL_TOOLTIP = "transparency-level.tooltip";
-    private static final String MSG_TRANSPARENCY_TOOLTIP = "transparency.tooltip";
+    private static final String STR_TRANSPARENCY = "transparency";
+    private static final String STR_TRANSPARENCY_LEVEL = "transparency-level";
+    private static final String STR_TRANSPARENCY_LEVEL_TOOLTIP = "transparency-level.tooltip";
+    private static final String STR_TRANSPARENCY_TOOLTIP = "transparency.tooltip";
     private static final long serialVersionUID = 4767295798528273381L;
 
-    public CTPreferencesDialog(CTPreferences preferences, Window owner, String title, ModalityType modalityType) {
-        super(owner, title, modalityType);
+    public CTPreferencesDialog(CTPreferences preferences, Window owner, String title) {
+        super(owner, title, ModalityType.MODELESS);
         init(new CTMessages(LOC_MESSAGES), preferences, getContentPane());
         pack();
         setDefaultCloseOperation(HIDE_ON_CLOSE);
@@ -25,8 +25,8 @@ public class CTPreferencesDialog extends JDialog {
     private void init(MessageProvider messages, CTPreferences preferences, Container pane) {
         pane.setLayout(new GridLayout(0, 2, 5, 5));
         {
-            JLabel label = new JLabel(messages.getMessage(MSG_TRANSPARENCY), SwingConstants.TRAILING);
-            label.setToolTipText(messages.getMessage(MSG_TRANSPARENCY_TOOLTIP));
+            JLabel label = new JLabel(messages.getMessage(STR_TRANSPARENCY), SwingConstants.TRAILING);
+            label.setToolTipText(messages.getMessage(STR_TRANSPARENCY_TOOLTIP));
             pane.add(label);
             JCheckBox control = new JCheckBox();
             control.setSelected(preferences.isTransparency());
@@ -34,8 +34,8 @@ public class CTPreferencesDialog extends JDialog {
             pane.add(control);
         }
         {
-            JLabel label = new JLabel(messages.getMessage(MSG_TRANSPARENCY_LEVEL), SwingConstants.TRAILING);
-            label.setToolTipText(messages.getMessage(MSG_TRANSPARENCY_LEVEL_TOOLTIP));
+            JLabel label = new JLabel(messages.getMessage(STR_TRANSPARENCY_LEVEL), SwingConstants.TRAILING);
+            label.setToolTipText(messages.getMessage(STR_TRANSPARENCY_LEVEL_TOOLTIP));
             pane.add(label);
             JSlider control = new JSlider(0, 100);
             control.setExtent(10);
