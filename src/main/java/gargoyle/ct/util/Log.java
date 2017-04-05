@@ -18,7 +18,7 @@ public final class Log {
     static {
         InputStream stream = Log.class.getResourceAsStream(LOGGING_PROPERTIES);
         if (stream == null) {
-            System.err.println(MessageFormat.format(MSG_NOT_FOUND, LOGGING_PROPERTIES));
+            Logger.getGlobal().warning(MessageFormat.format(MSG_NOT_FOUND, LOGGING_PROPERTIES));
         }
         try {
             LogManager.getLogManager().readConfiguration(stream);

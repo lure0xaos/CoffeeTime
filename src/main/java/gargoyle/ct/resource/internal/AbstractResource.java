@@ -47,7 +47,7 @@ abstract class AbstractResource implements Resource {
         if (url != null) {
             try {
                 URLConnection connection = url.openConnection();
-                Log.debug("check if exists {0}({1}) at {2}", connection, url.getProtocol(), url);
+                Log.debug("check if exists {0}({1}) at {2}", connection, url.getProtocol(), url); //NON-NLS
                 if (connection instanceof HttpURLConnection) {
                     HttpURLConnection huc = (HttpURLConnection) connection;
                     huc.setInstanceFollowRedirects(false);

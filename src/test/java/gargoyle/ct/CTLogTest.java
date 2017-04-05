@@ -20,8 +20,8 @@ public class CTLogTest {
         records = new LinkedList<>();
         logger.addHandler(new Handler() {
             @Override
-            public void close() throws SecurityException {
-                //
+            public void publish(LogRecord record) {
+                records.add(record);
             }
 
             @Override
@@ -30,15 +30,15 @@ public class CTLogTest {
             }
 
             @Override
-            public void publish(LogRecord record) {
-                records.add(record);
+            public void close() throws SecurityException {
+                //
             }
         });
     }
 
     @Test
     public void testLog() {
-        Log.warn("test");
+        Log.warn("test"); //NON-NLS
         Assert.assertEquals(CTLogTest.class.getName(), records.getLast().getSourceClassName());
     }
 }

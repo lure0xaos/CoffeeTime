@@ -10,14 +10,14 @@ import java.util.concurrent.TimeUnit;
 import static org.junit.Assert.assertEquals;
 
 public class SerializationUtilsTest {
-    private void test(Object obj) throws Exception {
-        assertEquals(obj, SerializationUtils.pipe(obj));
-    }
-
     @Test
     public void testPipe() throws Exception {
-        test("string");
+        test("string"); //NON-NLS
         test(Color.BLACK);
         test(new CTConfig(TimeUnit.MINUTES, 60, 10, 3));
+    }
+
+    private void test(Object obj) throws Exception {
+        assertEquals(obj, SerializationUtils.pipe(obj));
     }
 }

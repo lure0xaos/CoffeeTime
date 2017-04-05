@@ -33,14 +33,14 @@ public class VirtualResource extends AbstractResource {
         String suffix = location.substring(i + 1);
         for (Locale specificLocale : ctrl.getCandidateLocales(baseName, locale)) {
             String loc = ctrl.toResourceName(ctrl.toBundleName(baseName, specificLocale), suffix);
-            Log.debug("trying location {0}", loc);
+            Log.debug("trying location {0}", loc); //NON-NLS
             VirtualResource resource = createResource(baseResource, loc);
             if (resource.exists()) {
                 resource.locale = locale;
                 return resource;
             }
         }
-        Log.debug("{0} not found, returning null");
+        Log.debug("{0} not found, returning null"); //NON-NLS
         return null;
     }
 
