@@ -20,6 +20,7 @@ import gargoyle.ct.ui.impl.CTBlocker;
 import gargoyle.ct.ui.impl.CTControl;
 import gargoyle.ct.ui.impl.CTNewConfigDialog;
 import gargoyle.ct.ui.impl.CTPreferencesDialog;
+import gargoyle.ct.ui.impl.control.CTShowingFrame;
 import gargoyle.ct.util.CTStreamUtil;
 import gargoyle.ct.util.CTTimeUtil;
 
@@ -49,6 +50,7 @@ public final class CT implements CTApp {
     private static final String SLASH = "/";
     private final List<CTBlocker> blockers;
     private final CTControl control;
+    private final Frame owner;
     private final CTPreferences preferences;
     private final CTTimeHelper timeHelper;
     private final CTTimer timer;
@@ -63,7 +65,8 @@ public final class CT implements CTApp {
         List<CTBlocker> blockers = CTBlocker.forAllDevices();
         this.blockers = blockers;
         List<CTTaskUpdatable> updatables = new ArrayList<>(blockers);
-        CTControl control = new CTControl(this);
+        owner = new CTShowingFrame();
+        CTControl control = new CTControl(this, owner);
         this.control = control;
         preferences.addPreferenceChangeListener(control);
         updatables.add(control);
@@ -215,7 +218,7 @@ public final class CT implements CTApp {
     }
 
     @Override
-    public CTConfig showNewConfig(Window owner) {
+    public CTConfig showNewConfig() {
         try {
             return new CTNewConfigDialog(owner).showMe();
         } catch (IllegalArgumentException e) {
@@ -225,7 +228,7 @@ public final class CT implements CTApp {
     }
 
     @Override
-    public void showPreferences(Window owner) {
+    public void showPreferences() {
         if (preferencesDialog == null) {
             preferencesDialog = new CTPreferencesDialog(preferences(), owner);
         }

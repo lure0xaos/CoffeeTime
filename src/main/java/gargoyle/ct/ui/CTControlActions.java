@@ -4,8 +4,6 @@ import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.config.CTConfigs;
 import gargoyle.ct.pref.CTPreferences;
 
-import java.awt.*;
-
 public interface CTControlActions {
     void arm(CTConfig config);
 
@@ -19,9 +17,9 @@ public interface CTControlActions {
 
     void saveConfigs(CTConfigs configs);
 
-    CTConfig showNewConfig(Window owner);
+    CTConfig showNewConfig();
 
-    void showPreferences(Window owner);
+    void showPreferences();
 
     void unarm();
 }
