@@ -3,11 +3,12 @@ package gargoyle.ct.ui.impl;
 import gargoyle.ct.messages.MessageProvider;
 import gargoyle.ct.messages.impl.CTMessages;
 import gargoyle.ct.pref.CTPreferences;
+import gargoyle.ct.ui.CTDialog;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class CTPreferencesDialog extends JDialog {
+public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
     private static final String LOC_MESSAGES = "messages.preferences";
     private static final String STR_TITLE = "title";
     private static final String STR_TRANSPARENCY = "transparency";
@@ -64,9 +65,10 @@ public class CTPreferencesDialog extends JDialog {
         return label;
     }
 
-    public void showMe() {
+    public Void showMe() {
         setVisible(true);
         setLocationRelativeTo(getOwner());
         requestFocus();
+        return null;
     }
 }

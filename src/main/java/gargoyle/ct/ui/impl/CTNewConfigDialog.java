@@ -3,13 +3,14 @@ package gargoyle.ct.ui.impl;
 import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.log.Log;
 import gargoyle.ct.messages.impl.CTMessages;
+import gargoyle.ct.ui.CTDialog;
 
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.text.ParseException;
 
-public class CTNewConfigDialog {
+public class CTNewConfigDialog implements CTDialog<CTConfig> {
     private static final String LOC_NEW_CONFIG = "messages/new_config";
     private static final String STR_CANCEL = "cancel";
     private static final String STR_CONFIG_PATTERN = "##U/##U/##U";
@@ -24,6 +25,7 @@ public class CTNewConfigDialog {
         messages = new CTMessages(LOC_NEW_CONFIG);
     }
 
+    @Override
     public CTConfig showMe() {
         while (true) {
             try {
