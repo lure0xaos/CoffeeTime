@@ -17,6 +17,7 @@ import java.text.MessageFormat;
 import java.util.jar.JarFile;
 
 abstract class AbstractResource implements Resource {
+    private static final String CHECK_IF_EXISTS_0_1_AT_2 = "check if exists {0}({1}) at {2}";
     private static final String METHOD_HEAD = "HEAD";
     private static final String MSG_FOUND = "{0} found";
     private static final String MSG_NOT_FOUND = "{0} not found";
@@ -47,7 +48,7 @@ abstract class AbstractResource implements Resource {
         if (url != null) {
             try {
                 URLConnection connection = url.openConnection();
-                Log.debug("check if exists {0}({1}) at {2}", connection, url.getProtocol(), url); //NON-NLS
+                Log.debug(CHECK_IF_EXISTS_0_1_AT_2, connection, url.getProtocol(), url);
                 if (connection instanceof HttpURLConnection) {
                     HttpURLConnection huc = (HttpURLConnection) connection;
                     huc.setInstanceFollowRedirects(false);

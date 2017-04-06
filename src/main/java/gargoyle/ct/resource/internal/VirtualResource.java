@@ -11,6 +11,8 @@ import java.util.ResourceBundle.Control;
 
 public class VirtualResource extends AbstractResource {
     private static final char CHAR_DOT = '.';
+    private static final String NOT_FOUND = "{0} not found, returning null";
+    private static final String TRYING_LOCATION_0 = "trying location {0}";
     private final Resource baseResource;
     private Locale locale;
 
@@ -33,14 +35,14 @@ public class VirtualResource extends AbstractResource {
         String suffix = location.substring(i + 1);
         for (Locale specificLocale : ctrl.getCandidateLocales(baseName, locale)) {
             String loc = ctrl.toResourceName(ctrl.toBundleName(baseName, specificLocale), suffix);
-            Log.debug("trying location {0}", loc); //NON-NLS
+            Log.debug(TRYING_LOCATION_0, loc);
             VirtualResource resource = createResource(baseResource, loc);
             if (resource.exists()) {
                 resource.locale = locale;
                 return resource;
             }
         }
-        Log.debug("{0} not found, returning null"); //NON-NLS
+        Log.debug(NOT_FOUND);
         return null;
     }
 
