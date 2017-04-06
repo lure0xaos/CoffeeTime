@@ -207,6 +207,6 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
 
     @Override
     public void preferenceChange(PreferenceChangeEvent evt) {
-        controlWindow.transparency(true);
+        controlWindow.preferenceChange(evt);
     }
 }

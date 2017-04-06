@@ -2,6 +2,8 @@ package gargoyle.ct;
 
 import gargoyle.ct.ui.impl.CTBlocker;
 
+import java.awt.*;
+
 public final class CTBlockerTest {
     private CTBlockerTest() {
     }
@@ -9,9 +11,7 @@ public final class CTBlockerTest {
     public static void main(String[] args) {
         for (CTBlocker blocker : CTBlocker.forAllDevices()) {
             blocker.debug(true);
-            blocker.setText("00:00");
-            blocker.setVisible(true);
-            blocker.toFront();
+            blocker.showText(Color.WHITE, "00:00");
         }
     }
 }

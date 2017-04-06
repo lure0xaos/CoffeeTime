@@ -44,27 +44,27 @@ public abstract class CTAction extends AbstractAction {
         }
     }
 
-    protected String getText() {
+    protected final String getText() {
         return String.valueOf(getValue(Action.NAME));
     }
 
-    protected void setText(String text) {
+    protected final void setText(String text) {
         putValue(Action.NAME, text);
     }
 
-    protected String getToolTipText() {
+    protected final String getToolTipText() {
         return String.valueOf(getValue(Action.SHORT_DESCRIPTION));
     }
 
-    protected void setToolTipText(String text) {
+    protected final void setToolTipText(String text) {
         putValue(Action.SHORT_DESCRIPTION, text);
     }
 
-    protected Icon getIcon() {
+    protected final Icon getIcon() {
         return (Icon) getValue(Action.SMALL_ICON);
     }
 
-    protected void setIcon(Icon icon) {
+    protected final void setIcon(Icon icon) {
         putValue(Action.SMALL_ICON, icon);
     }
 }

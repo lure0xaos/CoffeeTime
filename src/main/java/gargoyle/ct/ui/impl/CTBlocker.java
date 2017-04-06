@@ -10,7 +10,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.util.ArrayList;
@@ -27,13 +26,6 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
     private static final String STR_BLOCKED = "blocked_w";
     private static final String STR_WARN = "warn_w";
     private static final long serialVersionUID = 1L;
-    private final transient MouseListener disposer = new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            setVisible(false);
-            dispose();
-        }
-    };
     private JLabel lblInfo;
     private JLabel lblMain;
     private transient MessageProvider messages;
@@ -110,10 +102,25 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
     public void debug(boolean debug) {
         setAlwaysOnTop(!debug);
         if (debug) {
-            addMouseListener(disposer);
+            addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    destroy();
+                }
+            });
         } else {
-            removeMouseListener(disposer);
+            removeMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    destroy();
+                }
+            });
         }
+    }
+
+    private void destroy() {
+        setVisible(false);
+        dispose();
     }
 
     @Override
@@ -121,16 +128,16 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
         lblInfo.setText(CTTimeUtil.formatHHMMSS(currentMillis));
         if (task.isReady()) {
             if (task.isBlocked(currentMillis)) {
-                setVisible(true);
-                setForeground(Color.WHITE);
-                setText(messages.getMessage(STR_BLOCKED,
+                showText(Color.WHITE, messages.getMessage(STR_BLOCKED,
                         CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockEnd(currentMillis)))));
             }
             if (task.isWarn(currentMillis)) {
-                setVisible(CTTimeUtil.isInPeriod(TimeUnit.SECONDS, currentMillis, PERIOD, DELAY));
-                setForeground(Color.GREEN);
-                setText(messages.getMessage(STR_WARN,
-                        CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis)))));
+                if (CTTimeUtil.isInPeriod(TimeUnit.SECONDS, currentMillis, PERIOD, DELAY)) {
+                    showText(Color.GREEN, messages.getMessage(STR_WARN,
+                            CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis)))));
+                } else {
+                    setVisible(false);
+                }
             }
             if (task.isSleeping(currentMillis)) {
                 setVisible(false);
@@ -138,19 +145,15 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
         }
     }
 
-    @Override
-    public void setForeground(Color color) {
-        lblMain.setForeground(color);
-    }
-
-    public void setText(String text) {
+    public void showText(Color foreground, String text) {
+        setForeground(foreground);
+        lblMain.setForeground(foreground);
         lblMain.setText(text);
-        repaint();
-    }
-
-    @Override
-    public void setVisible(boolean b) {
-        super.setVisible(b);
+        if (isVisible()) {
+            repaint();
+        } else {
+            setVisible(true);
+        }
         toFront();
     }
 

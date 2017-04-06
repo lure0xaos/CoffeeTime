@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
+import java.util.prefs.PreferenceChangeEvent;
 
 public final class CTControlWindow extends JWindow {
     private static final String MSG_TRANSPARENCY_NOT_SUPPORTED = "transparency not supported";
@@ -51,19 +52,24 @@ public final class CTControlWindow extends JWindow {
         label.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                reshow = true;
+                reshow(true);
                 transparency(false);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                reshow = false;
+                reshow(false);
                 transparency(true);
             }
         });
     }
 
-    public void transparency(boolean transparent) {
+    @SuppressWarnings("WeakerAccess")
+    void reshow(boolean reshow) {
+        this.reshow = reshow;
+    }
+
+    private void transparency(boolean transparent) {
         CTPreferences preferences = app.preferences();
         try {
             setOpacity(preferences.isTransparency() && transparent ? preferences.getTransparencyLevel() : 1);
@@ -84,6 +90,10 @@ public final class CTControlWindow extends JWindow {
             getOwner().dispose();
             live = true;
         }
+    }
+
+    public void preferenceChange(PreferenceChangeEvent evt) {
+        transparency(true);
     }
 
     public void setToolTipText(String text) {
