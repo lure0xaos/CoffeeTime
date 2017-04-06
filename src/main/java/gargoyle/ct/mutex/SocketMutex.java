@@ -5,21 +5,35 @@ import java.net.ServerSocket;
 
 public final class SocketMutex {
     private static final int PORT = 34567;
-    private static ServerSocket mutex;
+    private static SocketMutex defaultMutex;
+    private final int port;
+    private ServerSocket mutex;
 
-    private SocketMutex() {
+    private SocketMutex(int port) {
+        this.port = port;
     }
 
-    public static synchronized boolean acquire() {
+    public static SocketMutex getDefault() {
+        if (defaultMutex == null) {
+            synchronized (SocketMutex.class) {
+                if (defaultMutex == null) {
+                    defaultMutex = new SocketMutex(PORT);
+                }
+            }
+        }
+        return defaultMutex;
+    }
+
+    public synchronized boolean acquire() {
         try {
-            mutex = new ServerSocket(PORT);
+            mutex = new ServerSocket(port);
             return true;
         } catch (IOException ex) {
             return false;
         }
     }
 
-    public static synchronized void release() {
+    public synchronized void release() {
         try {
             if (mutex != null) {
                 if (!mutex.isClosed()) {

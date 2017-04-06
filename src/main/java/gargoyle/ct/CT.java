@@ -3,8 +3,8 @@ package gargoyle.ct;
 import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.config.CTConfigs;
 import gargoyle.ct.config.CTStandardConfigs;
-import gargoyle.ct.mutex.SocketMutex;
 import gargoyle.ct.log.Log;
+import gargoyle.ct.mutex.SocketMutex;
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.pref.impl.CTPreferencesImpl;
 import gargoyle.ct.resource.Resource;
@@ -82,7 +82,7 @@ public final class CT implements CTApp {
                 debug = Boolean.parseBoolean(args[1]);
             }
         }
-        if (!debug && !SocketMutex.acquire()) {
+        if (!debug && !SocketMutex.getDefault().acquire()) {
             Log.error(MSG_ALREADY_RUNNING);
             return;
         }
@@ -129,7 +129,7 @@ public final class CT implements CTApp {
             blocker.dispose();
         }
         timer.terminate();
-        SocketMutex.release();
+        SocketMutex.getDefault().release();
         preferences.removePreferenceChangeListener(control);
     }
 

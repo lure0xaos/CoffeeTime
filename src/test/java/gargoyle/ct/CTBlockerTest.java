@@ -2,7 +2,9 @@ package gargoyle.ct;
 
 import gargoyle.ct.ui.impl.CTBlocker;
 
-public class CTBlockerTest {
+public final class CTBlockerTest {
+    private CTBlockerTest() {
+    }
 
     public static void main(String[] args) {
         for (CTBlocker blocker : CTBlocker.forAllDevices()) {
