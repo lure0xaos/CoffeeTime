@@ -24,14 +24,15 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
     private long whole;
 
     public CTConfig() {
+        configDataConverter = CTConfigDataConverter.getInstance();
         whole = 0;
         block = 0;
         warn = 0;
         name = STR_INVALID;
-        configDataConverter = CTConfigDataConverter.getInstance();
     }
 
     private CTConfig(long whole, long block, long warn) {
+        configDataConverter = CTConfigDataConverter.getInstance();
         if (isNotValid(whole, block, warn)) {
             throw new IllegalArgumentException("convert is not valid");
         }
@@ -39,12 +40,11 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
         this.block = block;
         this.warn = warn;
         name = name(TimeUnit.MINUTES);
-        configDataConverter = CTConfigDataConverter.getInstance();
     }
 
     private CTConfig(String line) {
-        read(line);
         configDataConverter = CTConfigDataConverter.getInstance();
+        read(line);
     }
 
     private void read(String line) {

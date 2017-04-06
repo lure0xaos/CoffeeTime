@@ -34,7 +34,6 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
     private static final String STR_NEW_CONFIG_TOOLTIP = "new-config.tooltip";
     private static final String STR_PREFERENCES = "preferences";
     private static final String STR_PREFERENCES_TOOLTIP = "preferences.tooltip";
-    private static final String STR_TITLE = "title";
     private static final String STR_UNARM = "unarm";
     private static final String STR_UNARM_TOOLTIP = "unarm.tooltip";
     private static final String URL_ICON = "/icon/64/icon64.png";
@@ -117,7 +116,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
     }
 
     private void onNewConfig(CTConfigs configs, JPopupMenu menu) {
-        CTConfig config = newConfig(controlWindow.getOwner(), messages.getMessage(STR_TITLE));
+        CTConfig config = newConfig(controlWindow.getOwner());
         if (config != null && config.isValid() && !configs.hasConfig(config)) {
             configs.addConfig(config);
             addConfig(menu, config);
@@ -153,8 +152,8 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
     }
 
     @Override
-    public CTConfig newConfig(Window owner, String title) {
-        return app.newConfig(owner, title);
+    public CTConfig newConfig(Window owner) {
+        return app.newConfig(owner);
     }
 
     @Override

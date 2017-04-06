@@ -25,8 +25,8 @@ public class CTMessages implements MessageProvider {
     }
 
     public CTMessages(MessageProvider parent, String baseName, Locale locale) {
-        this.parent = parent;
         localeProvider = CTLocaleProvider.getInstance();
+        this.parent = parent;
         localeProvider.setLocale(locale);
         load(baseName);
     }

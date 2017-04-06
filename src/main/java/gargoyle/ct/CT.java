@@ -18,12 +18,12 @@ import gargoyle.ct.task.impl.CTTimer;
 import gargoyle.ct.ui.CTApp;
 import gargoyle.ct.ui.impl.CTBlocker;
 import gargoyle.ct.ui.impl.CTControl;
+import gargoyle.ct.ui.impl.CTNewConfigDialog;
 import gargoyle.ct.ui.impl.CTPreferencesDialog;
 import gargoyle.ct.util.CTStreamUtil;
 import gargoyle.ct.util.CTTimeUtil;
 
 import javax.swing.*;
-import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.Desktop.Action;
 import java.io.File;
@@ -32,7 +32,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -48,7 +47,6 @@ public final class CT implements CTApp {
     private static final String NOT_FOUND_0 = "Not found {0}";
     private static final String PAGE_0_NOT_FOUND = "Page {0} not found";
     private static final String SLASH = "/";
-    private static final String STR_CONFIG_PATTERN = "##U/##U/##U";
     private final List<CTBlocker> blockers;
     private final CTControl control;
     private final CTPreferences preferences;
@@ -201,34 +199,17 @@ public final class CT implements CTApp {
     }
 
     @Override
-    public CTConfig newConfig(Window owner, String title) {
+    public CTConfig newConfig(Window owner) {
         try {
-            return showConfigDialog(owner, title);
+            return showConfigDialog(owner);
         } catch (IllegalArgumentException e) {
             Log.error(e.getMessage());
         }
         return null;
     }
 
-    private static CTConfig showConfigDialog(Component owner, String title) {
-        while (true) {
-            try {
-                JFormattedTextField field = new JFormattedTextField(new MaskFormatter(STR_CONFIG_PATTERN));
-                int result = JOptionPane.showConfirmDialog(owner, field, title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-                if (result == JOptionPane.CANCEL_OPTION) {
-                    return null;
-                }
-                if (result == JOptionPane.OK_OPTION) {
-                    try {
-                        return CTConfig.parse(String.valueOf(field.getValue()));
-                    } catch (IllegalArgumentException ex) {
-                        Log.debug(ex, ex.getMessage());
-                    }
-                }
-            } catch (ParseException ex) {
-                return null;
-            }
-        }
+    private CTConfig showConfigDialog(Component owner) {
+        return new CTNewConfigDialog().showConfigDialog(owner);
     }
 
     @Override

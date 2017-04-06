@@ -15,7 +15,7 @@ public interface CTControlActions {
 
     CTConfigs loadConfigs(boolean reload);
 
-    CTConfig newConfig(Window owner, String title);
+    CTConfig newConfig(Window owner);
 
     CTPreferences preferences();
 
