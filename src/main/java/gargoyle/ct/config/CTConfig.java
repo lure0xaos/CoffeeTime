@@ -29,17 +29,13 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
     }
 
     private void init(long whole, long block, long warn, String name) {
-        if (isNotValid(whole, block, warn)) {
+        if (!isValid(whole, block, warn)) {
             throw new IllegalArgumentException(MSG_NOT_VALID);
         }
         this.whole = whole;
         this.block = block;
         this.warn = warn;
         this.name = name;
-    }
-
-    private boolean isNotValid(long wholeMillis, long blockMillis, long warnMillis) {
-        return !isValid(wholeMillis, blockMillis, warnMillis);
     }
 
     private boolean isValid(long wholeMillis, long blockMillis, long warnMillis) {
@@ -175,7 +171,7 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
     }
 
     public boolean isNotValid() {
-        return isNotValid(whole, block, warn);
+        return !isValid(whole, block, warn);
     }
 
     @Override
