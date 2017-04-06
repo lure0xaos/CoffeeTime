@@ -17,12 +17,14 @@ public class CTNewConfigDialog {
     private static final String STR_OK = "ok";
     private static final String STR_TITLE = "title";
     private final CTMessages messages;
+    private final Component owner;
 
-    public CTNewConfigDialog() {
+    public CTNewConfigDialog(Component owner) {
+        this.owner = owner;
         messages = new CTMessages(LOC_NEW_CONFIG);
     }
 
-    public CTConfig showConfigDialog(Component owner) {
+    public CTConfig showMe() {
         while (true) {
             try {
                 JFormattedTextField field = new JFormattedTextField(new MaskFormatter(STR_CONFIG_PATTERN));

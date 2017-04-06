@@ -77,9 +77,8 @@ public class CTMessages implements MessageProvider {
             }
         } catch (MissingResourceException ex) {
             if (parent == null) {
-                String key = ex.getKey();
                 String bundle = messages.getBaseBundleName();
-                throw new MissingResourceException(MessageFormat.format(MSG_NO_MESSAGE, bundle, key), bundle, key);
+                throw new MissingResourceException(MessageFormat.format(MSG_NO_MESSAGE, bundle, message), bundle, message);
             } else {
                 return parent.getMessage(message, args);
             }

@@ -15,13 +15,13 @@ public interface CTControlActions {
 
     CTConfigs loadConfigs(boolean reload);
 
-    CTConfig newConfig(Window owner);
-
     CTPreferences preferences();
 
     void saveConfigs(CTConfigs configs);
 
-    void showPreferences(Window owner, String title);
+    CTConfig showNewConfig(Window owner);
+
+    void showPreferences(Window owner);
 
     void unarm();
 }

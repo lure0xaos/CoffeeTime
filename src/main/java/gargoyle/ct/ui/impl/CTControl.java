@@ -17,6 +17,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Objects;
@@ -47,7 +49,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
         messages = new CTMessages(LOC_MESSAGES);
         group = new ButtonGroup();
         controlWindow = new CTControlWindow(app, CTControl.class.getResource(URL_ICON), createMenu(app.loadConfigs(false)));
-        controlWindow.setVisible(true);
+        controlWindow.showMe();
     }
 
     private JPopupMenu createMenu(CTConfigs configs) {
@@ -100,7 +102,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
 
     @SuppressWarnings("WeakerAccess")
     void onShowPreferences() {
-        showPreferences(controlWindow.getOwner(), messages.getMessage(STR_PREFERENCES));
+        showPreferences(controlWindow.getOwner());
     }
 
     private void addConfigs(JPopupMenu menu, CTConfigs configs) {
@@ -110,13 +112,13 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
     }
 
     private void addConfig(JPopupMenu menu, CTConfig config) {
-        CTConfigMenuItem menuItem = new CTConfigMenuItem(new ConfigAction(config));
+        CTConfigMenuItem menuItem = new CTConfigMenuItem(new ConfigAction(this, config));
         group.add(menuItem);
         menu.insert(menuItem, group.getButtonCount() - 1);
     }
 
     private void onNewConfig(CTConfigs configs, JPopupMenu menu) {
-        CTConfig config = newConfig(controlWindow.getOwner());
+        CTConfig config = showNewConfig(controlWindow.getOwner());
         if (config != null && config.isValid() && !configs.hasConfig(config)) {
             configs.addConfig(config);
             addConfig(menu, config);
@@ -152,11 +154,6 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
     }
 
     @Override
-    public CTConfig newConfig(Window owner) {
-        return app.newConfig(owner);
-    }
-
-    @Override
     public CTPreferences preferences() {
         return app.preferences();
     }
@@ -167,8 +164,13 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
     }
 
     @Override
-    public void showPreferences(Window owner, String title) {
-        app.showPreferences(owner, title);
+    public CTConfig showNewConfig(Window owner) {
+        return app.showNewConfig(owner);
+    }
+
+    @Override
+    public void showPreferences(Window owner) {
+        app.showPreferences(owner);
     }
 
     @Override
@@ -292,8 +294,8 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
         private static final long serialVersionUID = 1L;
         private final transient CTControlActions app;
         private final JLabel label;
-        volatile boolean reshow;
         private volatile boolean live = true;
+        private volatile boolean reshow;
 
         public CTControlWindow(CTControlActions app, URL imageURL, JPopupMenu menu) {
             super(new CTShowingFrame());
@@ -378,6 +380,10 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
             }
         }
 
+        private void showMe() {
+            setVisible(true);
+        }
+
         private static class CTShowingFrame extends JFrame {
             private static final long serialVersionUID = 1L;
 
@@ -399,11 +405,13 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
         }
     }
 
-    private final class ConfigAction extends CTAction {
+    private static final class ConfigAction extends CTAction {
         private static final long serialVersionUID = 8001396484814809015L;
-        private final CTConfig config;
+        private final transient CTControl control;
+        private CTConfig config;
 
-        public ConfigAction(CTConfig config) {
+        public ConfigAction(CTControl control, CTConfig config) {
+            this.control = control;
             this.config = config;
             String text = config.getName();
             setText(text);
@@ -418,9 +426,14 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
             return config;
         }
 
+        private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+            in.defaultReadObject();
+            config = new CTConfig();
+        }
+
         @Override
         public void actionPerformed(ActionEvent e) {
-            arm(config);
+            control.arm(config);
         }
     }
 }

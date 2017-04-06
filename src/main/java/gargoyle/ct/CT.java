@@ -199,20 +199,6 @@ public final class CT implements CTApp {
     }
 
     @Override
-    public CTConfig newConfig(Window owner) {
-        try {
-            return showConfigDialog(owner);
-        } catch (IllegalArgumentException e) {
-            Log.error(e.getMessage());
-        }
-        return null;
-    }
-
-    private CTConfig showConfigDialog(Component owner) {
-        return new CTNewConfigDialog().showConfigDialog(owner);
-    }
-
-    @Override
     public CTPreferences preferences() {
         return preferences;
     }
@@ -229,9 +215,19 @@ public final class CT implements CTApp {
     }
 
     @Override
-    public void showPreferences(Window owner, String title) {
+    public CTConfig showNewConfig(Window owner) {
+        try {
+            return new CTNewConfigDialog(owner).showMe();
+        } catch (IllegalArgumentException e) {
+            Log.error(e.getMessage());
+        }
+        return null;
+    }
+
+    @Override
+    public void showPreferences(Window owner) {
         if (preferencesDialog == null) {
-            preferencesDialog = new CTPreferencesDialog(preferences(), owner, title);
+            preferencesDialog = new CTPreferencesDialog(preferences(), owner);
         }
         preferencesDialog.showMe();
     }

@@ -9,20 +9,22 @@ import java.awt.*;
 
 public class CTPreferencesDialog extends JDialog {
     private static final String LOC_MESSAGES = "messages.preferences";
+    private static final String STR_TITLE = "title";
     private static final String STR_TRANSPARENCY = "transparency";
     private static final String STR_TRANSPARENCY_LEVEL = "transparency-level";
     private static final String STR_TRANSPARENCY_LEVEL_TOOLTIP = "transparency-level.tooltip";
     private static final String STR_TRANSPARENCY_TOOLTIP = "transparency.tooltip";
     private static final long serialVersionUID = 4767295798528273381L;
 
-    public CTPreferencesDialog(CTPreferences preferences, Window owner, String title) {
-        super(owner, title, ModalityType.MODELESS);
+    public CTPreferencesDialog(CTPreferences preferences, Window owner) {
+        super(owner, ModalityType.MODELESS);
         init(new CTMessages(LOC_MESSAGES), preferences, getContentPane());
         pack();
         setDefaultCloseOperation(HIDE_ON_CLOSE);
     }
 
     private void init(MessageProvider messages, CTPreferences preferences, Container pane) {
+        setTitle(messages.getMessage(STR_TITLE));
         pane.setLayout(new GridLayout(0, 2, 5, 5));
         addLabeledControl(pane,
                 createLabel(messages.getMessage(STR_TRANSPARENCY), messages.getMessage(STR_TRANSPARENCY_TOOLTIP)),
