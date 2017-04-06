@@ -3,7 +3,7 @@ package gargoyle.ct.ui.impl.control;
 import gargoyle.ct.log.Log;
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.ui.CTControlActions;
-import gargoyle.ct.ui.CTWindow;
+import gargoyle.ct.ui.CTControlWindow;
 import gargoyle.ct.ui.util.CTDragHelper;
 import gargoyle.ct.util.CTTimeUtil;
 
@@ -14,7 +14,7 @@ import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.util.prefs.PreferenceChangeEvent;
 
-public final class CTControlWindow extends JWindow implements CTWindow {
+public final class CTControlWindowImpl extends JWindow implements CTControlWindow {
     private static final String MSG_TOOLTIP_ERROR = "tooltip error";
     private static final String MSG_TRANSPARENCY_NOT_SUPPORTED = "transparency not supported";
     private static final int SNAP = 20;
@@ -25,7 +25,7 @@ public final class CTControlWindow extends JWindow implements CTWindow {
     private volatile boolean live = true;
     private volatile boolean reshow;
 
-    public CTControlWindow(Frame owner, CTControlActions app, URL imageURL, JPopupMenu menu) {
+    public CTControlWindowImpl(Frame owner, CTControlActions app, URL imageURL, JPopupMenu menu) {
         super(owner);
         this.app = app;
         if (imageURL == null) {
@@ -99,6 +99,7 @@ public final class CTControlWindow extends JWindow implements CTWindow {
         setVisible(true);
     }
 
+    @Override
     public void preferenceChange(PreferenceChangeEvent evt) {
         String key = evt.getKey();
         if (CTPreferences.PREF_TRANSPARENCY.equals(key) || CTPreferences.PREF_TRANSPARENCY_LEVEL.equals(key)) {
@@ -106,6 +107,7 @@ public final class CTControlWindow extends JWindow implements CTWindow {
         }
     }
 
+    @Override
     public void setToolTipText(String text) {
         label.setToolTipText(text);
         if (reshow && text != null && !text.isEmpty()) {

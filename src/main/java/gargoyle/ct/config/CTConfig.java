@@ -15,44 +15,44 @@ import java.util.concurrent.TimeUnit;
 
 public class CTConfig implements Externalizable, ObjectInputValidation {
     private static final String FORMAT_NAME = "{0,number,00}/{1,number,00}";
+    private static final String MSG_NOT_VALID = "convert is not valid";
     private static final String STR_INVALID = "invalid";
     private static final long serialVersionUID = -898699928298432564L;
     private long block;
-    private transient CTConfigDataConverter configDataConverter;
+    private transient CTConfigDataConverter configDataConverter = CTConfigDataConverter.getInstance();
     private String name;
     private long warn;
     private long whole;
 
     public CTConfig() {
-        configDataConverter = CTConfigDataConverter.getInstance();
-        whole = 0;
-        block = 0;
-        warn = 0;
-        name = STR_INVALID;
+        init(0, 0, 0, STR_INVALID);
     }
 
-    private CTConfig(long whole, long block, long warn) {
-        configDataConverter = CTConfigDataConverter.getInstance();
+    private void init(long whole, long block, long warn, String name) {
         if (isNotValid(whole, block, warn)) {
-            throw new IllegalArgumentException("convert is not valid");
+            throw new IllegalArgumentException(MSG_NOT_VALID);
         }
         this.whole = whole;
         this.block = block;
         this.warn = warn;
-        name = name(TimeUnit.MINUTES);
+        this.name = name;
+    }
+
+    private boolean isNotValid(long wholeMillis, long blockMillis, long warnMillis) {
+        return !isValid(wholeMillis, blockMillis, warnMillis);
+    }
+
+    private boolean isValid(long wholeMillis, long blockMillis, long warnMillis) {
+        return wholeMillis > blockMillis && blockMillis > warnMillis;
+    }
+
+    private CTConfig(long whole, long block, long warn) {
+        init(whole, block, warn, name(TimeUnit.MINUTES));
     }
 
     private CTConfig(String line) {
-        configDataConverter = CTConfigDataConverter.getInstance();
-        read(line);
-    }
-
-    private void read(String line) {
         long[] data = configDataConverter.parse(line);
-        whole = data[0];
-        block = data[1];
-        warn = data[2];
-        name = name(TimeUnit.MINUTES);
+        init(data[0], data[1], data[2], name(TimeUnit.MINUTES));
     }
 
     private String name(TimeUnit unit) {
@@ -142,10 +142,6 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
         return isValid(whole, block, warn);
     }
 
-    private boolean isValid(long wholeMillis, long blockMillis, long warnMillis) {
-        return wholeMillis > blockMillis && blockMillis > warnMillis;
-    }
-
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
         configDataConverter = CTConfigDataConverter.getInstance();
@@ -174,10 +170,6 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
         return isNotValid(whole, block, warn);
     }
 
-    private boolean isNotValid(long wholeMillis, long blockMillis, long warnMillis) {
-        return !isValid(wholeMillis, blockMillis, warnMillis);
-    }
-
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeBytes(format());
@@ -189,6 +181,16 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
 
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        read(in.readLine());
+        long[] data = configDataConverter.parse(in.readLine());
+        long whole1 = data[0];
+        long block1 = data[1];
+        long warn1 = data[2];
+        if (isNotValid(whole1, block1, warn1)) {
+            throw new IllegalArgumentException(MSG_NOT_VALID);
+        }
+        this.whole = whole1;
+        this.block = block1;
+        this.warn = warn1;
+        name = name(TimeUnit.MINUTES);
     }
 }
