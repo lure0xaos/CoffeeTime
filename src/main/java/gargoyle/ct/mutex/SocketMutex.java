@@ -1,13 +1,13 @@
-package gargoyle.ct.helper;
+package gargoyle.ct.mutex;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 
-public final class CTMutex {
+public final class SocketMutex {
     private static final int PORT = 34567;
     private static ServerSocket mutex;
 
-    private CTMutex() {
+    private SocketMutex() {
     }
 
     public static synchronized boolean acquire() {

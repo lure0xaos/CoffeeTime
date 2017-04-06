@@ -1,6 +1,6 @@
 package gargoyle.ct.messages.impl;
 
-import gargoyle.ct.helper.Log;
+import gargoyle.ct.log.Log;
 import gargoyle.ct.messages.MessageProvider;
 import gargoyle.ct.messages.util.UTF8Control;
 

@@ -2,7 +2,7 @@ package gargoyle.ct.ui.impl;
 
 import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.config.CTConfigs;
-import gargoyle.ct.helper.Log;
+import gargoyle.ct.log.Log;
 import gargoyle.ct.messages.MessageProvider;
 import gargoyle.ct.messages.impl.CTMessages;
 import gargoyle.ct.pref.CTPreferences;

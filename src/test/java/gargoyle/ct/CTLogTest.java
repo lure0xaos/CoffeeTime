@@ -1,6 +1,6 @@
 package gargoyle.ct;
 
-import gargoyle.ct.helper.Log;
+import gargoyle.ct.log.Log;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,6 +1,6 @@
 package gargoyle.ct.pref.impl;
 
-import gargoyle.ct.helper.Log;
+import gargoyle.ct.log.Log;
 import gargoyle.ct.pref.CTPreferences;
 
 import java.lang.reflect.InvocationTargetException;

@@ -1,6 +1,6 @@
 package gargoyle.ct;
 
-import gargoyle.ct.helper.Log;
+import gargoyle.ct.log.Log;
 import gargoyle.ct.resource.Resource;
 import gargoyle.ct.resource.internal.ClasspathResource;
 import org.junit.Assert;

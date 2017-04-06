@@ -1,7 +1,7 @@
 package gargoyle.ct.config;
 
 import gargoyle.ct.config.convert.impl.CTConfigsDataConverter;
-import gargoyle.ct.helper.Log;
+import gargoyle.ct.log.Log;
 
 import java.io.InvalidObjectException;
 import java.io.Serializable;

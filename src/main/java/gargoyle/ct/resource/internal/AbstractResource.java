@@ -1,6 +1,6 @@
 package gargoyle.ct.resource.internal;
 
-import gargoyle.ct.helper.Log;
+import gargoyle.ct.log.Log;
 import gargoyle.ct.resource.Resource;
 
 import java.io.File;
