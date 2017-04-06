@@ -77,7 +77,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                showPreferences(controlWindow.getOwner(), messages.getMessage(STR_PREFERENCES));
+                onShowPreferences();
             }
         }));
         menu.add(new CTMenuItem(new CTAction(messages.getMessage(STR_HELP), messages.getMessage(STR_HELP_TOOLTIP)) {
@@ -97,6 +97,10 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
             }
         }));
         return menu;
+    }
+
+    private void onShowPreferences() {
+        showPreferences(controlWindow.getOwner(), messages.getMessage(STR_PREFERENCES));
     }
 
     private void addConfigs(JPopupMenu menu, CTConfigs configs) {
@@ -216,24 +220,24 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
 
         public CTAction(String text) {
             setText(text);
-            setTooltipText(text);
+            setToolTipText(text);
         }
 
         public CTAction(String text, Icon icon) {
             setText(text);
-            setTooltipText(text);
+            setToolTipText(text);
             setIcon(icon);
         }
 
         public CTAction(String text, String tooltipText, Icon icon) {
             setText(text);
-            setTooltipText(tooltipText);
+            setToolTipText(tooltipText);
             setIcon(icon);
         }
 
         public CTAction(String text, String tooltipText) {
             setText(text);
-            setTooltipText(tooltipText);
+            setToolTipText(tooltipText);
         }
 
         public CTAction clone() throws CloneNotSupportedException {
@@ -243,7 +247,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
         public void init(AbstractButton menuItem) {
             menuItem.setAction(this);
             menuItem.setText(getText());
-            menuItem.setToolTipText(getTooltipText());
+            menuItem.setToolTipText(getToolTipText());
             Icon icon = getIcon();
             if (icon != null) {
                 menuItem.setIcon(icon);
@@ -258,11 +262,11 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
             putValue(Action.NAME, text);
         }
 
-        protected String getTooltipText() {
+        protected String getToolTipText() {
             return String.valueOf(getValue(Action.SHORT_DESCRIPTION));
         }
 
-        protected void setTooltipText(String text) {
+        protected void setToolTipText(String text) {
             putValue(Action.SHORT_DESCRIPTION, text);
         }
 
@@ -399,7 +403,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
             this.config = config;
             String text = config.getName();
             setText(text);
-            setTooltipText(text);
+            setToolTipText(text);
         }
 
         public ConfigAction clone() throws CloneNotSupportedException {

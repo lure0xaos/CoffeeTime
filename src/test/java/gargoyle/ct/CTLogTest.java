@@ -21,7 +21,7 @@ public class CTLogTest {
         logger.addHandler(new Handler() {
             @Override
             public void publish(LogRecord record) {
-                records.add(record);
+                addRecord(record);
             }
 
             @Override
@@ -34,6 +34,10 @@ public class CTLogTest {
                 //
             }
         });
+    }
+
+    private void addRecord(LogRecord record) {
+        records.add(record);
     }
 
     @Test

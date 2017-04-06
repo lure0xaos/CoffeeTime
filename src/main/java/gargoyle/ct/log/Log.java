@@ -16,12 +16,12 @@ public final class Log {
     private static final String MSG_NOT_FOUND = "configuration {0} not found";
 
     static {
-        InputStream stream = Log.class.getResourceAsStream(LOGGING_PROPERTIES);
-        if (stream == null) {
-            Logger.getGlobal().warning(MessageFormat.format(MSG_NOT_FOUND, LOGGING_PROPERTIES));
-        }
-        try {
-            LogManager.getLogManager().readConfiguration(stream);
+        try (InputStream stream = Log.class.getResourceAsStream(LOGGING_PROPERTIES)) {
+            if (stream == null) {
+                Logger.getGlobal().warning(MessageFormat.format(MSG_NOT_FOUND, LOGGING_PROPERTIES));
+            } else {
+                LogManager.getLogManager().readConfiguration(stream);
+            }
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

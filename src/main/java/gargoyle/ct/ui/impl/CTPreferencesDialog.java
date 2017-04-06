@@ -43,7 +43,7 @@ public class CTPreferencesDialog extends JDialog {
             control.setPaintTicks(true);
             control.setMajorTickSpacing(20);
             control.setMinorTickSpacing(10);
-            control.setValue((int) (preferences.getTransparencyLevel() * 100));
+            control.setValue((int) (preferences.getTransparencyLevel() * 100.0d));
             control.addChangeListener(e -> preferences.setTransparencyLevel(Math.max(1.0f, control.getValue()) / 100));
             pane.add(control);
         }
