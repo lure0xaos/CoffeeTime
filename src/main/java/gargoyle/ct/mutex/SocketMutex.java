@@ -1,9 +1,12 @@
 package gargoyle.ct.mutex;
 
+import gargoyle.ct.log.Log;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 
 public final class SocketMutex {
+    private static final String MSG_MUTEX_ERROR = "mutex error";
     private static final int PORT = 34567;
     private static SocketMutex defaultMutex;
     private final int port;
@@ -41,8 +44,8 @@ public final class SocketMutex {
                 }
                 mutex = null;
             }
-        } catch (IOException e) {
-            // ignore
+        } catch (IOException ex) {
+            Log.error(ex, MSG_MUTEX_ERROR);
         }
     }
 }

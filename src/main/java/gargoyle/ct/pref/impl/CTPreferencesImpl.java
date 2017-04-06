@@ -10,8 +10,6 @@ import java.util.prefs.Preferences;
 
 public class CTPreferencesImpl implements CTPreferences {
     private static final String MSG_JAVA_UTIL_LOGGING_ERROR = "java.util.logging error";
-    private static final String PREF_TRANSPARENCY = "pref.transparency";
-    private static final String PREF_TRANSPARENCY_LEVEL = "pref.transparency-level";
 
     static {
         try {

@@ -14,6 +14,7 @@ import java.net.URL;
 import java.util.prefs.PreferenceChangeEvent;
 
 public final class CTControlWindow extends JWindow {
+    private static final String MSG_TOOLTIP_ERROR = "tooltip error";
     private static final String MSG_TRANSPARENCY_NOT_SUPPORTED = "transparency not supported";
     private static final int SNAP = 20;
     private static final String TOOL_TIP_MANAGER_ENABLE_TOOL_TIP_MODE = "ToolTipManager.enableToolTipMode";
@@ -52,21 +53,20 @@ public final class CTControlWindow extends JWindow {
         label.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                reshow(true);
-                transparency(false);
+                onMouseMoved(true, false);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                reshow(false);
-                transparency(true);
+                onMouseMoved(false, true);
             }
         });
     }
 
     @SuppressWarnings("WeakerAccess")
-    void reshow(boolean reshow) {
+    void onMouseMoved(boolean reshow, boolean transparency) {
         this.reshow = reshow;
+        transparency(transparency);
     }
 
     private void transparency(boolean transparent) {
@@ -86,14 +86,17 @@ public final class CTControlWindow extends JWindow {
         setVisible(false);
         if (live) {
             live = false;
-            super.dispose();
+            dispose();
             getOwner().dispose();
             live = true;
         }
     }
 
     public void preferenceChange(PreferenceChangeEvent evt) {
-        transparency(true);
+        String key = evt.getKey();
+        if (CTPreferences.PREF_TRANSPARENCY.equals(key) || CTPreferences.PREF_TRANSPARENCY_LEVEL.equals(key)) {
+            transparency(true);
+        }
     }
 
     public void setToolTipText(String text) {
@@ -105,7 +108,7 @@ public final class CTControlWindow extends JWindow {
                                 new MouseEvent(label, MouseEvent.MOUSE_MOVED, CTTimeUtil.currentTimeMillis(), 0, getWidth(),
                                         getHeight(), 0, false));
             } catch (RuntimeException ex) {
-                // IGNORE
+                Log.debug(ex, MSG_TOOLTIP_ERROR);
             }
         }
     }

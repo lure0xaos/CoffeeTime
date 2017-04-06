@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class CTBlocker extends JWindow implements CTTaskUpdatable {
+public final class CTBlocker extends JWindow implements CTTaskUpdatable {
     private static final float ALIGNMENT_CENTER = 0.5f;
     private static final int DELAY = 3;
     private static final int FONT_SCALING = 30;
@@ -30,12 +31,12 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
     private JLabel lblMain;
     private transient MessageProvider messages;
 
-    public CTBlocker(MessageProvider messages) {
-        init(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice(), messages);
+    private CTBlocker(GraphicsDevice device) {
+        init(device);
     }
 
-    private void init(GraphicsDevice device, MessageProvider messages) {
-        this.messages = messages;
+    private void init(GraphicsDevice device) {
+        messages = new CTMessages(LOC_MESSAGES);
         setBounds(device.getDefaultConfiguration().getBounds());
         setAlwaysOnTop(true);
         toFront();
@@ -86,35 +87,34 @@ public class CTBlocker extends JWindow implements CTTaskUpdatable {
         return label;
     }
 
-    public CTBlocker(GraphicsDevice device, MessageProvider messages) {
-        init(device, messages);
-    }
-
     public static List<CTBlocker> forAllDevices() {
-        MessageProvider messages = new CTMessages(LOC_MESSAGES);
         List<CTBlocker> devices = new ArrayList<>();
         for (GraphicsDevice device : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
-            devices.add(new CTBlocker(device, messages));
+            devices.add(new CTBlocker(device));
         }
         return Collections.unmodifiableList(devices);
     }
 
+    public static CTBlocker forDefaultDevice() {
+        return new CTBlocker(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice());
+    }
+
+    public static CTBlocker forDevice(GraphicsDevice device) {
+        return new CTBlocker(device);
+    }
+
     public void debug(boolean debug) {
         setAlwaysOnTop(!debug);
+        MouseListener l = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                destroy();
+            }
+        };
         if (debug) {
-            addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    destroy();
-                }
-            });
+            addMouseListener(l);
         } else {
-            removeMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    destroy();
-                }
-            });
+            removeMouseListener(l);
         }
     }
 
