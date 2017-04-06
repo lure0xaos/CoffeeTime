@@ -45,11 +45,17 @@ public final class Log {
                         bundle =
                         ResourceBundle.getBundle(LOCATION_ERRORS, Locale.getDefault(),
                                 Log.class.getClassLoader());
+                String msg = pattern;
+                Object[] params = arguments;
+                if (pattern == null) {
+                    msg = "";
+                    params = new Object[0];
+                }
                 if (exception == null) {
-                    logger.logrb(level, sourceClass, sourceMethod, bundle, pattern, arguments);
+                    logger.logrb(level, sourceClass, sourceMethod, bundle, msg, params);
                 } else {
-                    logger.logrb(level, sourceClass, sourceMethod, bundle, pattern, arguments);
-                    logger.logrb(level, sourceClass, sourceMethod, bundle, pattern, exception);
+                    logger.logrb(level, sourceClass, sourceMethod, bundle, msg, params);
+                    logger.logrb(level, sourceClass, sourceMethod, bundle, msg, exception);
                 }
             }
         }

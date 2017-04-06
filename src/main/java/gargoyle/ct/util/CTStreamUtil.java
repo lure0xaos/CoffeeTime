@@ -1,5 +1,7 @@
 package gargoyle.ct.util;
 
+import gargoyle.ct.log.Log;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,8 +20,9 @@ public final class CTStreamUtil {
         try (Scanner scanner = new Scanner(is, StandardCharsets.US_ASCII.name());
              final Scanner s = scanner.useDelimiter(DELIMITER)) {
             return s.hasNext() ? s.next() : "";
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (RuntimeException ex) {
+            Log.error(ex, ex.getMessage());
+            throw ex;
         }
     }
 
