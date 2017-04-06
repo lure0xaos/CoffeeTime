@@ -3,10 +3,11 @@ package gargoyle.ct.config;
 import gargoyle.ct.config.convert.impl.CTConfigsDataConverter;
 import gargoyle.ct.log.Log;
 
+import java.io.IOException;
 import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.text.MessageFormat;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -20,30 +21,53 @@ public class CTConfigs implements Serializable {
     private static final String MSG_NOT_VALID_CONVERT_0 = "not valid convert: {0}";
     private static final long serialVersionUID = 2024075953874239351L;
     private final Map<String, CTConfig> configs = new LinkedHashMap<>();
+    private transient CTConfigsDataConverter configsDataConverter;
 
     protected CTConfigs(CTConfig... configs) {
-        this(Arrays.asList(configs));
-    }
-
-    public CTConfigs(List<CTConfig> configs) {
+        configsDataConverter = CTConfigsDataConverter.getInstance();
         setConfigs(configs);
     }
 
-    public static CTConfigs parse(String line) {
-        return new CTConfigs(read(line));
+    private void setConfigs(CTConfig[] configs) {
+        this.configs.clear();
+        for (CTConfig config : configs) {
+            addConfig(config);
+        }
     }
 
-    private static CTConfig[] read(String line) {
-        String[] data = CTConfigsDataConverter.getInstance().parse(line);
-        List<CTConfig> configs = new LinkedList<>();
-        for (String aData : data) {
+    public void addConfig(CTConfig config) {
+        String name = config.getName();
+        if (!configs.containsKey(name)) {
+            configs.put(name, config);
+        }
+    }
+
+    public CTConfigs(List<CTConfig> configs) {
+        configsDataConverter = CTConfigsDataConverter.getInstance();
+        setConfigs(configs);
+    }
+
+    private CTConfigs(String line) {
+        configsDataConverter = CTConfigsDataConverter.getInstance();
+        setConfigs(read(line));
+    }
+
+    private CTConfig[] read(String line) {
+        String[] data = configsDataConverter.parse(line);
+        int length = data.length;
+        CTConfig[] configs = new CTConfig[length];
+        for (int i = 0; i < length; i++) {
             try {
-                configs.add(CTConfig.parse(aData));
+                configs[i] = CTConfig.parse(data[i]);
             } catch (IllegalArgumentException ex) {
-                Log.error(MSG_INVALID_CONVERT_LINE_0, aData);
+                Log.error(MSG_INVALID_CONVERT_LINE_0, data[i]);
             }
         }
-        return configs.toArray(new CTConfig[configs.size()]);
+        return configs;
+    }
+
+    public static CTConfigs parse(String line) {
+        return new CTConfigs(line);
     }
 
     public String format() {
@@ -51,7 +75,7 @@ public class CTConfigs implements Serializable {
         for (CTConfig config : configs.values()) {
             formats.add(config.format());
         }
-        return CTConfigsDataConverter.getInstance()
+        return configsDataConverter
                 .format(TimeUnit.MINUTES, formats.toArray(new String[formats.size()]));
     }
 
@@ -63,17 +87,10 @@ public class CTConfigs implements Serializable {
         return Collections.unmodifiableList(new LinkedList<>(configs.values()));
     }
 
-    private void setConfigs(List<CTConfig> configs) {
+    private void setConfigs(Iterable<CTConfig> configs) {
         this.configs.clear();
         for (CTConfig config : configs) {
             addConfig(config);
-        }
-    }
-
-    public void addConfig(CTConfig config) {
-        String name = config.getName();
-        if (!configs.containsKey(name)) {
-            configs.put(name, config);
         }
     }
 
@@ -114,6 +131,11 @@ public class CTConfigs implements Serializable {
     @Override
     public String toString() {
         return MessageFormat.format("CTConfigs [configs={0}]", configs);
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        configsDataConverter = CTConfigsDataConverter.getInstance();
     }
 
     public void validate() throws InvalidObjectException {

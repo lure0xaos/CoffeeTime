@@ -68,9 +68,6 @@ public final class CTTimeUtil {
 
     public static long make() {
         return LocalDateTime.now().withNano(0).toInstant(ZoneOffset.UTC).toEpochMilli();
-        //        Calendar calendar = Calendar.getInstance();
-        //        calendar.set(Calendar.MILLISECOND, 0);
-        //        return calendar.getTimeInMillis();
     }
 
     public static long parseHHMMSS(String string) {
@@ -83,12 +80,6 @@ public final class CTTimeUtil {
                 .withNano(0)
                 .toInstant(ZoneOffset.UTC)
                 .toEpochMilli();
-        //        Calendar calendar = Calendar.getInstance();
-        //        calendar.set(Calendar.HOUR_OF_DAY, hours);
-        //        calendar.set(Calendar.MINUTE, minutes);
-        //        calendar.set(Calendar.SECOND, seconds);
-        //        calendar.set(Calendar.MILLISECOND, 0);
-        //        return calendar.getTimeInMillis();
     }
 
     public static long timeElapsedFrom(TimeUnit unit, long currentMillis, long begin) {

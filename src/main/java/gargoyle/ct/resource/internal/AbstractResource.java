@@ -44,6 +44,7 @@ abstract class AbstractResource implements Resource {
         }
     }
 
+    @SuppressWarnings("ChainOfInstanceofChecks")
     boolean exists(URL url) {
         if (url != null) {
             try {

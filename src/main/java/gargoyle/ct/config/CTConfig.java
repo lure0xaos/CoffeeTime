@@ -7,6 +7,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.InvalidObjectException;
 import java.io.ObjectInput;
+import java.io.ObjectInputStream;
 import java.io.ObjectInputValidation;
 import java.io.ObjectOutput;
 import java.text.MessageFormat;
@@ -17,6 +18,7 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
     private static final String STR_INVALID = "invalid";
     private static final long serialVersionUID = -898699928298432564L;
     private long block;
+    private transient CTConfigDataConverter configDataConverter;
     private String name;
     private long warn;
     private long whole;
@@ -26,6 +28,7 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
         block = 0;
         warn = 0;
         name = STR_INVALID;
+        configDataConverter = CTConfigDataConverter.getInstance();
     }
 
     private CTConfig(long whole, long block, long warn) {
@@ -36,14 +39,16 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
         this.block = block;
         this.warn = warn;
         name = name(TimeUnit.MINUTES);
+        configDataConverter = CTConfigDataConverter.getInstance();
     }
 
     private CTConfig(String line) {
         read(line);
+        configDataConverter = CTConfigDataConverter.getInstance();
     }
 
     private void read(String line) {
-        long[] data = CTConfigDataConverter.getInstance().parse(line);
+        long[] data = configDataConverter.parse(line);
         whole = data[0];
         block = data[1];
         warn = data[2];
@@ -141,6 +146,11 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
         return wholeMillis > blockMillis && blockMillis > warnMillis;
     }
 
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        configDataConverter = CTConfigDataConverter.getInstance();
+    }
+
     public void setBlock(TimeUnit unit, long block) {
         this.block = CTTimeUtil.toMillis(unit, block);
     }
@@ -174,7 +184,7 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
     }
 
     public String format() {
-        return CTConfigDataConverter.getInstance().format(TimeUnit.MINUTES, whole, block, warn);
+        return configDataConverter.format(TimeUnit.MINUTES, whole, block, warn);
     }
 
     @Override

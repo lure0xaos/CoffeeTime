@@ -24,29 +24,42 @@ public class CTPreferencesDialog extends JDialog {
 
     private void init(MessageProvider messages, CTPreferences preferences, Container pane) {
         pane.setLayout(new GridLayout(0, 2, 5, 5));
-        {
-            JLabel label = new JLabel(messages.getMessage(STR_TRANSPARENCY), SwingConstants.TRAILING);
-            label.setToolTipText(messages.getMessage(STR_TRANSPARENCY_TOOLTIP));
-            pane.add(label);
-            JCheckBox control = new JCheckBox();
-            control.setSelected(preferences.isTransparency());
-            control.addActionListener(e -> preferences.setTransparency(control.isSelected()));
-            pane.add(control);
-        }
-        {
-            JLabel label = new JLabel(messages.getMessage(STR_TRANSPARENCY_LEVEL), SwingConstants.TRAILING);
-            label.setToolTipText(messages.getMessage(STR_TRANSPARENCY_LEVEL_TOOLTIP));
-            pane.add(label);
-            JSlider control = new JSlider(0, 100);
-            control.setExtent(10);
-            control.setPaintLabels(true);
-            control.setPaintTicks(true);
-            control.setMajorTickSpacing(20);
-            control.setMinorTickSpacing(10);
-            control.setValue((int) (preferences.getTransparencyLevel() * 100.0d));
-            control.addChangeListener(e -> preferences.setTransparencyLevel(Math.max(1.0f, control.getValue()) / 100));
-            pane.add(control);
-        }
+        addLabeledControl(pane,
+                createLabel(messages.getMessage(STR_TRANSPARENCY), messages.getMessage(STR_TRANSPARENCY_TOOLTIP)),
+                createTransparencyControl(preferences));
+        addLabeledControl(pane,
+                createLabel(messages.getMessage(STR_TRANSPARENCY_LEVEL), messages.getMessage(STR_TRANSPARENCY_LEVEL_TOOLTIP)),
+                createTransparencyEnabledControl(preferences));
+    }
+
+    private void addLabeledControl(Container pane, JLabel label, JComponent transparencyControl) {
+        pane.add(label);
+        pane.add(transparencyControl);
+    }
+
+    private JSlider createTransparencyEnabledControl(CTPreferences preferences) {
+        JSlider control = new JSlider(0, 100);
+        control.setExtent(10);
+        control.setPaintLabels(true);
+        control.setPaintTicks(true);
+        control.setMajorTickSpacing(20);
+        control.setMinorTickSpacing(10);
+        control.setValue((int) (preferences.getTransparencyLevel() * 100.0d));
+        control.addChangeListener(e -> preferences.setTransparencyLevel(Math.max(1.0f, control.getValue()) / 100));
+        return control;
+    }
+
+    private JCheckBox createTransparencyControl(CTPreferences preferences) {
+        JCheckBox control = new JCheckBox();
+        control.setSelected(preferences.isTransparency());
+        control.addActionListener(e -> preferences.setTransparency(control.isSelected()));
+        return control;
+    }
+
+    private JLabel createLabel(String text, String toolTipText) {
+        JLabel label = new JLabel(text, SwingConstants.TRAILING);
+        label.setToolTipText(toolTipText);
+        return label;
     }
 
     public void showMe() {

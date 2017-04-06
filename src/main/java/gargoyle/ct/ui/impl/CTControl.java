@@ -99,7 +99,8 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
         return menu;
     }
 
-    private void onShowPreferences() {
+    @SuppressWarnings("WeakerAccess")
+    void onShowPreferences() {
         showPreferences(controlWindow.getOwner(), messages.getMessage(STR_PREFERENCES));
     }
 
@@ -136,8 +137,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
 
     @Override
     public void exit() {
-        controlWindow.setVisible(false);
-        controlWindow.dispose();
+        controlWindow.destroy();
         app.unarm();
         app.exit();
     }
@@ -297,7 +297,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
         private volatile boolean live = true;
 
         public CTControlWindow(CTControlActions app, URL imageURL, JPopupMenu menu) {
-            super(new JShowingFrame());
+            super(new CTShowingFrame());
             this.app = app;
             if (imageURL == null) {
                 throw new IllegalArgumentException("image not found");
@@ -350,6 +350,11 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
             label.setComponentPopupMenu(menu);
         }
 
+        private void destroy() {
+            setVisible(false);
+            dispose();
+        }
+
         @Override
         public void dispose() {
             if (live) {
@@ -374,10 +379,10 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
             }
         }
 
-        private static class JShowingFrame extends JFrame {
+        private static class CTShowingFrame extends JFrame {
             private static final long serialVersionUID = 1L;
 
-            public JShowingFrame() throws HeadlessException {
+            public CTShowingFrame() throws HeadlessException {
             }
 
             @Override
