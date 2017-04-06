@@ -4,11 +4,11 @@ import gargoyle.ct.messages.LocaleProvider;
 
 import java.util.Locale;
 
-public final class LocaleProviderImpl implements LocaleProvider {
-    private static LocaleProviderImpl instance;
+public final class CTLocaleProvider implements LocaleProvider {
+    private static CTLocaleProvider instance;
     private Locale locale;
 
-    private LocaleProviderImpl(Locale locale) {
+    private CTLocaleProvider(Locale locale) {
         this.locale = locale;
     }
 
@@ -16,7 +16,7 @@ public final class LocaleProviderImpl implements LocaleProvider {
         if (instance == null) {
             synchronized (LocaleProvider.class) {
                 if (instance == null) {
-                    instance = new LocaleProviderImpl(Locale.getDefault());
+                    instance = new CTLocaleProvider(Locale.getDefault());
                 }
             }
         }
