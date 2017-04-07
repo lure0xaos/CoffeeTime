@@ -1,28 +1,31 @@
 package gargoyle.ct.prop.impl;
 
+import gargoyle.ct.log.Log;
 import gargoyle.ct.pref.PropertyChangeEvent;
 import gargoyle.ct.pref.PropertyChangeListener;
 import gargoyle.ct.prop.CTProperty;
 
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public enum PropertyChangeManager {
     INSTANCE;
-    private final transient Map<CTProperty, List<PropertyChangeListener>> listeners = new HashMap<>();
+    private static final String MSG_ERROR_INVOKING_LISTENER = "Error invoking PropertyChangeListener#propertyChange";
+    private static final String STR_PROPERTY_CHANGE_LISTENER = "PropertyChangeListener#propertyChange";
+    private final transient Map<CTProperty, List<PropertyChangeListener>> listeners = new ConcurrentHashMap<>();
 
     public static PropertyChangeManager getInstance() {
         return INSTANCE;
     }
 
     public <T> void addPropertyChangeListener(CTProperty<T> property, PropertyChangeListener pcl) {
-        LinkedList<PropertyChangeListener> list;
+        List<PropertyChangeListener> list;
         if (listeners.containsKey(property)) {
-            list = (LinkedList<PropertyChangeListener>) listeners.get(property);
+            list = listeners.get(property);
         } else {
-            list = new LinkedList<>();
+            list = new CopyOnWriteArrayList<>();
             listeners.put(property, list);
         }
         list.add(pcl);
@@ -31,9 +34,15 @@ public enum PropertyChangeManager {
     public <T> void firePropertyChange(CTProperty<T> property, PropertyChangeEvent<T> event) {
         if (listeners.containsKey(property)) {
             List<PropertyChangeListener> listeners = this.listeners.get(property);
-            for (PropertyChangeListener listener : listeners) {
-                listener.propertyChange(event);
-            }
+            new Thread(() -> {
+                for (PropertyChangeListener listener : listeners) {
+                    try {
+                        listener.propertyChange(event);
+                    } catch (Exception ex) {
+                        Log.error(ex, MSG_ERROR_INVOKING_LISTENER);
+                    }
+                }
+            }, STR_PROPERTY_CHANGE_LISTENER).start();
         }
     }
 

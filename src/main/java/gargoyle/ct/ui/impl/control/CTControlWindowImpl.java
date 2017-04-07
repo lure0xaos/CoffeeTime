@@ -16,7 +16,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.net.URL;
 
-
 public final class CTControlWindowImpl extends JWindow implements CTControlWindow {
     private static final String MSG_TOOLTIP_ERROR = "tooltip error";
     private static final String MSG_TRANSPARENCY_NOT_SUPPORTED = "transparency not supported";
@@ -28,6 +27,7 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
     private final CTBlockerContent textContent;
     private volatile boolean live = true;
     private volatile boolean reshow;
+    private boolean textMode;
 
     public CTControlWindowImpl(Frame owner, CTControlActions app, URL imageURL, JPopupMenu menu) {
         super(owner);
@@ -84,7 +84,7 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
     private void transparency(boolean transparent) {
         CTPreferences preferences = app.preferences();
         try {
-            setOpacity(preferences.transparency().get() && transparent ? preferences.transparencyLevel().get() : 1);
+            setOpacity(!textMode && preferences.transparency().get() && transparent ? preferences.transparencyLevel().get() : 1);
         } catch (UnsupportedOperationException e) {
             Log.warn(e, MSG_TRANSPARENCY_NOT_SUPPORTED);
         }
@@ -121,6 +121,8 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
 
     @Override
     public void setTextMode(boolean textMode) {
+        this.textMode = textMode;
+        transparency(true);
         if (textMode && !app.preferences().block().get()) {
             showTextContent();
         } else {
