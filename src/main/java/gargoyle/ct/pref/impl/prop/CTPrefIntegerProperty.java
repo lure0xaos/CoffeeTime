@@ -6,6 +6,10 @@ import java.util.prefs.Preferences;
 
 public class CTPrefIntegerProperty extends CTPrefProperty<Integer> {
     public CTPrefIntegerProperty(Preferences preferences, String name) {
-        super(new IntegerConverter(), preferences, name);
+        this(preferences, name, 0);
+    }
+
+    public CTPrefIntegerProperty(Preferences preferences, String name, int def) {
+        super(new IntegerConverter(), preferences, name, def);
     }
 }

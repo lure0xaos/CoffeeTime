@@ -83,7 +83,7 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
     private void transparency(boolean transparent) {
         CTPreferences preferences = app.preferences();
         try {
-            setOpacity(preferences.transparency().get(true) && transparent ? preferences.transparencyLevel().get(0.3f) : 1);
+            setOpacity(preferences.transparency().get() && transparent ? preferences.transparencyLevel().get() : 1);
         } catch (UnsupportedOperationException e) {
             Log.warn(e, MSG_TRANSPARENCY_NOT_SUPPORTED);
         }
@@ -120,7 +120,7 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
 
     @Override
     public void setTextMode(boolean textMode) {
-        if (textMode && !app.preferences().block().get(false)) {
+        if (textMode && !app.preferences().block().get()) {
             showTextContent();
         } else {
             showIconContent();

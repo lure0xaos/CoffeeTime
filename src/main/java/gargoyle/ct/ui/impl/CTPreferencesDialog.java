@@ -33,10 +33,10 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
         pane.setLayout(new GridLayout(0, 2, 5, 5));
         addLabeledControl(pane,
                 createLabel(messages.getMessage(STR_BLOCK), messages.getMessage(STR_BLOCK_TOOLTIP)),
-                createCheckBox(preferences.block()));
+                createCheckBox(preferences.block(), false));
         addLabeledControl(pane,
                 createLabel(messages.getMessage(STR_TRANSPARENCY), messages.getMessage(STR_TRANSPARENCY_TOOLTIP)),
-                createCheckBox(preferences.transparency()));
+                createCheckBox(preferences.transparency(), true));
         addLabeledControl(pane,
                 createLabel(messages.getMessage(STR_TRANSPARENCY_LEVEL), messages.getMessage(STR_TRANSPARENCY_LEVEL_TOOLTIP)),
                 createTransparencyLevelControl(preferences.transparencyLevel()));
@@ -54,14 +54,14 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
         control.setPaintTicks(true);
         control.setMajorTickSpacing(20);
         control.setMinorTickSpacing(10);
-        control.setValue((int) (property.get(0.3f) * 100.0d));
+        control.setValue((int) (property.get() * 100.0d));
         control.addChangeListener(e -> property.set(Math.max(1.0f, control.getValue()) / 100));
         return control;
     }
 
-    private JCheckBox createCheckBox(CTPrefBooleanProperty property) {
+    private JCheckBox createCheckBox(CTPrefBooleanProperty property, boolean def) {
         JCheckBox control = new JCheckBox();
-        control.setSelected(property.get(true));
+        control.setSelected(property.get());
         control.addActionListener(e -> property.set(control.isSelected()));
         return control;
     }

@@ -11,9 +11,9 @@ public class CTPreferencesImpl extends CTBasePreferences implements CTPreference
 
     public CTPreferencesImpl(Class<?> clazz) {
         super(clazz);
-        block = new CTPrefBooleanProperty(preferences, BLOCK);
-        transparencyLevel = new CTPrefFloatProperty(preferences, TRANSPARENCY_LEVEL);
-        transparency = new CTPrefBooleanProperty(preferences, TRANSPARENCY);
+        block = new CTPrefBooleanProperty(preferences, BLOCK, false);
+        transparencyLevel = new CTPrefFloatProperty(preferences, TRANSPARENCY_LEVEL, 0.3f);
+        transparency = new CTPrefBooleanProperty(preferences, TRANSPARENCY, true);
     }
 
     @Override

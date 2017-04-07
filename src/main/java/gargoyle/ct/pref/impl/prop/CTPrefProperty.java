@@ -11,18 +11,16 @@ public class CTPrefProperty<T> extends CTBaseProperty<T> {
     private final Preferences prefs;
 
     protected CTPrefProperty(Converter<T> converter, Preferences preferences, String name) {
-        super(converter, name);
-        prefs = preferences;
+        this(converter, preferences, name, null);
     }
 
     public CTPrefProperty(Converter<T> converter, Preferences preferences, String name, T def) {
-        super(converter, name);
+        super(converter, name, def);
         prefs = preferences;
-        set(def);
     }
 
     @Override
-    public final T get(T def) {
+    public final T get() {
         String value = prefs.get(name, null);
         return value == null ? def : converter.parse(value);
     }
@@ -39,5 +37,11 @@ public class CTPrefProperty<T> extends CTBaseProperty<T> {
         } catch (BackingStoreException e) {
             Log.error(e, e.getMessage());
         }
+    }
+
+    @Override
+    public T get(T def) {
+        String value = prefs.get(name, null);
+        return value == null ? def : converter.parse(value);
     }
 }

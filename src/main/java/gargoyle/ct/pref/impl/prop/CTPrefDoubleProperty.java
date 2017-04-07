@@ -6,6 +6,10 @@ import java.util.prefs.Preferences;
 
 public class CTPrefDoubleProperty extends CTPrefProperty<Double> {
     public CTPrefDoubleProperty(Preferences preferences, String name) {
-        super(new DoubleConverter(), preferences, name);
+        this(preferences, name, 0);
+    }
+
+    public CTPrefDoubleProperty(Preferences preferences, String name, double def) {
+        super(new DoubleConverter(), preferences, name, def);
     }
 }

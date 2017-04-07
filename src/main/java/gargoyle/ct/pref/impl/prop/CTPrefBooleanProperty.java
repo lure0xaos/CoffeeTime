@@ -6,6 +6,10 @@ import java.util.prefs.Preferences;
 
 public class CTPrefBooleanProperty extends CTPrefProperty<Boolean> {
     public CTPrefBooleanProperty(Preferences preferences, String name) {
-        super(new BooleanConverter(), preferences, name);
+        this(preferences, name, false);
+    }
+
+    public CTPrefBooleanProperty(Preferences preferences, String name, boolean def) {
+        super(new BooleanConverter(), preferences, name, def);
     }
 }

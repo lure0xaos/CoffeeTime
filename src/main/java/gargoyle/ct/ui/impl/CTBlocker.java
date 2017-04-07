@@ -98,7 +98,7 @@ public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindo
     @Override
     public void doUpdate(CTTask task, long currentMillis) {
         content.doUpdate(task, currentMillis);
-        boolean block = app.preferences().block().get(false);
+        boolean block = app.preferences().block().get();
         boolean visible = block && textProvider.isVisible(task, currentMillis);
         setVisible(visible);
         content.setVisible(visible);
