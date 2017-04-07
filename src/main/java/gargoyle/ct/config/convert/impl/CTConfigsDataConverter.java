@@ -1,21 +1,11 @@
 package gargoyle.ct.config.convert.impl;
 
-import gargoyle.ct.config.convert.Converter;
+import gargoyle.ct.config.convert.CTTimeConverter;
 
 import java.util.concurrent.TimeUnit;
 
-public final class CTConfigsDataConverter implements Converter<String[]> {
-    private static CTConfigsDataConverter instance;
-
-    private CTConfigsDataConverter() {
-    }
-
-    public static synchronized CTConfigsDataConverter getInstance() {
-        if (instance == null) {
-            instance = new CTConfigsDataConverter();
-        }
-        return instance;
-    }
+public final class CTConfigsDataConverter implements CTTimeConverter<String[]> {
+    private static final long serialVersionUID = -2239592327479941656L;
 
     @Override
     public String format(TimeUnit unit, String... data) {

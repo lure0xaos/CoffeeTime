@@ -7,7 +7,6 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.InvalidObjectException;
 import java.io.ObjectInput;
-import java.io.ObjectInputStream;
 import java.io.ObjectInputValidation;
 import java.io.ObjectOutput;
 import java.text.MessageFormat;
@@ -18,8 +17,8 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
     private static final String MSG_NOT_VALID = "convert is not valid";
     private static final String STR_INVALID = "invalid";
     private static final long serialVersionUID = -898699928298432564L;
+    private final CTConfigDataConverter configDataConverter = new CTConfigDataConverter();
     private long block;
-    private transient CTConfigDataConverter configDataConverter = CTConfigDataConverter.getInstance();
     private String name;
     private long warn;
     private long whole;
@@ -144,11 +143,6 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
 
     public String name(TimeUnit unit) {
         return name(unit, whole, block);
-    }
-
-    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-        in.defaultReadObject();
-        configDataConverter = CTConfigDataConverter.getInstance();
     }
 
     public void setBlock(TimeUnit unit, long block) {

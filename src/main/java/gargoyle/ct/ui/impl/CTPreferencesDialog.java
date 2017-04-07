@@ -3,6 +3,8 @@ package gargoyle.ct.ui.impl;
 import gargoyle.ct.messages.MessageProvider;
 import gargoyle.ct.messages.impl.CTMessages;
 import gargoyle.ct.pref.CTPreferences;
+import gargoyle.ct.pref.impl.prop.CTPrefBooleanProperty;
+import gargoyle.ct.pref.impl.prop.CTPrefFloatProperty;
 import gargoyle.ct.ui.CTDialog;
 
 import javax.swing.*;
@@ -29,10 +31,10 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
         pane.setLayout(new GridLayout(0, 2, 5, 5));
         addLabeledControl(pane,
                 createLabel(messages.getMessage(STR_TRANSPARENCY), messages.getMessage(STR_TRANSPARENCY_TOOLTIP)),
-                createTransparencyControl(preferences));
+                createTransparencyControl(preferences.transparency()));
         addLabeledControl(pane,
                 createLabel(messages.getMessage(STR_TRANSPARENCY_LEVEL), messages.getMessage(STR_TRANSPARENCY_LEVEL_TOOLTIP)),
-                createTransparencyEnabledControl(preferences));
+                createTransparencyLevelControl(preferences.transparencyLevel()));
     }
 
     private void addLabeledControl(Container pane, JLabel label, JComponent transparencyControl) {
@@ -40,22 +42,22 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
         pane.add(transparencyControl);
     }
 
-    private JSlider createTransparencyEnabledControl(CTPreferences preferences) {
+    private JSlider createTransparencyLevelControl(CTPrefFloatProperty property) {
         JSlider control = new JSlider(0, 100);
         control.setExtent(10);
         control.setPaintLabels(true);
         control.setPaintTicks(true);
         control.setMajorTickSpacing(20);
         control.setMinorTickSpacing(10);
-        control.setValue((int) (preferences.getTransparencyLevel() * 100.0d));
-        control.addChangeListener(e -> preferences.setTransparencyLevel(Math.max(1.0f, control.getValue()) / 100));
+        control.setValue((int) (property.get(0.3f) * 100.0d));
+        control.addChangeListener(e -> property.set(Math.max(1.0f, control.getValue()) / 100));
         return control;
     }
 
-    private JCheckBox createTransparencyControl(CTPreferences preferences) {
+    private JCheckBox createTransparencyControl(CTPrefBooleanProperty property) {
         JCheckBox control = new JCheckBox();
-        control.setSelected(preferences.isTransparency());
-        control.addActionListener(e -> preferences.setTransparency(control.isSelected()));
+        control.setSelected(property.get(true));
+        control.addActionListener(e -> property.set(control.isSelected()));
         return control;
     }
 

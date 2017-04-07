@@ -21,6 +21,7 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
     private static final String TOOL_TIP_MANAGER_ENABLE_TOOL_TIP_MODE = "ToolTipManager.enableToolTipMode";
     private static final long serialVersionUID = 1L;
     private final transient CTControlActions app;
+    private final ImageIcon icon;
     private final JLabel label;
     private volatile boolean live = true;
     private volatile boolean reshow;
@@ -35,7 +36,8 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
         setAlwaysOnTop(true);
         Container pane = getContentPane();
         pane.setLayout(new BorderLayout());
-        label = new JLabel(new ImageIcon(imageURL));
+        icon = new ImageIcon(imageURL);
+        label = new JLabel(icon);
         pane.add(label, BorderLayout.CENTER);
         label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         pack();
@@ -73,7 +75,7 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
     private void transparency(boolean transparent) {
         CTPreferences preferences = app.preferences();
         try {
-            setOpacity(preferences.isTransparency() && transparent ? preferences.getTransparencyLevel() : 1);
+            setOpacity(preferences.transparency().get(true) && transparent ? preferences.transparencyLevel().get(0.3f) : 1);
         } catch (UnsupportedOperationException e) {
             Log.warn(e, MSG_TRANSPARENCY_NOT_SUPPORTED);
         }

@@ -1,6 +1,6 @@
 package gargoyle.ct.config.convert.impl;
 
-import gargoyle.ct.config.convert.Converter;
+import gargoyle.ct.config.convert.CTTimeConverter;
 import gargoyle.ct.util.CTTimeUtil;
 
 import java.text.MessageFormat;
@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public final class CTConfigDataConverter implements Converter<long[]> {
+public final class CTConfigDataConverter implements CTTimeConverter<long[]> {
     private static final String COMMENTS = "#;'";
     private static final String MSG_CANNOT_PARSE_LINE_0 = "Cannot parse line: {0}";
     private static final String
@@ -20,17 +20,7 @@ public final class CTConfigDataConverter implements Converter<long[]> {
     private static final String UNIT_HOURS = "H";
     private static final String UNIT_MINUTES = "M";
     private static final String UNIT_SECONDS = "S";
-    private static CTConfigDataConverter instance;
-
-    private CTConfigDataConverter() {
-    }
-
-    public static synchronized CTConfigDataConverter getInstance() {
-        if (instance == null) {
-            instance = new CTConfigDataConverter();
-        }
-        return instance;
-    }
+    private static final long serialVersionUID = -4641587129966829837L;
 
     @Override
     public String format(TimeUnit unit, long... data) {

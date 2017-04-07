@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 public class CTConfigsConverterTest {
     @Test
     public void testConvert() {
-        CTConfigsConverter converter = CTConfigsConverter.getInstance();
+        CTConfigsConverter converter = new CTConfigsConverter();
         CTConfigs config = new CTConfigs(new CTStandardConfigs().getConfigs());
         Assert.assertEquals(converter.parse(converter.format(TimeUnit.MINUTES, config)), config);
         Assert.assertEquals(converter.parse(converter.format(TimeUnit.HOURS, config)), config);
