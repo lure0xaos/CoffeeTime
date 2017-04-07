@@ -120,7 +120,6 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
 
     @Override
     public void setTextMode(boolean textMode) {
-        // FIXME
         if (textMode && !app.preferences().block().get(false)) {
             showTextContent();
         } else {
@@ -157,7 +156,6 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
 
     @Override
     public void showText(Color foreground, String text) {
-        // FIXME
         textContent.showText(foreground, text);
         textContent.repaint();
     }

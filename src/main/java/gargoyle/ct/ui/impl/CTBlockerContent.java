@@ -3,6 +3,7 @@ package gargoyle.ct.ui.impl;
 import gargoyle.ct.log.Log;
 import gargoyle.ct.task.CTTaskUpdatable;
 import gargoyle.ct.task.impl.CTTask;
+import gargoyle.ct.ui.CTBlockerTextProvider;
 import gargoyle.ct.ui.CTInformer;
 import gargoyle.ct.ui.CTWindow;
 
@@ -10,6 +11,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.text.MessageFormat;
 
 public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, CTWindow, CTInformer {
@@ -22,10 +25,10 @@ public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, C
     private static final int GAP = 10;
     private static final String MSG_DEBUG_SIZE = "height={0}, fontScaling={1}, ratio={2}, big={3}, fontSize={4}";
     private static final long serialVersionUID = 1873262133224449177L;
-    private final boolean big;
+    final boolean big;
     private final JLabel lblInfo;
     private final JLabel lblMain;
-    private final transient CTBlockerTextProvider textProvider = new CTBlockerTextProvider();
+    private transient CTBlockerTextProvider textProvider = new CTBlockerTextProvider();
 
     public CTBlockerContent(boolean big) {
         this.big = big;
@@ -63,7 +66,8 @@ public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, C
         return label;
     }
 
-    private void adjust(boolean big, JLabel label, double fontScaling) {
+    @SuppressWarnings("WeakerAccess")
+    void adjust(boolean big, JLabel label, double fontScaling) {
         if (!isVisible()) return;
         double height = big ? Toolkit.getDefaultToolkit().getScreenSize().getHeight() : getHeight();
         if (height == 0) return;
@@ -103,6 +107,11 @@ public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, C
         } else {
             showMe();
         }
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        textProvider = new CTBlockerTextProvider();
     }
 
     @Override

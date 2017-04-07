@@ -17,8 +17,8 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
     private static final String MSG_NOT_VALID = "convert is not valid";
     private static final String STR_INVALID = "invalid";
     private static final long serialVersionUID = -898699928298432564L;
-    private final CTConfigDataConverter configDataConverter = new CTConfigDataConverter();
     private long block;
+    private transient CTConfigDataConverter configDataConverter = new CTConfigDataConverter();
     private String name;
     private long warn;
     private long whole;
@@ -179,6 +179,7 @@ public class CTConfig implements Externalizable, ObjectInputValidation {
 
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        configDataConverter = new CTConfigDataConverter();
         long[] data = configDataConverter.parse(in.readLine());
         init(data[0], data[1], data[2]);
     }

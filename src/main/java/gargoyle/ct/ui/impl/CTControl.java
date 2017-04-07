@@ -7,6 +7,7 @@ import gargoyle.ct.messages.impl.CTMessages;
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.task.CTTaskUpdatable;
 import gargoyle.ct.task.impl.CTTask;
+import gargoyle.ct.ui.CTBlockerTextProvider;
 import gargoyle.ct.ui.CTControlActions;
 import gargoyle.ct.ui.CTControlWindow;
 import gargoyle.ct.ui.impl.control.CTAction;

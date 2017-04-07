@@ -5,7 +5,6 @@ import gargoyle.ct.config.convert.CTTimeConverter;
 import java.util.concurrent.TimeUnit;
 
 public final class CTConfigsDataConverter implements CTTimeConverter<String[]> {
-    private static final long serialVersionUID = -2239592327479941656L;
 
     @Override
     public String format(TimeUnit unit, String... data) {

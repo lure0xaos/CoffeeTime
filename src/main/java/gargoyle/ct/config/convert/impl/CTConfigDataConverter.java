@@ -20,7 +20,6 @@ public final class CTConfigDataConverter implements CTTimeConverter<long[]> {
     private static final String UNIT_HOURS = "H";
     private static final String UNIT_MINUTES = "M";
     private static final String UNIT_SECONDS = "S";
-    private static final long serialVersionUID = -4641587129966829837L;
 
     @Override
     public String format(TimeUnit unit, long... data) {

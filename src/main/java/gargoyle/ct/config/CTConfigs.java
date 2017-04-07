@@ -3,7 +3,9 @@ package gargoyle.ct.config;
 import gargoyle.ct.config.convert.impl.CTConfigsDataConverter;
 import gargoyle.ct.log.Log;
 
+import java.io.IOException;
 import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.Collections;
@@ -19,7 +21,7 @@ public class CTConfigs implements Serializable {
     private static final String MSG_NOT_VALID_CONVERT_0 = "not valid convert: {0}";
     private static final long serialVersionUID = 2024075953874239351L;
     private final Map<String, CTConfig> configs = new LinkedHashMap<>();
-    private final CTConfigsDataConverter configsDataConverter = new CTConfigsDataConverter();
+    private transient CTConfigsDataConverter configsDataConverter = new CTConfigsDataConverter();
 
     protected CTConfigs(CTConfig... configs) {
         setConfigs(configs);
@@ -127,6 +129,11 @@ public class CTConfigs implements Serializable {
     @Override
     public String toString() {
         return MessageFormat.format("CTConfigs [configs={0}]", configs);
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        configsDataConverter = new CTConfigsDataConverter();
     }
 
     public void validate() throws InvalidObjectException {

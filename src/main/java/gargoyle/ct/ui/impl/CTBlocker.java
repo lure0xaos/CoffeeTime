@@ -2,6 +2,7 @@ package gargoyle.ct.ui.impl;
 
 import gargoyle.ct.task.CTTaskUpdatable;
 import gargoyle.ct.task.impl.CTTask;
+import gargoyle.ct.ui.CTBlockerTextProvider;
 import gargoyle.ct.ui.CTControlActions;
 import gargoyle.ct.ui.CTInformer;
 import gargoyle.ct.ui.CTWindow;
@@ -13,6 +14,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -21,7 +24,7 @@ public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindo
     private static final long serialVersionUID = 4716380852101644265L;
     private final transient CTControlActions app;
     private final CTBlockerContent content;
-    private final transient CTBlockerTextProvider textProvider = new CTBlockerTextProvider();
+    private transient CTBlockerTextProvider textProvider = new CTBlockerTextProvider();
 
     private CTBlocker(CTControlActions app, GraphicsDevice device) {
         this.app = app;
@@ -114,6 +117,11 @@ public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindo
         } else {
             showMe();
         }
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        textProvider = new CTBlockerTextProvider();
     }
 
     @Override

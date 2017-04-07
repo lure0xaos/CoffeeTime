@@ -1,4 +1,4 @@
-package gargoyle.ct.ui.impl;
+package gargoyle.ct.ui;
 
 import gargoyle.ct.messages.MessageProvider;
 import gargoyle.ct.messages.impl.CTMessages;
@@ -50,7 +50,7 @@ public class CTBlockerTextProvider {
         return CTTimeUtil.formatHHMMSS(currentMillis);
     }
 
-    String getToolTipText(CTTask task, long currentMillis) {
+    public String getToolTipText(CTTask task, long currentMillis) {
         String toolTipText = CTTimeUtil.formatHHMMSS(currentMillis);
         if (task.isReady()) {
             if (task.isBlocked(currentMillis)) {
