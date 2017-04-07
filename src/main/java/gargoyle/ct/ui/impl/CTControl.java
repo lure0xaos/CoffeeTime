@@ -14,7 +14,6 @@ import gargoyle.ct.ui.impl.control.CTConfigAction;
 import gargoyle.ct.ui.impl.control.CTConfigMenuItem;
 import gargoyle.ct.ui.impl.control.CTControlWindowImpl;
 import gargoyle.ct.ui.impl.control.CTMenuItem;
-import gargoyle.ct.util.CTTimeUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,9 +40,11 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
     private final CTControlWindow controlWindow;
     private final ButtonGroup group;
     private final MessageProvider messages;
+    private final CTBlockerTextProvider textProvider;
 
     public CTControl(CTControlActions app, Frame owner) {
         this.app = app;
+        textProvider = new CTBlockerTextProvider();
         messages = new CTMessages(LOC_MESSAGES);
         group = new ButtonGroup();
         controlWindow = new CTControlWindowImpl(owner, app, CTControl.class.getResource(URL_ICON), createMenu(app.loadConfigs(false)));
@@ -76,7 +77,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                onShowPreferences();
+                showPreferences();
             }
         }));
         menu.add(new CTMenuItem(new CTAction(messages.getMessage(STR_HELP), messages.getMessage(STR_HELP_TOOLTIP)) {
@@ -96,11 +97,6 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
             }
         }));
         return menu;
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    void onShowPreferences() {
-        showPreferences();
     }
 
     private void addConfigs(JPopupMenu menu, CTConfigs configs) {
@@ -191,19 +187,13 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
 
     @Override
     public void doUpdate(CTTask task, long currentMillis) {
-        String toolTipText = CTTimeUtil.formatHHMMSS(currentMillis);
-        if (task.isReady()) {
-            if (task.isBlocked(currentMillis)) {
-                toolTipText = CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockEnd(currentMillis)));
-            }
-            if (task.isWarn(currentMillis)) {
-                toolTipText = CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis)));
-            }
-            if (task.isSleeping(currentMillis)) {
-                toolTipText = CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis)));
-            }
+        controlWindow.setToolTipText(textProvider.getToolTipText(task, currentMillis));
+//        lblInfo.setText(textProvider.getInfoText(task, currentMillis));
+        boolean visible = textProvider.isVisible(task, currentMillis);
+        controlWindow.setTextMode(visible);
+        if (visible) {
+            controlWindow.showText(textProvider.getColor(task, currentMillis), textProvider.getBlockerText(task, currentMillis));
         }
-        controlWindow.setToolTipText(toolTipText);
     }
 
     @Override

@@ -12,6 +12,8 @@ import java.awt.*;
 
 public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
     private static final String LOC_MESSAGES = "messages.preferences";
+    private static final String STR_BLOCK = CTPreferences.BLOCK;
+    private static final String STR_BLOCK_TOOLTIP = "block.tooltip";
     private static final String STR_TITLE = "title";
     private static final String STR_TRANSPARENCY = CTPreferences.TRANSPARENCY;
     private static final String STR_TRANSPARENCY_LEVEL = CTPreferences.TRANSPARENCY_LEVEL;
@@ -30,8 +32,11 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
         setTitle(messages.getMessage(STR_TITLE));
         pane.setLayout(new GridLayout(0, 2, 5, 5));
         addLabeledControl(pane,
+                createLabel(messages.getMessage(STR_BLOCK), messages.getMessage(STR_BLOCK_TOOLTIP)),
+                createCheckBox(preferences.block()));
+        addLabeledControl(pane,
                 createLabel(messages.getMessage(STR_TRANSPARENCY), messages.getMessage(STR_TRANSPARENCY_TOOLTIP)),
-                createTransparencyControl(preferences.transparency()));
+                createCheckBox(preferences.transparency()));
         addLabeledControl(pane,
                 createLabel(messages.getMessage(STR_TRANSPARENCY_LEVEL), messages.getMessage(STR_TRANSPARENCY_LEVEL_TOOLTIP)),
                 createTransparencyLevelControl(preferences.transparencyLevel()));
@@ -54,7 +59,7 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
         return control;
     }
 
-    private JCheckBox createTransparencyControl(CTPrefBooleanProperty property) {
+    private JCheckBox createCheckBox(CTPrefBooleanProperty property) {
         JCheckBox control = new JCheckBox();
         control.setSelected(property.get(true));
         control.addActionListener(e -> property.set(control.isSelected()));

@@ -15,6 +15,7 @@ import java.net.URL;
 import java.util.prefs.PreferenceChangeEvent;
 
 public final class CTControlWindowImpl extends JWindow implements CTControlWindow {
+    private static final String KEY_STORED_TEXT = "storedText";
     private static final String MSG_TOOLTIP_ERROR = "tooltip error";
     private static final String MSG_TRANSPARENCY_NOT_SUPPORTED = "transparency not supported";
     private static final int SNAP = 20;
@@ -110,6 +111,19 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
     }
 
     @Override
+    public void setTextMode(boolean textMode) {
+        // FIXME
+        if (textMode) {
+            label.setText(String.valueOf(label.getClientProperty(KEY_STORED_TEXT)));
+            label.setIcon(null);
+        } else {
+            label.putClientProperty(KEY_STORED_TEXT, label.getText());
+            label.setText("");
+            label.setIcon(icon);
+        }
+    }
+
+    @Override
     public void setToolTipText(String text) {
         label.setToolTipText(text);
         if (reshow && text != null && !text.isEmpty()) {
@@ -121,6 +135,16 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
             } catch (RuntimeException ex) {
                 Log.debug(ex, MSG_TOOLTIP_ERROR);
             }
+        }
+    }
+
+    @Override
+    public void showText(Color foreground, String text) {
+        // FIXME
+        if (label.getIcon() == null) {
+            label.setForeground(foreground);
+            label.setText(text);
+            label.putClientProperty(KEY_STORED_TEXT, label.getText());
         }
     }
 }

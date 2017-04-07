@@ -16,8 +16,9 @@ public class CTPrefProperty<T> extends CTBaseProperty<T> {
     }
 
     public CTPrefProperty(Converter<T> converter, Preferences preferences, String name, T def) {
-        super(converter, name, def);
+        super(converter, name);
         prefs = preferences;
+        set(def);
     }
 
     @Override

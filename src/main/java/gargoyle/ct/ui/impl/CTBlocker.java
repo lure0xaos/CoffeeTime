@@ -1,10 +1,9 @@
 package gargoyle.ct.ui.impl;
 
-import gargoyle.ct.messages.MessageProvider;
-import gargoyle.ct.messages.impl.CTMessages;
 import gargoyle.ct.task.CTTaskUpdatable;
 import gargoyle.ct.task.impl.CTTask;
-import gargoyle.ct.util.CTTimeUtil;
+import gargoyle.ct.ui.CTInformer;
+import gargoyle.ct.ui.CTWindow;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,27 +15,21 @@ import java.awt.event.WindowFocusListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-public final class CTBlocker extends JWindow implements CTTaskUpdatable {
+public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindow, CTInformer {
     private static final float ALIGNMENT_CENTER = 0.5f;
-    private static final int DELAY = 3;
     private static final int FONT_SCALING = 30;
-    private static final String LOC_MESSAGES = "messages.blocker";
-    private static final int PERIOD = 60;
-    private static final String STR_BLOCKED = "blocked_w";
-    private static final String STR_WARN = "warn_w";
     private static final long serialVersionUID = 1L;
     private JLabel lblInfo;
     private JLabel lblMain;
-    private transient MessageProvider messages;
+    private transient CTBlockerTextProvider textProvider;
 
     private CTBlocker(GraphicsDevice device) {
         init(device);
     }
 
     private void init(GraphicsDevice device) {
-        messages = new CTMessages(LOC_MESSAGES);
+        textProvider = new CTBlockerTextProvider();
         setBounds(device.getDefaultConfiguration().getBounds());
         setAlwaysOnTop(true);
         toFront();
@@ -118,43 +111,39 @@ public final class CTBlocker extends JWindow implements CTTaskUpdatable {
         }
     }
 
-    private void destroy() {
+    @Override
+    public void destroy() {
         setVisible(false);
         dispose();
     }
 
     @Override
+    public void showMe() {
+        setVisible(true);
+        toFront();
+    }
+
+    @Override
     public void doUpdate(CTTask task, long currentMillis) {
-        lblInfo.setText(CTTimeUtil.formatHHMMSS(currentMillis));
-        if (task.isReady()) {
-            if (task.isBlocked(currentMillis)) {
-                showText(Color.WHITE, messages.getMessage(STR_BLOCKED,
-                        CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockEnd(currentMillis)))));
-            }
-            if (task.isWarn(currentMillis)) {
-                if (CTTimeUtil.isInPeriod(TimeUnit.SECONDS, currentMillis, PERIOD, DELAY)) {
-                    showText(Color.GREEN, messages.getMessage(STR_WARN,
-                            CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis)))));
-                } else {
-                    setVisible(false);
-                }
-            }
-            if (task.isSleeping(currentMillis)) {
-                setVisible(false);
-            }
+        lblInfo.setText(textProvider.getInfoText(task, currentMillis));
+        boolean visible = textProvider.isVisible(task, currentMillis);
+        setVisible(visible);
+        if (visible) {
+            showText(textProvider.getColor(task, currentMillis), textProvider.getBlockerText(task, currentMillis));
         }
     }
 
+    @Override
     public void showText(Color foreground, String text) {
         setForeground(foreground);
         lblMain.setForeground(foreground);
         lblMain.setText(text);
         if (isVisible()) {
             repaint();
+            toFront();
         } else {
-            setVisible(true);
+            showMe();
         }
-        toFront();
     }
 
     @Override
