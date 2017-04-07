@@ -3,13 +3,13 @@ package gargoyle.ct;
 import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.config.CTConfigs;
 import gargoyle.ct.pref.CTPreferences;
+import gargoyle.ct.pref.PropertyChangeListener;
 import gargoyle.ct.pref.impl.prop.CTPrefBooleanProperty;
-import gargoyle.ct.pref.impl.prop.CTPrefFloatProperty;
+import gargoyle.ct.pref.impl.prop.CTPrefProperty;
 import gargoyle.ct.ui.CTApp;
 import gargoyle.ct.ui.impl.CTBlocker;
 
 import java.awt.*;
-import java.util.prefs.PreferenceChangeListener;
 import java.util.prefs.Preferences;
 
 public final class CTBlockerTest {
@@ -39,26 +39,26 @@ public final class CTBlockerTest {
             public CTPreferences preferences() {
                 return new CTPreferences() {
                     @Override
-                    public void addPreferenceChangeListener(PreferenceChangeListener pcl) {
+                    public void addPropertyChangeListener(PropertyChangeListener listener) {
                     }
 
                     @Override
-                    public void removePreferenceChangeListener(PreferenceChangeListener pcl) {
+                    public void removePropertyChangeListener(PropertyChangeListener listener) {
                     }
 
                     @Override
-                    public CTPrefBooleanProperty block() {
+                    public CTPrefProperty<Boolean> block() {
                         return new CTPrefBooleanProperty(Preferences.userNodeForPackage(CTBlockerTest.class), CTPreferences.BLOCK) {
                         };
                     }
 
                     @Override
-                    public CTPrefBooleanProperty transparency() {
+                    public CTPrefProperty<Boolean> transparency() {
                         return null;
                     }
 
                     @Override
-                    public CTPrefFloatProperty transparencyLevel() {
+                    public CTPrefProperty<Float> transparencyLevel() {
                         return null;
                     }
                 };

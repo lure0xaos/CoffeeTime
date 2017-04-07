@@ -2,6 +2,7 @@ package gargoyle.ct.ui.impl.control;
 
 import gargoyle.ct.log.Log;
 import gargoyle.ct.pref.CTPreferences;
+import gargoyle.ct.pref.PropertyChangeEvent;
 import gargoyle.ct.ui.CTControlActions;
 import gargoyle.ct.ui.CTControlWindow;
 import gargoyle.ct.ui.impl.CTBlockerContent;
@@ -14,7 +15,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.net.URL;
-import java.util.prefs.PreferenceChangeEvent;
+
 
 public final class CTControlWindowImpl extends JWindow implements CTControlWindow {
     private static final String MSG_TOOLTIP_ERROR = "tooltip error";
@@ -111,8 +112,8 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
     }
 
     @Override
-    public void preferenceChange(PreferenceChangeEvent evt) {
-        String key = evt.getKey();
+    public void propertyChange(PropertyChangeEvent evt) {
+        String key = evt.getName();
         if (CTPreferences.TRANSPARENCY.equals(key) || CTPreferences.TRANSPARENCY_LEVEL.equals(key)) {
             transparency(true);
         }

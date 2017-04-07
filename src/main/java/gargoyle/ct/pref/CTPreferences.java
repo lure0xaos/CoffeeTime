@@ -1,16 +1,15 @@
 package gargoyle.ct.pref;
 
-import gargoyle.ct.pref.impl.prop.CTPrefBooleanProperty;
-import gargoyle.ct.pref.impl.prop.CTPrefFloatProperty;
+import gargoyle.ct.pref.impl.prop.CTPrefProperty;
 
 public interface CTPreferences extends CTPreferencesManager {
     String BLOCK = "block";
     String TRANSPARENCY = "transparency";
     String TRANSPARENCY_LEVEL = "transparency-level";
 
-    CTPrefBooleanProperty block();
+    CTPrefProperty<Boolean> block();
 
-    CTPrefBooleanProperty transparency();
+    CTPrefProperty<Boolean> transparency();
 
-    CTPrefFloatProperty transparencyLevel();
+    CTPrefProperty<Float> transparencyLevel();
 }

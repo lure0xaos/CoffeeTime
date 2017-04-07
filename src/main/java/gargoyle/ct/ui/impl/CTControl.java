@@ -5,6 +5,8 @@ import gargoyle.ct.config.CTConfigs;
 import gargoyle.ct.messages.MessageProvider;
 import gargoyle.ct.messages.impl.CTMessages;
 import gargoyle.ct.pref.CTPreferences;
+import gargoyle.ct.pref.PropertyChangeEvent;
+import gargoyle.ct.pref.PropertyChangeListener;
 import gargoyle.ct.task.CTTaskUpdatable;
 import gargoyle.ct.task.impl.CTTask;
 import gargoyle.ct.ui.CTBlockerTextProvider;
@@ -21,10 +23,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.Collections;
 import java.util.Objects;
-import java.util.prefs.PreferenceChangeEvent;
-import java.util.prefs.PreferenceChangeListener;
 
-public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceChangeListener {
+public class CTControl implements CTControlActions, CTTaskUpdatable, PropertyChangeListener {
     private static final String LOC_MESSAGES = "messages.control";
     private static final String STR_EXIT = "exit";
     private static final String STR_EXIT_TOOLTIP = "exit.tooltip";
@@ -198,7 +198,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
     }
 
     @Override
-    public void preferenceChange(PreferenceChangeEvent evt) {
-        controlWindow.preferenceChange(evt);
+    public void propertyChange(PropertyChangeEvent evt) {
+        controlWindow.propertyChange(evt);
     }
 }

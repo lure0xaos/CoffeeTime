@@ -3,8 +3,7 @@ package gargoyle.ct.ui.impl;
 import gargoyle.ct.messages.MessageProvider;
 import gargoyle.ct.messages.impl.CTMessages;
 import gargoyle.ct.pref.CTPreferences;
-import gargoyle.ct.pref.impl.prop.CTPrefBooleanProperty;
-import gargoyle.ct.pref.impl.prop.CTPrefFloatProperty;
+import gargoyle.ct.pref.impl.prop.CTPrefProperty;
 import gargoyle.ct.ui.CTDialog;
 
 import javax.swing.*;
@@ -33,10 +32,10 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
         pane.setLayout(new GridLayout(0, 2, 5, 5));
         addLabeledControl(pane,
                 createLabel(messages.getMessage(STR_BLOCK), messages.getMessage(STR_BLOCK_TOOLTIP)),
-                createCheckBox(preferences.block(), false));
+                createCheckBox(preferences.block()));
         addLabeledControl(pane,
                 createLabel(messages.getMessage(STR_TRANSPARENCY), messages.getMessage(STR_TRANSPARENCY_TOOLTIP)),
-                createCheckBox(preferences.transparency(), true));
+                createCheckBox(preferences.transparency()));
         addLabeledControl(pane,
                 createLabel(messages.getMessage(STR_TRANSPARENCY_LEVEL), messages.getMessage(STR_TRANSPARENCY_LEVEL_TOOLTIP)),
                 createTransparencyLevelControl(preferences.transparencyLevel()));
@@ -47,7 +46,7 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
         pane.add(transparencyControl);
     }
 
-    private JSlider createTransparencyLevelControl(CTPrefFloatProperty property) {
+    private JSlider createTransparencyLevelControl(CTPrefProperty<Float> property) {
         JSlider control = new JSlider(0, 100);
         control.setExtent(10);
         control.setPaintLabels(true);
@@ -59,7 +58,7 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
         return control;
     }
 
-    private JCheckBox createCheckBox(CTPrefBooleanProperty property, boolean def) {
+    private JCheckBox createCheckBox(CTPrefProperty<Boolean> property) {
         JCheckBox control = new JCheckBox();
         control.setSelected(property.get());
         control.addActionListener(e -> property.set(control.isSelected()));

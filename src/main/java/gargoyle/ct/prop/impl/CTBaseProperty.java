@@ -24,4 +24,8 @@ public abstract class CTBaseProperty<T> implements CTProperty<T> {
         T value = get();
         return value == null ? def : value;
     }
+
+    public String name() {
+        return name;
+    }
 }

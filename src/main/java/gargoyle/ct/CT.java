@@ -68,7 +68,7 @@ public final class CT implements CTApp {
         owner = new CTShowingFrame();
         CTControl control = new CTControl(this, owner);
         this.control = control;
-        preferences.addPreferenceChangeListener(control);
+        preferences.addPropertyChangeListener(control);
         updatables.add(control);
         timer = new CTTimer(timeHelper, updatables);
     }
@@ -131,7 +131,7 @@ public final class CT implements CTApp {
         }
         timer.terminate();
         SocketMutex.getDefault().release();
-        preferences.removePreferenceChangeListener(control);
+        preferences.removePropertyChangeListener(control);
     }
 
     @Override

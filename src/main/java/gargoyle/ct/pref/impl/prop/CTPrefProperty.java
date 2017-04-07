@@ -2,12 +2,16 @@ package gargoyle.ct.pref.impl.prop;
 
 import gargoyle.ct.convert.Converter;
 import gargoyle.ct.log.Log;
+import gargoyle.ct.pref.PropertyChangeEvent;
+import gargoyle.ct.pref.PropertyChangeListener;
+import gargoyle.ct.prop.CTObservableProperty;
 import gargoyle.ct.prop.impl.CTBaseProperty;
+import gargoyle.ct.prop.impl.PropertyChangeManager;
 
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
-public class CTPrefProperty<T> extends CTBaseProperty<T> {
+public class CTPrefProperty<T> extends CTBaseProperty<T> implements CTObservableProperty {
     private final Preferences prefs;
 
     protected CTPrefProperty(Converter<T> converter, Preferences preferences, String name) {
@@ -20,6 +24,22 @@ public class CTPrefProperty<T> extends CTBaseProperty<T> {
     }
 
     @Override
+    public void addPropertyChangeListener(PropertyChangeListener pcl) {
+        PropertyChangeManager.getInstance().addPropertyChangeListener(this, pcl);
+    }
+
+    @Override
+    public void removePropertyChangeListener(PropertyChangeListener pcl) {
+        PropertyChangeManager.getInstance().removePropertyChangeListener(this, pcl);
+    }
+
+    @Override
+    public T get(T def) {
+        String value = prefs.get(name, null);
+        return value == null ? def : converter.parse(value);
+    }
+
+    @Override
     public final T get() {
         String value = prefs.get(name, null);
         return value == null ? def : converter.parse(value);
@@ -27,8 +47,10 @@ public class CTPrefProperty<T> extends CTBaseProperty<T> {
 
     @Override
     public final void set(T value) {
+        T oldValue = get();
         prefs.put(name, value == null ? null : converter.format(value));
         sync();
+        PropertyChangeManager.getInstance().firePropertyChange(this, new PropertyChangeEvent<>(this, name, oldValue, value));
     }
 
     private void sync() {
@@ -37,11 +59,5 @@ public class CTPrefProperty<T> extends CTBaseProperty<T> {
         } catch (BackingStoreException e) {
             Log.error(e, e.getMessage());
         }
-    }
-
-    @Override
-    public T get(T def) {
-        String value = prefs.get(name, null);
-        return value == null ? def : converter.parse(value);
     }
 }
