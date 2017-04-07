@@ -1,4 +1,4 @@
-package gargoyle.ct.pref.prop;
+package gargoyle.ct.prop;
 
 public interface CTProperty<T> {
     T get(T def);

@@ -1,6 +1,6 @@
-package gargoyle.ct.pref.convert.impl;
+package gargoyle.ct.convert.impl;
 
-import gargoyle.ct.pref.convert.Converter;
+import gargoyle.ct.convert.Converter;
 
 public class IntegerConverter implements Converter<Integer> {
     @Override

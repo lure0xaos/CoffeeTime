@@ -1,7 +1,8 @@
 package gargoyle.ct.pref.impl.prop;
 
+import gargoyle.ct.convert.Converter;
 import gargoyle.ct.log.Log;
-import gargoyle.ct.pref.convert.Converter;
+import gargoyle.ct.prop.impl.CTBaseProperty;
 
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;

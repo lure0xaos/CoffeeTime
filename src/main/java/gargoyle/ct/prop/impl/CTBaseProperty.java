@@ -1,7 +1,7 @@
-package gargoyle.ct.pref.impl.prop;
+package gargoyle.ct.prop.impl;
 
-import gargoyle.ct.pref.convert.Converter;
-import gargoyle.ct.pref.prop.CTProperty;
+import gargoyle.ct.convert.Converter;
+import gargoyle.ct.prop.CTProperty;
 
 public abstract class CTBaseProperty<T> implements CTProperty<T> {
     protected final Converter<T> converter;

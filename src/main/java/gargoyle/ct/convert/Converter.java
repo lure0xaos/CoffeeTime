@@ -1,4 +1,4 @@
-package gargoyle.ct.pref.convert;
+package gargoyle.ct.convert;
 
 import java.io.Serializable;
 

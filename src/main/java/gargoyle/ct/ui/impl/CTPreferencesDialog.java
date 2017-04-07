@@ -13,8 +13,8 @@ import java.awt.*;
 public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
     private static final String LOC_MESSAGES = "messages.preferences";
     private static final String STR_TITLE = "title";
-    private static final String STR_TRANSPARENCY = "transparency";
-    private static final String STR_TRANSPARENCY_LEVEL = "transparency-level";
+    private static final String STR_TRANSPARENCY = CTPreferences.TRANSPARENCY;
+    private static final String STR_TRANSPARENCY_LEVEL = CTPreferences.TRANSPARENCY_LEVEL;
     private static final String STR_TRANSPARENCY_LEVEL_TOOLTIP = "transparency-level.tooltip";
     private static final String STR_TRANSPARENCY_TOOLTIP = "transparency.tooltip";
     private static final long serialVersionUID = 4767295798528273381L;
