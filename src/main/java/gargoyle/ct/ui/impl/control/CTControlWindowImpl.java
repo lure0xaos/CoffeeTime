@@ -4,6 +4,7 @@ import gargoyle.ct.log.Log;
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.ui.CTControlActions;
 import gargoyle.ct.ui.CTControlWindow;
+import gargoyle.ct.ui.impl.CTBlockerContent;
 import gargoyle.ct.ui.util.CTDragHelper;
 import gargoyle.ct.util.CTTimeUtil;
 
@@ -11,42 +12,39 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.net.URL;
 import java.util.prefs.PreferenceChangeEvent;
 
 public final class CTControlWindowImpl extends JWindow implements CTControlWindow {
-    private static final String KEY_STORED_TEXT = "storedText";
     private static final String MSG_TOOLTIP_ERROR = "tooltip error";
     private static final String MSG_TRANSPARENCY_NOT_SUPPORTED = "transparency not supported";
     private static final int SNAP = 20;
     private static final String TOOL_TIP_MANAGER_ENABLE_TOOL_TIP_MODE = "ToolTipManager.enableToolTipMode";
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 6345130901927558555L;
     private final transient CTControlActions app;
-    private final ImageIcon icon;
-    private final JLabel label;
+    private final CTIconContent iconContent;
+    private final CTBlockerContent textContent;
     private volatile boolean live = true;
     private volatile boolean reshow;
 
     public CTControlWindowImpl(Frame owner, CTControlActions app, URL imageURL, JPopupMenu menu) {
         super(owner);
         this.app = app;
-        if (imageURL == null) {
-            throw new IllegalArgumentException("image not found");
-        }
         UIManager.getDefaults().put(TOOL_TIP_MANAGER_ENABLE_TOOL_TIP_MODE, "");
         setAlwaysOnTop(true);
         Container pane = getContentPane();
         pane.setLayout(new BorderLayout());
-        icon = new ImageIcon(imageURL);
-        label = new JLabel(icon);
-        pane.add(label, BorderLayout.CENTER);
-        label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        textContent = new CTBlockerContent(false);
+        iconContent = new CTIconContent(imageURL);
+        showIconContent();
         pack();
         setComponentPopupMenu(menu);
         Dimension screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getSize();
         setLocation(screenSize.width - getWidth(), screenSize.height - getHeight());
         getOwner().setLocation(getLocation());
-        CTDragHelper.makeDraggable(label, SNAP);
+        CTDragHelper.makeDraggable(textContent, SNAP);
+        CTDragHelper.makeDraggable(iconContent, SNAP);
         CTDragHelper.makeDraggable(this, SNAP);
         ToolTipManager toolTipManager = ToolTipManager.sharedInstance();
         toolTipManager.setDismissDelay(1000);
@@ -54,7 +52,7 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
         toolTipManager.setReshowDelay(100);
         toolTipManager.setEnabled(true);
         toolTipManager.setLightWeightPopupEnabled(true);
-        label.addMouseListener(new MouseAdapter() {
+        MouseListener l = new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
                 onMouseMoved(true, false);
@@ -64,7 +62,16 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
             public void mouseExited(MouseEvent e) {
                 onMouseMoved(false, true);
             }
-        });
+        };
+        textContent.addMouseListener(l);
+        iconContent.addMouseListener(l);
+    }
+
+    private void showIconContent() {
+        Container pane = getContentPane();
+        pane.remove(textContent);
+        pane.add(iconContent, BorderLayout.CENTER);
+        iconContent.repaint();
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -83,7 +90,8 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
     }
 
     private void setComponentPopupMenu(JPopupMenu menu) {
-        label.setComponentPopupMenu(menu);
+        textContent.setComponentPopupMenu(menu);
+        iconContent.setComponentPopupMenu(menu);
     }
 
     @Override
@@ -113,24 +121,33 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
     @Override
     public void setTextMode(boolean textMode) {
         // FIXME
-        if (textMode) {
-            label.setText(String.valueOf(label.getClientProperty(KEY_STORED_TEXT)));
-            label.setIcon(null);
+        if (textMode && !app.preferences().block().get(false)) {
+            showTextContent();
         } else {
-            label.putClientProperty(KEY_STORED_TEXT, label.getText());
-            label.setText("");
-            label.setIcon(icon);
+            showIconContent();
         }
+    }
+
+    private void showTextContent() {
+        Container pane = getContentPane();
+        pane.remove(iconContent);
+        pane.add(textContent, BorderLayout.CENTER);
+        textContent.repaint();
     }
 
     @Override
     public void setToolTipText(String text) {
-        label.setToolTipText(text);
+        textContent.setToolTipText(text);
+        iconContent.setToolTipText(text);
         if (reshow && text != null && !text.isEmpty()) {
             try {
                 ToolTipManager.sharedInstance()
                         .mouseMoved(
-                                new MouseEvent(label, MouseEvent.MOUSE_MOVED, CTTimeUtil.currentTimeMillis(), 0, getWidth(),
+                                new MouseEvent(textContent, MouseEvent.MOUSE_MOVED, CTTimeUtil.currentTimeMillis(), 0, getWidth(),
+                                        getHeight(), 0, false));
+                ToolTipManager.sharedInstance()
+                        .mouseMoved(
+                                new MouseEvent(iconContent, MouseEvent.MOUSE_MOVED, CTTimeUtil.currentTimeMillis(), 0, getWidth(),
                                         getHeight(), 0, false));
             } catch (RuntimeException ex) {
                 Log.debug(ex, MSG_TOOLTIP_ERROR);
@@ -141,10 +158,7 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
     @Override
     public void showText(Color foreground, String text) {
         // FIXME
-        if (label.getIcon() == null) {
-            label.setForeground(foreground);
-            label.setText(text);
-            label.putClientProperty(KEY_STORED_TEXT, label.getText());
-        }
+        textContent.showText(foreground, text);
+        textContent.repaint();
     }
 }

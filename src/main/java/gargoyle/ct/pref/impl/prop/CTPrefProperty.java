@@ -10,7 +10,7 @@ import java.util.prefs.Preferences;
 public class CTPrefProperty<T> extends CTBaseProperty<T> {
     private final Preferences prefs;
 
-    public CTPrefProperty(Converter<T> converter, Preferences preferences, String name) {
+    protected CTPrefProperty(Converter<T> converter, Preferences preferences, String name) {
         super(converter, name);
         prefs = preferences;
     }

@@ -2,6 +2,7 @@ package gargoyle.ct.ui.impl;
 
 import gargoyle.ct.task.CTTaskUpdatable;
 import gargoyle.ct.task.impl.CTTask;
+import gargoyle.ct.ui.CTControlActions;
 import gargoyle.ct.ui.CTInformer;
 import gargoyle.ct.ui.CTWindow;
 
@@ -17,28 +18,20 @@ import java.util.Collections;
 import java.util.List;
 
 public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindow, CTInformer {
-    private static final float ALIGNMENT_CENTER = 0.5f;
-    private static final int FONT_SCALING = 30;
-    private static final long serialVersionUID = 1L;
-    private JLabel lblInfo;
-    private JLabel lblMain;
-    private transient CTBlockerTextProvider textProvider;
+    private static final long serialVersionUID = 4716380852101644265L;
+    private final transient CTControlActions app;
+    private final CTBlockerContent content;
+    private final transient CTBlockerTextProvider textProvider = new CTBlockerTextProvider();
 
-    private CTBlocker(GraphicsDevice device) {
-        init(device);
-    }
-
-    private void init(GraphicsDevice device) {
-        textProvider = new CTBlockerTextProvider();
+    private CTBlocker(CTControlActions app, GraphicsDevice device) {
+        this.app = app;
         setBounds(device.getDefaultConfiguration().getBounds());
         setAlwaysOnTop(true);
         toFront();
         Container container = getContentPane();
         container.setLayout(new BorderLayout());
-        lblMain = createMainLabel();
-        container.add(lblMain, BorderLayout.CENTER);
-        lblInfo = createInfoLabel();
-        container.add(lblInfo, BorderLayout.SOUTH);
+        content = new CTBlockerContent(true);
+        container.add(content, BorderLayout.CENTER);
         addWindowFocusListener(new WindowFocusListener() {
             @Override
             public void windowGainedFocus(WindowEvent e) {
@@ -54,46 +47,20 @@ public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindo
         });
     }
 
-    private JLabel createInfoLabel() {
-        JLabel label = new JLabel();
-        label.setOpaque(true);
-        label.setBackground(Color.BLACK);
-        label.setForeground(Color.GRAY);
-        label.setAlignmentX(1);
-        int gap = 10;
-        label.setBorder(BorderFactory.createEmptyBorder(gap, gap, gap, gap));
-        label.setHorizontalAlignment(SwingConstants.RIGHT);
-        label.setFont(new Font(Font.MONOSPACED, Font.PLAIN,
-                (int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() / FONT_SCALING)));
-        return label;
-    }
-
-    private JLabel createMainLabel() {
-        JLabel label = new JLabel();
-        label.setOpaque(true);
-        label.setBackground(Color.BLACK);
-        label.setForeground(Color.WHITE);
-        label.setAlignmentX(ALIGNMENT_CENTER);
-        label.setHorizontalAlignment(SwingConstants.CENTER);
-        label.setFont(new Font(Font.MONOSPACED, Font.PLAIN,
-                (int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 10)));
-        return label;
-    }
-
-    public static List<CTBlocker> forAllDevices() {
+    public static List<CTBlocker> forAllDevices(CTControlActions app) {
         List<CTBlocker> devices = new ArrayList<>();
         for (GraphicsDevice device : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
-            devices.add(new CTBlocker(device));
+            devices.add(new CTBlocker(app, device));
         }
         return Collections.unmodifiableList(devices);
     }
 
-    public static CTBlocker forDefaultDevice() {
-        return new CTBlocker(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice());
+    public static CTBlocker forDefaultDevice(CTControlActions app) {
+        return new CTBlocker(app, GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice());
     }
 
-    public static CTBlocker forDevice(GraphicsDevice device) {
-        return new CTBlocker(device);
+    public static CTBlocker forDevice(CTControlActions app, GraphicsDevice device) {
+        return new CTBlocker(app, device);
     }
 
     public void debug(boolean debug) {
@@ -113,31 +80,34 @@ public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindo
 
     @Override
     public void destroy() {
+        content.destroy();
         setVisible(false);
         dispose();
     }
 
     @Override
     public void showMe() {
+        content.showMe();
         setVisible(true);
         toFront();
     }
 
     @Override
     public void doUpdate(CTTask task, long currentMillis) {
-        lblInfo.setText(textProvider.getInfoText(task, currentMillis));
-        boolean visible = textProvider.isVisible(task, currentMillis);
+        content.doUpdate(task, currentMillis);
+        boolean block = app.preferences().block().get(false);
+        boolean visible = block && textProvider.isVisible(task, currentMillis);
         setVisible(visible);
+        content.setVisible(visible);
         if (visible) {
-            showText(textProvider.getColor(task, currentMillis), textProvider.getBlockerText(task, currentMillis));
+            showText(textProvider.getColor(task, currentMillis), textProvider.getBlockerText(task, currentMillis, true));
         }
     }
 
     @Override
     public void showText(Color foreground, String text) {
+        content.showText(foreground, text);
         setForeground(foreground);
-        lblMain.setForeground(foreground);
-        lblMain.setText(text);
         if (isVisible()) {
             repaint();
             toFront();
@@ -148,6 +118,6 @@ public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindo
 
     @Override
     public void setBackground(Color color) {
-        lblMain.setBackground(color);
+        content.setBackground(color);
     }
 }

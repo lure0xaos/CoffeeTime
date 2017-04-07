@@ -192,7 +192,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PreferenceC
         boolean visible = textProvider.isVisible(task, currentMillis);
         controlWindow.setTextMode(visible);
         if (visible) {
-            controlWindow.showText(textProvider.getColor(task, currentMillis), textProvider.getBlockerText(task, currentMillis));
+            controlWindow.showText(textProvider.getColor(task, currentMillis), textProvider.getBlockerText(task, currentMillis, false));
         }
     }
 

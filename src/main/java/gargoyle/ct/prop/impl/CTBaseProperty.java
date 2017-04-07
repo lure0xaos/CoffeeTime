@@ -7,7 +7,7 @@ public abstract class CTBaseProperty<T> implements CTProperty<T> {
     protected final Converter<T> converter;
     protected final String name;
 
-    public CTBaseProperty(Converter<T> converter, String name) {
+    protected CTBaseProperty(Converter<T> converter, String name) {
         this.name = name;
         this.converter = converter;
     }

@@ -26,7 +26,7 @@ abstract class CTBasePreferences implements CTPreferencesManager {
 
     protected final Preferences preferences;
 
-    public CTBasePreferences(Class<?> clazz) {
+    protected CTBasePreferences(Class<?> clazz) {
         preferences = Preferences.userNodeForPackage(clazz);
     }
 
