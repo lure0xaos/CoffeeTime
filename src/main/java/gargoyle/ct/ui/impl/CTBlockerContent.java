@@ -9,23 +9,18 @@ import gargoyle.ct.ui.CTWindow;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.text.MessageFormat;
 
 public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, CTWindow, CTInformer {
     private static final float ALIGNMENT_CENTER = 0.5f;
     private static final float ALIGNMENT_RIGHT = 1.0f;
-    private static final double FONT_SCALING_INFO_BIG = 30;
-    private static final double FONT_SCALING_INFO_SMALL = 45;
-    private static final double FONT_SCALING_MAIN_BIG = 10;
-    private static final double FONT_SCALING_MAIN_SMALL = 8;
+    private static final int FONT_SIZE = 12;
     private static final int GAP = 10;
-    private static final String MSG_DEBUG_SIZE = "height={0}, fontScaling={1}, ratio={2}, big={3}, fontSize={4}";
     private static final long serialVersionUID = 1873262133224449177L;
-    final boolean big;
+    private final boolean big;
     private final JLabel lblInfo;
     private final JLabel lblMain;
     private transient CTBlockerTextProvider textProvider = new CTBlockerTextProvider();
@@ -33,17 +28,15 @@ public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, C
     public CTBlockerContent(boolean big) {
         this.big = big;
         setLayout(new BorderLayout());
-        double fontScalingMain = big ? FONT_SCALING_MAIN_BIG : FONT_SCALING_MAIN_SMALL;
-        lblMain = createMainLabel(big, fontScalingMain);
-        lblMain.addComponentListener(new ContentComponentListener(lblMain, fontScalingMain));
+        lblMain = createMainLabel();
+        lblMain.addComponentListener(new ContentComponentListener(this, lblMain));
         add(lblMain, BorderLayout.CENTER);
-        double fontScalingInfo = big ? FONT_SCALING_INFO_BIG : FONT_SCALING_INFO_SMALL;
-        lblInfo = createInfoLabel(big, fontScalingInfo);
-        lblInfo.addComponentListener(new ContentComponentListener(lblInfo, fontScalingInfo));
+        lblInfo = createInfoLabel();
+        lblInfo.addComponentListener(new ContentComponentListener(this, lblInfo));
         add(lblInfo, BorderLayout.SOUTH);
     }
 
-    private JLabel createInfoLabel(boolean big, double fontScalingInfo) {
+    private JLabel createInfoLabel() {
         JLabel label = new JLabel();
         label.setOpaque(true);
         label.setBackground(Color.BLACK);
@@ -51,29 +44,28 @@ public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, C
         label.setAlignmentX(ALIGNMENT_RIGHT);
         label.setBorder(BorderFactory.createEmptyBorder(GAP, GAP, GAP, GAP));
         label.setHorizontalAlignment(SwingConstants.RIGHT);
-        adjust(big, label, fontScalingInfo);
+        adjust(this, label);
         return label;
     }
 
-    private JLabel createMainLabel(boolean big, double fontScalingMain) {
+    private JLabel createMainLabel() {
         JLabel label = new JLabel();
         label.setOpaque(true);
         label.setBackground(Color.BLACK);
         label.setForeground(Color.WHITE);
         label.setAlignmentX(ALIGNMENT_CENTER);
         label.setHorizontalAlignment(SwingConstants.CENTER);
-        adjust(big, label, fontScalingMain);
+        adjust(this, label);
         return label;
     }
 
-    @SuppressWarnings("WeakerAccess")
-    void adjust(boolean big, JLabel label, double fontScaling) {
-        if (!isVisible()) return;
-        double height = big ? Toolkit.getDefaultToolkit().getScreenSize().getHeight() : getHeight();
-        if (height == 0) return;
-        Log.debug(MessageFormat.format(MSG_DEBUG_SIZE,
-                height, fontScaling, height / fontScaling, big, (int) (height / fontScaling)));
-        label.setFont(new Font(Font.DIALOG, Font.PLAIN, (int) (height / fontScaling)));
+    static void adjust(JComponent container, JLabel label) {
+        if (!container.isVisible() || container.getHeight() == 0) return;
+        label.setFont(new Font(Font.DIALOG, Font.PLAIN, FONT_SIZE));
+        label.setFont(new Font(Font.DIALOG, Font.PLAIN,
+                Math.min((int) (FONT_SIZE * label.getWidth() /
+                                (1.1 * label.getFontMetrics(label.getFont()).stringWidth(label.getText()))),
+                        label.getHeight())));
     }
 
     @Override
@@ -101,6 +93,7 @@ public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, C
         setForeground(foreground);
         lblMain.setForeground(foreground);
         lblMain.setText(text);
+        adjust(this, lblMain);
         if (isVisible()) {
             Log.debug(text);
             repaint();
@@ -122,34 +115,24 @@ public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, C
         }
     }
 
-    private class ContentComponentListener implements ComponentListener {
-        private final double fontScaling;
+    private static class ContentComponentListener extends ComponentAdapter {
+        private final CTBlockerContent container;
         private final JLabel label;
 
         @SuppressWarnings("WeakerAccess")
-        public ContentComponentListener(JLabel label, double fontScaling) {
+        public ContentComponentListener(CTBlockerContent container, JLabel label) {
+            this.container = container;
             this.label = label;
-            this.fontScaling = fontScaling;
         }
 
         @Override
         public void componentResized(ComponentEvent e) {
-            adjust(big, label, fontScaling);
-        }
-
-        @Override
-        public void componentMoved(ComponentEvent e) {
-            adjust(big, label, fontScaling);
+            adjust(container, label);
         }
 
         @Override
         public void componentShown(ComponentEvent e) {
-            adjust(big, label, fontScaling);
-        }
-
-        @Override
-        public void componentHidden(ComponentEvent e) {
-            adjust(big, label, fontScaling);
+            adjust(container, label);
         }
     }
 }
