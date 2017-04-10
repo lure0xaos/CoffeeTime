@@ -1,6 +1,6 @@
 package gargoyle.ct;
 
-import gargoyle.ct.config.data.CTConfig;
+import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.util.CTSerializationUtil;
 import org.junit.Test;
 

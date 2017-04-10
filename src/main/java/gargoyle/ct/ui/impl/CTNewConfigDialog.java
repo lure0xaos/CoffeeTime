@@ -1,7 +1,7 @@
 package gargoyle.ct.ui.impl;
 
+import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.config.convert.impl.CTConfigConverter;
-import gargoyle.ct.config.data.CTConfig;
 import gargoyle.ct.log.Log;
 import gargoyle.ct.messages.impl.CTMessages;
 import gargoyle.ct.ui.CTDialog;

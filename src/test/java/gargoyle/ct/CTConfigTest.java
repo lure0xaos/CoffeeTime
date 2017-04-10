@@ -1,7 +1,7 @@
 package gargoyle.ct;
 
+import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.config.convert.impl.CTConfigConverter;
-import gargoyle.ct.config.data.CTConfig;
 import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;

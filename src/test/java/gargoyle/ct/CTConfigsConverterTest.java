@@ -1,8 +1,8 @@
 package gargoyle.ct;
 
+import gargoyle.ct.config.CTConfigs;
+import gargoyle.ct.config.CTStandardConfigs;
 import gargoyle.ct.config.convert.impl.CTConfigsConverter;
-import gargoyle.ct.config.data.CTConfigs;
-import gargoyle.ct.config.data.CTStandardConfigs;
 import org.junit.Assert;
 import org.junit.Test;
 

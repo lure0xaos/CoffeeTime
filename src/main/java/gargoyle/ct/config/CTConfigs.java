@@ -1,4 +1,4 @@
-package gargoyle.ct.config.data;
+package gargoyle.ct.config;
 
 import java.io.InvalidObjectException;
 import java.io.Serializable;

@@ -1,6 +1,6 @@
 package gargoyle.ct;
 
-import gargoyle.ct.config.data.CTConfig;
+import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.task.impl.CTTask;
 import gargoyle.ct.util.CTTimeUtil;
 import org.junit.After;
@@ -11,9 +11,9 @@ import org.junit.Test;
 import java.text.MessageFormat;
 import java.util.concurrent.TimeUnit;
 
-import static gargoyle.ct.config.data.CTStandardConfigs.BLOCK_10M;
-import static gargoyle.ct.config.data.CTStandardConfigs.WARN_3M;
-import static gargoyle.ct.config.data.CTStandardConfigs.WHOLE_1H;
+import static gargoyle.ct.config.CTStandardConfigs.BLOCK_10M;
+import static gargoyle.ct.config.CTStandardConfigs.WARN_3M;
+import static gargoyle.ct.config.CTStandardConfigs.WHOLE_1H;
 
 public class CTTaskTest {
     private static final String TEST_BLOCKED_FAILED_0_1 = "testBlocked failed: {0} {1}";

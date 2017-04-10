@@ -1,4 +1,4 @@
-package gargoyle.ct.config.data;
+package gargoyle.ct.config;
 
 import gargoyle.ct.util.CTTimeUtil;
 
@@ -38,7 +38,7 @@ public class CTConfig implements Serializable, ObjectInputValidation {
 
     public CTConfig(TimeUnit unit, long whole, long block, long warn) {
         this(CTTimeUtil.toMillis(unit, whole), CTTimeUtil.toMillis(unit, block), CTTimeUtil.toMillis(unit, warn));
-        name = name(unit, whole, block);
+        name = name(unit, CTTimeUtil.toMillis(unit, whole), CTTimeUtil.toMillis(unit, block));
     }
 
     public CTConfig(long whole, long block, long warn) {
