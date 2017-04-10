@@ -1,6 +1,6 @@
 package gargoyle.ct.ui.impl.control;
 
-import gargoyle.ct.config.CTConfig;
+import gargoyle.ct.config.data.CTConfig;
 import gargoyle.ct.ui.impl.CTControl;
 
 import java.awt.event.ActionEvent;

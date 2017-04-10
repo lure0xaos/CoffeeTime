@@ -1,8 +1,9 @@
 package gargoyle.ct;
 
-import gargoyle.ct.config.CTConfig;
-import gargoyle.ct.config.CTConfigs;
-import gargoyle.ct.config.CTStandardConfigs;
+import gargoyle.ct.config.convert.impl.CTConfigsConverter;
+import gargoyle.ct.config.data.CTConfig;
+import gargoyle.ct.config.data.CTConfigs;
+import gargoyle.ct.config.data.CTStandardConfigs;
 import gargoyle.ct.log.Log;
 import gargoyle.ct.mutex.SocketMutex;
 import gargoyle.ct.pref.CTPreferences;
@@ -36,6 +37,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public final class CT implements CTApp {
     private static final String CONFIG_NAME = "CT.cfg";
@@ -49,6 +51,7 @@ public final class CT implements CTApp {
     private static final String PAGE_0_NOT_FOUND = "Page {0} not found";
     private static final String SLASH = "/";
     private final List<CTBlocker> blockers;
+    private final CTConfigsConverter configsConverter = new CTConfigsConverter();
     private final CTControl control;
     private final Frame owner;
     private final CTPreferences preferences;
@@ -168,7 +171,7 @@ public final class CT implements CTApp {
             CTConfigResource configResource = CTConfigResource.findLocalConfig(CONFIG_NAME);
             if (configResource != null && configResource.exists()) {
                 try (InputStream stream = configResource.getInputStream()) {
-                    configs = CTConfigs.parse(CTStreamUtil.convertStreamToString(stream));
+                    configs = configsConverter.parse(CTStreamUtil.convertStreamToString(stream));
                     if (configs.getConfigs().isEmpty()) {
                         configs = new CTStandardConfigs();
                     }
@@ -185,7 +188,7 @@ public final class CT implements CTApp {
                 configs = new CTStandardConfigs();
                 configResource = CTConfigResource.forURL(LocalResource.getHomeDirectoryLocation(), CONFIG_NAME);
                 try (OutputStream stream = configResource.getOutputStream()) {
-                    CTStreamUtil.write(stream, configs.format());
+                    CTStreamUtil.write(stream, configsConverter.format(TimeUnit.MINUTES, configs));
                 } catch (IOException ex) {
                     Log.warn(NOT_FOUND_0, configResource);
                 }
@@ -193,7 +196,7 @@ public final class CT implements CTApp {
             this.configResource = configResource;
         } else {
             try (InputStream stream = configResource.getInputStream()) {
-                configs = CTConfigs.parse(CTStreamUtil.convertStreamToString(stream));
+                configs = configsConverter.parse(CTStreamUtil.convertStreamToString(stream));
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -210,7 +213,7 @@ public final class CT implements CTApp {
     public void saveConfigs(CTConfigs configs) {
         if (configResource != null) {
             try (OutputStream stream = configResource.getOutputStream()) {
-                CTStreamUtil.write(stream, configs.format());
+                CTStreamUtil.write(stream, configsConverter.format(TimeUnit.MINUTES, configs));
             } catch (IOException ex) {
                 Log.warn(NOT_FOUND_0, configResource);
             }

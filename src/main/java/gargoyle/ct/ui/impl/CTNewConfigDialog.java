@@ -1,6 +1,7 @@
 package gargoyle.ct.ui.impl;
 
-import gargoyle.ct.config.CTConfig;
+import gargoyle.ct.config.convert.impl.CTConfigConverter;
+import gargoyle.ct.config.data.CTConfig;
 import gargoyle.ct.log.Log;
 import gargoyle.ct.messages.impl.CTMessages;
 import gargoyle.ct.ui.CTDialog;
@@ -17,6 +18,7 @@ public class CTNewConfigDialog implements CTDialog<CTConfig> {
     private static final String STR_NEW_CONFIG_TOOLTIP = "new-config-field.tooltip";
     private static final String STR_OK = "ok";
     private static final String STR_TITLE = "title";
+    private final CTConfigConverter configConverter = new CTConfigConverter();
     private final CTMessages messages;
     private final Component owner;
 
@@ -36,7 +38,7 @@ public class CTNewConfigDialog implements CTDialog<CTConfig> {
                         new Object[]{messages.getMessage(STR_OK), messages.getMessage(STR_CANCEL)}, null);
                 if (result == JOptionPane.OK_OPTION) {
                     try {
-                        return CTConfig.parse(String.valueOf(field.getValue()));
+                        return configConverter.parse(String.valueOf(field.getValue()));
                     } catch (IllegalArgumentException ex) {
                         Log.debug(ex, ex.getMessage());
                     }

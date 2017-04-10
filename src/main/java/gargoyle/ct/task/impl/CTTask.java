@@ -1,6 +1,6 @@
 package gargoyle.ct.task.impl;
 
-import gargoyle.ct.config.CTConfig;
+import gargoyle.ct.config.data.CTConfig;
 import gargoyle.ct.util.CTTimeUtil;
 
 import java.util.concurrent.TimeUnit;

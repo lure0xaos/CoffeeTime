@@ -1,6 +1,6 @@
 package gargoyle.ct.task.impl;
 
-import gargoyle.ct.config.CTConfig;
+import gargoyle.ct.config.data.CTConfig;
 import gargoyle.ct.task.CTTaskUpdatable;
 import gargoyle.ct.task.helper.CTTimeHelper;
 

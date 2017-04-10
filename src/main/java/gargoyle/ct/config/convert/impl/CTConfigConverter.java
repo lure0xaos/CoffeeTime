@@ -1,19 +1,21 @@
 package gargoyle.ct.config.convert.impl;
 
-import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.config.convert.CTTimeConverter;
+import gargoyle.ct.config.data.CTConfig;
 
 import java.util.concurrent.TimeUnit;
 
 public final class CTConfigConverter implements CTTimeConverter<CTConfig> {
+    private final CTConfigDataConverter configDataConverter = new CTConfigDataConverter();
 
     @Override
     public String format(TimeUnit unit, CTConfig data) {
-        return data.format();
+        return configDataConverter.format(TimeUnit.MINUTES, data.getWhole(), data.getBlock(), data.getWarn());
     }
 
     @Override
-    public CTConfig parse(String data) {
-        return CTConfig.parse(data);
+    public CTConfig parse(String line) {
+        long[] data = configDataConverter.parse(line);
+        return new CTConfig(data[0], data[1], data[2]);
     }
 }

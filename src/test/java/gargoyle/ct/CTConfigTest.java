@@ -1,6 +1,7 @@
 package gargoyle.ct;
 
-import gargoyle.ct.config.CTConfig;
+import gargoyle.ct.config.convert.impl.CTConfigConverter;
+import gargoyle.ct.config.data.CTConfig;
 import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
@@ -14,7 +15,7 @@ public class CTConfigTest {
     @Test
     public void format() throws Exception {
         CTConfig config = new CTConfig(TimeUnit.MINUTES, 60, 10, 3);
-        assertEquals(CONFIG, config.format());
+        assertEquals(CONFIG, new CTConfigConverter().format(TimeUnit.MINUTES, config));
     }
 
     @Test
@@ -26,7 +27,7 @@ public class CTConfigTest {
     @Test
     public void parse() throws Exception {
         CTConfig config = new CTConfig(TimeUnit.MINUTES, 60, 10, 3);
-        CTConfig parsed = CTConfig.parse(CONFIG);
+        CTConfig parsed = new CTConfigConverter().parse(CONFIG);
         assertEquals(config, parsed);
     }
 }
