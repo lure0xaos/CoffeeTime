@@ -5,22 +5,10 @@ import gargoyle.ct.messages.LocaleProvider;
 import java.util.Locale;
 
 public final class CTLocaleProvider implements LocaleProvider {
-    private static CTLocaleProvider instance;
-    private Locale locale;
+    private static Locale locale;
 
-    private CTLocaleProvider(Locale locale) {
-        this.locale = locale;
-    }
-
-    public static LocaleProvider getInstance() {
-        if (instance == null) {
-            synchronized (LocaleProvider.class) {
-                if (instance == null) {
-                    instance = new CTLocaleProvider(Locale.getDefault());
-                }
-            }
-        }
-        return instance;
+    static {
+        locale = Locale.getDefault();
     }
 
     @Override
@@ -30,6 +18,6 @@ public final class CTLocaleProvider implements LocaleProvider {
 
     @Override
     public void setLocale(Locale locale) {
-        this.locale = locale;
+        CTLocaleProvider.locale = locale;
     }
 }

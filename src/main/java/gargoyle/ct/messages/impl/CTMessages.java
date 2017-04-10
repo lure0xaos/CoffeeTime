@@ -7,7 +7,6 @@ import gargoyle.ct.messages.util.UTF8Control;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
-import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -21,19 +20,18 @@ public class CTMessages implements MessageProvider {
     private ResourceBundle messages;
 
     public CTMessages(String baseName) {
-        this(null, baseName, Locale.getDefault());
+        this(null, baseName);
     }
 
-    public CTMessages(MessageProvider parent, String baseName, Locale locale) {
-        localeProvider = CTLocaleProvider.getInstance();
+    public CTMessages(MessageProvider parent, String baseName) {
+        localeProvider = new CTLocaleProvider();
         this.parent = parent;
-        localeProvider.setLocale(locale);
         load(baseName);
     }
 
     private void load(String baseName) {
         try {
-            messages = ResourceBundle.getBundle(baseName, getLocale(), UTF8Control.getControl());
+            messages = ResourceBundle.getBundle(baseName, localeProvider.getLocale(), UTF8Control.getControl());
         } catch (MissingResourceException ex) {
             if (parent == null) {
                 throw new MissingResourceException(MessageFormat.format(MSG_NO_BUNDLE, baseName), baseName, ex.getKey());
@@ -43,30 +41,11 @@ public class CTMessages implements MessageProvider {
         }
     }
 
-    public Locale getLocale() {
-        return localeProvider.getLocale();
-    }
-
-    public void setLocale(Locale locale) {
-        localeProvider.setLocale(locale);
-        reload();
-    }
-
-    private void reload() {
-        load(messages.getBaseBundleName());
-    }
-
-    public CTMessages(String baseName, Locale locale) {
-        this(null, baseName, locale);
-    }
-
-    public CTMessages(MessageProvider parent, String baseName) {
-        this(parent, baseName, Locale.getDefault());
-    }
-
     @Override
     public String getMessage(String message, Object... args) {
-        check();
+        if (!Objects.equals(messages.getLocale(), localeProvider.getLocale())) {
+            reload();
+        }
         try {
             String pattern = messages.getString(message);
             try {
@@ -85,9 +64,7 @@ public class CTMessages implements MessageProvider {
         }
     }
 
-    private void check() {
-        if (!Objects.equals(messages.getLocale(), getLocale())) {
-            reload();
-        }
+    private void reload() {
+        load(messages.getBaseBundleName());
     }
 }
