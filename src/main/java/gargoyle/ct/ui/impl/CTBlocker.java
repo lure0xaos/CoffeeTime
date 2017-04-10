@@ -1,9 +1,9 @@
 package gargoyle.ct.ui.impl;
 
+import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.task.CTTaskUpdatable;
 import gargoyle.ct.task.impl.CTTask;
 import gargoyle.ct.ui.CTBlockerTextProvider;
-import gargoyle.ct.ui.CTControlActions;
 import gargoyle.ct.ui.CTInformer;
 import gargoyle.ct.ui.CTWindow;
 
@@ -22,12 +22,11 @@ import java.util.List;
 
 public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindow, CTInformer {
     private static final long serialVersionUID = 4716380852101644265L;
-    private final transient CTControlActions app;
     private final CTBlockerContent content;
+    private final transient CTPreferences preferences;
     private transient CTBlockerTextProvider textProvider = new CTBlockerTextProvider();
 
-    private CTBlocker(CTControlActions app, GraphicsDevice device) {
-        this.app = app;
+    private CTBlocker(CTPreferences preferences, GraphicsDevice device) {
         setBounds(device.getDefaultConfiguration().getBounds());
         setAlwaysOnTop(true);
         toFront();
@@ -48,22 +47,23 @@ public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindo
                 }
             }
         });
+        this.preferences = preferences;
     }
 
-    public static List<CTBlocker> forAllDevices(CTControlActions app) {
+    public static List<CTBlocker> forAllDevices(CTPreferences preferences) {
         List<CTBlocker> devices = new ArrayList<>();
         for (GraphicsDevice device : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
-            devices.add(new CTBlocker(app, device));
+            devices.add(new CTBlocker(preferences, device));
         }
         return Collections.unmodifiableList(devices);
     }
 
-    public static CTBlocker forDefaultDevice(CTControlActions app) {
-        return new CTBlocker(app, GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice());
+    public static CTBlocker forDefaultDevice(CTPreferences preferences) {
+        return new CTBlocker(preferences, GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice());
     }
 
-    public static CTBlocker forDevice(CTControlActions app, GraphicsDevice device) {
-        return new CTBlocker(app, device);
+    public static CTBlocker forDevice(CTPreferences preferences, GraphicsDevice device) {
+        return new CTBlocker(preferences, device);
     }
 
     public void debug(boolean debug) {
@@ -98,7 +98,7 @@ public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindo
     @Override
     public void doUpdate(CTTask task, long currentMillis) {
         content.doUpdate(task, currentMillis);
-        boolean block = app.preferences().block().get();
+        boolean block = preferences.block().get();
         boolean visible = block && textProvider.isVisible(task, currentMillis);
         setVisible(visible);
         content.setVisible(visible);

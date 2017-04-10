@@ -3,7 +3,6 @@ package gargoyle.ct.ui.impl.control;
 import gargoyle.ct.log.Log;
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.pref.PropertyChangeEvent;
-import gargoyle.ct.ui.CTControlActions;
 import gargoyle.ct.ui.CTControlWindow;
 import gargoyle.ct.ui.impl.CTBlockerContent;
 import gargoyle.ct.ui.util.CTDragHelper;
@@ -22,16 +21,15 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
     private static final int SNAP = 20;
     private static final String TOOL_TIP_MANAGER_ENABLE_TOOL_TIP_MODE = "ToolTipManager.enableToolTipMode";
     private static final long serialVersionUID = 6345130901927558555L;
-    private final transient CTControlActions app;
     private final CTIconContent iconContent;
+    private final transient CTPreferences preferences;
     private final CTBlockerContent textContent;
+    private boolean iconMode = true;
     private volatile boolean live = true;
     private volatile boolean reshow;
-    private boolean textMode;
 
-    public CTControlWindowImpl(Frame owner, CTControlActions app, URL imageURL, JPopupMenu menu) {
+    public CTControlWindowImpl(Frame owner, CTPreferences preferences, URL imageURL, JPopupMenu menu) {
         super(owner);
-        this.app = app;
         UIManager.getDefaults().put(TOOL_TIP_MANAGER_ENABLE_TOOL_TIP_MODE, "");
         setAlwaysOnTop(true);
         Container pane = getContentPane();
@@ -66,6 +64,7 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
         };
         textContent.addMouseListener(l);
         iconContent.addMouseListener(l);
+        this.preferences = preferences;
     }
 
     private void showIconContent() {
@@ -82,9 +81,9 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
     }
 
     private void transparency(boolean transparent) {
-        CTPreferences preferences = app.preferences();
+        CTPreferences preferences = this.preferences;
         try {
-            setOpacity(!textMode && preferences.transparency().get() && transparent ? preferences.transparencyLevel().get() : 1);
+            setOpacity(iconMode && preferences.transparency().get() && transparent ? preferences.transparencyLevel().get() : 1);
         } catch (UnsupportedOperationException e) {
             Log.warn(e, MSG_TRANSPARENCY_NOT_SUPPORTED);
         }
@@ -121,9 +120,9 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
 
     @Override
     public void setTextMode(boolean textMode) {
-        this.textMode = textMode;
+        iconMode = !textMode;
         transparency(true);
-        if (textMode && !app.preferences().block().get()) {
+        if (textMode && !preferences.block().get()) {
             showTextContent();
         } else {
             showIconContent();

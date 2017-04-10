@@ -10,14 +10,17 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public enum PropertyChangeManager {
-    INSTANCE;
+public class PropertyChangeManager {
     private static final String MSG_ERROR_INVOKING_LISTENER = "Error invoking PropertyChangeListener#propertyChange";
     private static final String STR_PROPERTY_CHANGE_LISTENER = "PropertyChangeListener#propertyChange";
-    private final transient Map<CTProperty, List<PropertyChangeListener>> listeners = new ConcurrentHashMap<>();
+    private static PropertyChangeManager instance;
+    private final Map<CTProperty, List<PropertyChangeListener>> listeners = new ConcurrentHashMap<>();
 
-    public static PropertyChangeManager getInstance() {
-        return INSTANCE;
+    public static synchronized PropertyChangeManager getInstance() {
+        if (instance == null) {
+            instance = new PropertyChangeManager();
+        }
+        return instance;
     }
 
     public <T> void addPropertyChangeListener(CTProperty<T> property, PropertyChangeListener pcl) {

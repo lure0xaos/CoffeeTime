@@ -65,7 +65,7 @@ public final class CT implements CTApp {
         this.preferences = preferences;
         CTTimeHelper timeHelper = new CTTimeHelperImpl();
         this.timeHelper = timeHelper;
-        List<CTBlocker> blockers = CTBlocker.forAllDevices(this);
+        List<CTBlocker> blockers = CTBlocker.forAllDevices(this.preferences);
         this.blockers = blockers;
         List<CTTaskUpdatable> updatables = new ArrayList<>(blockers);
         owner = new CTShowingFrame();

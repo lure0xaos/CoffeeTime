@@ -13,7 +13,6 @@ public class CTPreferencesImpl extends CTBasePreferences implements CTPreference
         addProperty(new CTPrefBooleanProperty(preferences, TRANSPARENCY, true));
     }
 
-
     @Override
     public CTPrefProperty<Boolean> block() {
         return getProperty(BLOCK);

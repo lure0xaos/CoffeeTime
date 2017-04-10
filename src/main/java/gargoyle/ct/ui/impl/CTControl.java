@@ -48,7 +48,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PropertyCha
         textProvider = new CTBlockerTextProvider();
         messages = new CTMessages(LOC_MESSAGES);
         group = new ButtonGroup();
-        controlWindow = new CTControlWindowImpl(owner, app, CTControl.class.getResource(URL_ICON), createMenu(app.loadConfigs(false)));
+        controlWindow = new CTControlWindowImpl(owner, app.preferences(), CTControl.class.getResource(URL_ICON), createMenu(app.loadConfigs(false)));
         controlWindow.showMe();
     }
 
