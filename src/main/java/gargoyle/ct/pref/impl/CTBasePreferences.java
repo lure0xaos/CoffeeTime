@@ -56,4 +56,8 @@ abstract class CTBasePreferences implements CTPreferencesManager {
     protected <T> CTPrefProperty<T> getProperty(String name) {
         return (CTPrefProperty<T>) properties.get(name);
     }
+
+    protected <E extends Enum<E>> CTPrefProperty<E> getProperty(Class<E> type) {
+        return (CTPrefProperty<E>) properties.get(type.getSimpleName());
+    }
 }

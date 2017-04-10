@@ -7,7 +7,7 @@ import java.util.Map;
 
 public abstract class CTAction implements Action {
     private final Map<String, Object> values = new HashMap<>();
-    private boolean enabled;
+    private boolean enabled = true;
 
     protected CTAction() {
     }
@@ -15,11 +15,6 @@ public abstract class CTAction implements Action {
     public CTAction(String text) {
         setText(text);
         setToolTipText(text);
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return enabled;
     }
 
     public CTAction(String text, Icon icon) {
@@ -35,8 +30,8 @@ public abstract class CTAction implements Action {
     }
 
     @Override
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+    public boolean isEnabled() {
+        return enabled;
     }
 
     public CTAction(String text, String tooltipText) {
@@ -54,21 +49,17 @@ public abstract class CTAction implements Action {
         }
     }
 
-    @Override
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-    }
-
     protected final String getText() {
         return String.valueOf(getValue(Action.NAME));
     }
-
     @Override
     public Object getValue(String key) {
         return values.get(key);
     }
 
     @Override
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     @Override
@@ -88,6 +79,10 @@ public abstract class CTAction implements Action {
         putValue(Action.SHORT_DESCRIPTION, text);
     }
 
+    @Override
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+    }
+
     protected final Icon getIcon() {
         return (Icon) getValue(Action.SMALL_ICON);
     }
@@ -95,4 +90,20 @@ public abstract class CTAction implements Action {
     protected final void setIcon(Icon icon) {
         putValue(Action.SMALL_ICON, icon);
     }
+
+    @Override
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 }

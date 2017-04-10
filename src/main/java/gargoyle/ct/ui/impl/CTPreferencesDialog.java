@@ -3,16 +3,21 @@ package gargoyle.ct.ui.impl;
 import gargoyle.ct.messages.MessageProvider;
 import gargoyle.ct.messages.impl.CTMessages;
 import gargoyle.ct.pref.CTPreferences;
+import gargoyle.ct.pref.CTPreferences.SUPPORTED_LOCALES;
 import gargoyle.ct.pref.impl.prop.CTPrefProperty;
 import gargoyle.ct.ui.CTDialog;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
+import java.util.Vector;
 
 public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
     private static final String LOC_MESSAGES = "messages.preferences";
     private static final String STR_BLOCK = CTPreferences.BLOCK;
     private static final String STR_BLOCK_TOOLTIP = "block.tooltip";
+    private static final String STR_SUPPORTED_LOCALES = "supported-locales";
+    private static final String STR_SUPPORTED_LOCALES_TOOLTIP = "supported-locales.tooltip";
     private static final String STR_TITLE = "title";
     private static final String STR_TRANSPARENCY = CTPreferences.TRANSPARENCY;
     private static final String STR_TRANSPARENCY_LEVEL = CTPreferences.TRANSPARENCY_LEVEL;
@@ -39,6 +44,9 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
         addLabeledControl(pane,
                 createLabel(messages.getMessage(STR_TRANSPARENCY_LEVEL), messages.getMessage(STR_TRANSPARENCY_LEVEL_TOOLTIP)),
                 createTransparencyLevelControl(preferences.transparencyLevel()));
+        addLabeledControl(pane,
+                createLabel(messages.getMessage(STR_SUPPORTED_LOCALES), messages.getMessage(STR_SUPPORTED_LOCALES_TOOLTIP)),
+                createComboBox(SUPPORTED_LOCALES.class, preferences.supportedLocales(), false));
     }
 
     private void addLabeledControl(Container pane, JLabel label, JComponent transparencyControl) {
@@ -69,6 +77,21 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
         JLabel label = new JLabel(text, SwingConstants.TRAILING);
         label.setToolTipText(toolTipText);
         return label;
+    }
+
+    private <E extends Enum<E>> JComboBox<E> createComboBox(Class<E> type, CTPrefProperty<E> property, boolean allowNull) {
+        E[] enumConstants = type.getEnumConstants();
+        JComboBox<E> control;
+        if (allowNull) {
+            Vector<E> list = new Vector<>(Arrays.asList(enumConstants));
+            list.add(0, null);
+            control = new JComboBox<>(list);
+        } else {
+            control = new JComboBox<>(enumConstants);
+        }
+        control.setSelectedItem(property.get());
+        control.addActionListener(e -> property.set((E) control.getSelectedItem()));
+        return control;
     }
 
     public Void showMe() {

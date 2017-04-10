@@ -2,6 +2,7 @@ package gargoyle.ct.pref.impl;
 
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.pref.impl.prop.CTPrefBooleanProperty;
+import gargoyle.ct.pref.impl.prop.CTPrefEnumProperty;
 import gargoyle.ct.pref.impl.prop.CTPrefFloatProperty;
 import gargoyle.ct.pref.impl.prop.CTPrefProperty;
 
@@ -11,11 +12,17 @@ public class CTPreferencesImpl extends CTBasePreferences implements CTPreference
         addProperty(new CTPrefBooleanProperty(preferences, BLOCK, false));
         addProperty(new CTPrefFloatProperty(preferences, TRANSPARENCY_LEVEL, 0.3f));
         addProperty(new CTPrefBooleanProperty(preferences, TRANSPARENCY, true));
+        addProperty(new CTPrefEnumProperty<>(preferences, SUPPORTED_LOCALES.class, SUPPORTED_LOCALES.DEFAULT));
     }
 
     @Override
     public CTPrefProperty<Boolean> block() {
         return getProperty(BLOCK);
+    }
+
+    @Override
+    public CTPrefProperty<SUPPORTED_LOCALES> supportedLocales() {
+        return getProperty(SUPPORTED_LOCALES.class);
     }
 
     @Override
