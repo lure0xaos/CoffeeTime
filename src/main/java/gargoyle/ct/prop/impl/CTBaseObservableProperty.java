@@ -1,8 +1,8 @@
 package gargoyle.ct.prop.impl;
 
 import gargoyle.ct.convert.Converter;
-import gargoyle.ct.pref.PropertyChangeEvent;
-import gargoyle.ct.pref.PropertyChangeListener;
+import gargoyle.ct.pref.CTPropertyChangeEvent;
+import gargoyle.ct.pref.CTPropertyChangeListener;
 import gargoyle.ct.prop.CTObservableProperty;
 import gargoyle.ct.prop.CTProperty;
 
@@ -22,7 +22,7 @@ public abstract class CTBaseObservableProperty<T> extends CTBaseProperty<T> impl
         if (Objects.equals(oldValue, value)) {
             return null;
         }
-        return PropertyChangeManager.getInstance().firePropertyChange(this, new PropertyChangeEvent<>(this, name(), oldValue, value));
+        return PropertyChangeManager.getInstance().firePropertyChange(this, new CTPropertyChangeEvent<>(this, name(), oldValue, value));
     }
 
     @SuppressWarnings("Convert2Lambda")
@@ -41,9 +41,9 @@ public abstract class CTBaseObservableProperty<T> extends CTBaseProperty<T> impl
         if (!Objects.equals(otherValue, newOtherValue)) {
             property.set(newOtherValue);
         }
-        addPropertyChangeListener(new PropertyChangeListener<T>() {
+        addPropertyChangeListener(new CTPropertyChangeListener<T>() {
             @Override
-            public void propertyChange(PropertyChangeEvent<T> event) {
+            public void onPropertyChange(CTPropertyChangeEvent<T> event) {
                 property.set(mapper.apply(event.getNewValue()));
             }
         });
@@ -64,21 +64,21 @@ public abstract class CTBaseObservableProperty<T> extends CTBaseProperty<T> impl
         if (!Objects.equals(myValue, otherValue)) {
             property.set(myValue);
         }
-        addPropertyChangeListener(new PropertyChangeListener<T>() {
+        addPropertyChangeListener(new CTPropertyChangeListener<T>() {
             @Override
-            public void propertyChange(PropertyChangeEvent<T> event) {
+            public void onPropertyChange(CTPropertyChangeEvent<T> event) {
                 property.set(event.getNewValue());
             }
         });
     }
 
     @Override
-    public void addPropertyChangeListener(PropertyChangeListener<T> listener) {
+    public void addPropertyChangeListener(CTPropertyChangeListener<T> listener) {
         PropertyChangeManager.getInstance().addPropertyChangeListener(this, listener);
     }
 
     @Override
-    public void removePropertyChangeListener(PropertyChangeListener<T> listener) {
+    public void removePropertyChangeListener(CTPropertyChangeListener<T> listener) {
         PropertyChangeManager.getInstance().removePropertyChangeListener(this, listener);
     }
 }

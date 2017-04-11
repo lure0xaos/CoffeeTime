@@ -2,7 +2,7 @@ package gargoyle.ct.ui.impl.control;
 
 import gargoyle.ct.log.Log;
 import gargoyle.ct.pref.CTPreferences;
-import gargoyle.ct.pref.PropertyChangeEvent;
+import gargoyle.ct.pref.CTPropertyChangeEvent;
 import gargoyle.ct.ui.CTBlockerTextProvider;
 import gargoyle.ct.ui.CTControlWindow;
 import gargoyle.ct.ui.impl.CTBlockerContent;
@@ -117,7 +117,7 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
     }
 
     @Override
-    public void propertyChange(PropertyChangeEvent event) {
+    public void onPropertyChange(CTPropertyChangeEvent event) {
         String key = event.getName();
         if (CTPreferences.TRANSPARENCY.equals(key) || CTPreferences.TRANSPARENCY_LEVEL.equals(key)) {
             transparency(true);

@@ -1,7 +1,7 @@
 package gargoyle.ct.pref;
 
 public interface CTPreferencesManager {
-    void addPropertyChangeListener(PropertyChangeListener listener);
+    void addPropertyChangeListener(CTPropertyChangeListener listener);
 
-    void removePropertyChangeListener(PropertyChangeListener listener);
+    void removePropertyChangeListener(CTPropertyChangeListener listener);
 }

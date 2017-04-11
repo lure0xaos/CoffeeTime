@@ -1,8 +1,8 @@
 package gargoyle.ct.prop.impl;
 
 import gargoyle.ct.log.Log;
-import gargoyle.ct.pref.PropertyChangeEvent;
-import gargoyle.ct.pref.PropertyChangeListener;
+import gargoyle.ct.pref.CTPropertyChangeEvent;
+import gargoyle.ct.pref.CTPropertyChangeListener;
 import gargoyle.ct.prop.CTProperty;
 
 import java.util.List;
@@ -11,10 +11,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class PropertyChangeManager {
-    private static final String MSG_ERROR_INVOKING_LISTENER = "Error invoking PropertyChangeListener#propertyChange";
-    private static final String STR_PROPERTY_CHANGE_LISTENER = "PropertyChangeListener#propertyChange";
+    private static final String MSG_ERROR_INVOKING_LISTENER = "Error invoking CTPropertyChangeListener#onPropertyChange";
+    private static final String STR_PROPERTY_CHANGE_LISTENER = "CTPropertyChangeListener#onPropertyChange";
     private static PropertyChangeManager instance;
-    private final Map<CTProperty, List<PropertyChangeListener>> listeners = new ConcurrentHashMap<>();
+    private final Map<CTProperty, List<CTPropertyChangeListener>> listeners = new ConcurrentHashMap<>();
 
     public static synchronized PropertyChangeManager getInstance() {
         if (instance == null) {
@@ -23,8 +23,8 @@ public class PropertyChangeManager {
         return instance;
     }
 
-    public <T> void addPropertyChangeListener(CTProperty<T> property, PropertyChangeListener listener) {
-        List<PropertyChangeListener> list;
+    public <T> void addPropertyChangeListener(CTProperty<T> property, CTPropertyChangeListener listener) {
+        List<CTPropertyChangeListener> list;
         if (listeners.containsKey(property)) {
             list = listeners.get(property);
         } else {
@@ -34,14 +34,14 @@ public class PropertyChangeManager {
         list.add(listener);
     }
 
-    public <T> Thread firePropertyChange(CTProperty<T> property, PropertyChangeEvent<T> event) {
+    public <T> Thread firePropertyChange(CTProperty<T> property, CTPropertyChangeEvent<T> event) {
         if (listeners.containsKey(property)) {
-            List<PropertyChangeListener> listeners = this.listeners.get(property);
+            List<CTPropertyChangeListener> listeners = this.listeners.get(property);
             Thread thread = new Thread(() -> {
-                for (PropertyChangeListener listener : listeners) {
+                for (CTPropertyChangeListener listener : listeners) {
                     try {
                         //noinspection unchecked
-                        listener.propertyChange(event);
+                        listener.onPropertyChange(event);
                     } catch (Exception ex) {
                         Log.error(ex, MSG_ERROR_INVOKING_LISTENER);
                     }
@@ -53,7 +53,7 @@ public class PropertyChangeManager {
         return null;
     }
 
-    public <T> void removePropertyChangeListener(CTProperty<T> property, PropertyChangeListener listener) {
+    public <T> void removePropertyChangeListener(CTProperty<T> property, CTPropertyChangeListener listener) {
         if (listeners.containsKey(property)) listeners.get(property).add(listener);
     }
 
