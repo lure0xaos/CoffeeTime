@@ -17,13 +17,13 @@ public abstract class CTSimpleProperty<T> extends CTBaseProperty<T> implements C
     }
 
     @Override
-    public void addPropertyChangeListener(PropertyChangeListener pcl) {
-        PropertyChangeManager.getInstance().addPropertyChangeListener(this, pcl);
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        PropertyChangeManager.getInstance().addPropertyChangeListener(this, listener);
     }
 
     @Override
-    public void removePropertyChangeListener(PropertyChangeListener pcl) {
-        PropertyChangeManager.getInstance().removePropertyChangeListener(this, pcl);
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        PropertyChangeManager.getInstance().removePropertyChangeListener(this, listener);
     }
 
     public T get(T def) {

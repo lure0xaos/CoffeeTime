@@ -198,7 +198,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PropertyCha
     }
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        controlWindow.propertyChange(evt);
+    public void propertyChange(PropertyChangeEvent event) {
+        controlWindow.propertyChange(event);
     }
 }

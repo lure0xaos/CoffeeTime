@@ -11,7 +11,7 @@ import gargoyle.ct.prop.impl.PropertyChangeManager;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
-public class CTPrefProperty<T> extends CTBaseProperty<T> implements CTObservableProperty {
+public class CTPrefProperty<T> extends CTBaseProperty<T> implements CTObservableProperty<T> {
     private final Preferences prefs;
 
     protected CTPrefProperty(Converter<T> converter, Preferences preferences, String name) {
@@ -24,13 +24,13 @@ public class CTPrefProperty<T> extends CTBaseProperty<T> implements CTObservable
     }
 
     @Override
-    public void addPropertyChangeListener(PropertyChangeListener pcl) {
-        PropertyChangeManager.getInstance().addPropertyChangeListener(this, pcl);
+    public void addPropertyChangeListener(PropertyChangeListener<T> listener) {
+        PropertyChangeManager.getInstance().addPropertyChangeListener(this, listener);
     }
 
     @Override
-    public void removePropertyChangeListener(PropertyChangeListener pcl) {
-        PropertyChangeManager.getInstance().removePropertyChangeListener(this, pcl);
+    public void removePropertyChangeListener(PropertyChangeListener<T> listener) {
+        PropertyChangeManager.getInstance().removePropertyChangeListener(this, listener);
     }
 
     @Override

@@ -111,8 +111,8 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
     }
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        String key = evt.getName();
+    public void propertyChange(PropertyChangeEvent event) {
+        String key = event.getName();
         if (CTPreferences.TRANSPARENCY.equals(key) || CTPreferences.TRANSPARENCY_LEVEL.equals(key)) {
             transparency(true);
         }

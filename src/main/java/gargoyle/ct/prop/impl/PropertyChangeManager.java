@@ -23,7 +23,7 @@ public class PropertyChangeManager {
         return instance;
     }
 
-    public <T> void addPropertyChangeListener(CTProperty<T> property, PropertyChangeListener pcl) {
+    public <T> void addPropertyChangeListener(CTProperty<T> property, PropertyChangeListener listener) {
         List<PropertyChangeListener> list;
         if (listeners.containsKey(property)) {
             list = listeners.get(property);
@@ -31,7 +31,7 @@ public class PropertyChangeManager {
             list = new CopyOnWriteArrayList<>();
             listeners.put(property, list);
         }
-        list.add(pcl);
+        list.add(listener);
     }
 
     public <T> void firePropertyChange(CTProperty<T> property, PropertyChangeEvent<T> event) {
@@ -49,8 +49,8 @@ public class PropertyChangeManager {
         }
     }
 
-    public <T> void removePropertyChangeListener(CTProperty<T> property, PropertyChangeListener pcl) {
-        if (listeners.containsKey(property)) listeners.get(property).add(pcl);
+    public <T> void removePropertyChangeListener(CTProperty<T> property, PropertyChangeListener listener) {
+        if (listeners.containsKey(property)) listeners.get(property).add(listener);
     }
 
     public void removePropertyChangeListeners() {
