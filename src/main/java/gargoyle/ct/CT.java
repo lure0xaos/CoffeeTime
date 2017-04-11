@@ -8,6 +8,7 @@ import gargoyle.ct.log.Log;
 import gargoyle.ct.mutex.SocketMutex;
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.pref.impl.CTPreferencesImpl;
+import gargoyle.ct.prop.impl.PropertyChangeManager;
 import gargoyle.ct.resource.Resource;
 import gargoyle.ct.resource.impl.CTConfigResource;
 import gargoyle.ct.resource.internal.ClasspathResource;
@@ -96,7 +97,7 @@ public final class CT implements CTApp {
             try {
                 long fakeTime = CTTimeUtil.parseHHMMSS(args[0]);
                 app.setFakeTime(fakeTime);
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException ex) {
                 Log.info(MSG_FAKE_TIME_INVALID);
             }
         }
@@ -135,6 +136,7 @@ public final class CT implements CTApp {
         timer.terminate();
         SocketMutex.getDefault().release();
         preferences.removePropertyChangeListener(control);
+        PropertyChangeManager.getInstance().removePropertyChangeListeners();
     }
 
     @Override
@@ -224,8 +226,8 @@ public final class CT implements CTApp {
     public CTConfig showNewConfig() {
         try {
             return new CTNewConfigDialog(owner).showMe();
-        } catch (IllegalArgumentException e) {
-            Log.error(e.getMessage());
+        } catch (IllegalArgumentException ex) {
+            Log.error(ex.getMessage());
         }
         return null;
     }

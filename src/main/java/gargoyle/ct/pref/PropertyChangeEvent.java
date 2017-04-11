@@ -30,4 +30,11 @@ public class PropertyChangeEvent<T> {
     public CTProperty<T> getProperty() {
         return property;
     }
+
+    @Override
+    public String toString() {
+        return "PropertyChangeEvent{" +
+                "property=" + property +
+                '}';
+    }
 }

@@ -34,19 +34,23 @@ public class PropertyChangeManager {
         list.add(listener);
     }
 
-    public <T> void firePropertyChange(CTProperty<T> property, PropertyChangeEvent<T> event) {
+    public <T> Thread firePropertyChange(CTProperty<T> property, PropertyChangeEvent<T> event) {
         if (listeners.containsKey(property)) {
             List<PropertyChangeListener> listeners = this.listeners.get(property);
-            new Thread(() -> {
+            Thread thread = new Thread(() -> {
                 for (PropertyChangeListener listener : listeners) {
                     try {
+                        //noinspection unchecked
                         listener.propertyChange(event);
                     } catch (Exception ex) {
                         Log.error(ex, MSG_ERROR_INVOKING_LISTENER);
                     }
                 }
-            }, STR_PROPERTY_CHANGE_LISTENER).start();
+            }, STR_PROPERTY_CHANGE_LISTENER);
+            thread.start();
+            return thread;
         }
+        return null;
     }
 
     public <T> void removePropertyChangeListener(CTProperty<T> property, PropertyChangeListener listener) {

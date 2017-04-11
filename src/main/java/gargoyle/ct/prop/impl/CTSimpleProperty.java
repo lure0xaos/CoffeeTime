@@ -1,11 +1,10 @@
 package gargoyle.ct.prop.impl;
 
 import gargoyle.ct.convert.Converter;
-import gargoyle.ct.pref.PropertyChangeEvent;
-import gargoyle.ct.pref.PropertyChangeListener;
-import gargoyle.ct.prop.CTObservableProperty;
 
-public abstract class CTSimpleProperty<T> extends CTBaseProperty<T> implements CTObservableProperty {
+import java.util.Objects;
+
+public abstract class CTSimpleProperty<T> extends CTBaseObservableProperty<T> {
     private T value;
 
     protected CTSimpleProperty(Converter<T> converter, String name) {
@@ -14,16 +13,7 @@ public abstract class CTSimpleProperty<T> extends CTBaseProperty<T> implements C
 
     public CTSimpleProperty(Converter<T> converter, String name, T def) {
         super(converter, name, def);
-    }
-
-    @Override
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        PropertyChangeManager.getInstance().addPropertyChangeListener(this, listener);
-    }
-
-    @Override
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        PropertyChangeManager.getInstance().removePropertyChangeListener(this, listener);
+        value = def;
     }
 
     public T get(T def) {
@@ -39,7 +29,17 @@ public abstract class CTSimpleProperty<T> extends CTBaseProperty<T> implements C
     @Override
     public void set(T value) {
         T oldValue = get();
+        if (Objects.equals(oldValue, value)) {
+            return;
+        }
         this.value = value;
-        PropertyChangeManager.getInstance().firePropertyChange(this, new PropertyChangeEvent<>(this, name, oldValue, value));
+        Thread thread = firePropertyChange(value, oldValue);
+        try {
+            if (thread != null) {
+                thread.join();
+            }
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

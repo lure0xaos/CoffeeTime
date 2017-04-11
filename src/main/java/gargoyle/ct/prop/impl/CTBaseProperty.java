@@ -28,4 +28,9 @@ public abstract class CTBaseProperty<T> implements CTProperty<T> {
     public String name() {
         return name;
     }
+
+    @Override
+    public String toString() {
+        return name + ":" + get();
+    }
 }

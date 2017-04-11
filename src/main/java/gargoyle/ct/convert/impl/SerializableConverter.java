@@ -13,8 +13,8 @@ public class SerializableConverter<T extends Serializable> implements Converter<
     public String format(T data) {
         try {
             return converter.format(CTSerializationUtil.serialize(data));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
         }
     }
 
@@ -22,8 +22,8 @@ public class SerializableConverter<T extends Serializable> implements Converter<
     public T parse(String data) {
         try {
             return CTSerializationUtil.deserialize(converter.parse(data));
-        } catch (ClassNotFoundException | IOException e) {
-            throw new RuntimeException(e);
+        } catch (ClassNotFoundException | IOException ex) {
+            throw new RuntimeException(ex);
         }
     }
 }
