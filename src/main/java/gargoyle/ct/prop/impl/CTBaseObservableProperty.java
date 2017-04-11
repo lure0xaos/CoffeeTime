@@ -35,6 +35,12 @@ public abstract class CTBaseObservableProperty<T> extends CTBaseProperty<T> impl
     @SuppressWarnings("Convert2Lambda")
     @Override
     public <T2> void bind(CTProperty<T2> property, Function<T, T2> mapper) {
+        T myValue = get();
+        T2 otherValue = property.get();
+        T2 newOtherValue = mapper.apply(myValue);
+        if (!Objects.equals(otherValue, newOtherValue)) {
+            property.set(newOtherValue);
+        }
         addPropertyChangeListener(new PropertyChangeListener<T>() {
             @Override
             public void propertyChange(PropertyChangeEvent<T> event) {
@@ -53,6 +59,11 @@ public abstract class CTBaseObservableProperty<T> extends CTBaseProperty<T> impl
     @SuppressWarnings("Convert2Lambda")
     @Override
     public void bind(CTProperty<T> property) {
+        T myValue = get();
+        T otherValue = property.get();
+        if (!Objects.equals(myValue, otherValue)) {
+            property.set(myValue);
+        }
         addPropertyChangeListener(new PropertyChangeListener<T>() {
             @Override
             public void propertyChange(PropertyChangeEvent<T> event) {

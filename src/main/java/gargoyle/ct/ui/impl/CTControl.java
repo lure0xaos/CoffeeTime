@@ -45,8 +45,10 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PropertyCha
 
     public CTControl(CTControlActions app, Frame owner) {
         this.app = app;
-        textProvider = new CTBlockerTextProvider();
-        messages = new CTMessages(LOC_MESSAGES);
+        textProvider = new CTBlockerTextProvider(app.preferences());
+        CTMessages messages = new CTMessages(LOC_MESSAGES);
+        app.preferences().supportedLocales().bind(messages.locale());
+        this.messages = messages;
         group = new ButtonGroup();
         controlWindow = new CTControlWindowImpl(owner, app.preferences(), CTControl.class.getResource(URL_ICON), createMenu(app.loadConfigs(false)));
         controlWindow.showMe();
@@ -57,8 +59,6 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PropertyCha
         addConfigs(menu, configs);
         menu.add(new JSeparator(SwingConstants.HORIZONTAL));
         menu.add(new CTMenuItem(new CTAction(messages.getMessage(STR_NEW_CONFIG), messages.getMessage(STR_NEW_CONFIG_TOOLTIP)) {
-            private static final long serialVersionUID = 1121004649381891357L;
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 onNewConfig(configs, menu);
@@ -66,32 +66,24 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, PropertyCha
         }));
         menu.add(new JSeparator(SwingConstants.HORIZONTAL));
         menu.add(new CTMenuItem(new CTAction(messages.getMessage(STR_UNARM), messages.getMessage(STR_UNARM_TOOLTIP)) {
-            private static final long serialVersionUID = -4330571111080076360L;
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 unarm();
             }
         }));
         menu.add(new CTMenuItem(new CTAction(messages.getMessage(STR_PREFERENCES), messages.getMessage(STR_PREFERENCES_TOOLTIP)) {
-            private static final long serialVersionUID = 8645604731109700568L;
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 showPreferences();
             }
         }));
         menu.add(new CTMenuItem(new CTAction(messages.getMessage(STR_HELP), messages.getMessage(STR_HELP_TOOLTIP)) {
-            private static final long serialVersionUID = 5717750136378884217L;
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 help();
             }
         }));
         menu.add(new CTMenuItem(new CTAction(messages.getMessage(STR_EXIT), messages.getMessage(STR_EXIT_TOOLTIP)) {
-            private static final long serialVersionUID = 6450213490024118820L;
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 exit();

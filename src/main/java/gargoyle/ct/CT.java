@@ -225,7 +225,7 @@ public final class CT implements CTApp {
     @Override
     public CTConfig showNewConfig() {
         try {
-            return new CTNewConfigDialog(owner).showMe();
+            return new CTNewConfigDialog(owner, preferences).showMe();
         } catch (IllegalArgumentException ex) {
             Log.error(ex.getMessage());
         }

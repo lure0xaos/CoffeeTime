@@ -2,6 +2,7 @@ package gargoyle.ct.ui;
 
 import gargoyle.ct.messages.MessageProvider;
 import gargoyle.ct.messages.impl.CTMessages;
+import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.task.impl.CTTask;
 import gargoyle.ct.util.CTTimeUtil;
 
@@ -18,8 +19,10 @@ public class CTBlockerTextProvider {
     private static final String STR_WARN_SMALL = "warn_w-small";
     private final MessageProvider messages;
 
-    public CTBlockerTextProvider() {
-        messages = new CTMessages(LOC_MESSAGES);
+    public CTBlockerTextProvider(CTPreferences preferences) {
+        CTMessages messages = new CTMessages(LOC_MESSAGES);
+        preferences.supportedLocales().bind(messages.locale());
+        this.messages = messages;
     }
 
     public String getBlockerText(CTTask task, long currentMillis, boolean big) {

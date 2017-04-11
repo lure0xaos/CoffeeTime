@@ -23,9 +23,9 @@ public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, C
     private final boolean big;
     private final JLabel lblInfo;
     private final JLabel lblMain;
-    private transient CTBlockerTextProvider textProvider = new CTBlockerTextProvider();
+    private final transient CTBlockerTextProvider textProvider;
 
-    public CTBlockerContent(boolean big) {
+    public CTBlockerContent(CTBlockerTextProvider textProvider, boolean big) {
         this.big = big;
         setLayout(new BorderLayout());
         lblMain = createMainLabel();
@@ -34,6 +34,7 @@ public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, C
         lblInfo = createInfoLabel();
         lblInfo.addComponentListener(new ContentComponentListener(this, lblInfo));
         add(lblInfo, BorderLayout.SOUTH);
+        this.textProvider = textProvider;
     }
 
     private JLabel createInfoLabel() {
@@ -104,7 +105,7 @@ public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, C
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
-        textProvider = new CTBlockerTextProvider();
+//        textProvider = new CTBlockerTextProvider(); // FIXME
     }
 
     @Override

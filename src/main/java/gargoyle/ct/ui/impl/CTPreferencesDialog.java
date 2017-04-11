@@ -33,6 +33,7 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
     }
 
     private void init(MessageProviderEx messages, CTPreferences preferences, Container pane) {
+        preferences.supportedLocales().bind(messages.locale());
         setTitle(messages.getMessage(STR_TITLE));
         pane.setLayout(new GridLayout(0, 2, 5, 5));
         addLabeledControl(pane,

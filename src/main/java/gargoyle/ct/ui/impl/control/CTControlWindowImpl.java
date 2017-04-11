@@ -3,6 +3,7 @@ package gargoyle.ct.ui.impl.control;
 import gargoyle.ct.log.Log;
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.pref.PropertyChangeEvent;
+import gargoyle.ct.ui.CTBlockerTextProvider;
 import gargoyle.ct.ui.CTControlWindow;
 import gargoyle.ct.ui.impl.CTBlockerContent;
 import gargoyle.ct.ui.util.CTDragHelper;
@@ -34,7 +35,7 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
         setAlwaysOnTop(true);
         Container pane = getContentPane();
         pane.setLayout(new BorderLayout());
-        textContent = new CTBlockerContent(false);
+        textContent = new CTBlockerContent(new CTBlockerTextProvider(preferences), false);
         iconContent = new CTIconContent(imageURL);
         showIconContent();
         pack();

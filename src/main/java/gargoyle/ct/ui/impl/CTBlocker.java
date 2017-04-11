@@ -24,15 +24,16 @@ public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindo
     private static final long serialVersionUID = 4716380852101644265L;
     private final CTBlockerContent content;
     private final transient CTPreferences preferences;
-    private transient CTBlockerTextProvider textProvider = new CTBlockerTextProvider();
+    private transient CTBlockerTextProvider textProvider;
 
     private CTBlocker(CTPreferences preferences, GraphicsDevice device) {
+        textProvider = new CTBlockerTextProvider(preferences);
         setBounds(device.getDefaultConfiguration().getBounds());
         setAlwaysOnTop(true);
         toFront();
         Container container = getContentPane();
         container.setLayout(new BorderLayout());
-        content = new CTBlockerContent(true);
+        content = new CTBlockerContent(textProvider, true);
         container.add(content, BorderLayout.CENTER);
         addWindowFocusListener(new WindowFocusListener() {
             @Override
@@ -121,7 +122,7 @@ public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindo
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
-        textProvider = new CTBlockerTextProvider();
+        textProvider = new CTBlockerTextProvider(preferences);
     }
 
     @Override
