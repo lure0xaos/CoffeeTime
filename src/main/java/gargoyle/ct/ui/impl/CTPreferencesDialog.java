@@ -1,6 +1,6 @@
 package gargoyle.ct.ui.impl;
 
-import gargoyle.ct.messages.MessageProvider;
+import gargoyle.ct.messages.MessageProviderEx;
 import gargoyle.ct.messages.impl.CTMessages;
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.pref.CTPreferences.SUPPORTED_LOCALES;
@@ -32,7 +32,7 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
         setDefaultCloseOperation(HIDE_ON_CLOSE);
     }
 
-    private void init(MessageProvider messages, CTPreferences preferences, Container pane) {
+    private void init(MessageProviderEx messages, CTPreferences preferences, Container pane) {
         setTitle(messages.getMessage(STR_TITLE));
         pane.setLayout(new GridLayout(0, 2, 5, 5));
         addLabeledControl(pane,
@@ -47,6 +47,7 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
         addLabeledControl(pane,
                 createLabel(messages.getMessage(STR_SUPPORTED_LOCALES), messages.getMessage(STR_SUPPORTED_LOCALES_TOOLTIP)),
                 createComboBox(SUPPORTED_LOCALES.class, preferences.supportedLocales(), false));
+        preferences.supportedLocales().bind(messages.locale());
     }
 
     private void addLabeledControl(Container pane, JLabel label, JComponent transparencyControl) {
