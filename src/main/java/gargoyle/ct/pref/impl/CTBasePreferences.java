@@ -4,7 +4,7 @@ import gargoyle.ct.log.Log;
 import gargoyle.ct.pref.CTPreferencesManager;
 import gargoyle.ct.pref.CTPropertyChangeListener;
 import gargoyle.ct.pref.impl.prop.CTPrefProperty;
-import gargoyle.ct.prop.impl.PropertyChangeManager;
+import gargoyle.ct.prop.impl.CTPropertyChangeManager;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -42,14 +42,14 @@ abstract class CTBasePreferences implements CTPreferencesManager {
     @Override
     public void addPropertyChangeListener(CTPropertyChangeListener listener) {
         for (CTPrefProperty<?> property : properties.values()) {
-            PropertyChangeManager.getInstance().addPropertyChangeListener(property, listener);
+            CTPropertyChangeManager.getInstance().addPropertyChangeListener(property, listener);
         }
     }
 
     @Override
     public void removePropertyChangeListener(CTPropertyChangeListener listener) {
         for (CTPrefProperty<?> property : properties.values()) {
-            PropertyChangeManager.getInstance().removePropertyChangeListener(property, listener);
+            CTPropertyChangeManager.getInstance().removePropertyChangeListener(property, listener);
         }
     }
 

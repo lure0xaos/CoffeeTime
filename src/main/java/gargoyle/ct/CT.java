@@ -8,7 +8,7 @@ import gargoyle.ct.log.Log;
 import gargoyle.ct.mutex.SocketMutex;
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.pref.impl.CTPreferencesImpl;
-import gargoyle.ct.prop.impl.PropertyChangeManager;
+import gargoyle.ct.prop.impl.CTPropertyChangeManager;
 import gargoyle.ct.resource.Resource;
 import gargoyle.ct.resource.impl.CTConfigResource;
 import gargoyle.ct.resource.internal.ClasspathResource;
@@ -136,7 +136,7 @@ public final class CT implements CTApp {
         timer.terminate();
         SocketMutex.getDefault().release();
         preferences.removePropertyChangeListener(control);
-        PropertyChangeManager.getInstance().removePropertyChangeListeners();
+        CTPropertyChangeManager.getInstance().removePropertyChangeListeners();
     }
 
     @Override

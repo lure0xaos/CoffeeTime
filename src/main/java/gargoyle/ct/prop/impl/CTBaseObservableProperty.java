@@ -22,7 +22,7 @@ public abstract class CTBaseObservableProperty<T> extends CTBaseProperty<T> impl
         if (Objects.equals(oldValue, value)) {
             return null;
         }
-        return PropertyChangeManager.getInstance().firePropertyChange(this, new CTPropertyChangeEvent<>(this, name(), oldValue, value));
+        return CTPropertyChangeManager.getInstance().firePropertyChange(this, new CTPropertyChangeEvent<>(this, name(), oldValue, value));
     }
 
     @SuppressWarnings("Convert2Lambda")
@@ -74,11 +74,11 @@ public abstract class CTBaseObservableProperty<T> extends CTBaseProperty<T> impl
 
     @Override
     public void addPropertyChangeListener(CTPropertyChangeListener<T> listener) {
-        PropertyChangeManager.getInstance().addPropertyChangeListener(this, listener);
+        CTPropertyChangeManager.getInstance().addPropertyChangeListener(this, listener);
     }
 
     @Override
     public void removePropertyChangeListener(CTPropertyChangeListener<T> listener) {
-        PropertyChangeManager.getInstance().removePropertyChangeListener(this, listener);
+        CTPropertyChangeManager.getInstance().removePropertyChangeListener(this, listener);
     }
 }
