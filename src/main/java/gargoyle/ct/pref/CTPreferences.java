@@ -18,7 +18,7 @@ public interface CTPreferences extends CTPreferencesManager {
     CTPrefProperty<Float> transparencyLevel();
 
     enum SUPPORTED_LOCALES {
-        DEFAULT(Locale.getDefault()), RU(new Locale("ru", "RU"));
+        DEFAULT(Locale.getDefault()), EN(Locale.ENGLISH), RU(new Locale("ru", "RU"));
         private final Locale locale;
 
         SUPPORTED_LOCALES(Locale locale) {
