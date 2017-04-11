@@ -3,14 +3,14 @@ package gargoyle.ct.pref.impl;
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.pref.impl.prop.CTPrefBooleanProperty;
 import gargoyle.ct.pref.impl.prop.CTPrefEnumProperty;
-import gargoyle.ct.pref.impl.prop.CTPrefFloatProperty;
+import gargoyle.ct.pref.impl.prop.CTPrefIntegerProperty;
 import gargoyle.ct.pref.impl.prop.CTPrefProperty;
 
 public class CTPreferencesImpl extends CTBasePreferences implements CTPreferences {
     public CTPreferencesImpl(Class<?> clazz) {
         super(clazz);
         addProperty(new CTPrefBooleanProperty(preferences, BLOCK, false));
-        addProperty(new CTPrefFloatProperty(preferences, TRANSPARENCY_LEVEL, 0.3f));
+        addProperty(new CTPrefIntegerProperty(preferences, TRANSPARENCY_LEVEL, 30));
         addProperty(new CTPrefBooleanProperty(preferences, TRANSPARENCY, true));
         addProperty(new CTPrefEnumProperty<>(preferences, SUPPORTED_LOCALES.class, SUPPORTED_LOCALES.DEFAULT));
     }
@@ -31,7 +31,7 @@ public class CTPreferencesImpl extends CTBasePreferences implements CTPreference
     }
 
     @Override
-    public CTPrefProperty<Float> transparencyLevel() {
+    public CTPrefProperty<Integer> transparencyLevel() {
         return getProperty(TRANSPARENCY_LEVEL);
     }
 }

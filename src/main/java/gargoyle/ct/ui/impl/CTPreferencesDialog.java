@@ -55,15 +55,15 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
         pane.add(transparencyControl);
     }
 
-    private JSlider createTransparencyLevelControl(CTPrefProperty<Float> property) {
+    private JSlider createTransparencyLevelControl(CTPrefProperty<Integer> property) {
         JSlider control = new JSlider(0, 100);
         control.setExtent(10);
         control.setPaintLabels(true);
         control.setPaintTicks(true);
         control.setMajorTickSpacing(20);
         control.setMinorTickSpacing(10);
-        control.setValue((int) (property.get() * 100.0d));
-        control.addChangeListener(e -> property.set(Math.max(1.0f, control.getValue()) / 100));
+        control.setValue(property.get());
+        control.addChangeListener(e -> property.set(Math.max(100, control.getValue())));
         return control;
     }
 
