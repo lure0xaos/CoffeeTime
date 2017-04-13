@@ -1,6 +1,6 @@
 package gargoyle.ct.convert.impl;
 
-import gargoyle.ct.pref.convert.impl.BytesConverter;
+import gargoyle.ct.pref.impl.convert.impl.BytesConverter;
 import org.junit.Test;
 
 import java.util.Arrays;

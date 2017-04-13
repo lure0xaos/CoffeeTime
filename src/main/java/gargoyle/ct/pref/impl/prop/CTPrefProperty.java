@@ -1,6 +1,6 @@
 package gargoyle.ct.pref.impl.prop;
 
-import gargoyle.ct.pref.convert.Converter;
+import gargoyle.ct.pref.impl.convert.Converter;
 import gargoyle.ct.log.Log;
 import gargoyle.ct.prop.impl.CTBaseObservableProperty;
 

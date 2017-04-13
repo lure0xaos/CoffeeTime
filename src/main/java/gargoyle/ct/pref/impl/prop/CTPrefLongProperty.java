@@ -1,6 +1,6 @@
 package gargoyle.ct.pref.impl.prop;
 
-import gargoyle.ct.pref.convert.impl.LongConverter;
+import gargoyle.ct.pref.impl.convert.impl.LongConverter;
 
 import java.util.prefs.Preferences;
 

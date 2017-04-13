@@ -1,6 +1,6 @@
 package gargoyle.ct.pref.impl.prop;
 
-import gargoyle.ct.pref.convert.impl.DoubleConverter;
+import gargoyle.ct.pref.impl.convert.impl.DoubleConverter;
 
 import java.util.prefs.Preferences;
 

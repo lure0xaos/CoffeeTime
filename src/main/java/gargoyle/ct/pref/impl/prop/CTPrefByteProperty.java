@@ -1,6 +1,6 @@
 package gargoyle.ct.pref.impl.prop;
 
-import gargoyle.ct.pref.convert.impl.ByteConverter;
+import gargoyle.ct.pref.impl.convert.impl.ByteConverter;
 
 import java.util.prefs.Preferences;
 
