@@ -8,6 +8,7 @@ import java.util.Map;
 public abstract class CTAction implements Action {
     private static final String ENABLED = "enabled";
     private final Map<String, Object> values = new HashMap<>();
+
     protected CTAction() {
         setEnabled(true);
     }
@@ -32,11 +33,6 @@ public abstract class CTAction implements Action {
         setEnabled(true);
     }
 
-    @Override
-    public final boolean isEnabled() {
-        return (Boolean) getValue(ENABLED);
-    }
-
     public CTAction(String text, String tooltipText) {
         setText(text);
         setToolTipText(tooltipText);
@@ -53,22 +49,13 @@ public abstract class CTAction implements Action {
         }
     }
 
+    @Override
+    public final boolean isEnabled() {
+        return (Boolean) getValue(ENABLED);
+    }
+
     protected final String getText() {
         return String.valueOf(getValue(Action.NAME));
-    }
-    @Override
-    public Object getValue(String key) {
-        return values.get(key);
-    }
-
-    @Override
-    public final void setEnabled(boolean enabled) {
-        putValue(ENABLED, enabled);
-    }
-
-    @Override
-    public void putValue(String key, Object value) {
-        values.put(key, value);
     }
 
     protected final void setText(String text) {
@@ -83,12 +70,13 @@ public abstract class CTAction implements Action {
         putValue(Action.SHORT_DESCRIPTION, text);
     }
 
-    @Override
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-    }
-
     protected final Icon getIcon() {
         return (Icon) getValue(Action.SMALL_ICON);
+    }
+
+    @Override
+    public Object getValue(String key) {
+        return values.get(key);
     }
 
     protected final void setIcon(Icon icon) {
@@ -96,18 +84,24 @@ public abstract class CTAction implements Action {
     }
 
     @Override
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
+    public final void setEnabled(boolean enabled) {
+        putValue(ENABLED, enabled);
+    }
+
+    @Override
+    public void putValue(String key, Object value) {
+        values.put(key, value);
+    }
+
+    @Override
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
     }
 
 
 
 
 
-
-
-
-
-
-
-
+    @Override
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+    }
 }

@@ -19,8 +19,8 @@ public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, C
     private static final float ALIGNMENT_RIGHT = 1.0f;
     private static final int FONT_SIZE = 12;
     private static final int GAP = 10;
-    private static final long serialVersionUID = 1873262133224449177L;
     private static final double MARGIN = 1.1;
+    private static final long serialVersionUID = 1873262133224449177L;
     private final boolean big;
     private final JLabel lblInfo;
     private final JLabel lblMain;

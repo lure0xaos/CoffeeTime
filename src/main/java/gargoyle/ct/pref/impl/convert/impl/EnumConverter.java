@@ -1,7 +1,7 @@
 package gargoyle.ct.pref.impl.convert.impl;
 
-import gargoyle.ct.pref.impl.convert.Converter;
 import gargoyle.ct.log.Log;
+import gargoyle.ct.pref.impl.convert.Converter;
 
 public class EnumConverter<E extends Enum<E>> implements Converter<E> {
     private final Class<E> type;
@@ -20,7 +20,7 @@ public class EnumConverter<E extends Enum<E>> implements Converter<E> {
         try {
             return Enum.valueOf(type, data);
         } catch (IllegalArgumentException ex) {
-            Log.error(ex,ex.getMessage());
+            Log.error(ex, ex.getMessage());
 //            throw new ParseException(ex.getMessage(),0);
             throw new IllegalArgumentException(ex.getMessage());
         }

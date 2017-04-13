@@ -7,9 +7,9 @@ import java.util.Objects;
 
 public interface CTPreferences extends CTPreferencesManager {
     String BLOCK = "block";
+    float OPACITY_PERCENT = 100.0f;
     String TRANSPARENCY = "transparency";
     String TRANSPARENCY_LEVEL = "transparency-level";
-    float OPACITY_PERCENT = 100.0f;
 
     CTPrefProperty<Boolean> block();
 
@@ -27,15 +27,6 @@ public interface CTPreferences extends CTPreferencesManager {
             this.locale = locale;
         }
 
-        public static SUPPORTED_LOCALES forLocale(Locale locale) {
-            for (SUPPORTED_LOCALES value : values()) {
-                if (Objects.equals(value.locale, locale)) {
-                    return value;
-                }
-            }
-            return null;
-        }
-
         public static SUPPORTED_LOCALES findSimilar() {
             return findSimilar(Locale.getDefault(), EN);
         }
@@ -51,6 +42,15 @@ public interface CTPreferences extends CTPreferencesManager {
 
         private static boolean isSimilar(Locale locale1, Locale locale2) {
             return Objects.equals(locale1, locale2);
+        }
+
+        public static SUPPORTED_LOCALES forLocale(Locale locale) {
+            for (SUPPORTED_LOCALES value : values()) {
+                if (Objects.equals(value.locale, locale)) {
+                    return value;
+                }
+            }
+            return null;
         }
 
         public Locale getLocale() {

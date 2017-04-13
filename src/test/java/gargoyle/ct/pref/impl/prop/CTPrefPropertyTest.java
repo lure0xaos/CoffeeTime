@@ -39,6 +39,7 @@ public class CTPrefPropertyTest {
         Integer gotValue = prop1.get();
         assertEquals(setValue, gotValue);
     }
+
     @Test
     public void testBindMutual() {
         CTPrefIntegerProperty prop1 = new CTPrefIntegerProperty(preferences, "pref.prop11", 1); //NON-NLS

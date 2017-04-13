@@ -11,7 +11,11 @@ import gargoyle.ct.task.impl.CTTask;
 import gargoyle.ct.ui.CTBlockerTextProvider;
 import gargoyle.ct.ui.CTControlActions;
 import gargoyle.ct.ui.CTControlWindow;
-import gargoyle.ct.ui.impl.control.*;
+import gargoyle.ct.ui.impl.control.CTConfigAction;
+import gargoyle.ct.ui.impl.control.CTConfigMenuItem;
+import gargoyle.ct.ui.impl.control.CTControlWindowImpl;
+import gargoyle.ct.ui.impl.control.CTLocalizableAction;
+import gargoyle.ct.ui.impl.control.CTLocalizableMenuItem;
 
 import javax.swing.*;
 import java.awt.*;
@@ -52,32 +56,32 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyC
         JPopupMenu menu = new JPopupMenu();
         addConfigs(menu, configs);
         menu.add(new JSeparator(SwingConstants.HORIZONTAL));
-        menu.add(new CTLocalizableMenuItem(messages, new CTLocalizableAction(messages,(STR_NEW_CONFIG), (STR_NEW_CONFIG_TOOLTIP)) {
+        menu.add(new CTLocalizableMenuItem(messages, new CTLocalizableAction(messages, (STR_NEW_CONFIG), (STR_NEW_CONFIG_TOOLTIP)) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 onNewConfig(configs, menu);
             }
         }));
         menu.add(new JSeparator(SwingConstants.HORIZONTAL));
-        menu.add(new CTLocalizableMenuItem(messages, new CTLocalizableAction(messages,(STR_UNARM), (STR_UNARM_TOOLTIP)) {
+        menu.add(new CTLocalizableMenuItem(messages, new CTLocalizableAction(messages, (STR_UNARM), (STR_UNARM_TOOLTIP)) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 unarm();
             }
         }));
-        menu.add(new CTLocalizableMenuItem(messages, new CTLocalizableAction(messages,(STR_PREFERENCES), (STR_PREFERENCES_TOOLTIP)) {
+        menu.add(new CTLocalizableMenuItem(messages, new CTLocalizableAction(messages, (STR_PREFERENCES), (STR_PREFERENCES_TOOLTIP)) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 showPreferences();
             }
         }));
-        menu.add(new CTLocalizableMenuItem(messages, new CTLocalizableAction(messages,(STR_HELP), (STR_HELP_TOOLTIP)) {
+        menu.add(new CTLocalizableMenuItem(messages, new CTLocalizableAction(messages, (STR_HELP), (STR_HELP_TOOLTIP)) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 help();
             }
         }));
-        menu.add(new CTLocalizableMenuItem(messages, new CTLocalizableAction(messages,(STR_EXIT), (STR_EXIT_TOOLTIP)) {
+        menu.add(new CTLocalizableMenuItem(messages, new CTLocalizableAction(messages, (STR_EXIT), (STR_EXIT_TOOLTIP)) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 exit();

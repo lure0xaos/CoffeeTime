@@ -1,7 +1,7 @@
 package gargoyle.ct.pref.impl.prop;
 
-import gargoyle.ct.pref.impl.convert.Converter;
 import gargoyle.ct.log.Log;
+import gargoyle.ct.pref.impl.convert.Converter;
 import gargoyle.ct.prop.impl.CTBaseObservableProperty;
 
 import java.util.Objects;

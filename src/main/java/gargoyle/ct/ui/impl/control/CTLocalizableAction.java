@@ -11,8 +11,8 @@ public abstract class CTLocalizableAction implements Action {
     private static final String ENABLED = "enabled";
     private static final String KEY_TEXT = "text-key";
     private static final String KEY_TOOLTIP = "tooltip-key";
-    private final Map<String, Object> values = new HashMap<>();
     private final MessageProvider messages;
+    private final Map<String, Object> values = new HashMap<>();
 
     public CTLocalizableAction(MessageProvider messages, String textKey) {
         this.messages = messages;
@@ -37,11 +37,6 @@ public abstract class CTLocalizableAction implements Action {
         setEnabled(true);
     }
 
-    @Override
-    public final boolean isEnabled() {
-        return (Boolean) getValue(ENABLED);
-    }
-
     public CTLocalizableAction(MessageProvider messages, String textKey, String tooltipTextKey) {
         this.messages = messages;
         setTextKey(textKey);
@@ -59,27 +54,17 @@ public abstract class CTLocalizableAction implements Action {
         }
     }
 
+    @Override
+    public final boolean isEnabled() {
+        return (Boolean) getValue(ENABLED);
+    }
+
     protected final String getText() {
         return messages.getMessage(getTextKey());
     }
 
     protected final String getTextKey() {
         return String.valueOf(getValue(KEY_TEXT));
-    }
-
-    @Override
-    public Object getValue(String key) {
-        return values.get(key);
-    }
-
-    @Override
-    public final void setEnabled(boolean enabled) {
-        putValue(ENABLED, enabled);
-    }
-
-    @Override
-    public void putValue(String key, Object value) {
-        values.put(key, value);
     }
 
     protected final void setTextKey(String textKey) {
@@ -99,7 +84,8 @@ public abstract class CTLocalizableAction implements Action {
     }
 
     @Override
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
+    public Object getValue(String key) {
+        return values.get(key);
     }
 
     protected final Icon getIcon() {
@@ -109,6 +95,24 @@ public abstract class CTLocalizableAction implements Action {
     protected final void setIcon(Icon icon) {
         putValue(Action.SMALL_ICON, icon);
     }
+
+    @Override
+    public final void setEnabled(boolean enabled) {
+        putValue(ENABLED, enabled);
+    }
+
+    @Override
+    public void putValue(String key, Object value) {
+        values.put(key, value);
+    }
+
+    @Override
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+    }
+
+
+
+
 
     @Override
     public void removePropertyChangeListener(PropertyChangeListener listener) {
