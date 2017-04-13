@@ -8,16 +8,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class CTLocalizableAction implements Action {
+    private static final String ENABLED = "enabled";
     private static final String KEY_TEXT = "text-key";
     private static final String KEY_TOOLTIP = "tooltip-key";
     private final Map<String, Object> values = new HashMap<>();
     private final MessageProvider messages;
-    private boolean enabled = true;
 
     public CTLocalizableAction(MessageProvider messages, String textKey) {
         this.messages = messages;
         setTextKey(textKey);
         setToolTipTextKey(textKey);
+        setEnabled(true);
     }
 
     public CTLocalizableAction(MessageProvider messages, String textKey, Icon icon) {
@@ -25,6 +26,7 @@ public abstract class CTLocalizableAction implements Action {
         setTextKey(textKey);
         setToolTipTextKey(textKey);
         setIcon(icon);
+        setEnabled(true);
     }
 
     public CTLocalizableAction(MessageProvider messages, String textKey, String tooltipTextKey, Icon icon) {
@@ -32,17 +34,19 @@ public abstract class CTLocalizableAction implements Action {
         setTextKey(textKey);
         setToolTipTextKey(tooltipTextKey);
         setIcon(icon);
+        setEnabled(true);
     }
 
     @Override
-    public boolean isEnabled() {
-        return enabled;
+    public final boolean isEnabled() {
+        return (Boolean) getValue(ENABLED);
     }
 
     public CTLocalizableAction(MessageProvider messages, String textKey, String tooltipTextKey) {
         this.messages = messages;
         setTextKey(textKey);
         setToolTipTextKey(tooltipTextKey);
+        setEnabled(true);
     }
 
     public void init(AbstractButton menuItem) {
@@ -69,8 +73,8 @@ public abstract class CTLocalizableAction implements Action {
     }
 
     @Override
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+    public final void setEnabled(boolean enabled) {
+        putValue(ENABLED, enabled);
     }
 
     @Override

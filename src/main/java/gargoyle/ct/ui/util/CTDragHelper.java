@@ -11,23 +11,23 @@ public final class CTDragHelper {
     }
 
     public static void makeDraggable(JComponent comp, int snap) {
-        Point mouseDownCompCoords = new Point();
+        Point mouseDownLocation = new Point();
         comp.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                mouseDownCompCoords.setLocation(e.getPoint());
+                mouseDownLocation.setLocation(e.getPoint());
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                mouseDownCompCoords.setLocation(0, 0);
+                mouseDownLocation.setLocation(0, 0);
             }
         });
         comp.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                Point currCoords = e.getLocationOnScreen();
-                Point p = new Point(currCoords.x - mouseDownCompCoords.x, currCoords.y - mouseDownCompCoords.y);
+                Point currentLocation = e.getLocationOnScreen();
+                Point p = new Point(currentLocation.x - mouseDownLocation.x, currentLocation.y - mouseDownLocation.y);
                 Window win = SwingUtilities.getWindowAncestor(comp);
                 snap(p, win.getSize(), snap);
                 win.setLocation(p);
@@ -52,23 +52,23 @@ public final class CTDragHelper {
     }
 
     public static void makeDraggable(JWindow win, int snap) {
-        Point mouseDownCompCoords = new Point();
+        Point mouseDownLocation = new Point();
         win.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                mouseDownCompCoords.setLocation(e.getPoint());
+                mouseDownLocation.setLocation(e.getPoint());
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                mouseDownCompCoords.setLocation(0, 0);
+                mouseDownLocation.setLocation(0, 0);
             }
         });
         win.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                Point currCoords = e.getLocationOnScreen();
-                Point p = new Point(currCoords.x - mouseDownCompCoords.x, currCoords.y - mouseDownCompCoords.y);
+                Point currentLocation = e.getLocationOnScreen();
+                Point p = new Point(currentLocation.x - mouseDownLocation.x, currentLocation.y - mouseDownLocation.y);
                 snap(p, win.getSize(), snap);
                 win.setLocation(p);
             }

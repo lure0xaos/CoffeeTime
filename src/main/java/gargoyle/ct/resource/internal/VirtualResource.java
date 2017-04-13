@@ -46,6 +46,7 @@ public class VirtualResource extends AbstractResource {
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected VirtualResource createResource(Resource base, String location) {
         return base == null ? new VirtualResource(location) : new VirtualResource(base, location);
@@ -67,7 +68,7 @@ public class VirtualResource extends AbstractResource {
         String
                 loc =
                 new StringBuilder().append(location.substring(0, location.lastIndexOf(CHAR_DOT)))
-                        .append(".")
+                        .append('.')
                         .append(extension)
                         .toString();
         return createResource(null, loc);

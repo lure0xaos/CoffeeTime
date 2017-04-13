@@ -22,7 +22,7 @@ public class SerializableConverter<T extends Serializable> implements Converter<
     public T parse(String data) {
         try {
             return CTSerializationUtil.deserialize(converter.parse(data));
-        } catch (ClassNotFoundException | IOException ex) {
+        } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
     }

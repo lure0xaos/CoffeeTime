@@ -6,37 +6,41 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class CTAction implements Action {
+    private static final String ENABLED = "enabled";
     private final Map<String, Object> values = new HashMap<>();
-    private boolean enabled = true;
-
     protected CTAction() {
+        setEnabled(true);
     }
 
     public CTAction(String text) {
         setText(text);
         setToolTipText(text);
+        setEnabled(true);
     }
 
     public CTAction(String text, Icon icon) {
         setText(text);
         setToolTipText(text);
         setIcon(icon);
+        setEnabled(true);
     }
 
     public CTAction(String text, String tooltipText, Icon icon) {
         setText(text);
         setToolTipText(tooltipText);
         setIcon(icon);
+        setEnabled(true);
     }
 
     @Override
-    public boolean isEnabled() {
-        return enabled;
+    public final boolean isEnabled() {
+        return (Boolean) getValue(ENABLED);
     }
 
     public CTAction(String text, String tooltipText) {
         setText(text);
         setToolTipText(tooltipText);
+        setEnabled(true);
     }
 
     public void init(AbstractButton menuItem) {
@@ -58,8 +62,8 @@ public abstract class CTAction implements Action {
     }
 
     @Override
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+    public final void setEnabled(boolean enabled) {
+        putValue(ENABLED, enabled);
     }
 
     @Override

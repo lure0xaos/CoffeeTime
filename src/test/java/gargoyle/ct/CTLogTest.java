@@ -30,7 +30,7 @@ public class CTLogTest {
             }
 
             @Override
-            public void close() throws SecurityException {
+            public void close() {
                 //
             }
         });

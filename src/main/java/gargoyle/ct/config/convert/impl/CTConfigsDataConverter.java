@@ -9,7 +9,7 @@ public final class CTConfigsDataConverter implements CTTimeConverter<String[]> {
     public String format(TimeUnit unit, String... data) {
         StringBuilder ret = new StringBuilder();
         for (String string : data) {
-            ret.append(string).append("\n");
+            ret.append(string).append('\n');
         }
         return ret.toString();
     }

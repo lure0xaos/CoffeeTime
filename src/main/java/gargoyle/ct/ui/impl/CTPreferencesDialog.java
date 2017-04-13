@@ -35,7 +35,7 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
     private void init(MessageProviderEx messages, CTPreferences preferences, Container pane) {
         preferences.supportedLocales().bind(messages.locale());
         setTitle(messages.getMessage(STR_TITLE));
-        pane.setLayout(new GridLayout(0, 2, 5, 5));
+        pane.setLayout(new GridLayout(0, 2, 5, 3));
         addLabeledControl(pane,
                 createLocalizableLabel(messages, (STR_BLOCK), (STR_BLOCK_TOOLTIP)),
                 createCheckBox(preferences.block()));
@@ -57,7 +57,7 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
     }
 
     private JSlider createTransparencyLevelControl(CTPrefProperty<Integer> property) {
-        JSlider control = new JSlider(0, 100);
+        JSlider control = new JSlider(0, (int) CTPreferences.OPACITY_PERCENT);
         control.setExtent(10);
         control.setPaintLabels(true);
         control.setPaintTicks(true);
@@ -75,20 +75,16 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
         return control;
     }
 
-    private JLabel createLabel(String text, String toolTipText) {
-        JLabel label = new JLabel(text, SwingConstants.TRAILING);
-        label.setToolTipText(toolTipText);
-        return label;
-    }
-
     private JLabel createLocalizableLabel(MessageProviderEx messages, String textKey, String toolTipTextKey) {
-        return new JLocalizableLabel(messages, messages, textKey, toolTipTextKey, SwingConstants.TRAILING);
+        return new CTLocalizableLabel(messages, messages, textKey, toolTipTextKey, SwingConstants.TRAILING);
     }
 
+    @SuppressWarnings("unchecked")
     private <E extends Enum<E>> JComboBox<E> createComboBox(Class<E> type, CTPrefProperty<E> property, boolean allowNull) {
         E[] enumConstants = type.getEnumConstants();
         JComboBox<E> control;
         if (allowNull) {
+            //noinspection UseOfObsoleteCollectionType
             Vector<E> list = new Vector<>(Arrays.asList(enumConstants));
             list.add(0, null);
             control = new JComboBox<>(list);

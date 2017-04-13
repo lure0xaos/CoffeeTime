@@ -9,7 +9,7 @@ import static org.junit.Assert.assertArrayEquals;
 
 public class BytesConverterTest {
     @Test
-    public void testConverter() throws Exception {
+    public void testConverter() {
         BytesConverter converter = new BytesConverter();
         byte[] original = new byte[0];
         String formatted = converter.format(original);

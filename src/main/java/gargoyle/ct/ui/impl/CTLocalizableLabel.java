@@ -5,10 +5,10 @@ import gargoyle.ct.messages.MessageProvider;
 
 import javax.swing.*;
 
-public class JLocalizableLabel extends JLabel {
+public class CTLocalizableLabel extends JLabel {
     private static final long serialVersionUID = 1215028617118416457L;
 
-    public JLocalizableLabel(MessageProvider messages, LocaleProvider provider, String textKey, String toolTipTextKey, int alignment) {
+    public CTLocalizableLabel(MessageProvider messages, LocaleProvider provider, String textKey, String toolTipTextKey, int alignment) {
         super(textKey, alignment);
         provider.locale().addPropertyChangeListener(event -> update(messages, textKey, toolTipTextKey));
         update(messages, textKey, toolTipTextKey);

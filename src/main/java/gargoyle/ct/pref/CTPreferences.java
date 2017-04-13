@@ -9,6 +9,7 @@ public interface CTPreferences extends CTPreferencesManager {
     String BLOCK = "block";
     String TRANSPARENCY = "transparency";
     String TRANSPARENCY_LEVEL = "transparency-level";
+    float OPACITY_PERCENT = 100.0f;
 
     CTPrefProperty<Boolean> block();
 

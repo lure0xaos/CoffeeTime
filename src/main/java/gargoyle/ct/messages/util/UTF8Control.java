@@ -45,7 +45,7 @@ public final class UTF8Control extends Control {
     }
 
     public ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader,
-                                    boolean reload) throws IllegalAccessException, InstantiationException, IOException {
+                                    boolean reload) throws IOException {
         String bundleName = toBundleName(baseName, locale);
         String resourceName = toResourceName(bundleName, PROPERTIES);
         try (InputStream stream = getStream(loader, reload, resourceName)) {

@@ -2,7 +2,6 @@ package gargoyle.ct.ui.impl;
 
 import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.config.CTConfigs;
-import gargoyle.ct.messages.MessageProvider;
 import gargoyle.ct.messages.impl.CTMessages;
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.pref.CTPropertyChangeEvent;
@@ -20,7 +19,7 @@ import java.awt.event.ActionEvent;
 import java.util.Collections;
 import java.util.Objects;
 
-public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyChangeListener {
+public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyChangeListener<Object> {
     private static final String LOC_MESSAGES = "messages.control";
     private static final String STR_EXIT = "exit";
     private static final String STR_EXIT_TOOLTIP = "exit.tooltip";
@@ -36,7 +35,6 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyC
     private final CTControlActions app;
     private final CTControlWindow controlWindow;
     private final ButtonGroup group;
-    private final MessageProvider messages;
     private final CTBlockerTextProvider textProvider;
 
     public CTControl(CTControlActions app, Frame owner) {
@@ -44,7 +42,6 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyC
         textProvider = new CTBlockerTextProvider(app.preferences());
         CTMessages messages = new CTMessages(LOC_MESSAGES);
         app.preferences().supportedLocales().bind(messages.locale());
-        this.messages = messages;
         group = new ButtonGroup();
         controlWindow = new CTControlWindowImpl(owner, app.preferences(), CTControl.class.getResource(URL_ICON),
                 createMenu(messages, app.loadConfigs(false)));

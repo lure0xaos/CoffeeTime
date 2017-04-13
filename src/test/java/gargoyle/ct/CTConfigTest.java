@@ -13,19 +13,19 @@ public class CTConfigTest {
     private static final String CONFIG = "60M/10M/3M";
 
     @Test
-    public void format() throws Exception {
+    public void format() {
         CTConfig config = new CTConfig(TimeUnit.MINUTES, 60, 10, 3);
         assertEquals(CONFIG, new CTConfigConverter().format(TimeUnit.MINUTES, config));
     }
 
     @Test
-    public void isNotValid() throws Exception {
+    public void isNotValid() {
         CTConfig config = new CTConfig(TimeUnit.MINUTES, 60, 10, 3);
         assertFalse(config.isNotValid());
     }
 
     @Test
-    public void parse() throws Exception {
+    public void parse() {
         CTConfig config = new CTConfig(TimeUnit.MINUTES, 60, 10, 3);
         CTConfig parsed = new CTConfigConverter().parse(CONFIG);
         assertEquals(config, parsed);

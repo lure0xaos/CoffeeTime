@@ -15,7 +15,7 @@ public class CTPrefPropertyTest {
     private Preferences preferences;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         preferences = mock(Preferences.class);
         Mockito.doAnswer(invocation -> {
             when(preferences.get(anyString(), anyString())).thenReturn(invocation.getArgumentAt(1, String.class));
@@ -24,7 +24,7 @@ public class CTPrefPropertyTest {
     }
 
     @Test
-    public void testBindBi() throws Exception {
+    public void testBindBi() {
         CTPrefIntegerProperty prop1 = new CTPrefIntegerProperty(preferences, "pref.prop31", 1); //NON-NLS
         CTPrefIntegerProperty prop2 = new CTPrefIntegerProperty(preferences, "pref.prop32", 2); //NON-NLS
         prop1.bindBi(prop2);
@@ -40,7 +40,7 @@ public class CTPrefPropertyTest {
         assertEquals(setValue, gotValue);
     }
     @Test
-    public void testBindMutual() throws Exception {
+    public void testBindMutual() {
         CTPrefIntegerProperty prop1 = new CTPrefIntegerProperty(preferences, "pref.prop11", 1); //NON-NLS
         CTPrefIntegerProperty prop2 = new CTPrefIntegerProperty(preferences, "pref.prop12", 2); //NON-NLS
         prop1.bind(prop2);
@@ -58,7 +58,7 @@ public class CTPrefPropertyTest {
     }
 
     @Test
-    public void testBindPref() throws Exception {
+    public void testBindPref() {
         CTPrefIntegerProperty prop1 = new CTPrefIntegerProperty(preferences, "pref.prop21", 1); //NON-NLS
         CTPrefIntegerProperty prop2 = new CTPrefIntegerProperty(preferences, "pref.prop22", 2); //NON-NLS
         prop1.bind(prop2);

@@ -12,16 +12,20 @@ public final class CTSerializationUtil {
     private CTSerializationUtil() {
     }
 
-    public static <T> T pipe(T orig) throws ClassNotFoundException, IOException {
+    public static <T> T pipe(T orig) throws IOException {
         byte[] serialized = serialize(orig);
         // System.out.println(new String(serialized));
         return deserialize(serialized);
     }
 
     @SuppressWarnings({"unchecked", "MethodCanBeVariableArityMethod"})
-    public static <T> T deserialize(byte[] bytes) throws ClassNotFoundException, IOException {
+    public static <T> T deserialize(byte[] bytes) throws IOException {
         try (final ObjectInput ois = new ObjectInputStream(new ByteArrayInputStream(bytes))) {
-            return (T) ois.readObject();
+            try {
+                return (T) ois.readObject();
+            } catch (ClassNotFoundException ex) {
+                throw new IOException(ex);
+            }
         }
     }
 
