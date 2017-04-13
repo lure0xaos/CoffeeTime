@@ -13,7 +13,7 @@ public class CTPreferencesImpl extends CTBasePreferences implements CTPreference
         addProperty(new CTPrefBooleanProperty(preferences, BLOCK, false));
         addProperty(new CTPrefIntegerProperty(preferences, TRANSPARENCY_LEVEL, 30));
         addProperty(new CTPrefBooleanProperty(preferences, TRANSPARENCY, true));
-        addProperty(new CTPrefEnumProperty<>(preferences, SUPPORTED_LOCALES.class, SUPPORTED_LOCALES.DEFAULT));
+        addProperty(new CTPrefEnumProperty<>(preferences, SUPPORTED_LOCALES.class, SUPPORTED_LOCALES.findSimilar()));
     }
 
     @Override

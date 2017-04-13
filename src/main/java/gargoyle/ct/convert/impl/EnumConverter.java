@@ -1,6 +1,9 @@
 package gargoyle.ct.convert.impl;
 
 import gargoyle.ct.convert.Converter;
+import gargoyle.ct.log.Log;
+
+import java.text.ParseException;
 
 public class EnumConverter<E extends Enum<E>> implements Converter<E> {
     private final Class<E> type;
@@ -16,6 +19,12 @@ public class EnumConverter<E extends Enum<E>> implements Converter<E> {
 
     @Override
     public E parse(String data) {
-        return Enum.valueOf(type, data);
+        try {
+            return Enum.valueOf(type, data);
+        } catch (IllegalArgumentException ex) {
+            Log.error(ex,ex.getMessage());
+//            throw new ParseException(ex.getMessage(),0);
+            throw new IllegalArgumentException(ex.getMessage());
+        }
     }
 }

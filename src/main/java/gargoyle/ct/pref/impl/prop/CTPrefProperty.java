@@ -23,13 +23,31 @@ public class CTPrefProperty<T> extends CTBaseObservableProperty<T> {
     @Override
     public T get(T def) {
         String value = prefs.get(name, null);
-        return value == null ? def : converter.parse(value);
+        if (value == null) {
+            return def;
+        } else {
+            try {
+                return converter.parse(value);
+            } catch (IllegalArgumentException ex) {
+                Log.warn(ex,ex.getMessage());
+                return def;
+            }
+        }
     }
 
     @Override
     public final T get() {
         String value = prefs.get(name, null);
-        return value == null ? def : converter.parse(value);
+        if (value == null) {
+            return def;
+        } else {
+            try {
+                return converter.parse(value);
+            } catch (IllegalArgumentException ex) {
+                Log.warn(ex,ex.getMessage());
+                return def;
+            }
+        }
     }
 
     @Override

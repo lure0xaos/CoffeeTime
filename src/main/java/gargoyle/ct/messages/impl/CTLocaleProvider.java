@@ -11,7 +11,7 @@ public final class CTLocaleProvider implements LocaleProvider {
     private final CTObservableProperty<SUPPORTED_LOCALES> locale;
 
     public CTLocaleProvider() {
-        this(new CTSimpleEnumProperty<>(SUPPORTED_LOCALES.DEFAULT));
+        this(new CTSimpleEnumProperty<>(SUPPORTED_LOCALES.findSimilar()));
     }
 
     public CTLocaleProvider(CTObservableProperty<SUPPORTED_LOCALES> locale) {
