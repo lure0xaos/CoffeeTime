@@ -37,16 +37,16 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
         setTitle(messages.getMessage(STR_TITLE));
         pane.setLayout(new GridLayout(0, 2, 5, 5));
         addLabeledControl(pane,
-                createLabel(messages.getMessage(STR_BLOCK), messages.getMessage(STR_BLOCK_TOOLTIP)),
+                createLocalizableLabel(messages, (STR_BLOCK), (STR_BLOCK_TOOLTIP)),
                 createCheckBox(preferences.block()));
         addLabeledControl(pane,
-                createLabel(messages.getMessage(STR_TRANSPARENCY), messages.getMessage(STR_TRANSPARENCY_TOOLTIP)),
+                createLocalizableLabel(messages, (STR_TRANSPARENCY), (STR_TRANSPARENCY_TOOLTIP)),
                 createCheckBox(preferences.transparency()));
         addLabeledControl(pane,
-                createLabel(messages.getMessage(STR_TRANSPARENCY_LEVEL), messages.getMessage(STR_TRANSPARENCY_LEVEL_TOOLTIP)),
+                createLocalizableLabel(messages, (STR_TRANSPARENCY_LEVEL), (STR_TRANSPARENCY_LEVEL_TOOLTIP)),
                 createTransparencyLevelControl(preferences.transparencyLevel()));
         addLabeledControl(pane,
-                createLabel(messages.getMessage(STR_SUPPORTED_LOCALES), messages.getMessage(STR_SUPPORTED_LOCALES_TOOLTIP)),
+                createLocalizableLabel(messages, (STR_SUPPORTED_LOCALES), (STR_SUPPORTED_LOCALES_TOOLTIP)),
                 createComboBox(SUPPORTED_LOCALES.class, preferences.supportedLocales(), false));
         preferences.supportedLocales().bind(messages.locale());
     }
@@ -79,6 +79,10 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
         JLabel label = new JLabel(text, SwingConstants.TRAILING);
         label.setToolTipText(toolTipText);
         return label;
+    }
+
+    private JLabel createLocalizableLabel(MessageProviderEx messages, String textKey, String toolTipTextKey) {
+        return new JLocalizableLabel(messages, messages, textKey, toolTipTextKey, SwingConstants.TRAILING);
     }
 
     private <E extends Enum<E>> JComboBox<E> createComboBox(Class<E> type, CTPrefProperty<E> property, boolean allowNull) {

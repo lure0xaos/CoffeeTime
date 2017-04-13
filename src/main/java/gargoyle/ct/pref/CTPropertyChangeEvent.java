@@ -2,6 +2,8 @@ package gargoyle.ct.pref;
 
 import gargoyle.ct.prop.CTProperty;
 
+import java.text.MessageFormat;
+
 public class CTPropertyChangeEvent<T> {
     private final String name;
     private final T newValue;
@@ -33,8 +35,6 @@ public class CTPropertyChangeEvent<T> {
 
     @Override
     public String toString() {
-        return "CTPropertyChangeEvent{" +
-                "property=" + property +
-                '}';
+        return MessageFormat.format("CTPropertyChangeEvent'{'property={0}'}'", property);
     }
 }

@@ -2,6 +2,7 @@ package gargoyle.ct.prop.impl;
 
 import gargoyle.ct.convert.Converter;
 
+import java.text.MessageFormat;
 import java.util.Objects;
 
 public abstract class CTSimpleProperty<T> extends CTBaseObservableProperty<T> {
@@ -41,5 +42,10 @@ public abstract class CTSimpleProperty<T> extends CTBaseObservableProperty<T> {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public String toString() {
+        return MessageFormat.format("CTSimpleProperty'{'name=''{0}'', value={1}, def={2}'}'", name, value, def);
     }
 }

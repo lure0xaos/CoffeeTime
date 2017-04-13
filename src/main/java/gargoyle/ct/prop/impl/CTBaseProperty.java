@@ -3,6 +3,8 @@ package gargoyle.ct.prop.impl;
 import gargoyle.ct.convert.Converter;
 import gargoyle.ct.prop.CTProperty;
 
+import java.text.MessageFormat;
+
 public abstract class CTBaseProperty<T> implements CTProperty<T> {
     protected final Converter<T> converter;
     protected final T def;
@@ -31,6 +33,6 @@ public abstract class CTBaseProperty<T> implements CTProperty<T> {
 
     @Override
     public String toString() {
-        return name + ":" + get();
+        return MessageFormat.format("CTBaseProperty'{'name=''{0}'', def={1}'}'", name, def);
     }
 }

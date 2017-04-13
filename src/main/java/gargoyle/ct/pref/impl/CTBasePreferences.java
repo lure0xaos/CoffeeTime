@@ -29,7 +29,7 @@ abstract class CTBasePreferences implements CTPreferencesManager {
     }
 
     protected final Preferences preferences;
-    private final Map<String, CTPrefProperty> properties = new HashMap<>();
+    private final Map<String, CTPrefProperty<?>> properties = new HashMap<>();
 
     protected CTBasePreferences(Class<?> clazz) {
         preferences = Preferences.userNodeForPackage(clazz);
@@ -53,10 +53,12 @@ abstract class CTBasePreferences implements CTPreferencesManager {
         }
     }
 
+    @SuppressWarnings("unchecked")
     protected <T> CTPrefProperty<T> getProperty(String name) {
         return (CTPrefProperty<T>) properties.get(name);
     }
 
+    @SuppressWarnings("unchecked")
     protected <E extends Enum<E>> CTPrefProperty<E> getProperty(Class<E> type) {
         return (CTPrefProperty<E>) properties.get(type.getSimpleName());
     }

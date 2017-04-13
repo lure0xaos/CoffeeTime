@@ -7,6 +7,7 @@ import gargoyle.ct.pref.impl.prop.CTPrefIntegerProperty;
 import gargoyle.ct.pref.impl.prop.CTPrefProperty;
 
 public class CTPreferencesImpl extends CTBasePreferences implements CTPreferences {
+    @SuppressWarnings("MagicNumber")
     public CTPreferencesImpl(Class<?> clazz) {
         super(clazz);
         addProperty(new CTPrefBooleanProperty(preferences, BLOCK, false));

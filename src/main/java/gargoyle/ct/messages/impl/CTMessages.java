@@ -31,7 +31,7 @@ public class CTMessages implements MessageProviderEx {
         localeProvider = new CTLocaleProvider();
         this.parent = parent;
         load(baseName);
-        locale().addPropertyChangeListener(event -> reload());
+        localeProvider.locale().addPropertyChangeListener(event -> reload());
     }
 
     private void load(String baseName) {
@@ -41,7 +41,7 @@ public class CTMessages implements MessageProviderEx {
             if (parent == null) {
                 throw new MissingResourceException(MessageFormat.format(MSG_NO_BUNDLE, baseName), baseName, ex.getKey());
             } else {
-                Log.warn(MessageFormat.format(MSG_NO_BUNDLE, messages.getBaseBundleName()));
+                Log.warn(MessageFormat.format(MSG_NO_BUNDLE, baseName));
             }
         }
     }

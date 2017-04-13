@@ -14,7 +14,7 @@ public abstract class CTBaseObservableProperty<T> extends CTBaseProperty<T> impl
         super(converter, name);
     }
 
-    public CTBaseObservableProperty(Converter<T> converter, String name, T def) {
+    protected CTBaseObservableProperty(Converter<T> converter, String name, T def) {
         super(converter, name, def);
     }
 

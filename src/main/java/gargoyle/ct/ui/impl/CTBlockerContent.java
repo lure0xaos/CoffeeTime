@@ -20,6 +20,7 @@ public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, C
     private static final int FONT_SIZE = 12;
     private static final int GAP = 10;
     private static final long serialVersionUID = 1873262133224449177L;
+    private static final double MARGIN = 1.1;
     private final boolean big;
     private final JLabel lblInfo;
     private final JLabel lblMain;
@@ -65,7 +66,7 @@ public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, C
         label.setFont(new Font(Font.DIALOG, Font.PLAIN, FONT_SIZE));
         label.setFont(new Font(Font.DIALOG, Font.PLAIN,
                 Math.min((int) (FONT_SIZE * label.getWidth() /
-                                (1.1 * label.getFontMetrics(label.getFont()).stringWidth(label.getText()))),
+                                (MARGIN * label.getFontMetrics(label.getFont()).stringWidth(label.getText()))),
                         label.getHeight())));
     }
 
