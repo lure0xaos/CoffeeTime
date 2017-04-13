@@ -1,4 +1,6 @@
-package gargoyle.ct.prop.impl;
+package gargoyle.ct.prop.impl.simple;
+
+import gargoyle.ct.prop.impl.CTBaseObservableProperty;
 
 import java.text.MessageFormat;
 import java.util.Objects;

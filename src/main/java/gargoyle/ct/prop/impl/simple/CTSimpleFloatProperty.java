@@ -1,4 +1,4 @@
-package gargoyle.ct.prop.impl;
+package gargoyle.ct.prop.impl.simple;
 
 public class CTSimpleFloatProperty extends CTSimpleProperty<Float> {
     public CTSimpleFloatProperty(String name) {

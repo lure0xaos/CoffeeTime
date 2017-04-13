@@ -3,7 +3,7 @@ package gargoyle.ct.messages.impl;
 import gargoyle.ct.messages.LocaleProvider;
 import gargoyle.ct.pref.CTPreferences.SUPPORTED_LOCALES;
 import gargoyle.ct.prop.CTObservableProperty;
-import gargoyle.ct.prop.impl.CTSimpleEnumProperty;
+import gargoyle.ct.prop.impl.simple.CTSimpleEnumProperty;
 
 import java.util.Locale;
 

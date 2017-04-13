@@ -1,5 +1,6 @@
 package gargoyle.ct.prop.impl;
 
+import gargoyle.ct.prop.impl.simple.CTSimpleIntegerProperty;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

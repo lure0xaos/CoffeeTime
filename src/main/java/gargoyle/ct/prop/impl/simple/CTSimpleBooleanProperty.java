@@ -1,4 +1,4 @@
-package gargoyle.ct.prop.impl;
+package gargoyle.ct.prop.impl.simple;
 
 public class CTSimpleBooleanProperty extends CTSimpleProperty<Boolean> {
     public CTSimpleBooleanProperty(String name) {

@@ -1,4 +1,4 @@
-package gargoyle.ct.prop.impl;
+package gargoyle.ct.prop.impl.simple;
 
 public class CTSimpleDoubleProperty extends CTSimpleProperty<Double> {
     public CTSimpleDoubleProperty(String name) {
