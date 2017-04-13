@@ -10,12 +10,12 @@ import java.util.Objects;
 import java.util.function.Function;
 
 public abstract class CTBaseObservableProperty<T> extends CTBaseProperty<T> implements CTObservableProperty<T> {
-    protected CTBaseObservableProperty(Converter<T> converter, String name) {
-        super(converter, name);
+    protected CTBaseObservableProperty(String name) {
+        super(name);
     }
 
-    protected CTBaseObservableProperty(Converter<T> converter, String name, T def) {
-        super(converter, name, def);
+    protected CTBaseObservableProperty(String name, T def) {
+        super(name, def);
     }
 
     protected Thread firePropertyChange(T value, T oldValue) {

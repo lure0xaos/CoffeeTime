@@ -1,19 +1,17 @@
 package gargoyle.ct.prop.impl;
 
-import gargoyle.ct.convert.Converter;
-
 import java.text.MessageFormat;
 import java.util.Objects;
 
 public abstract class CTSimpleProperty<T> extends CTBaseObservableProperty<T> {
     private T value;
 
-    protected CTSimpleProperty(Converter<T> converter, String name) {
-        super(converter, name);
+    protected CTSimpleProperty(String name) {
+        super(name);
     }
 
-    public CTSimpleProperty(Converter<T> converter, String name, T def) {
-        super(converter, name, def);
+    public CTSimpleProperty(String name, T def) {
+        super(name, def);
         value = def;
     }
 

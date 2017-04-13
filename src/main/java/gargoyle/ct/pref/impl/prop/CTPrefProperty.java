@@ -9,27 +9,29 @@ import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 public class CTPrefProperty<T> extends CTBaseObservableProperty<T> {
-    private final Preferences prefs;
+    protected final Converter<T> converter;
+    private final Preferences preferences;
 
     protected CTPrefProperty(Converter<T> converter, Preferences preferences, String name) {
         this(converter, preferences, name, null);
     }
 
     public CTPrefProperty(Converter<T> converter, Preferences preferences, String name, T def) {
-        super(converter, name, def);
-        prefs = preferences;
+        super(name, def);
+        this.converter = converter;
+        this.preferences = preferences;
     }
 
     @Override
     public T get(T def) {
-        String value = prefs.get(name, null);
+        String value = preferences.get(name, null);
         if (value == null) {
             return def;
         } else {
             try {
                 return converter.parse(value);
             } catch (IllegalArgumentException ex) {
-                Log.warn(ex,ex.getMessage());
+                Log.warn(ex, ex.getMessage());
                 return def;
             }
         }
@@ -37,17 +39,7 @@ public class CTPrefProperty<T> extends CTBaseObservableProperty<T> {
 
     @Override
     public final T get() {
-        String value = prefs.get(name, null);
-        if (value == null) {
-            return def;
-        } else {
-            try {
-                return converter.parse(value);
-            } catch (IllegalArgumentException ex) {
-                Log.warn(ex,ex.getMessage());
-                return def;
-            }
-        }
+        return get(def);
     }
 
     @Override
@@ -56,14 +48,14 @@ public class CTPrefProperty<T> extends CTBaseObservableProperty<T> {
         if (Objects.equals(oldValue, value)) {
             return;
         }
-        prefs.put(name, value == null ? null : converter.format(value));
+        preferences.put(name, value == null ? null : converter.format(value));
         sync();
         firePropertyChange(value, oldValue);
     }
 
     private void sync() {
         try {
-            prefs.flush();
+            preferences.flush();
         } catch (BackingStoreException ex) {
             Log.error(ex, ex.getMessage());
         }

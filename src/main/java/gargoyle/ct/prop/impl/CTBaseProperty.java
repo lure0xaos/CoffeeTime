@@ -1,24 +1,20 @@
 package gargoyle.ct.prop.impl;
 
-import gargoyle.ct.convert.Converter;
 import gargoyle.ct.prop.CTProperty;
 
 import java.text.MessageFormat;
 
 public abstract class CTBaseProperty<T> implements CTProperty<T> {
-    protected final Converter<T> converter;
     protected final T def;
     protected final String name;
 
-    protected CTBaseProperty(Converter<T> converter, String name) {
+    protected CTBaseProperty(String name) {
         this.name = name;
-        this.converter = converter;
         def = null;
     }
 
-    public CTBaseProperty(Converter<T> converter, String name, T def) {
+    public CTBaseProperty(String name, T def) {
         this.name = name;
-        this.converter = converter;
         this.def = def;
     }
 
