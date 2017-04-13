@@ -1,6 +1,6 @@
 package gargoyle.ct.pref.impl.prop;
 
-import gargoyle.ct.convert.impl.EnumConverter;
+import gargoyle.ct.pref.convert.impl.EnumConverter;
 
 import java.util.prefs.Preferences;
 

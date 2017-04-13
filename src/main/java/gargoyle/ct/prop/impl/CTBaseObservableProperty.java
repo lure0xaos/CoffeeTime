@@ -1,6 +1,5 @@
 package gargoyle.ct.prop.impl;
 
-import gargoyle.ct.convert.Converter;
 import gargoyle.ct.pref.CTPropertyChangeEvent;
 import gargoyle.ct.pref.CTPropertyChangeListener;
 import gargoyle.ct.prop.CTObservableProperty;

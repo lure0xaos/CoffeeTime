@@ -1,9 +1,7 @@
-package gargoyle.ct.convert.impl;
+package gargoyle.ct.pref.convert.impl;
 
-import gargoyle.ct.convert.Converter;
+import gargoyle.ct.pref.convert.Converter;
 import gargoyle.ct.log.Log;
-
-import java.text.ParseException;
 
 public class EnumConverter<E extends Enum<E>> implements Converter<E> {
     private final Class<E> type;

@@ -1,6 +1,6 @@
 package gargoyle.ct.pref.impl.prop;
 
-import gargoyle.ct.convert.impl.SerializableConverter;
+import gargoyle.ct.pref.convert.impl.SerializableConverter;
 
 import java.io.Serializable;
 import java.util.prefs.Preferences;

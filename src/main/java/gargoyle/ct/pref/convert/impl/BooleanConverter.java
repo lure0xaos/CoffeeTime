@@ -1,6 +1,6 @@
-package gargoyle.ct.convert.impl;
+package gargoyle.ct.pref.convert.impl;
 
-import gargoyle.ct.convert.Converter;
+import gargoyle.ct.pref.convert.Converter;
 
 public class BooleanConverter implements Converter<Boolean> {
     @Override

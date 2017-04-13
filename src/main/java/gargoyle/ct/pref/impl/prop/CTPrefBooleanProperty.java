@@ -1,6 +1,6 @@
 package gargoyle.ct.pref.impl.prop;
 
-import gargoyle.ct.convert.impl.BooleanConverter;
+import gargoyle.ct.pref.convert.impl.BooleanConverter;
 
 import java.util.prefs.Preferences;
 
