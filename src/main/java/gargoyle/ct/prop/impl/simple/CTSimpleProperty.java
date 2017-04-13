@@ -17,6 +17,7 @@ public abstract class CTSimpleProperty<T> extends CTBaseObservableProperty<T> {
         value = def;
     }
 
+    @Override
     public T get(T def) {
         T value = get();
         return value == null ? def : value;

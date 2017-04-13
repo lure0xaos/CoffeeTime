@@ -96,6 +96,7 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
         return control;
     }
 
+    @Override
     public Void showMe() {
         setVisible(true);
         setLocationRelativeTo(getOwner());

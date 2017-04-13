@@ -44,6 +44,7 @@ public final class UTF8Control extends Control {
         this.charset = charset;
     }
 
+    @Override
     public ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader,
                                     boolean reload) throws IOException {
         String bundleName = toBundleName(baseName, locale);
