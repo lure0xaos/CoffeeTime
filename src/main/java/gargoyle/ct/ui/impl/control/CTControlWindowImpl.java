@@ -61,7 +61,7 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
         toolTipManager.setReshowDelay(100);
         toolTipManager.setEnabled(true);
         toolTipManager.setLightWeightPopupEnabled(true);
-        MouseListener l = new MouseAdapter() {
+        MouseListener updater = new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent event) {
                 onMouseMoved(true, false);
@@ -72,8 +72,8 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
                 onMouseMoved(false, true);
             }
         };
-        textContent.addMouseListener(l);
-        iconContent.addMouseListener(l);
+        textContent.addMouseListener(updater);
+        iconContent.addMouseListener(updater);
         this.preferences = preferences;
     }
 

@@ -76,9 +76,10 @@ public final class CTDragHelper {
             @Override
             public void mouseDragged(MouseEvent event) {
                 Point currentLocation = event.getLocationOnScreen();
-                Point p = new Point(currentLocation.x - mouseDownLocation.x, currentLocation.y - mouseDownLocation.y);
-                snap(p, win.getSize(), snap);
-                win.setLocation(p);
+                Point point = new Point(currentLocation.x - mouseDownLocation.x,
+                                        currentLocation.y - mouseDownLocation.y);
+                snap(point, win.getSize(), snap);
+                win.setLocation(point);
             }
         });
     }

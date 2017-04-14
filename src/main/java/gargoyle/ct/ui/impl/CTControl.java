@@ -202,7 +202,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyC
     }
 
     @Override
-    public void onPropertyChange(CTPropertyChangeEvent event) {
+    public void onPropertyChange(CTPropertyChangeEvent<Object> event) {
         controlWindow.onPropertyChange(event);
     }
 }

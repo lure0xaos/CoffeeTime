@@ -32,24 +32,21 @@ public class CTSerializationTest {
 
     @Test
     public void testLoadH() {
-        //noinspection HardCodedStringLiteral
-        CTConfigs parsed = new CTConfigsConverter().parse("60H/10H/3H\n30H/5H/3H\n120H/20H/3H\n");
+        CTConfigs parsed = new CTConfigsConverter().parse("60H/10H/3H\n30H/5H/3H\n120H/20H/3H\n"); //NON-NLS
         Assert.assertNotNull(parsed);
         Assert.assertNotNull(parsed.getConfig("3600/600"));
     }
 
     @Test
     public void testLoadM() {
-        //noinspection HardCodedStringLiteral
-        CTConfigs parsed = new CTConfigsConverter().parse("60M/10M/3M\n30M/5M/3M\n120M/20M/3M\n");
+        CTConfigs parsed = new CTConfigsConverter().parse("60M/10M/3M\n30M/5M/3M\n120M/20M/3M\n"); //NON-NLS
         Assert.assertNotNull(parsed);
         Assert.assertNotNull(parsed.getConfig("60/10"));
     }
 
     @Test
     public void testLoadS() {
-        //noinspection HardCodedStringLiteral
-        CTConfigs parsed = new CTConfigsConverter().parse("3600S/600S/3S\n1800S/300S/3S\n120S/20S/3S\n");
+        CTConfigs parsed = new CTConfigsConverter().parse("3600S/600S/3S\n1800S/300S/3S\n120S/20S/3S\n"); //NON-NLS
         Assert.assertNotNull(parsed);
         Assert.assertNotNull(parsed.getConfig("60/10"));
     }

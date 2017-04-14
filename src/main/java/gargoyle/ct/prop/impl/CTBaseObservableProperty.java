@@ -42,9 +42,13 @@ public abstract class CTBaseObservableProperty<T> extends CTBaseProperty<T> impl
         addPropertyChangeListener(new CTPropertyChangeListener<T>() {
             @Override
             public void onPropertyChange(CTPropertyChangeEvent<T> event) {
-                property.set(mapper.apply(event.getNewValue()));
+                onLateBind(property, mapper, event.getNewValue());
             }
         });
+    }
+
+    private <T2> void onLateBind(CTProperty<T2> property, Function<T, T2> mapper, T newValue) {
+        property.set(mapper.apply(newValue));
     }
 
     @SuppressWarnings("Convert2Lambda")
@@ -60,14 +64,18 @@ public abstract class CTBaseObservableProperty<T> extends CTBaseProperty<T> impl
         T myValue    = get();
         T otherValue = property.get();
         if (!Objects.equals(myValue, otherValue)) {
-            property.set(myValue);
+            onLateBind(property, myValue);
         }
         addPropertyChangeListener(new CTPropertyChangeListener<T>() {
             @Override
             public void onPropertyChange(CTPropertyChangeEvent<T> event) {
-                property.set(event.getNewValue());
+                onLateBind(property, event.getNewValue());
             }
         });
+    }
+
+    private void onLateBind(CTProperty<T> property, T newValue) {
+        property.set(newValue);
     }
 
     @Override

@@ -15,6 +15,7 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -72,19 +73,15 @@ public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindo
 
     public void debug(boolean debug) {
         setAlwaysOnTop(!debug);
-        removeMouseListener(new MouseAdapter() {
+        MouseListener clickToDestroy = new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent event) {
                 destroy();
             }
-        });
+        };
+        removeMouseListener(clickToDestroy);
         if (debug) {
-            addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent event) {
-                    destroy();
-                }
-            });
+            addMouseListener(clickToDestroy);
         }
     }
 

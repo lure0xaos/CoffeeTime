@@ -58,37 +58,39 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
         preferences.supportedLocales().bind(messages.locale());
     }
 
-    private void addLabeledControl(Container pane, JLabel label, JComponent transparencyControl) {
+    private static void addLabeledControl(Container pane, JLabel label, JComponent transparencyControl) {
         pane.add(label);
         pane.add(transparencyControl);
     }
 
-    private JSlider createTransparencyLevelControl(CTPrefProperty<Integer> property) {
+    private static JSlider createTransparencyLevelControl(CTPrefProperty<Integer> property) {
         JSlider control = new JSlider(0, (int) CTPreferences.OPACITY_PERCENT);
-        control.setExtent(10);
+        control.setExtent((int) CTPreferences.OPACITY_PERCENT / 10);
         control.setPaintLabels(true);
         control.setPaintTicks(true);
-        control.setMajorTickSpacing(20);
-        control.setMinorTickSpacing(10);
+        control.setMajorTickSpacing((int) CTPreferences.OPACITY_PERCENT / 5);
+        control.setMinorTickSpacing((int) CTPreferences.OPACITY_PERCENT / 10);
         control.setValue(property.get());
-        control.addChangeListener(e -> property.set(Math.max(100, control.getValue())));
+        control.addChangeListener(event -> property.set(Math.max(1,
+                                                                 Math.min((int) CTPreferences.OPACITY_PERCENT,
+                                                                          control.getValue()))));
         return control;
     }
 
-    private JCheckBox createCheckBox(CTPrefProperty<Boolean> property) {
+    private static JCheckBox createCheckBox(CTPrefProperty<Boolean> property) {
         JCheckBox control = new JCheckBox();
         control.setSelected(property.get());
-        control.addActionListener(e -> property.set(control.isSelected()));
+        control.addActionListener(event -> property.set(control.isSelected()));
         return control;
     }
 
-    private JLabel createLocalizableLabel(MessageProviderEx messages, String textKey, String toolTipTextKey) {
+    private static JLabel createLocalizableLabel(MessageProviderEx messages, String textKey, String toolTipTextKey) {
         return new CTLocalizableLabel(messages, messages, textKey, toolTipTextKey, SwingConstants.TRAILING);
     }
 
-    @SuppressWarnings("unchecked")
-    private <E extends Enum<E>> JComboBox<E> createComboBox(Class<E> type, CTPrefProperty<E> property,
-                                                            boolean allowNull) {
+    @SuppressWarnings({"unchecked", "TypeMayBeWeakened", "SameParameterValue"})
+    private static <E extends Enum<E>> JComboBox<E> createComboBox(Class<E> type, CTPrefProperty<E> property,
+                                                                   boolean allowNull) {
         E[]          enumConstants = type.getEnumConstants();
         JComboBox<E> control;
         if (allowNull) {
@@ -100,7 +102,7 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
             control = new JComboBox<>(enumConstants);
         }
         control.setSelectedItem(property.get());
-        control.addActionListener(e -> property.set((E) control.getSelectedItem()));
+        control.addActionListener(event -> property.set((E) control.getSelectedItem()));
         return control;
     }
 
