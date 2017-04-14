@@ -1,6 +1,8 @@
 package gargoyle.ct.prop.impl.simple;
 
-public class CTSimpleFloatProperty extends CTSimpleProperty<Float> {
+import gargoyle.ct.prop.CTNumberProperty;
+
+public class CTSimpleFloatProperty extends CTSimpleProperty<Float> implements CTNumberProperty<Float> {
 
     public CTSimpleFloatProperty(String name) {
         this(name, 0);

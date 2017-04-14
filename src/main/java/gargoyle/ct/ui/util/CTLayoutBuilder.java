@@ -4,6 +4,7 @@ import gargoyle.ct.messages.LocaleProvider;
 import gargoyle.ct.messages.MessageProvider;
 import gargoyle.ct.messages.MessageProviderEx;
 import gargoyle.ct.pref.impl.prop.CTPrefProperty;
+import gargoyle.ct.prop.CTNumberProperty;
 import gargoyle.ct.prop.CTProperty;
 import gargoyle.ct.ui.impl.CTLocalizableLabel;
 
@@ -11,6 +12,10 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JSlider;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import java.awt.Container;
 import java.awt.GridBagConstraints;
@@ -56,6 +61,39 @@ public class CTLayoutBuilder {
         JCheckBox control = new JCheckBox();
         control.setSelected(property.get());
         control.addActionListener(event -> property.set(control.isSelected()));
+        return control;
+    }
+
+    public <T extends Number> JSpinner createSpinner(CTNumberProperty<T> property, T min, T max) {
+        JSpinner control = new JSpinner(new SpinnerNumberModel());
+        control.setValue(property.get().intValue());
+        control.addChangeListener(event -> property.set(fromInt(minmax(min, max, (T) control.getValue()))));
+        return control;
+    }
+
+    private static <T extends Number> T fromInt(int value) {
+        return (T) (Integer) value;
+    }
+
+    private static <T extends Number> int minmax(T min, T max, T value) {
+        return Math.max(toInt(min), Math.min(toInt(max), toInt(value)));
+    }
+
+    private static <T extends Number> int toInt(T value) {
+        return (Integer) value;
+    }
+
+    public <T extends Number> JSlider createSlider(CTNumberProperty<T> property, T min, T max) {
+        JSlider control = new JSlider(toInt(min), toInt(max));
+        control.setValue(property.get().intValue());
+        control.addChangeListener(event -> property.set(fromInt(minmax(min, max, control.getValue()))));
+        return control;
+    }
+
+    public JTextField createTextField(CTProperty<String> property) {
+        JTextField control = new JTextField();
+        control.setText(property.get());
+        control.addActionListener(event -> property.set(control.getText()));
         return control;
     }
 

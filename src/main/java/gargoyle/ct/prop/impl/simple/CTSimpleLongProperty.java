@@ -1,6 +1,8 @@
 package gargoyle.ct.prop.impl.simple;
 
-public class CTSimpleLongProperty extends CTSimpleProperty<Long> {
+import gargoyle.ct.prop.CTNumberProperty;
+
+public class CTSimpleLongProperty extends CTSimpleProperty<Long> implements CTNumberProperty<Long> {
 
     public CTSimpleLongProperty(String name) {
         this(name, 0L);

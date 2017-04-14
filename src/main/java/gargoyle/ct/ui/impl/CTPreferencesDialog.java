@@ -5,6 +5,7 @@ import gargoyle.ct.messages.impl.CTMessages;
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.pref.CTPreferences.SUPPORTED_LOCALES;
 import gargoyle.ct.pref.impl.prop.CTPrefProperty;
+import gargoyle.ct.prop.CTNumberProperty;
 import gargoyle.ct.ui.CTDialog;
 import gargoyle.ct.ui.util.CTLayoutBuilder;
 
@@ -47,7 +48,7 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
         layoutBuilder.addLabeledControl(layoutBuilder.createLocalizableLabel(messages,
                                                                              STR_TRANSPARENCY_LEVEL,
                                                                              STR_TRANSPARENCY_LEVEL_TOOLTIP),
-                                        createTransparencyLevelControl(preferences.transparencyLevel()));
+                                        createTransparencyLevelControl(layoutBuilder, preferences.transparencyLevel()));
         layoutBuilder.addLabeledControl(layoutBuilder.createLocalizableLabel(messages,
                                                                              STR_SUPPORTED_LOCALES,
                                                                              STR_SUPPORTED_LOCALES_TOOLTIP),
@@ -57,16 +58,15 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
         layoutBuilder.build();
     }
 
-    private static JSlider createTransparencyLevelControl(CTPrefProperty<Integer> property) {
+    private static JSlider createTransparencyLevelControl(CTLayoutBuilder layoutBuilder,
+                                                          CTPrefProperty<Integer> property) {
         int     maxOpacity = (int) CTPreferences.OPACITY_PERCENT;
-        JSlider control    = new JSlider(0, maxOpacity);
+        JSlider control    = layoutBuilder.createSlider((CTNumberProperty<Integer>) property, 0, maxOpacity);
         control.setExtent(maxOpacity / 10);
         control.setPaintLabels(true);
         control.setPaintTicks(true);
         control.setMajorTickSpacing(maxOpacity / 5);
         control.setMinorTickSpacing(maxOpacity / 10);
-        control.setValue(property.get());
-        control.addChangeListener(event -> property.set(minmax(1, maxOpacity, control.getValue())));
         return control;
     }
 

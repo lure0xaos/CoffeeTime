@@ -1,6 +1,8 @@
 package gargoyle.ct.prop.impl.simple;
 
-public class CTSimpleByteProperty extends CTSimpleProperty<Byte> {
+import gargoyle.ct.prop.CTNumberProperty;
+
+public class CTSimpleByteProperty extends CTSimpleProperty<Byte> implements CTNumberProperty<Byte> {
 
     public CTSimpleByteProperty(String name) {
         this(name, (byte) 0);
