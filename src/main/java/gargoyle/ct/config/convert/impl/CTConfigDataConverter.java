@@ -1,6 +1,6 @@
 package gargoyle.ct.config.convert.impl;
 
-import gargoyle.ct.config.convert.CTTimeConverter;
+import gargoyle.ct.config.convert.CTUnitConverter;
 import gargoyle.ct.util.CTTimeUtil;
 
 import java.text.MessageFormat;
@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public final class CTConfigDataConverter implements CTTimeConverter<long[]> {
+public final class CTConfigDataConverter implements CTUnitConverter<long[]> {
 
     private static final String  COMMENTS                                    = "#;'";
     private static final String  MSG_CANNOT_PARSE_LINE_0                     = "Cannot parse line: {0}";

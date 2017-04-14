@@ -21,16 +21,20 @@ public class CTConfigs implements Serializable {
     }
 
     private void setConfigs(CTConfig[] configs) {
-        this.configs.clear();
-        for (CTConfig config : configs) {
-            addConfig(config);
+        synchronized (this.configs) {
+            this.configs.clear();
+            for (CTConfig config : configs) {
+                addConfig(config);
+            }
         }
     }
 
     public void addConfig(CTConfig config) {
-        String name = config.getName();
-        if (!configs.containsKey(name)) {
-            configs.put(name, config);
+        synchronized (configs) {
+            String name = config.getName();
+            if (!configs.containsKey(name)) {
+                configs.put(name, config);
+            }
         }
     }
 
@@ -48,9 +52,11 @@ public class CTConfigs implements Serializable {
     }
 
     private void setConfigs(Iterable<CTConfig> configs) {
-        this.configs.clear();
-        for (CTConfig config : configs) {
-            addConfig(config);
+        synchronized (this.configs) {
+            this.configs.clear();
+            for (CTConfig config : configs) {
+                addConfig(config);
+            }
         }
     }
 
