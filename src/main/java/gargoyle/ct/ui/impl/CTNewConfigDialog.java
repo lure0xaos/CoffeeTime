@@ -7,9 +7,10 @@ import gargoyle.ct.messages.impl.CTMessages;
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.ui.CTDialog;
 
-import javax.swing.*;
+import javax.swing.JFormattedTextField;
+import javax.swing.JOptionPane;
 import javax.swing.text.MaskFormatter;
-import java.awt.*;
+import java.awt.Component;
 import java.text.ParseException;
 
 public class CTNewConfigDialog implements CTDialog<CTConfig> {
@@ -37,10 +38,15 @@ public class CTNewConfigDialog implements CTDialog<CTConfig> {
             try {
                 JFormattedTextField field = new JFormattedTextField(new MaskFormatter(STR_CONFIG_PATTERN));
                 field.setToolTipText(messages.getMessage(STR_NEW_CONFIG_TOOLTIP));
-                int result = JOptionPane.showOptionDialog(owner, field, messages.getMessage(STR_TITLE),
-                                                          JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
-                                                          null, new Object[]{messages.getMessage(STR_OK),
-                                                                             messages.getMessage(STR_CANCEL)}, null);
+                int result = JOptionPane.showOptionDialog(owner,
+                                                          field,
+                                                          messages.getMessage(STR_TITLE),
+                                                          JOptionPane.OK_CANCEL_OPTION,
+                                                          JOptionPane.QUESTION_MESSAGE,
+                                                          null,
+                                                          new Object[]{messages.getMessage(STR_OK),
+                                                                       messages.getMessage(STR_CANCEL)},
+                                                          null);
                 if (result == JOptionPane.OK_OPTION) {
                     try {
                         return configConverter.parse(String.valueOf(field.getValue()));

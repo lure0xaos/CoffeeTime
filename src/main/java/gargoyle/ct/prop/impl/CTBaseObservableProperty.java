@@ -14,10 +14,6 @@ public abstract class CTBaseObservableProperty<T> extends CTBaseProperty<T> impl
         super(name);
     }
 
-    protected CTBaseObservableProperty(String name, T def) {
-        super(name, def);
-    }
-
     protected Thread firePropertyChange(T value, T oldValue) {
         if (Objects.equals(oldValue, value)) {
             return null;

@@ -2,7 +2,9 @@ package gargoyle.ct.ui.impl.control;
 
 import gargoyle.ct.messages.MessageProvider;
 
-import javax.swing.*;
+import javax.swing.AbstractButton;
+import javax.swing.Action;
+import javax.swing.Icon;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,11 +65,6 @@ public abstract class CTLocalizableAction implements Action {
         return String.valueOf(getValue(KEY_TEXT));
     }
 
-    @Override
-    public final boolean isEnabled() {
-        return (Boolean) getValue(ENABLED);
-    }
-
     protected final void setTextKey(String textKey) {
         putValue(KEY_TEXT, textKey);
     }
@@ -88,6 +85,11 @@ public abstract class CTLocalizableAction implements Action {
 
     protected final String getToolTipTextKey() {
         return String.valueOf(getValue(KEY_TOOLTIP));
+    }
+
+    @Override
+    public final boolean isEnabled() {
+        return (Boolean) getValue(ENABLED);
     }
 
     protected final void setToolTipTextKey(String toolTipTextKey) {

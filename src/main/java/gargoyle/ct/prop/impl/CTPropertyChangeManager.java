@@ -12,7 +12,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class CTPropertyChangeManager {
 
-    private static final String MSG_ERROR_INVOKING_LISTENER  = "Error invoking CTPropertyChangeListener#onPropertyChange";
+    private static final String MSG_ERROR_INVOKING_LISTENER  =
+            "Error invoking " + "CTPropertyChangeListener#onPropertyChange";
     private static final String STR_PROPERTY_CHANGE_LISTENER = "CTPropertyChangeListener#onPropertyChange";
     private static CTPropertyChangeManager instance;
     private final Map<CTProperty, List<CTPropertyChangeListener>> listeners = new ConcurrentHashMap<>();
@@ -28,8 +29,7 @@ public class CTPropertyChangeManager {
         List<CTPropertyChangeListener> list;
         if (listeners.containsKey(property)) {
             list = listeners.get(property);
-        }
-        else {
+        } else {
             list = new CopyOnWriteArrayList<>();
             listeners.put(property, list);
         }

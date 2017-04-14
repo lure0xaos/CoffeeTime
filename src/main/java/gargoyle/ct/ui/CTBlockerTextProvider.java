@@ -6,7 +6,7 @@ import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.task.impl.CTTask;
 import gargoyle.ct.util.CTTimeUtil;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.concurrent.TimeUnit;
 
 public class CTBlockerTextProvider {
@@ -29,13 +29,17 @@ public class CTBlockerTextProvider {
     public String getBlockerText(CTTask task, long currentMillis, boolean big) {
         if (task.isReady()) {
             if (task.isBlocked(currentMillis)) {
-                return messages.getMessage(big ? STR_BLOCKED_BIG : STR_BLOCKED_SMALL, CTTimeUtil.formatMMSS(
-                        CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockEnd(currentMillis))));
+                return messages.getMessage(big ? STR_BLOCKED_BIG : STR_BLOCKED_SMALL,
+                                           CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis,
+                                                                                          task.getBlockEnd
+                                                                                                  (currentMillis))));
             }
             if (task.isWarn(currentMillis)) {
                 return CTTimeUtil.isInPeriod(TimeUnit.SECONDS, currentMillis, PERIOD, DELAY) ?
-                       messages.getMessage(big ? STR_WARN_BIG : STR_WARN_SMALL, CTTimeUtil.formatMMSS(
-                               CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis)))) :
+                       messages.getMessage(big ? STR_WARN_BIG : STR_WARN_SMALL,
+                                           CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis,
+                                                                                          task.getBlockStart(
+                                                                                                  currentMillis)))) :
                        null;
             }
         }
@@ -63,16 +67,16 @@ public class CTBlockerTextProvider {
         String toolTipText = CTTimeUtil.formatHHMMSS(currentMillis);
         if (task.isReady()) {
             if (task.isBlocked(currentMillis)) {
-                toolTipText = CTTimeUtil.formatMMSS(
-                        CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockEnd(currentMillis)));
+                toolTipText = CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis,
+                                                                             task.getBlockEnd(currentMillis)));
             }
             if (task.isWarn(currentMillis)) {
-                toolTipText = CTTimeUtil.formatMMSS(
-                        CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis)));
+                toolTipText = CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis,
+                                                                             task.getBlockStart(currentMillis)));
             }
             if (task.isSleeping(currentMillis)) {
-                toolTipText = CTTimeUtil.formatMMSS(
-                        CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis)));
+                toolTipText = CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis,
+                                                                             task.getBlockStart(currentMillis)));
             }
         }
         return toolTipText;

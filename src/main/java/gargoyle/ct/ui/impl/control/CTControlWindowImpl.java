@@ -9,8 +9,16 @@ import gargoyle.ct.ui.impl.CTBlockerContent;
 import gargoyle.ct.ui.util.CTDragHelper;
 import gargoyle.ct.util.CTTimeUtil;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPopupMenu;
+import javax.swing.JWindow;
+import javax.swing.ToolTipManager;
+import javax.swing.UIManager;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -55,12 +63,12 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
         toolTipManager.setLightWeightPopupEnabled(true);
         MouseListener l = new MouseAdapter() {
             @Override
-            public void mouseEntered(MouseEvent e) {
+            public void mouseEntered(MouseEvent event) {
                 onMouseMoved(true, false);
             }
 
             @Override
-            public void mouseExited(MouseEvent e) {
+            public void mouseExited(MouseEvent event) {
                 onMouseMoved(false, true);
             }
         };
@@ -138,8 +146,7 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
         transparency(true);
         if (textMode && !preferences.block().get()) {
             showTextContent();
-        }
-        else {
+        } else {
             showIconContent();
         }
     }
@@ -158,12 +165,22 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
         if (reshow && text != null && !text.isEmpty()) {
             try {
                 ToolTipManager.sharedInstance()
-                              .mouseMoved(new MouseEvent(textContent, MouseEvent.MOUSE_MOVED,
-                                                         CTTimeUtil.currentTimeMillis(), 0, getWidth(), getHeight(), 0,
+                              .mouseMoved(new MouseEvent(textContent,
+                                                         MouseEvent.MOUSE_MOVED,
+                                                         CTTimeUtil.currentTimeMillis(),
+                                                         0,
+                                                         getWidth(),
+                                                         getHeight(),
+                                                         0,
                                                          false));
                 ToolTipManager.sharedInstance()
-                              .mouseMoved(new MouseEvent(iconContent, MouseEvent.MOUSE_MOVED,
-                                                         CTTimeUtil.currentTimeMillis(), 0, getWidth(), getHeight(), 0,
+                              .mouseMoved(new MouseEvent(iconContent,
+                                                         MouseEvent.MOUSE_MOVED,
+                                                         CTTimeUtil.currentTimeMillis(),
+                                                         0,
+                                                         getWidth(),
+                                                         getHeight(),
+                                                         0,
                                                          false));
             } catch (RuntimeException ex) {
                 Log.debug(ex, MSG_TOOLTIP_ERROR);

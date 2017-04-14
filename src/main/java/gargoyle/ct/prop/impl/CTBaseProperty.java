@@ -6,17 +6,10 @@ import java.text.MessageFormat;
 
 public abstract class CTBaseProperty<T> implements CTProperty<T> {
 
-    protected final T      def;
     protected final String name;
-
-    public CTBaseProperty(String name, T def) {
-        this.name = name;
-        this.def = def;
-    }
 
     protected CTBaseProperty(String name) {
         this.name = name;
-        def = null;
     }
 
     public T get(T def) {
@@ -30,6 +23,6 @@ public abstract class CTBaseProperty<T> implements CTProperty<T> {
 
     @Override
     public String toString() {
-        return MessageFormat.format("CTBaseProperty'{'name=''{0}'', def={1}'}'", name, def);
+        return MessageFormat.format("CTBaseProperty'{'name=''{0}'''}'", name);
     }
 }

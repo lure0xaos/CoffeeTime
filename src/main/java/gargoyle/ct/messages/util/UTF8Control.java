@@ -68,8 +68,7 @@ public final class UTF8Control extends Control {
                     return connection.getInputStream();
                 }
             }
-        }
-        else {
+        } else {
             return loader.getResourceAsStream(resourceName);
         }
         return null;

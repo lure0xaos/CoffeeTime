@@ -24,7 +24,8 @@ abstract class CTBasePreferences implements CTPreferencesManager {
                        .invoke(loggerClass.getMethod("getLogger", String.class).invoke(null, "java.util.preferences"),
                                //NON-NLS
                                Enum.valueOf((Class<Enum>) levelClass, "OFF")); //NON-NLS
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | ClassNotFoundException ex) {
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | ClassNotFoundException
+                ex) {
             Log.warn(ex, MSG_JAVA_UTIL_LOGGING_ERROR);
         }
     }

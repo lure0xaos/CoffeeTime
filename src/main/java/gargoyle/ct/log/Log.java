@@ -20,8 +20,7 @@ public final class Log {
         try (InputStream stream = Log.class.getResourceAsStream(LOGGING_PROPERTIES)) {
             if (stream == null) {
                 Logger.getGlobal().warning(MessageFormat.format(MSG_NOT_FOUND, LOGGING_PROPERTIES));
-            }
-            else {
+            } else {
                 LogManager.getLogManager().readConfiguration(stream);
             }
         } catch (IOException ex) {
@@ -53,8 +52,7 @@ public final class Log {
                 }
                 if (exception == null) {
                     logger.logrb(level, sourceClass, sourceMethod, bundle, msg, params);
-                }
-                else {
+                } else {
                     logger.logrb(level, sourceClass, sourceMethod, bundle, msg, params);
                     logger.logrb(level, sourceClass, sourceMethod, bundle, msg, exception);
                 }

@@ -7,13 +7,16 @@ import gargoyle.ct.ui.CTBlockerTextProvider;
 import gargoyle.ct.ui.CTInformer;
 import gargoyle.ct.ui.CTWindow;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JWindow;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
@@ -36,20 +39,19 @@ public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindo
         container.setLayout(new BorderLayout());
         content = new CTBlockerContent(textProvider, true);
         container.add(content, BorderLayout.CENTER);
-        addWindowFocusListener(new WindowFocusListener() {
+        addWindowFocusListener(new WindowAdapter() {
             @Override
-            public void windowGainedFocus(WindowEvent e) {
-                //
-            }
-
-            @Override
-            public void windowLostFocus(WindowEvent e) {
-                if (isVisible()) {
-                    e.getWindow().requestFocus();
-                }
+            public void windowLostFocus(WindowEvent event) {
+                holdFocus(event);
             }
         });
         this.preferences = preferences;
+    }
+
+    private void holdFocus(WindowEvent event) {
+        if (isVisible()) {
+            event.getWindow().requestFocus();
+        }
     }
 
     public static List<CTBlocker> forAllDevices(CTPreferences preferences) {
@@ -70,17 +72,19 @@ public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindo
 
     public void debug(boolean debug) {
         setAlwaysOnTop(!debug);
-        MouseListener l = new MouseAdapter() {
+        removeMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mouseClicked(MouseEvent event) {
                 destroy();
             }
-        };
+        });
         if (debug) {
-            addMouseListener(l);
-        }
-        else {
-            removeMouseListener(l);
+            addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent event) {
+                    destroy();
+                }
+            });
         }
     }
 
@@ -118,8 +122,7 @@ public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindo
         if (isVisible()) {
             repaint();
             toFront();
-        }
-        else {
+        } else {
             showMe();
         }
     }

@@ -3,7 +3,7 @@ package gargoyle.ct.ui.impl;
 import gargoyle.ct.messages.LocaleProvider;
 import gargoyle.ct.messages.MessageProvider;
 
-import javax.swing.*;
+import javax.swing.JLabel;
 
 public class CTLocalizableLabel extends JLabel {
 

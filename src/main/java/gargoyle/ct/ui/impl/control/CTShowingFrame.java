@@ -1,6 +1,6 @@
 package gargoyle.ct.ui.impl.control;
 
-import javax.swing.*;
+import javax.swing.JFrame;
 
 public class CTShowingFrame extends JFrame {
 

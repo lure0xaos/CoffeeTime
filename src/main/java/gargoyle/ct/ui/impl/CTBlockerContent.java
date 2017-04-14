@@ -7,8 +7,14 @@ import gargoyle.ct.ui.CTBlockerTextProvider;
 import gargoyle.ct.ui.CTInformer;
 import gargoyle.ct.ui.CTWindow;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.IOException;
@@ -64,13 +70,13 @@ public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, C
 
     static void adjust(JComponent container, JLabel label) {
         if (!container.isVisible() || container.getHeight() == 0) return;
-        label.setFont(new Font(Font.DIALOG, Font.PLAIN, FONT_SIZE));
-        label.setFont(new Font(Font.DIALOG, Font.PLAIN, Math.min((int) (FONT_SIZE * label.getWidth() / (MARGIN *
-                                                                                                        label.getFontMetrics(
-                                                                                                                label.getFont())
-                                                                                                             .stringWidth(
-                                                                                                                     label.getText()))),
-                                                                 label.getHeight())));
+        Font font = new Font(Font.DIALOG, Font.PLAIN, FONT_SIZE);
+        label.setFont(font);
+        label.setFont(new Font(Font.DIALOG,
+                               Font.PLAIN,
+                               Math.min((int) (FONT_SIZE * label.getWidth() /
+                                               (MARGIN * label.getFontMetrics(font).stringWidth(label.getText()))),
+                                        label.getHeight())));
     }
 
     @Override
@@ -102,8 +108,7 @@ public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, C
         if (isVisible()) {
             Log.debug(text);
             repaint();
-        }
-        else {
+        } else {
             showMe();
         }
     }
@@ -133,12 +138,12 @@ public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, C
         }
 
         @Override
-        public void componentResized(ComponentEvent e) {
+        public void componentResized(ComponentEvent event) {
             adjust(container, label);
         }
 
         @Override
-        public void componentShown(ComponentEvent e) {
+        public void componentShown(ComponentEvent event) {
             adjust(container, label);
         }
     }

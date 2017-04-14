@@ -88,8 +88,7 @@ public class CTConfigs implements Serializable {
             if (other.configs != null) {
                 return false;
             }
-        }
-        else if (!Objects.equals(configs, other.configs)) {
+        } else if (!Objects.equals(configs, other.configs)) {
             return false;
         }
         return true;

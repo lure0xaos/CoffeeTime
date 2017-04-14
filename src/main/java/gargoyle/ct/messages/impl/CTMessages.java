@@ -42,8 +42,7 @@ public class CTMessages implements MessageProviderEx {
             if (parent == null) {
                 throw new MissingResourceException(MessageFormat.format(MSG_NO_BUNDLE, baseName), baseName,
                                                    ex.getKey());
-            }
-            else {
+            } else {
                 Log.warn(MessageFormat.format(MSG_NO_BUNDLE, baseName));
             }
         }
@@ -78,16 +77,17 @@ public class CTMessages implements MessageProviderEx {
             try {
                 return MessageFormat.format(pattern, args);
             } catch (IllegalArgumentException ex) {
-                throw new IllegalArgumentException(
-                        MessageFormat.format(CAN_T_PARSE_MESSAGE_0_1_2, message, pattern, Arrays.toString(args)), ex);
+                throw new IllegalArgumentException(MessageFormat.format(CAN_T_PARSE_MESSAGE_0_1_2,
+                                                                        message,
+                                                                        pattern,
+                                                                        Arrays.toString(args)), ex);
             }
         } catch (MissingResourceException ex) {
             if (parent == null) {
                 String bundle = messages.getBaseBundleName();
                 throw new MissingResourceException(MessageFormat.format(MSG_NO_MESSAGE, bundle, message), bundle,
                                                    message);
-            }
-            else {
+            } else {
                 return parent.getMessage(message, args);
             }
         }

@@ -1,6 +1,6 @@
 package gargoyle.ct.ui.impl.control;
 
-import javax.swing.*;
+import javax.swing.JCheckBoxMenuItem;
 
 public final class CTConfigMenuItem extends JCheckBoxMenuItem {
 

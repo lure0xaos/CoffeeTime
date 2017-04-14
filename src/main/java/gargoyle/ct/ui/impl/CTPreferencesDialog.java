@@ -7,8 +7,16 @@ import gargoyle.ct.pref.CTPreferences.SUPPORTED_LOCALES;
 import gargoyle.ct.pref.impl.prop.CTPrefProperty;
 import gargoyle.ct.ui.CTDialog;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JSlider;
+import javax.swing.SwingConstants;
+import java.awt.Container;
+import java.awt.GridLayout;
+import java.awt.Window;
 import java.util.Arrays;
 import java.util.Vector;
 
@@ -88,8 +96,7 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
             Vector<E> list = new Vector<>(Arrays.asList(enumConstants));
             list.add(0, null);
             control = new JComboBox<>(list);
-        }
-        else {
+        } else {
             control = new JComboBox<>(enumConstants);
         }
         control.setSelectedItem(property.get());

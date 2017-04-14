@@ -12,8 +12,10 @@ public final class CTConfigDataConverter implements CTUnitConverter<long[]> {
 
     private static final String  COMMENTS                                    = "#;'";
     private static final String  MSG_CANNOT_PARSE_LINE_0                     = "Cannot parse line: {0}";
-    private static final String  MSG_CANNOT_PARSE_LINE_0_INVALID_TIME_UNIT_1 = "Cannot parse line: {0}, invalid time unit {1}";
-    private static final String  MSG_CANNOT_PARSE_LINE_INVALID_TIME_UNIT_0   = "Cannot parse line, invalid time unit {0}";
+    private static final String  MSG_CANNOT_PARSE_LINE_0_INVALID_TIME_UNIT_1 =
+            "Cannot parse line: {0}, invalid time " + "unit {1}";
+    private static final String  MSG_CANNOT_PARSE_LINE_INVALID_TIME_UNIT_0   =
+            "Cannot parse line, invalid time unit " + "{0}";
     private static final String  MSG_COMMENTED_LINE_0                        = "Commented line: {0}";
     private static final String  MSG_EMPTY_LINE                              = "Empty line";
     private static final String  UNIT_HOURS                                  = "H";
@@ -38,24 +40,28 @@ public final class CTConfigDataConverter implements CTUnitConverter<long[]> {
                 unitChar = UNIT_SECONDS;
                 break;
             case NANOSECONDS:
-                throw new UnsupportedOperationException(
-                        MessageFormat.format(MSG_CANNOT_PARSE_LINE_INVALID_TIME_UNIT_0, unit.name()));
+                throw new UnsupportedOperationException(MessageFormat.format(MSG_CANNOT_PARSE_LINE_INVALID_TIME_UNIT_0,
+                                                                             unit.name()));
             case MICROSECONDS:
-                throw new UnsupportedOperationException(
-                        MessageFormat.format(MSG_CANNOT_PARSE_LINE_INVALID_TIME_UNIT_0, unit.name()));
+                throw new UnsupportedOperationException(MessageFormat.format(MSG_CANNOT_PARSE_LINE_INVALID_TIME_UNIT_0,
+                                                                             unit.name()));
             case MILLISECONDS:
-                throw new UnsupportedOperationException(
-                        MessageFormat.format(MSG_CANNOT_PARSE_LINE_INVALID_TIME_UNIT_0, unit.name()));
+                throw new UnsupportedOperationException(MessageFormat.format(MSG_CANNOT_PARSE_LINE_INVALID_TIME_UNIT_0,
+                                                                             unit.name()));
             case DAYS:
-                throw new UnsupportedOperationException(
-                        MessageFormat.format(MSG_CANNOT_PARSE_LINE_INVALID_TIME_UNIT_0, unit.name()));
+                throw new UnsupportedOperationException(MessageFormat.format(MSG_CANNOT_PARSE_LINE_INVALID_TIME_UNIT_0,
+                                                                             unit.name()));
             default:
-                throw new UnsupportedOperationException(
-                        MessageFormat.format(MSG_CANNOT_PARSE_LINE_INVALID_TIME_UNIT_0, unit.name()));
+                throw new UnsupportedOperationException(MessageFormat.format(MSG_CANNOT_PARSE_LINE_INVALID_TIME_UNIT_0,
+                                                                             unit.name()));
         }
-        return MessageFormat.format(PATTERN_FORMAT, CTTimeUtil.fromMillis(unit, data[0]), unitChar,
-                                    CTTimeUtil.fromMillis(unit, data[1]), unitChar,
-                                    CTTimeUtil.fromMillis(unit, data[2]), unitChar);
+        return MessageFormat.format(PATTERN_FORMAT,
+                                    CTTimeUtil.fromMillis(unit, data[0]),
+                                    unitChar,
+                                    CTTimeUtil.fromMillis(unit, data[1]),
+                                    unitChar,
+                                    CTTimeUtil.fromMillis(unit, data[2]),
+                                    unitChar);
     }
 
     @Override
@@ -92,8 +98,10 @@ public final class CTConfigDataConverter implements CTUnitConverter<long[]> {
                         unit = TimeUnit.SECONDS;
                         break;
                     default:
-                        throw new IllegalArgumentException(
-                                MessageFormat.format(MSG_CANNOT_PARSE_LINE_0_INVALID_TIME_UNIT_1, line, u));
+                        throw new IllegalArgumentException(MessageFormat.format(
+                                MSG_CANNOT_PARSE_LINE_0_INVALID_TIME_UNIT_1,
+                                line,
+                                u));
                 }
                 try {
                     data[g / 2] = CTTimeUtil.toMillis(unit, Long.parseLong(q));
@@ -101,8 +109,7 @@ public final class CTConfigDataConverter implements CTUnitConverter<long[]> {
                     throw new IllegalArgumentException(MessageFormat.format(MSG_CANNOT_PARSE_LINE_0, line), ex);
                 }
             }
-        }
-        else {
+        } else {
             throw new IllegalArgumentException(line);
         }
         return data;

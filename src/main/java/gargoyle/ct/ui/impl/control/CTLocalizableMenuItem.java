@@ -2,7 +2,7 @@ package gargoyle.ct.ui.impl.control;
 
 import gargoyle.ct.messages.LocaleProvider;
 
-import javax.swing.*;
+import javax.swing.JMenuItem;
 
 public final class CTLocalizableMenuItem extends JMenuItem {
 

@@ -1,6 +1,8 @@
 package gargoyle.ct.ui.impl.control;
 
-import javax.swing.*;
+import javax.swing.AbstractButton;
+import javax.swing.Action;
+import javax.swing.Icon;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Map;
@@ -59,11 +61,6 @@ public abstract class CTAction implements Action {
     }
 
     @Override
-    public final boolean isEnabled() {
-        return (Boolean) getValue(ENABLED);
-    }
-
-    @Override
     public Object getValue(String key) {
         return values.get(key);
     }
@@ -83,6 +80,11 @@ public abstract class CTAction implements Action {
 
     protected final Icon getIcon() {
         return (Icon) getValue(Action.SMALL_ICON);
+    }
+
+    @Override
+    public final boolean isEnabled() {
+        return (Boolean) getValue(ENABLED);
     }
 
     protected final void setIcon(Icon icon) {

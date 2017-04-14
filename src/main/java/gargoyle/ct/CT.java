@@ -26,9 +26,11 @@ import gargoyle.ct.ui.impl.control.CTShowingFrame;
 import gargoyle.ct.util.CTStreamUtil;
 import gargoyle.ct.util.CTTimeUtil;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import java.awt.Desktop;
 import java.awt.Desktop.Action;
+import java.awt.Frame;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -111,7 +113,8 @@ public final class CT implements CTApp {
     private static void setSystemLookAndFeel() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException ex) {
+        } catch (ClassNotFoundException | UnsupportedLookAndFeelException | IllegalAccessException |
+                InstantiationException ex) {
             throw new RuntimeException(ex);
         }
     }
@@ -146,8 +149,8 @@ public final class CT implements CTApp {
             ClassLoader loader = CT.class.getClassLoader();
             Locale      locale = Locale.getDefault();
             for (Resource resource : new Resource[]{new ClasspathResource(loader, HELP_PAGE).forLocale(locale),
-                                                    new ClasspathResource(loader, SLASH + HELP_PAGE).forLocale(
-                                                            locale)}) {
+                                                    new ClasspathResource(loader,
+                                                                          SLASH + HELP_PAGE).forLocale(locale)}) {
                 if (resource != null && resource.exists()) {
                     try (InputStream stream = resource.getInputStream()) {
                         File tempFile = File.createTempFile(CT.class.getName(), DOT + HTML);
@@ -158,8 +161,7 @@ public final class CT implements CTApp {
                         Log.error(ex, PAGE_0_NOT_FOUND, HELP_PAGE);
                     }
                     return;
-                }
-                else {
+                } else {
                     Log.debug(PAGE_0_NOT_FOUND, HELP_PAGE + ": " + (resource != null ? resource.getLocation() : null));
                 }
             }
@@ -182,12 +184,10 @@ public final class CT implements CTApp {
                     Log.error(ex, MSG_CANNOT_LOAD_0, configResource);
                     configs = new CTStandardConfigs();
                 }
-            }
-            else {
+            } else {
                 if (configResource == null) {
                     Log.warn(NOT_FOUND_0, CONFIG_NAME);
-                }
-                else {
+                } else {
                     Log.warn(NOT_FOUND_0, configResource);
                 }
                 configs = new CTStandardConfigs();
@@ -199,8 +199,7 @@ public final class CT implements CTApp {
                 }
             }
             this.configResource = configResource;
-        }
-        else {
+        } else {
             try (InputStream stream = configResource.getInputStream()) {
                 configs = configsConverter.parse(CTStreamUtil.convertStreamToString(stream));
             } catch (IOException ex) {

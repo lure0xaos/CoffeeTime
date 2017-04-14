@@ -1,7 +1,13 @@
 package gargoyle.ct.ui.util;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JComponent;
+import javax.swing.JWindow;
+import javax.swing.SwingUtilities;
+import java.awt.Dimension;
+import java.awt.GraphicsEnvironment;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Window;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -15,23 +21,24 @@ public final class CTDragHelper {
         Point mouseDownLocation = new Point();
         comp.addMouseListener(new MouseAdapter() {
             @Override
-            public void mousePressed(MouseEvent e) {
-                mouseDownLocation.setLocation(e.getPoint());
+            public void mousePressed(MouseEvent event) {
+                mouseDownLocation.setLocation(event.getPoint());
             }
 
             @Override
-            public void mouseReleased(MouseEvent e) {
+            public void mouseReleased(MouseEvent event) {
                 mouseDownLocation.setLocation(0, 0);
             }
         });
         comp.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
-            public void mouseDragged(MouseEvent e) {
-                Point currentLocation = e.getLocationOnScreen();
-                Point p = new Point(currentLocation.x - mouseDownLocation.x, currentLocation.y - mouseDownLocation.y);
+            public void mouseDragged(MouseEvent event) {
+                Point currentLocation = event.getLocationOnScreen();
+                Point point = new Point(currentLocation.x - mouseDownLocation.x,
+                                        currentLocation.y - mouseDownLocation.y);
                 Window win = SwingUtilities.getWindowAncestor(comp);
-                snap(p, win.getSize(), snap);
-                win.setLocation(p);
+                snap(point, win.getSize(), snap);
+                win.setLocation(point);
             }
         });
     }
@@ -56,19 +63,19 @@ public final class CTDragHelper {
         Point mouseDownLocation = new Point();
         win.addMouseListener(new MouseAdapter() {
             @Override
-            public void mousePressed(MouseEvent e) {
-                mouseDownLocation.setLocation(e.getPoint());
+            public void mousePressed(MouseEvent event) {
+                mouseDownLocation.setLocation(event.getPoint());
             }
 
             @Override
-            public void mouseReleased(MouseEvent e) {
+            public void mouseReleased(MouseEvent event) {
                 mouseDownLocation.setLocation(0, 0);
             }
         });
         win.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
-            public void mouseDragged(MouseEvent e) {
-                Point currentLocation = e.getLocationOnScreen();
+            public void mouseDragged(MouseEvent event) {
+                Point currentLocation = event.getLocationOnScreen();
                 Point p = new Point(currentLocation.x - mouseDownLocation.x, currentLocation.y - mouseDownLocation.y);
                 snap(p, win.getSize(), snap);
                 win.setLocation(p);

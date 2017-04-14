@@ -1,6 +1,6 @@
 package gargoyle.ct.ui;
 
-import java.awt.*;
+import java.awt.Color;
 
 @FunctionalInterface
 public interface CTInformer {

@@ -1,7 +1,9 @@
 package gargoyle.ct.ui.impl.control;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import java.awt.Color;
 import java.net.URL;
 
 public class CTIconContent extends JLabel {

@@ -10,6 +10,7 @@ import java.util.prefs.Preferences;
 
 public class CTPrefProperty<T> extends CTBaseObservableProperty<T> {
 
+    protected final T            def;
     protected final Converter<T> converter;
     private final   Preferences  preferences;
 
@@ -18,7 +19,8 @@ public class CTPrefProperty<T> extends CTBaseObservableProperty<T> {
     }
 
     public CTPrefProperty(Converter<T> converter, Preferences preferences, String name, T def) {
-        super(name, def);
+        super(name);
+        this.def = def;
         this.converter = converter;
         this.preferences = preferences;
     }
@@ -29,13 +31,11 @@ public class CTPrefProperty<T> extends CTBaseObservableProperty<T> {
         if (value == null) {
             return def;
         }
-        else {
-            try {
-                return converter.parse(value);
-            } catch (IllegalArgumentException ex) {
-                Log.warn(ex, ex.getMessage());
-                return def;
-            }
+        try {
+            return converter.parse(value);
+        } catch (IllegalArgumentException ex) {
+            Log.warn(ex, ex.getMessage());
+            return def;
         }
     }
 
