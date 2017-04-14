@@ -14,6 +14,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
@@ -21,6 +22,8 @@ import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.Arrays;
 import java.util.Vector;
 
@@ -64,15 +67,28 @@ public class CTLayoutBuilder {
         return control;
     }
 
-    public <T extends Number> JSpinner createSpinner(CTNumberProperty<T> property, T min, T max) {
+    public JSpinner createSpinner(CTProperty<Integer> property, Integer min, Integer max) {
         JSpinner control = new JSpinner(new SpinnerNumberModel());
-        control.setValue(property.get().intValue());
-        control.addChangeListener(event -> property.set(fromInt(minmax(min, max, (T) control.getValue()))));
+        control.setValue(property.get());
+        control.addChangeListener(event -> property.set(fromInt(minmax(min,
+                                                                       max,
+                                                                       Integer.valueOf(String.valueOf(control.getValue()))))));
         return control;
     }
 
     private static <T extends Number> T fromInt(int value) {
         return (T) (Integer) value;
+    }
+
+    private static Integer minmax(Integer min, Integer max, Integer value) {
+        return Math.max(min, Math.min(max, value));
+    }
+
+    public <T extends Number> JSpinner createSpinner(CTNumberProperty<T> property, T min, T max) {
+        JSpinner control = new JSpinner(new SpinnerNumberModel());
+        control.setValue(property.get().intValue());
+        control.addChangeListener(event -> property.set(fromInt(minmax(min, max, (T) control.getValue()))));
+        return control;
     }
 
     private static <T extends Number> int minmax(T min, T max, T value) {
@@ -81,6 +97,13 @@ public class CTLayoutBuilder {
 
     private static <T extends Number> int toInt(T value) {
         return (Integer) value;
+    }
+
+    public JSlider createSlider(CTProperty<Integer> property, Integer min, Integer max) {
+        JSlider control = new JSlider(toInt(min), toInt(max));
+        control.setValue(property.get());
+        control.addChangeListener(event -> property.set(fromInt(minmax(min, max, control.getValue()))));
+        return control;
     }
 
     public <T extends Number> JSlider createSlider(CTNumberProperty<T> property, T min, T max) {
@@ -93,7 +116,24 @@ public class CTLayoutBuilder {
     public JTextField createTextField(CTProperty<String> property) {
         JTextField control = new JTextField();
         control.setText(property.get());
-        control.addActionListener(event -> property.set(control.getText()));
+        control.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent event) {
+                property.set(control.getText());
+            }
+        });
+        return control;
+    }
+
+    public JTextArea createTextArea(CTProperty<String> property) {
+        JTextArea control = new JTextArea();
+        control.setText(property.get());
+        control.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent event) {
+                property.set(control.getText());
+            }
+        });
         return control;
     }
 

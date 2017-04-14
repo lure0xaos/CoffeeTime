@@ -5,7 +5,6 @@ import gargoyle.ct.messages.impl.CTMessages;
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.pref.CTPreferences.SUPPORTED_LOCALES;
 import gargoyle.ct.pref.impl.prop.CTPrefProperty;
-import gargoyle.ct.prop.CTNumberProperty;
 import gargoyle.ct.ui.CTDialog;
 import gargoyle.ct.ui.util.CTLayoutBuilder;
 
@@ -61,7 +60,7 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
     private static JSlider createTransparencyLevelControl(CTLayoutBuilder layoutBuilder,
                                                           CTPrefProperty<Integer> property) {
         int     maxOpacity = (int) CTPreferences.OPACITY_PERCENT;
-        JSlider control    = layoutBuilder.createSlider((CTNumberProperty<Integer>) property, 0, maxOpacity);
+        JSlider control    = layoutBuilder.createSlider(property, 0, maxOpacity);
         control.setExtent(maxOpacity / 10);
         control.setPaintLabels(true);
         control.setPaintTicks(true);
