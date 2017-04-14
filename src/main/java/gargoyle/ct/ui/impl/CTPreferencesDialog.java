@@ -69,10 +69,6 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
         return control;
     }
 
-    private static int minmax(int min, int max, int value) {
-        return Math.max(min, Math.min(max, value));
-    }
-
     @Override
     public Void showMe() {
         setVisible(true);
