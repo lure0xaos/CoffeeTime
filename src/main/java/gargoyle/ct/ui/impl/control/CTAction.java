@@ -103,7 +103,7 @@ public abstract class CTAction implements Action {
 
     @SuppressWarnings("InstanceVariableUsedBeforeInitialized")
     protected final synchronized void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
-        if (changeSupport == null || (oldValue != null && newValue != null && oldValue.equals(newValue))) {
+        if (changeSupport == null || oldValue != null && newValue != null && oldValue.equals(newValue)) {
             return;
         }
         changeSupport.firePropertyChange(propertyName, oldValue, newValue);

@@ -6,19 +6,12 @@ import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.pref.CTPreferences.SUPPORTED_LOCALES;
 import gargoyle.ct.pref.impl.prop.CTPrefProperty;
 import gargoyle.ct.ui.CTDialog;
+import gargoyle.ct.ui.util.CTLayoutBuilder;
 
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JSlider;
-import javax.swing.SwingConstants;
 import java.awt.Container;
-import java.awt.GridLayout;
 import java.awt.Window;
-import java.util.Arrays;
-import java.util.Vector;
 
 public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
 
@@ -42,68 +35,43 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
     }
 
     private void init(MessageProviderEx messages, CTPreferences preferences, Container pane) {
+        CTLayoutBuilder layoutBuilder = new CTLayoutBuilder(pane);
         preferences.supportedLocales().bind(messages.locale());
         setTitle(messages.getMessage(STR_TITLE));
-        pane.setLayout(new GridLayout(0, 2, 5, 3));
-        addLabeledControl(pane, createLocalizableLabel(messages, (STR_BLOCK), (STR_BLOCK_TOOLTIP)),
-                          createCheckBox(preferences.block()));
-        addLabeledControl(pane, createLocalizableLabel(messages, (STR_TRANSPARENCY), (STR_TRANSPARENCY_TOOLTIP)),
-                          createCheckBox(preferences.transparency()));
-        addLabeledControl(pane,
-                          createLocalizableLabel(messages, (STR_TRANSPARENCY_LEVEL), (STR_TRANSPARENCY_LEVEL_TOOLTIP)),
-                          createTransparencyLevelControl(preferences.transparencyLevel()));
-        addLabeledControl(pane,
-                          createLocalizableLabel(messages, (STR_SUPPORTED_LOCALES), (STR_SUPPORTED_LOCALES_TOOLTIP)),
-                          createComboBox(SUPPORTED_LOCALES.class, preferences.supportedLocales(), false));
-        preferences.supportedLocales().bind(messages.locale());
-    }
-
-    private static void addLabeledControl(Container pane, JLabel label, JComponent transparencyControl) {
-        pane.add(label);
-        pane.add(transparencyControl);
+        layoutBuilder.addLabeledControl(layoutBuilder.createLocalizableLabel(messages, STR_BLOCK, STR_BLOCK_TOOLTIP),
+                                        layoutBuilder.createCheckBox(preferences.block()));
+        layoutBuilder.addLabeledControl(layoutBuilder.createLocalizableLabel(messages,
+                                                                             STR_TRANSPARENCY,
+                                                                             STR_TRANSPARENCY_TOOLTIP),
+                                        layoutBuilder.createCheckBox(preferences.transparency()));
+        layoutBuilder.addLabeledControl(layoutBuilder.createLocalizableLabel(messages,
+                                                                             STR_TRANSPARENCY_LEVEL,
+                                                                             STR_TRANSPARENCY_LEVEL_TOOLTIP),
+                                        createTransparencyLevelControl(preferences.transparencyLevel()));
+        layoutBuilder.addLabeledControl(layoutBuilder.createLocalizableLabel(messages,
+                                                                             STR_SUPPORTED_LOCALES,
+                                                                             STR_SUPPORTED_LOCALES_TOOLTIP),
+                                        layoutBuilder.createComboBox(SUPPORTED_LOCALES.class,
+                                                                     preferences.supportedLocales(),
+                                                                     false));
+        layoutBuilder.build();
     }
 
     private static JSlider createTransparencyLevelControl(CTPrefProperty<Integer> property) {
-        JSlider control = new JSlider(0, (int) CTPreferences.OPACITY_PERCENT);
-        control.setExtent((int) CTPreferences.OPACITY_PERCENT / 10);
+        int     maxOpacity = (int) CTPreferences.OPACITY_PERCENT;
+        JSlider control    = new JSlider(0, maxOpacity);
+        control.setExtent(maxOpacity / 10);
         control.setPaintLabels(true);
         control.setPaintTicks(true);
-        control.setMajorTickSpacing((int) CTPreferences.OPACITY_PERCENT / 5);
-        control.setMinorTickSpacing((int) CTPreferences.OPACITY_PERCENT / 10);
+        control.setMajorTickSpacing(maxOpacity / 5);
+        control.setMinorTickSpacing(maxOpacity / 10);
         control.setValue(property.get());
-        control.addChangeListener(event -> property.set(Math.max(1,
-                                                                 Math.min((int) CTPreferences.OPACITY_PERCENT,
-                                                                          control.getValue()))));
+        control.addChangeListener(event -> property.set(minmax(1, maxOpacity, control.getValue())));
         return control;
     }
 
-    private static JCheckBox createCheckBox(CTPrefProperty<Boolean> property) {
-        JCheckBox control = new JCheckBox();
-        control.setSelected(property.get());
-        control.addActionListener(event -> property.set(control.isSelected()));
-        return control;
-    }
-
-    private static JLabel createLocalizableLabel(MessageProviderEx messages, String textKey, String toolTipTextKey) {
-        return new CTLocalizableLabel(messages, messages, textKey, toolTipTextKey, SwingConstants.TRAILING);
-    }
-
-    @SuppressWarnings({"unchecked", "TypeMayBeWeakened", "SameParameterValue"})
-    private static <E extends Enum<E>> JComboBox<E> createComboBox(Class<E> type, CTPrefProperty<E> property,
-                                                                   boolean allowNull) {
-        E[]          enumConstants = type.getEnumConstants();
-        JComboBox<E> control;
-        if (allowNull) {
-            //noinspection UseOfObsoleteCollectionType
-            Vector<E> list = new Vector<>(Arrays.asList(enumConstants));
-            list.add(0, null);
-            control = new JComboBox<>(list);
-        } else {
-            control = new JComboBox<>(enumConstants);
-        }
-        control.setSelectedItem(property.get());
-        control.addActionListener(event -> property.set((E) control.getSelectedItem()));
-        return control;
+    private static int minmax(int min, int max, int value) {
+        return Math.max(min, Math.min(max, value));
     }
 
     @Override
