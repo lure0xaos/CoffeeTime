@@ -4,8 +4,6 @@ import gargoyle.ct.messages.MessageProvider;
 
 import javax.swing.AbstractButton;
 import javax.swing.Icon;
-import java.util.HashMap;
-import java.util.Map;
 
 @SuppressWarnings("ConstructorNotProtectedInAbstractClass")
 public abstract class CTLocalizableAction extends CTAction {
@@ -13,7 +11,6 @@ public abstract class CTLocalizableAction extends CTAction {
     private static final String KEY_TEXT    = "text-key";
     private static final String KEY_TOOLTIP = "tooltip-key";
     private final MessageProvider messages;
-    private final Map<String, Object> values = new HashMap<>();
 
     public CTLocalizableAction(MessageProvider messages, String textKey) {
         this.messages = messages;

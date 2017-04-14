@@ -18,6 +18,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
+import javax.swing.text.JTextComponent;
 import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -116,24 +117,14 @@ public class CTLayoutBuilder {
     public JTextField createTextField(CTProperty<String> property) {
         JTextField control = new JTextField();
         control.setText(property.get());
-        control.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyTyped(KeyEvent event) {
-                property.set(control.getText());
-            }
-        });
+        control.addKeyListener(new PropertyKeyAdapter(property, control));
         return control;
     }
 
     public JTextArea createTextArea(CTProperty<String> property) {
         JTextArea control = new JTextArea();
         control.setText(property.get());
-        control.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyTyped(KeyEvent event) {
-                property.set(control.getText());
-            }
-        });
+        control.addKeyListener(new PropertyKeyAdapter(property, control));
         return control;
     }
 
@@ -166,5 +157,21 @@ public class CTLayoutBuilder {
 
     public void build() {
         pane.validate();
+    }
+
+    private static class PropertyKeyAdapter extends KeyAdapter {
+
+        private final CTProperty<String> property;
+        private final JTextComponent     control;
+
+        public PropertyKeyAdapter(CTProperty<String> property, JTextComponent control) {
+            this.property = property;
+            this.control = control;
+        }
+
+        @Override
+        public void keyTyped(KeyEvent event) {
+            property.set(control.getText());
+        }
     }
 }
