@@ -3,15 +3,17 @@ package gargoyle.ct.ui.impl.control;
 import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.Icon;
+import javax.swing.event.SwingPropertyChangeSupport;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Map;
 
-@SuppressWarnings("ConstructorNotProtectedInAbstractClass")
+@SuppressWarnings({"ConstructorNotProtectedInAbstractClass", "WeakerAccess"})
 public abstract class CTAction implements Action {
 
     private static final String              ENABLED = "enabled";
     private final        Map<String, Object> values  = new HashMap<>();
+    private SwingPropertyChangeSupport changeSupport;
 
     public CTAction(String text) {
         setText(text);
@@ -61,16 +63,6 @@ public abstract class CTAction implements Action {
         putValue(Action.NAME, text);
     }
 
-    @Override
-    public Object getValue(String key) {
-        return values.get(key);
-    }
-
-    @Override
-    public void putValue(String key, Object value) {
-        values.put(key, value);
-    }
-
     protected final String getToolTipText() {
         return String.valueOf(getValue(Action.SHORT_DESCRIPTION));
     }
@@ -88,6 +80,18 @@ public abstract class CTAction implements Action {
     }
 
     @Override
+    public final Object getValue(String key) {
+        return values.get(key);
+    }
+
+    @Override
+    public final void putValue(String key, Object value) {
+        Object oldValue = getValue(key);
+        values.put(key, value);
+        firePropertyChange(key, oldValue, value);
+    }
+
+    @Override
     public final boolean isEnabled() {
         return (Boolean) getValue(ENABLED);
     }
@@ -97,11 +101,27 @@ public abstract class CTAction implements Action {
         putValue(ENABLED, enabled);
     }
 
-    @Override
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
+    @SuppressWarnings("InstanceVariableUsedBeforeInitialized")
+    protected final synchronized void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
+        if (changeSupport == null || (oldValue != null && newValue != null && oldValue.equals(newValue))) {
+            return;
+        }
+        changeSupport.firePropertyChange(propertyName, oldValue, newValue);
     }
 
     @Override
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
+    public final synchronized void addPropertyChangeListener(PropertyChangeListener listener) {
+        if (changeSupport == null) {
+            changeSupport = new SwingPropertyChangeSupport(this);
+        }
+        changeSupport.addPropertyChangeListener(listener);
+    }
+
+    @Override
+    public final synchronized void removePropertyChangeListener(PropertyChangeListener listener) {
+        if (changeSupport == null) {
+            return;
+        }
+        changeSupport.removePropertyChangeListener(listener);
     }
 }

@@ -64,16 +64,6 @@ public abstract class CTLocalizableAction extends CTAction {
         putValue(KEY_TEXT, textKey);
     }
 
-    @Override
-    public Object getValue(String key) {
-        return values.get(key);
-    }
-
-    @Override
-    public void putValue(String key, Object value) {
-        values.put(key, value);
-    }
-
     protected final String getToolTipLocalizedText() {
         return messages.getMessage(getToolTipTextKey());
     }
