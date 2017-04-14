@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.prefs.Preferences;
 
 public class CTPrefSerializableProperty<T extends Serializable> extends CTPrefProperty<T> {
+
     public CTPrefSerializableProperty(Preferences preferences, String name) {
         this(preferences, name, null);
     }

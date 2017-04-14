@@ -9,6 +9,7 @@ import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 
 public final class CTSerializationUtil {
+
     private CTSerializationUtil() {
     }
 
@@ -30,8 +31,8 @@ public final class CTSerializationUtil {
     }
 
     public static <T> byte[] serialize(T o) throws IOException {
-        try (ByteArrayOutputStream out = new ByteArrayOutputStream();
-             final ObjectOutput oos = new ObjectOutputStream(out)) {
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream(); final ObjectOutput oos = new ObjectOutputStream(
+                out)) {
             oos.writeObject(o);
             oos.flush();
             return out.toByteArray();

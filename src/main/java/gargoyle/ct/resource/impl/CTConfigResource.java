@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public final class CTConfigResource extends LocalResource {
+
     private static final String SLASH = "/";
 
     private CTConfigResource(URL url) {

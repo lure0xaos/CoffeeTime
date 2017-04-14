@@ -6,7 +6,8 @@ import gargoyle.ct.ui.impl.CTControl;
 import java.awt.event.ActionEvent;
 
 public final class CTConfigAction extends CTAction {
-    private final CTConfig config;
+
+    private final CTConfig  config;
     private final CTControl control;
 
     public CTConfigAction(CTControl control, CTConfig config) {

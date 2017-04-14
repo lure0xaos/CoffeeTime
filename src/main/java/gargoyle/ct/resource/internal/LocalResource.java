@@ -8,11 +8,12 @@ import java.net.URL;
 import java.text.MessageFormat;
 
 public class LocalResource extends VirtualResource {
-    private static final String CANNOT_CREATE_ROOTS = "Cannot create roots";
+
+    private static final String CANNOT_CREATE_ROOTS  = "Cannot create roots";
     private static final String CANNOT_USE_0_AS_ROOT = "Cannot use {0} as root";
     private static final String MSG_LOCATION_IS_NULL = "some location is null";
-    private static final String USER_DIR = "user.dir";
-    private static final String USER_HOME = "user.home";
+    private static final String USER_DIR             = "user.dir";
+    private static final String USER_HOME            = "user.home";
 
     protected LocalResource(URL url) {
         super(url.toExternalForm());
@@ -39,9 +40,9 @@ public class LocalResource extends VirtualResource {
     public static URL[] getLocations() {
         try {
             return new URL[]{getCurrentDirectoryLocation(),
-                    getProgramDirectoryLocation(),
-                    getHomeDirectoryLocation(),
-                    getClasspathLocation()};
+                             getProgramDirectoryLocation(),
+                             getHomeDirectoryLocation(),
+                             getClasspathLocation()};
         } catch (RuntimeException ex) {
             throw new RuntimeException(CANNOT_CREATE_ROOTS, ex);
         }

@@ -5,6 +5,7 @@ import gargoyle.ct.config.CTConfigs;
 import gargoyle.ct.pref.CTPreferences;
 
 public interface CTControlActions {
+
     void arm(CTConfig config);
 
     void exit();

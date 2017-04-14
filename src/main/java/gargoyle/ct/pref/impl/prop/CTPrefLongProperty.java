@@ -5,6 +5,7 @@ import gargoyle.ct.pref.impl.convert.impl.LongConverter;
 import java.util.prefs.Preferences;
 
 public class CTPrefLongProperty extends CTPrefProperty<Long> {
+
     public CTPrefLongProperty(Preferences preferences, String name) {
         this(preferences, name, 0L);
     }

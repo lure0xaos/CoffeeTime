@@ -1,6 +1,7 @@
 package gargoyle.ct.prop.impl.simple;
 
 public class CTSimpleEnumProperty<E extends Enum<E>> extends CTSimpleProperty<E> {
+
     public CTSimpleEnumProperty(Class<E> type, String name) {
         this(type, name, null);
     }

@@ -9,6 +9,7 @@ import java.util.Objects;
 import java.util.function.Function;
 
 public abstract class CTBaseObservableProperty<T> extends CTBaseProperty<T> implements CTObservableProperty<T> {
+
     protected CTBaseObservableProperty(String name) {
         super(name);
     }
@@ -21,7 +22,9 @@ public abstract class CTBaseObservableProperty<T> extends CTBaseProperty<T> impl
         if (Objects.equals(oldValue, value)) {
             return null;
         }
-        return CTPropertyChangeManager.getInstance().firePropertyChange(this, new CTPropertyChangeEvent<>(this, name(), oldValue, value));
+        return CTPropertyChangeManager.getInstance()
+                                      .firePropertyChange(this,
+                                                          new CTPropertyChangeEvent<>(this, name(), oldValue, value));
     }
 
     @SuppressWarnings("Convert2Lambda")
@@ -34,8 +37,8 @@ public abstract class CTBaseObservableProperty<T> extends CTBaseProperty<T> impl
     @SuppressWarnings("Convert2Lambda")
     @Override
     public <T2> void bind(CTProperty<T2> property, Function<T, T2> mapper) {
-        T myValue = get();
-        T2 otherValue = property.get();
+        T  myValue       = get();
+        T2 otherValue    = property.get();
         T2 newOtherValue = mapper.apply(myValue);
         if (!Objects.equals(otherValue, newOtherValue)) {
             property.set(newOtherValue);
@@ -58,7 +61,7 @@ public abstract class CTBaseObservableProperty<T> extends CTBaseProperty<T> impl
     @SuppressWarnings("Convert2Lambda")
     @Override
     public void bind(CTProperty<T> property) {
-        T myValue = get();
+        T myValue    = get();
         T otherValue = property.get();
         if (!Objects.equals(myValue, otherValue)) {
             property.set(myValue);

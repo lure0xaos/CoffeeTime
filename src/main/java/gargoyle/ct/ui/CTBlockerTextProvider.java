@@ -10,13 +10,14 @@ import java.awt.*;
 import java.util.concurrent.TimeUnit;
 
 public class CTBlockerTextProvider {
-    private static final int DELAY = 3;
-    private static final String LOC_MESSAGES = "messages.blocker";
-    private static final int PERIOD = 60;
-    private static final String STR_BLOCKED_BIG = "blocked_w-big";
+
+    private static final int    DELAY             = 3;
+    private static final String LOC_MESSAGES      = "messages.blocker";
+    private static final int    PERIOD            = 60;
+    private static final String STR_BLOCKED_BIG   = "blocked_w-big";
     private static final String STR_BLOCKED_SMALL = "blocked_w-small";
-    private static final String STR_WARN_BIG = "warn_w-big";
-    private static final String STR_WARN_SMALL = "warn_w-small";
+    private static final String STR_WARN_BIG      = "warn_w-big";
+    private static final String STR_WARN_SMALL    = "warn_w-small";
     private final MessageProvider messages;
 
     public CTBlockerTextProvider(CTPreferences preferences) {
@@ -28,10 +29,14 @@ public class CTBlockerTextProvider {
     public String getBlockerText(CTTask task, long currentMillis, boolean big) {
         if (task.isReady()) {
             if (task.isBlocked(currentMillis)) {
-                return messages.getMessage(big ? STR_BLOCKED_BIG : STR_BLOCKED_SMALL, CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockEnd(currentMillis))));
+                return messages.getMessage(big ? STR_BLOCKED_BIG : STR_BLOCKED_SMALL, CTTimeUtil.formatMMSS(
+                        CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockEnd(currentMillis))));
             }
             if (task.isWarn(currentMillis)) {
-                return CTTimeUtil.isInPeriod(TimeUnit.SECONDS, currentMillis, PERIOD, DELAY) ? messages.getMessage(big ? STR_WARN_BIG : STR_WARN_SMALL, CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis)))) : null;
+                return CTTimeUtil.isInPeriod(TimeUnit.SECONDS, currentMillis, PERIOD, DELAY) ?
+                       messages.getMessage(big ? STR_WARN_BIG : STR_WARN_SMALL, CTTimeUtil.formatMMSS(
+                               CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis)))) :
+                       null;
             }
         }
         return null;
@@ -58,13 +63,16 @@ public class CTBlockerTextProvider {
         String toolTipText = CTTimeUtil.formatHHMMSS(currentMillis);
         if (task.isReady()) {
             if (task.isBlocked(currentMillis)) {
-                toolTipText = CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockEnd(currentMillis)));
+                toolTipText = CTTimeUtil.formatMMSS(
+                        CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockEnd(currentMillis)));
             }
             if (task.isWarn(currentMillis)) {
-                toolTipText = CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis)));
+                toolTipText = CTTimeUtil.formatMMSS(
+                        CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis)));
             }
             if (task.isSleeping(currentMillis)) {
-                toolTipText = CTTimeUtil.formatMMSS(CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis)));
+                toolTipText = CTTimeUtil.formatMMSS(
+                        CTTimeUtil.timeRemainsTo(currentMillis, task.getBlockStart(currentMillis)));
             }
         }
         return toolTipText;

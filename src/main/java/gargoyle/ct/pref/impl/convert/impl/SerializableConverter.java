@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 public class SerializableConverter<T extends Serializable> implements Converter<T> {
+
     private final BytesConverter converter = new BytesConverter();
 
     @Override

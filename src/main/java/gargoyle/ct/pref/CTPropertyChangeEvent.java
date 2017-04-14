@@ -5,9 +5,10 @@ import gargoyle.ct.prop.CTProperty;
 import java.text.MessageFormat;
 
 public class CTPropertyChangeEvent<T> {
-    private final String name;
-    private final T newValue;
-    private final T oldValue;
+
+    private final String        name;
+    private final T             newValue;
+    private final T             oldValue;
     private final CTProperty<T> property;
 
     public CTPropertyChangeEvent(CTProperty<T> property, String name, T oldValue, T newValue) {

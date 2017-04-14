@@ -9,17 +9,20 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class CTConfigDataConverter implements CTTimeConverter<long[]> {
-    private static final String COMMENTS = "#;'";
-    private static final String MSG_CANNOT_PARSE_LINE_0 = "Cannot parse line: {0}";
-    private static final String
-            MSG_CANNOT_PARSE_LINE_0_INVALID_TIME_UNIT_1 =
-            "Cannot parse line: {0}, invalid time unit {1}";
-    private static final String MSG_CANNOT_PARSE_LINE_INVALID_TIME_UNIT_0 = "Cannot parse line, invalid time unit {0}";
-    private static final String MSG_COMMENTED_LINE_0 = "Commented line: {0}";
-    private static final String MSG_EMPTY_LINE = "Empty line";
-    private static final String UNIT_HOURS = "H";
-    private static final String UNIT_MINUTES = "M";
-    private static final String UNIT_SECONDS = "S";
+
+    private static final String  COMMENTS                                    = "#;'";
+    private static final String  MSG_CANNOT_PARSE_LINE_0                     = "Cannot parse line: {0}";
+    private static final String  MSG_CANNOT_PARSE_LINE_0_INVALID_TIME_UNIT_1 = "Cannot parse line: {0}, invalid time unit {1}";
+    private static final String  MSG_CANNOT_PARSE_LINE_INVALID_TIME_UNIT_0   = "Cannot parse line, invalid time unit {0}";
+    private static final String  MSG_COMMENTED_LINE_0                        = "Commented line: {0}";
+    private static final String  MSG_EMPTY_LINE                              = "Empty line";
+    private static final String  UNIT_HOURS                                  = "H";
+    private static final String  UNIT_MINUTES                                = "M";
+    private static final String  UNIT_SECONDS                                = "S";
+    private static final String  PATTERN_FORMAT                              = "{0}{1}/{2}{3}/{4}{5}";
+    private static final Pattern PATTERN_PARSE                               = Pattern.compile(
+            "(?:([0-9]+)([a-zA-Z]+))/(?:([0-9]+)([a-zA-Z]+))[^a-zA-Z0-9]+(?:([0-9]+)([a-zA-Z]+))",
+            Pattern.CASE_INSENSITIVE);
 
     @Override
     public String format(TimeUnit unit, long... data) {
@@ -50,8 +53,9 @@ public final class CTConfigDataConverter implements CTTimeConverter<long[]> {
                 throw new UnsupportedOperationException(
                         MessageFormat.format(MSG_CANNOT_PARSE_LINE_INVALID_TIME_UNIT_0, unit.name()));
         }
-        return MessageFormat.format("{0}{1}/{2}{3}/{4}{5}", CTTimeUtil.fromMillis(unit, data[0]), unitChar,
-                CTTimeUtil.fromMillis(unit, data[1]), unitChar, CTTimeUtil.fromMillis(unit, data[2]), unitChar);
+        return MessageFormat.format(PATTERN_FORMAT, CTTimeUtil.fromMillis(unit, data[0]), unitChar,
+                                    CTTimeUtil.fromMillis(unit, data[1]), unitChar,
+                                    CTTimeUtil.fromMillis(unit, data[2]), unitChar);
     }
 
     @Override
@@ -66,20 +70,16 @@ public final class CTConfigDataConverter implements CTTimeConverter<long[]> {
         if (COMMENTS.contains(trimmedLine.substring(0, 1))) {
             throw new IllegalArgumentException(MessageFormat.format(MSG_COMMENTED_LINE_0, line));
         }
-        long[] data = new long[3];
-        Pattern
-                p =
-                Pattern.compile("(?:([0-9]+)([a-zA-Z]+))/(?:([0-9]+)([a-zA-Z]+))[^a-zA-Z0-9]+(?:([0-9]+)([a-zA-Z]+))",
-                        Pattern.CASE_INSENSITIVE);
-        Matcher m = p.matcher(trimmedLine);
+        long[]  data = new long[3];
+        Matcher m    = PATTERN_PARSE.matcher(trimmedLine);
         if (m.find()) {
             int groupCount = m.groupCount();
             if (groupCount != 6) {
                 throw new IllegalArgumentException(MessageFormat.format(MSG_CANNOT_PARSE_LINE_0, line));// XXX
             }
             for (int g = 1; g <= groupCount; g += 2) {
-                String q = m.group(g);
-                String u = m.group(g + 1);
+                String   q = m.group(g);
+                String   u = m.group(g + 1);
                 TimeUnit unit;
                 switch (u) {
                     case UNIT_HOURS:
@@ -101,7 +101,8 @@ public final class CTConfigDataConverter implements CTTimeConverter<long[]> {
                     throw new IllegalArgumentException(MessageFormat.format(MSG_CANNOT_PARSE_LINE_0, line), ex);
                 }
             }
-        } else {
+        }
+        else {
             throw new IllegalArgumentException(line);
         }
         return data;

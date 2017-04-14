@@ -6,12 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class CTAction implements Action {
-    private static final String ENABLED = "enabled";
-    private final Map<String, Object> values = new HashMap<>();
 
-    protected CTAction() {
-        setEnabled(true);
-    }
+    private static final String              ENABLED = "enabled";
+    private final        Map<String, Object> values  = new HashMap<>();
 
     public CTAction(String text) {
         setText(text);
@@ -39,6 +36,10 @@ public abstract class CTAction implements Action {
         setEnabled(true);
     }
 
+    protected CTAction() {
+        setEnabled(true);
+    }
+
     public void init(AbstractButton menuItem) {
         menuItem.setAction(this);
         menuItem.setText(getText());
@@ -49,17 +50,27 @@ public abstract class CTAction implements Action {
         }
     }
 
-    @Override
-    public final boolean isEnabled() {
-        return (Boolean) getValue(ENABLED);
-    }
-
     protected final String getText() {
         return String.valueOf(getValue(Action.NAME));
     }
 
     protected final void setText(String text) {
         putValue(Action.NAME, text);
+    }
+
+    @Override
+    public final boolean isEnabled() {
+        return (Boolean) getValue(ENABLED);
+    }
+
+    @Override
+    public Object getValue(String key) {
+        return values.get(key);
+    }
+
+    @Override
+    public void putValue(String key, Object value) {
+        values.put(key, value);
     }
 
     protected final String getToolTipText() {
@@ -74,11 +85,6 @@ public abstract class CTAction implements Action {
         return (Icon) getValue(Action.SMALL_ICON);
     }
 
-    @Override
-    public Object getValue(String key) {
-        return values.get(key);
-    }
-
     protected final void setIcon(Icon icon) {
         putValue(Action.SMALL_ICON, icon);
     }
@@ -89,17 +95,8 @@ public abstract class CTAction implements Action {
     }
 
     @Override
-    public void putValue(String key, Object value) {
-        values.put(key, value);
-    }
-
-    @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) {
     }
-
-
-
-
 
     @Override
     public void removePropertyChangeListener(PropertyChangeListener listener) {

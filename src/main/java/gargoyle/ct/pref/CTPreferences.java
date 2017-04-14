@@ -6,9 +6,10 @@ import java.util.Locale;
 import java.util.Objects;
 
 public interface CTPreferences extends CTPreferencesManager {
-    String BLOCK = "block";
-    float OPACITY_PERCENT = 100.0f;
-    String TRANSPARENCY = "transparency";
+
+    String BLOCK              = "block";
+    float  OPACITY_PERCENT    = 100.0f;
+    String TRANSPARENCY       = "transparency";
     String TRANSPARENCY_LEVEL = "transparency-level";
 
     CTPrefProperty<Boolean> block();
@@ -20,7 +21,8 @@ public interface CTPreferences extends CTPreferencesManager {
     CTPrefProperty<Integer> transparencyLevel();
 
     enum SUPPORTED_LOCALES {
-        EN(Locale.ENGLISH), RU(new Locale("ru", "RU")); //NON-NLS
+        EN(Locale.ENGLISH),
+        RU(new Locale("ru", "RU")); //NON-NLS
         private final Locale locale;
 
         SUPPORTED_LOCALES(Locale locale) {

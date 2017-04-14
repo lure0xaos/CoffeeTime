@@ -41,25 +41,26 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public final class CT implements CTApp {
-    private static final String CONFIG_NAME = "CT.cfg";
-    private static final String DOT = ".";
-    private static final String HELP_PAGE = "html/help.html";
-    private static final String HTML = "html";
-    private static final String MSG_ALREADY_RUNNING = "App already running";
-    private static final String MSG_CANNOT_LOAD_0 = "Cannot load {0}";
+
+    private static final String CONFIG_NAME           = "CT.cfg";
+    private static final String DOT                   = ".";
+    private static final String HELP_PAGE             = "html/help.html";
+    private static final String HTML                  = "html";
+    private static final String MSG_ALREADY_RUNNING   = "App already running";
+    private static final String MSG_CANNOT_LOAD_0     = "Cannot load {0}";
     private static final String MSG_FAKE_TIME_INVALID = "fake time not set";
-    private static final String NOT_FOUND_0 = "Not found {0}";
-    private static final String PAGE_0_NOT_FOUND = "Page {0} not found";
-    private static final String SLASH = "/";
+    private static final String NOT_FOUND_0           = "Not found {0}";
+    private static final String PAGE_0_NOT_FOUND      = "Page {0} not found";
+    private static final String SLASH                 = "/";
     private final List<CTBlocker> blockers;
     private final CTConfigsConverter configsConverter = new CTConfigsConverter();
-    private final CTControl control;
-    private final Frame owner;
-    private final CTPreferences preferences;
-    private final CTTimeHelper timeHelper;
-    private final CTTimer timer;
-    private Resource configResource;
-    private CTPreferencesDialog preferencesDialog;
+    private final CTControl           control;
+    private final Frame               owner;
+    private final CTPreferences       preferences;
+    private final CTTimeHelper        timeHelper;
+    private final CTTimer             timer;
+    private       Resource            configResource;
+    private       CTPreferencesDialog preferencesDialog;
 
     private CT() {
         CTPreferences preferences = new CTPreferencesImpl(CT.class);
@@ -143,11 +144,10 @@ public final class CT implements CTApp {
     public void help() {
         if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Action.BROWSE)) {
             ClassLoader loader = CT.class.getClassLoader();
-            Locale locale = Locale.getDefault();
-            for (Resource resource : new Resource[]{
-                    new ClasspathResource(loader, HELP_PAGE).forLocale(locale),
-                    new ClasspathResource(loader, SLASH + HELP_PAGE).forLocale(locale)
-            }) {
+            Locale      locale = Locale.getDefault();
+            for (Resource resource : new Resource[]{new ClasspathResource(loader, HELP_PAGE).forLocale(locale),
+                                                    new ClasspathResource(loader, SLASH + HELP_PAGE).forLocale(
+                                                            locale)}) {
                 if (resource != null && resource.exists()) {
                     try (InputStream stream = resource.getInputStream()) {
                         File tempFile = File.createTempFile(CT.class.getName(), DOT + HTML);
@@ -158,7 +158,8 @@ public final class CT implements CTApp {
                         Log.error(ex, PAGE_0_NOT_FOUND, HELP_PAGE);
                     }
                     return;
-                } else {
+                }
+                else {
                     Log.debug(PAGE_0_NOT_FOUND, HELP_PAGE + ": " + (resource != null ? resource.getLocation() : null));
                 }
             }
@@ -181,10 +182,12 @@ public final class CT implements CTApp {
                     Log.error(ex, MSG_CANNOT_LOAD_0, configResource);
                     configs = new CTStandardConfigs();
                 }
-            } else {
+            }
+            else {
                 if (configResource == null) {
                     Log.warn(NOT_FOUND_0, CONFIG_NAME);
-                } else {
+                }
+                else {
                     Log.warn(NOT_FOUND_0, configResource);
                 }
                 configs = new CTStandardConfigs();
@@ -196,7 +199,8 @@ public final class CT implements CTApp {
                 }
             }
             this.configResource = configResource;
-        } else {
+        }
+        else {
             try (InputStream stream = configResource.getInputStream()) {
                 configs = configsConverter.parse(CTStreamUtil.convertStreamToString(stream));
             } catch (IOException ex) {

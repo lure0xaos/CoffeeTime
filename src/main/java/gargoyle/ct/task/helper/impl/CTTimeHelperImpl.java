@@ -4,6 +4,7 @@ import gargoyle.ct.task.helper.CTTimeHelper;
 import gargoyle.ct.util.CTTimeUtil;
 
 public class CTTimeHelperImpl implements CTTimeHelper {
+
     private long delta;
     private long fakeTime;
 

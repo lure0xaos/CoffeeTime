@@ -17,16 +17,17 @@ import java.awt.event.MouseListener;
 import java.net.URL;
 
 public final class CTControlWindowImpl extends JWindow implements CTControlWindow {
-    private static final String MSG_TOOLTIP_ERROR = "tooltip error";
-    private static final String MSG_TRANSPARENCY_NOT_SUPPORTED = "transparency not supported";
-    private static final int SNAP = 20;
+
+    private static final String MSG_TOOLTIP_ERROR                     = "tooltip error";
+    private static final String MSG_TRANSPARENCY_NOT_SUPPORTED        = "transparency not supported";
+    private static final int    SNAP                                  = 20;
     private static final String TOOL_TIP_MANAGER_ENABLE_TOOL_TIP_MODE = "ToolTipManager.enableToolTipMode";
-    private static final long serialVersionUID = 6345130901927558555L;
-    private final CTIconContent iconContent;
-    private final transient CTPreferences preferences;
-    private final CTBlockerContent textContent;
-    private boolean iconMode = true;
-    private volatile boolean live = true;
+    private static final long   serialVersionUID                      = 6345130901927558555L;
+    private final           CTIconContent    iconContent;
+    private final transient CTPreferences    preferences;
+    private final           CTBlockerContent textContent;
+    private          boolean iconMode = true;
+    private volatile boolean live     = true;
     private volatile boolean reshow;
 
     public CTControlWindowImpl(Frame owner, CTPreferences preferences, URL imageURL, JPopupMenu menu) {
@@ -85,7 +86,9 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
         CTPreferences preferences = this.preferences;
         try {
             int oldOpacity = (int) (getOpacity() * CTPreferences.OPACITY_PERCENT);
-            int newOpacity = (int) (iconMode && preferences.transparency().get() && transparent ? preferences.transparencyLevel().get() : CTPreferences.OPACITY_PERCENT);
+            int newOpacity = (int) (iconMode && preferences.transparency().get() && transparent ?
+                                    preferences.transparencyLevel().get() :
+                                    CTPreferences.OPACITY_PERCENT);
             if (oldOpacity == newOpacity) {
                 return;
             }
@@ -135,7 +138,8 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
         transparency(true);
         if (textMode && !preferences.block().get()) {
             showTextContent();
-        } else {
+        }
+        else {
             showIconContent();
         }
     }
@@ -154,13 +158,13 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
         if (reshow && text != null && !text.isEmpty()) {
             try {
                 ToolTipManager.sharedInstance()
-                        .mouseMoved(
-                                new MouseEvent(textContent, MouseEvent.MOUSE_MOVED, CTTimeUtil.currentTimeMillis(), 0, getWidth(),
-                                        getHeight(), 0, false));
+                              .mouseMoved(new MouseEvent(textContent, MouseEvent.MOUSE_MOVED,
+                                                         CTTimeUtil.currentTimeMillis(), 0, getWidth(), getHeight(), 0,
+                                                         false));
                 ToolTipManager.sharedInstance()
-                        .mouseMoved(
-                                new MouseEvent(iconContent, MouseEvent.MOUSE_MOVED, CTTimeUtil.currentTimeMillis(), 0, getWidth(),
-                                        getHeight(), 0, false));
+                              .mouseMoved(new MouseEvent(iconContent, MouseEvent.MOUSE_MOVED,
+                                                         CTTimeUtil.currentTimeMillis(), 0, getWidth(), getHeight(), 0,
+                                                         false));
             } catch (RuntimeException ex) {
                 Log.debug(ex, MSG_TOOLTIP_ERROR);
             }

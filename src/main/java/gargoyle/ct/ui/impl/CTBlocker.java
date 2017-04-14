@@ -21,10 +21,11 @@ import java.util.Collections;
 import java.util.List;
 
 public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindow, CTInformer {
+
     private static final long serialVersionUID = 4716380852101644265L;
-    private final CTBlockerContent content;
-    private final transient CTPreferences preferences;
-    private transient CTBlockerTextProvider textProvider;
+    private final           CTBlockerContent      content;
+    private final transient CTPreferences         preferences;
+    private transient       CTBlockerTextProvider textProvider;
 
     private CTBlocker(CTPreferences preferences, GraphicsDevice device) {
         textProvider = new CTBlockerTextProvider(preferences);
@@ -77,7 +78,8 @@ public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindo
         };
         if (debug) {
             addMouseListener(l);
-        } else {
+        }
+        else {
             removeMouseListener(l);
         }
     }
@@ -99,12 +101,13 @@ public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindo
     @Override
     public void doUpdate(CTTask task, long currentMillis) {
         content.doUpdate(task, currentMillis);
-        boolean block = preferences.block().get();
+        boolean block   = preferences.block().get();
         boolean visible = block && textProvider.isVisible(task, currentMillis);
         setVisible(visible);
         content.setVisible(visible);
         if (visible) {
-            showText(textProvider.getColor(task, currentMillis), textProvider.getBlockerText(task, currentMillis, true));
+            showText(textProvider.getColor(task, currentMillis),
+                     textProvider.getBlockerText(task, currentMillis, true));
         }
     }
 
@@ -115,18 +118,19 @@ public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindo
         if (isVisible()) {
             repaint();
             toFront();
-        } else {
+        }
+        else {
             showMe();
         }
-    }
-
-    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-        in.defaultReadObject();
-        textProvider = new CTBlockerTextProvider(preferences);
     }
 
     @Override
     public void setBackground(Color color) {
         content.setBackground(color);
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        textProvider = new CTBlockerTextProvider(preferences);
     }
 }

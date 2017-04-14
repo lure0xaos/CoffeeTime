@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
 public final class CTDragHelper {
+
     private CTDragHelper() {
     }
 

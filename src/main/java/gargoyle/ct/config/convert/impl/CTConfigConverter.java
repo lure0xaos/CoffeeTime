@@ -6,6 +6,7 @@ import gargoyle.ct.config.convert.CTTimeConverter;
 import java.util.concurrent.TimeUnit;
 
 public final class CTConfigConverter implements CTTimeConverter<CTConfig> {
+
     private final CTConfigDataConverter configDataConverter = new CTConfigDataConverter();
 
     @Override

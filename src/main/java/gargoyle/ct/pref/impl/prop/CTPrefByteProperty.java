@@ -5,6 +5,7 @@ import gargoyle.ct.pref.impl.convert.impl.ByteConverter;
 import java.util.prefs.Preferences;
 
 public class CTPrefByteProperty extends CTPrefProperty<Byte> {
+
     public CTPrefByteProperty(Preferences preferences, String name) {
         this(preferences, name, (byte) 0);
     }

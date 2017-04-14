@@ -11,14 +11,16 @@ import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public final class CTStreamUtil {
+
     private static final String DELIMITER = "\\A";
 
     private CTStreamUtil() {
     }
 
     public static String convertStreamToString(InputStream is) {
-        try (Scanner scanner = new Scanner(is, StandardCharsets.US_ASCII.name());
-             final Scanner s = scanner.useDelimiter(DELIMITER)) {
+        try (Scanner scanner = new Scanner(is,
+                                           StandardCharsets.US_ASCII.name()); final Scanner s = scanner.useDelimiter(
+                DELIMITER)) {
             return s.hasNext() ? s.next() : "";
         } catch (RuntimeException ex) {
             Log.error(ex, ex.getMessage());

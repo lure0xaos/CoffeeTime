@@ -9,14 +9,15 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public final class CTConfigsConverter implements CTTimeConverter<CTConfigs> {
-    private static final String MSG_INVALID_CONVERT_LINE_0 = "skip invalid convert line: {0}";
-    private final CTConfigConverter configConverter = new CTConfigConverter();
-    private final CTConfigsDataConverter configsDataConverter = new CTConfigsDataConverter();
+
+    private static final String                 MSG_INVALID_CONVERT_LINE_0 = "skip invalid convert line: {0}";
+    private final        CTConfigConverter      configConverter            = new CTConfigConverter();
+    private final        CTConfigsDataConverter configsDataConverter       = new CTConfigsDataConverter();
 
     @Override
     public String format(TimeUnit unit, CTConfigs data) {
         List<CTConfig> configs = data.getConfigs();
-        String[] formats = new String[configs.size()];
+        String[]       formats = new String[configs.size()];
         for (int i = 0; i < configs.size(); i++) {
             CTConfig config = configs.get(i);
             formats[i] = configConverter.format(unit, config);
@@ -26,8 +27,8 @@ public final class CTConfigsConverter implements CTTimeConverter<CTConfigs> {
 
     @Override
     public CTConfigs parse(String line) {
-        String[] data = configsDataConverter.parse(line);
-        int length = data.length;
+        String[]   data    = configsDataConverter.parse(line);
+        int        length  = data.length;
         CTConfig[] configs = new CTConfig[length];
         for (int i = 0; i < length; i++) {
             try {

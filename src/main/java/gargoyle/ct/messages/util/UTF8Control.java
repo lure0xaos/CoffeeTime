@@ -13,9 +13,10 @@ import java.util.ResourceBundle;
 import java.util.ResourceBundle.Control;
 
 public final class UTF8Control extends Control {
+
     private static final String PROPERTIES = "properties";
     private static UTF8Control instance;
-    private Charset charset;
+    private        Charset     charset;
 
     private UTF8Control(Charset charset) {
         this.charset = charset;
@@ -45,9 +46,9 @@ public final class UTF8Control extends Control {
     }
 
     @Override
-    public ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader,
-                                    boolean reload) throws IOException {
-        String bundleName = toBundleName(baseName, locale);
+    public ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader, boolean reload)
+    throws IOException {
+        String bundleName   = toBundleName(baseName, locale);
         String resourceName = toResourceName(bundleName, PROPERTIES);
         try (InputStream stream = getStream(loader, reload, resourceName)) {
             if (stream != null) {
@@ -67,7 +68,8 @@ public final class UTF8Control extends Control {
                     return connection.getInputStream();
                 }
             }
-        } else {
+        }
+        else {
             return loader.getResourceAsStream(resourceName);
         }
         return null;

@@ -8,8 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class CTLocalizableAction implements Action {
-    private static final String ENABLED = "enabled";
-    private static final String KEY_TEXT = "text-key";
+
+    private static final String ENABLED     = "enabled";
+    private static final String KEY_TEXT    = "text-key";
     private static final String KEY_TOOLTIP = "tooltip-key";
     private final MessageProvider messages;
     private final Map<String, Object> values = new HashMap<>();
@@ -54,11 +55,6 @@ public abstract class CTLocalizableAction implements Action {
         }
     }
 
-    @Override
-    public final boolean isEnabled() {
-        return (Boolean) getValue(ENABLED);
-    }
-
     protected final String getText() {
         return messages.getMessage(getTextKey());
     }
@@ -67,8 +63,23 @@ public abstract class CTLocalizableAction implements Action {
         return String.valueOf(getValue(KEY_TEXT));
     }
 
+    @Override
+    public final boolean isEnabled() {
+        return (Boolean) getValue(ENABLED);
+    }
+
     protected final void setTextKey(String textKey) {
         putValue(KEY_TEXT, textKey);
+    }
+
+    @Override
+    public Object getValue(String key) {
+        return values.get(key);
+    }
+
+    @Override
+    public void putValue(String key, Object value) {
+        values.put(key, value);
     }
 
     protected final String getToolTipText() {
@@ -81,11 +92,6 @@ public abstract class CTLocalizableAction implements Action {
 
     protected final void setToolTipTextKey(String toolTipTextKey) {
         putValue(KEY_TOOLTIP, toolTipTextKey);
-    }
-
-    @Override
-    public Object getValue(String key) {
-        return values.get(key);
     }
 
     protected final Icon getIcon() {
@@ -102,17 +108,8 @@ public abstract class CTLocalizableAction implements Action {
     }
 
     @Override
-    public void putValue(String key, Object value) {
-        values.put(key, value);
-    }
-
-    @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) {
     }
-
-
-
-
 
     @Override
     public void removePropertyChangeListener(PropertyChangeListener listener) {

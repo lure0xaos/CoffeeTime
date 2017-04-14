@@ -5,6 +5,7 @@ import gargoyle.ct.pref.impl.convert.impl.IntegerConverter;
 import java.util.prefs.Preferences;
 
 public class CTPrefIntegerProperty extends CTPrefProperty<Integer> {
+
     public CTPrefIntegerProperty(Preferences preferences, String name) {
         this(preferences, name, 0);
     }

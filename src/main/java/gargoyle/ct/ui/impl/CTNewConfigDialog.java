@@ -13,15 +13,16 @@ import java.awt.*;
 import java.text.ParseException;
 
 public class CTNewConfigDialog implements CTDialog<CTConfig> {
-    private static final String LOC_NEW_CONFIG = "messages/new_config";
-    private static final String STR_CANCEL = "cancel";
-    private static final String STR_CONFIG_PATTERN = "##U/##U/##U";
-    private static final String STR_NEW_CONFIG_TOOLTIP = "new-config-field.tooltip";
-    private static final String STR_OK = "ok";
-    private static final String STR_TITLE = "title";
-    private final CTConfigConverter configConverter = new CTConfigConverter();
+
+    private static final String            LOC_NEW_CONFIG         = "messages/new_config";
+    private static final String            STR_CANCEL             = "cancel";
+    private static final String            STR_CONFIG_PATTERN     = "##U/##U/##U";
+    private static final String            STR_NEW_CONFIG_TOOLTIP = "new-config-field.tooltip";
+    private static final String            STR_OK                 = "ok";
+    private static final String            STR_TITLE              = "title";
+    private final        CTConfigConverter configConverter        = new CTConfigConverter();
     private final CTMessages messages;
-    private final Component owner;
+    private final Component  owner;
 
     public CTNewConfigDialog(Component owner, CTPreferences preferences) {
         this.owner = owner;
@@ -37,8 +38,9 @@ public class CTNewConfigDialog implements CTDialog<CTConfig> {
                 JFormattedTextField field = new JFormattedTextField(new MaskFormatter(STR_CONFIG_PATTERN));
                 field.setToolTipText(messages.getMessage(STR_NEW_CONFIG_TOOLTIP));
                 int result = JOptionPane.showOptionDialog(owner, field, messages.getMessage(STR_TITLE),
-                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-                        new Object[]{messages.getMessage(STR_OK), messages.getMessage(STR_CANCEL)}, null);
+                                                          JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+                                                          null, new Object[]{messages.getMessage(STR_OK),
+                                                                             messages.getMessage(STR_CANCEL)}, null);
                 if (result == JOptionPane.OK_OPTION) {
                     try {
                         return configConverter.parse(String.valueOf(field.getValue()));

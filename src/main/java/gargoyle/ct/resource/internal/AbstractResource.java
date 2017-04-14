@@ -17,23 +17,20 @@ import java.text.MessageFormat;
 import java.util.jar.JarFile;
 
 abstract class AbstractResource implements Resource {
+
     private static final String CHECK_IF_EXISTS_0_1_AT_2 = "check if exists {0}({1}) at {2}";
-    private static final String METHOD_HEAD = "HEAD";
-    private static final String MSG_FOUND = "{0} found";
-    private static final String MSG_NOT_FOUND = "{0} not found";
-    private static final String PROP_UA = "User-Agent";
-    private static final String PROTOCOL_FILE = "file";
-    private static final String SCHEME_FILE = PROTOCOL_FILE;
-    private static final String
-            USER_AGENT =
-            "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2 (.NET CLR 3.5.30729)";
+    private static final String METHOD_HEAD              = "HEAD";
+    private static final String MSG_FOUND                = "{0} found";
+    private static final String MSG_NOT_FOUND            = "{0} not found";
+    private static final String PROP_UA                  = "User-Agent";
+    private static final String PROTOCOL_FILE            = "file";
+    private static final String SCHEME_FILE              = PROTOCOL_FILE;
+    private static final String USER_AGENT               = "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2 (.NET CLR 3.5.30729)";
     private final String location;
 
     protected AbstractResource(String location) {
         this.location = location;
     }
-
-    protected abstract <R extends Resource> R createResource(R base, String location);
 
     @Override
     public boolean exists() {
@@ -105,10 +102,11 @@ abstract class AbstractResource implements Resource {
 
     @Override
     public OutputStream getOutputStream() throws IOException {
-        URL url = toURL();
+        URL    url      = toURL();
         String protocol = url.getProtocol();
         if (PROTOCOL_FILE.equals(protocol)) {
-            return new FileOutputStream(location.startsWith(PROTOCOL_FILE + ":/") ? location.substring(protocol.length() + 2) : location);
+            return new FileOutputStream(
+                    location.startsWith(PROTOCOL_FILE + ":/") ? location.substring(protocol.length() + 2) : location);
         }
         return url.openConnection().getOutputStream();
     }
@@ -122,4 +120,6 @@ abstract class AbstractResource implements Resource {
     public String toString() {
         return MessageFormat.format("AbstractResource [location={0}]", location);
     }
+
+    protected abstract <R extends Resource> R createResource(R base, String location);
 }

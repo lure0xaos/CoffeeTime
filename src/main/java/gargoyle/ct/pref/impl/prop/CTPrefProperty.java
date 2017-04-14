@@ -9,8 +9,9 @@ import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 public class CTPrefProperty<T> extends CTBaseObservableProperty<T> {
+
     protected final Converter<T> converter;
-    private final Preferences preferences;
+    private final   Preferences  preferences;
 
     protected CTPrefProperty(Converter<T> converter, Preferences preferences, String name) {
         this(converter, preferences, name, null);
@@ -27,7 +28,8 @@ public class CTPrefProperty<T> extends CTBaseObservableProperty<T> {
         String value = preferences.get(name, null);
         if (value == null) {
             return def;
-        } else {
+        }
+        else {
             try {
                 return converter.parse(value);
             } catch (IllegalArgumentException ex) {

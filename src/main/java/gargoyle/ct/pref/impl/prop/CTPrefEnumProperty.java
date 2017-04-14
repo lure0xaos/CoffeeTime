@@ -5,6 +5,7 @@ import gargoyle.ct.pref.impl.convert.impl.EnumConverter;
 import java.util.prefs.Preferences;
 
 public class CTPrefEnumProperty<E extends Enum<E>> extends CTPrefProperty<E> {
+
     public CTPrefEnumProperty(Preferences preferences, Class<E> type, String name) {
         this(preferences, type, name, null);
     }

@@ -8,6 +8,7 @@ import gargoyle.ct.prop.impl.simple.CTSimpleEnumProperty;
 import java.util.Locale;
 
 public final class CTLocaleProvider implements LocaleProvider {
+
     private final CTObservableProperty<SUPPORTED_LOCALES> locale;
 
     public CTLocaleProvider() {

@@ -6,8 +6,9 @@ import gargoyle.ct.util.CTTimeUtil;
 import java.util.concurrent.TimeUnit;
 
 public class CTTask {
+
     private CTConfig config;
-    private long started;
+    private long     started;
 
     public CTConfig getConfig() {
         return config;
@@ -31,7 +32,7 @@ public class CTTask {
 
     public boolean isBlocked(long currentMillis) {
         return isReady() &&
-                CTTimeUtil.isBetween(currentMillis, getBlockStart(currentMillis), getBlockEnd(currentMillis));
+               CTTimeUtil.isBetween(currentMillis, getBlockStart(currentMillis), getBlockEnd(currentMillis));
     }
 
     public long getBlockStart(long currentMillis) {
@@ -60,7 +61,7 @@ public class CTTask {
 
     public boolean isWarn(long currentMillis) {
         return isReady() &&
-                CTTimeUtil.isBetween(currentMillis, getWarnStart(currentMillis), getBlockStart(currentMillis));
+               CTTimeUtil.isBetween(currentMillis, getWarnStart(currentMillis), getBlockStart(currentMillis));
     }
 
     public void setStarted(TimeUnit unit, long started) {

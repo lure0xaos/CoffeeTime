@@ -5,6 +5,7 @@ import gargoyle.ct.pref.impl.convert.impl.DoubleConverter;
 import java.util.prefs.Preferences;
 
 public class CTPrefDoubleProperty extends CTPrefProperty<Double> {
+
     public CTPrefDoubleProperty(Preferences preferences, String name) {
         this(preferences, name, 0);
     }

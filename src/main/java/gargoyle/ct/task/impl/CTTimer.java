@@ -8,9 +8,10 @@ import java.util.Arrays;
 import java.util.Timer;
 
 public class CTTimer {
-    private static final int CHECK_DELAY = 100;
+
+    private static final int CHECK_DELAY  = 100;
     private static final int CHECK_PERIOD = 500;
-    private final Timer timer;
+    private final Timer       timer;
     private final CTTimerTask timerTask;
 
     public CTTimer(CTTimeHelper timeHelper, CTTaskUpdatable... updatables) {

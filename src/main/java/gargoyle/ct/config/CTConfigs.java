@@ -11,9 +11,10 @@ import java.util.Map;
 import java.util.Objects;
 
 public class CTConfigs implements Serializable {
-    private static final String MSG_NOT_VALID_CONVERT_0 = "not valid convert: {0}";
-    private static final long serialVersionUID = 2024075953874239351L;
-    private final Map<String, CTConfig> configs = new LinkedHashMap<>();
+
+    private static final String                MSG_NOT_VALID_CONVERT_0 = "not valid convert: {0}";
+    private static final long                  serialVersionUID        = 2024075953874239351L;
+    private final        Map<String, CTConfig> configs                 = new LinkedHashMap<>();
 
     public CTConfigs(CTConfig... configs) {
         setConfigs(configs);
@@ -59,7 +60,7 @@ public class CTConfigs implements Serializable {
 
     @Override
     public int hashCode() {
-        int prime = 31;
+        int prime  = 31;
         int result = 1;
         result = prime * result + (configs == null ? 0 : configs.hashCode());
         return result;
@@ -81,7 +82,8 @@ public class CTConfigs implements Serializable {
             if (other.configs != null) {
                 return false;
             }
-        } else if (!Objects.equals(configs, other.configs)) {
+        }
+        else if (!Objects.equals(configs, other.configs)) {
             return false;
         }
         return true;

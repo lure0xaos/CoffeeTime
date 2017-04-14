@@ -3,6 +3,7 @@ package gargoyle.ct.pref.impl.convert.impl;
 import gargoyle.ct.pref.impl.convert.Converter;
 
 public class CharConverter implements Converter<Character> {
+
     @Override
     public String format(Character data) {
         return String.valueOf(data);

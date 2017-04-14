@@ -15,15 +15,16 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 
 public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, CTWindow, CTInformer {
-    private static final float ALIGNMENT_CENTER = 0.5f;
-    private static final float ALIGNMENT_RIGHT = 1.0f;
-    private static final int FONT_SIZE = 12;
-    private static final int GAP = 10;
-    private static final double MARGIN = 1.1;
-    private static final long serialVersionUID = 1873262133224449177L;
-    private final boolean big;
-    private final JLabel lblInfo;
-    private final JLabel lblMain;
+
+    private static final float  ALIGNMENT_CENTER = 0.5f;
+    private static final float  ALIGNMENT_RIGHT  = 1.0f;
+    private static final int    FONT_SIZE        = 12;
+    private static final int    GAP              = 10;
+    private static final double MARGIN           = 1.1;
+    private static final long   serialVersionUID = 1873262133224449177L;
+    private final           boolean               big;
+    private final           JLabel                lblInfo;
+    private final           JLabel                lblMain;
     private final transient CTBlockerTextProvider textProvider;
 
     public CTBlockerContent(CTBlockerTextProvider textProvider, boolean big) {
@@ -64,10 +65,12 @@ public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, C
     static void adjust(JComponent container, JLabel label) {
         if (!container.isVisible() || container.getHeight() == 0) return;
         label.setFont(new Font(Font.DIALOG, Font.PLAIN, FONT_SIZE));
-        label.setFont(new Font(Font.DIALOG, Font.PLAIN,
-                Math.min((int) (FONT_SIZE * label.getWidth() /
-                                (MARGIN * label.getFontMetrics(label.getFont()).stringWidth(label.getText()))),
-                        label.getHeight())));
+        label.setFont(new Font(Font.DIALOG, Font.PLAIN, Math.min((int) (FONT_SIZE * label.getWidth() / (MARGIN *
+                                                                                                        label.getFontMetrics(
+                                                                                                                label.getFont())
+                                                                                                             .stringWidth(
+                                                                                                                     label.getText()))),
+                                                                 label.getHeight())));
     }
 
     @Override
@@ -99,14 +102,10 @@ public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, C
         if (isVisible()) {
             Log.debug(text);
             repaint();
-        } else {
+        }
+        else {
             showMe();
         }
-    }
-
-    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-        in.defaultReadObject();
-//        textProvider = new CTBlockerTextProvider(); // FIXME
     }
 
     @Override
@@ -117,9 +116,15 @@ public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, C
         }
     }
 
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+//        textProvider = new CTBlockerTextProvider(); // FIXME
+    }
+
     private static class ContentComponentListener extends ComponentAdapter {
+
         private final CTBlockerContent container;
-        private final JLabel label;
+        private final JLabel           label;
 
         @SuppressWarnings("WeakerAccess")
         public ContentComponentListener(CTBlockerContent container, JLabel label) {

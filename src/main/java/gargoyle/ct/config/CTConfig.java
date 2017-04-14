@@ -9,14 +9,15 @@ import java.text.MessageFormat;
 import java.util.concurrent.TimeUnit;
 
 public class CTConfig implements Serializable, ObjectInputValidation {
-    private static final String FORMAT_NAME = "{0,number,00}/{1,number,00}";
-    private static final String MSG_NOT_VALID = "convert is not valid";
-    private static final String STR_INVALID = "invalid";
-    private static final long serialVersionUID = -898699928298432564L;
-    private long block;
+
+    private static final String FORMAT_NAME      = "{0,number,00}/{1,number,00}";
+    private static final String MSG_NOT_VALID    = "convert is not valid";
+    private static final String STR_INVALID      = "invalid";
+    private static final long   serialVersionUID = -898699928298432564L;
+    private long   block;
     private String name;
-    private long warn;
-    private long whole;
+    private long   warn;
+    private long   whole;
 
     public CTConfig() {
         init(0, 0, 0, STR_INVALID);
@@ -50,7 +51,8 @@ public class CTConfig implements Serializable, ObjectInputValidation {
     }
 
     private String name(TimeUnit unit, long whole, long block) {
-        return MessageFormat.format(FORMAT_NAME, CTTimeUtil.fromMillis(unit, whole), CTTimeUtil.fromMillis(unit, block));
+        return MessageFormat.format(FORMAT_NAME, CTTimeUtil.fromMillis(unit, whole),
+                                    CTTimeUtil.fromMillis(unit, block));
     }
 
     public long getBlock(TimeUnit unit) {
@@ -95,7 +97,7 @@ public class CTConfig implements Serializable, ObjectInputValidation {
 
     @Override
     public int hashCode() {
-        int prime = 31;
+        int prime  = 31;
         int result = 1;
         result = prime * result + (int) (block ^ block >>> 32);
         result = prime * result + (int) (warn ^ warn >>> 32);

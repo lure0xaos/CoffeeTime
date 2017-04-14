@@ -5,6 +5,7 @@ import gargoyle.ct.pref.impl.convert.impl.BooleanConverter;
 import java.util.prefs.Preferences;
 
 public class CTPrefBooleanProperty extends CTPrefProperty<Boolean> {
+
     public CTPrefBooleanProperty(Preferences preferences, String name) {
         this(preferences, name, false);
     }

@@ -10,10 +10,11 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public final class CTTimeUtil {
+
     private static final String HH_MM_SS = "HH:mm:ss";
-    private static final String MM = "mm";
-    private static final String MM_SS = "mm:ss";
-    private static final String SS = "ss";
+    private static final String MM       = "mm";
+    private static final String MM_SS    = "mm:ss";
+    private static final String SS       = "ss";
 
     private CTTimeUtil() {
     }
@@ -77,9 +78,9 @@ public final class CTTimeUtil {
 
     public static long make(int hours, int minutes, int seconds) {
         return LocalDateTime.of(LocalDate.now(), LocalTime.of(hours, minutes, seconds))
-                .withNano(0)
-                .toInstant(ZoneOffset.UTC)
-                .toEpochMilli();
+                            .withNano(0)
+                            .toInstant(ZoneOffset.UTC)
+                            .toEpochMilli();
     }
 
     public static long timeElapsedFrom(TimeUnit unit, long currentMillis, long begin) {
@@ -99,9 +100,9 @@ public final class CTTimeUtil {
     }
 
     public static long toBase(long startMillis, long currentMillis, long baseMillis) {
-        long low = downTo(currentMillis, baseMillis);
+        long low  = downTo(currentMillis, baseMillis);
         long high = upTo(currentMillis, baseMillis);
-        long ret = startMillis;
+        long ret  = startMillis;
         while (ret <= low) {
             ret += baseMillis;
         }

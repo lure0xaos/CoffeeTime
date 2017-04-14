@@ -13,17 +13,18 @@ import java.util.Arrays;
 import java.util.Vector;
 
 public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
-    private static final String LOC_MESSAGES = "messages.preferences";
-    private static final String STR_BLOCK = CTPreferences.BLOCK;
-    private static final String STR_BLOCK_TOOLTIP = "block.tooltip";
-    private static final String STR_SUPPORTED_LOCALES = "supported-locales";
-    private static final String STR_SUPPORTED_LOCALES_TOOLTIP = "supported-locales.tooltip";
-    private static final String STR_TITLE = "title";
-    private static final String STR_TRANSPARENCY = CTPreferences.TRANSPARENCY;
-    private static final String STR_TRANSPARENCY_LEVEL = CTPreferences.TRANSPARENCY_LEVEL;
+
+    private static final String LOC_MESSAGES                   = "messages.preferences";
+    private static final String STR_BLOCK                      = CTPreferences.BLOCK;
+    private static final String STR_BLOCK_TOOLTIP              = "block.tooltip";
+    private static final String STR_SUPPORTED_LOCALES          = "supported-locales";
+    private static final String STR_SUPPORTED_LOCALES_TOOLTIP  = "supported-locales.tooltip";
+    private static final String STR_TITLE                      = "title";
+    private static final String STR_TRANSPARENCY               = CTPreferences.TRANSPARENCY;
+    private static final String STR_TRANSPARENCY_LEVEL         = CTPreferences.TRANSPARENCY_LEVEL;
     private static final String STR_TRANSPARENCY_LEVEL_TOOLTIP = "transparency-level.tooltip";
-    private static final String STR_TRANSPARENCY_TOOLTIP = "transparency.tooltip";
-    private static final long serialVersionUID = 4767295798528273381L;
+    private static final String STR_TRANSPARENCY_TOOLTIP       = "transparency.tooltip";
+    private static final long   serialVersionUID               = 4767295798528273381L;
 
     public CTPreferencesDialog(CTPreferences preferences, Window owner) {
         super(owner, ModalityType.MODELESS);
@@ -36,18 +37,16 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
         preferences.supportedLocales().bind(messages.locale());
         setTitle(messages.getMessage(STR_TITLE));
         pane.setLayout(new GridLayout(0, 2, 5, 3));
+        addLabeledControl(pane, createLocalizableLabel(messages, (STR_BLOCK), (STR_BLOCK_TOOLTIP)),
+                          createCheckBox(preferences.block()));
+        addLabeledControl(pane, createLocalizableLabel(messages, (STR_TRANSPARENCY), (STR_TRANSPARENCY_TOOLTIP)),
+                          createCheckBox(preferences.transparency()));
         addLabeledControl(pane,
-                createLocalizableLabel(messages, (STR_BLOCK), (STR_BLOCK_TOOLTIP)),
-                createCheckBox(preferences.block()));
+                          createLocalizableLabel(messages, (STR_TRANSPARENCY_LEVEL), (STR_TRANSPARENCY_LEVEL_TOOLTIP)),
+                          createTransparencyLevelControl(preferences.transparencyLevel()));
         addLabeledControl(pane,
-                createLocalizableLabel(messages, (STR_TRANSPARENCY), (STR_TRANSPARENCY_TOOLTIP)),
-                createCheckBox(preferences.transparency()));
-        addLabeledControl(pane,
-                createLocalizableLabel(messages, (STR_TRANSPARENCY_LEVEL), (STR_TRANSPARENCY_LEVEL_TOOLTIP)),
-                createTransparencyLevelControl(preferences.transparencyLevel()));
-        addLabeledControl(pane,
-                createLocalizableLabel(messages, (STR_SUPPORTED_LOCALES), (STR_SUPPORTED_LOCALES_TOOLTIP)),
-                createComboBox(SUPPORTED_LOCALES.class, preferences.supportedLocales(), false));
+                          createLocalizableLabel(messages, (STR_SUPPORTED_LOCALES), (STR_SUPPORTED_LOCALES_TOOLTIP)),
+                          createComboBox(SUPPORTED_LOCALES.class, preferences.supportedLocales(), false));
         preferences.supportedLocales().bind(messages.locale());
     }
 
@@ -80,15 +79,17 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
     }
 
     @SuppressWarnings("unchecked")
-    private <E extends Enum<E>> JComboBox<E> createComboBox(Class<E> type, CTPrefProperty<E> property, boolean allowNull) {
-        E[] enumConstants = type.getEnumConstants();
+    private <E extends Enum<E>> JComboBox<E> createComboBox(Class<E> type, CTPrefProperty<E> property,
+                                                            boolean allowNull) {
+        E[]          enumConstants = type.getEnumConstants();
         JComboBox<E> control;
         if (allowNull) {
             //noinspection UseOfObsoleteCollectionType
             Vector<E> list = new Vector<>(Arrays.asList(enumConstants));
             list.add(0, null);
             control = new JComboBox<>(list);
-        } else {
+        }
+        else {
             control = new JComboBox<>(enumConstants);
         }
         control.setSelectedItem(property.get());

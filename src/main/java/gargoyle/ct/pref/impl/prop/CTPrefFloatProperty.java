@@ -5,6 +5,7 @@ import gargoyle.ct.pref.impl.convert.impl.FloatConverter;
 import java.util.prefs.Preferences;
 
 public class CTPrefFloatProperty extends CTPrefProperty<Float> {
+
     public CTPrefFloatProperty(Preferences preferences, String name) {
         this(preferences, name, 0);
     }

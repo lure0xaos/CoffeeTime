@@ -5,6 +5,7 @@ import gargoyle.ct.pref.CTPropertyChangeListener;
 import java.util.function.Function;
 
 public interface CTObservableProperty<T> extends CTProperty<T> {
+
     void addPropertyChangeListener(CTPropertyChangeListener<T> listener);
 
     <T2> void bind(CTProperty<T2> property, Function<T, T2> mapper);

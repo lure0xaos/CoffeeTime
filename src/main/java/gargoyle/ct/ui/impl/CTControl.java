@@ -24,21 +24,22 @@ import java.util.Collections;
 import java.util.Objects;
 
 public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyChangeListener<Object> {
-    private static final String LOC_MESSAGES = "messages.control";
-    private static final String STR_EXIT = "exit";
-    private static final String STR_EXIT_TOOLTIP = "exit.tooltip";
-    private static final String STR_HELP = "help";
-    private static final String STR_HELP_TOOLTIP = "help.tooltip";
-    private static final String STR_NEW_CONFIG = "new-config";
-    private static final String STR_NEW_CONFIG_TOOLTIP = "new-config.tooltip";
-    private static final String STR_PREFERENCES = "preferences";
+
+    private static final String LOC_MESSAGES            = "messages.control";
+    private static final String STR_EXIT                = "exit";
+    private static final String STR_EXIT_TOOLTIP        = "exit.tooltip";
+    private static final String STR_HELP                = "help";
+    private static final String STR_HELP_TOOLTIP        = "help.tooltip";
+    private static final String STR_NEW_CONFIG          = "new-config";
+    private static final String STR_NEW_CONFIG_TOOLTIP  = "new-config.tooltip";
+    private static final String STR_PREFERENCES         = "preferences";
     private static final String STR_PREFERENCES_TOOLTIP = "preferences.tooltip";
-    private static final String STR_UNARM = "unarm";
-    private static final String STR_UNARM_TOOLTIP = "unarm.tooltip";
-    private static final String URL_ICON = "/icon/64/icon64.png";
-    private final CTControlActions app;
-    private final CTControlWindow controlWindow;
-    private final ButtonGroup group;
+    private static final String STR_UNARM               = "unarm";
+    private static final String STR_UNARM_TOOLTIP       = "unarm.tooltip";
+    private static final String URL_ICON                = "/icon/64/icon64.png";
+    private final CTControlActions      app;
+    private final CTControlWindow       controlWindow;
+    private final ButtonGroup           group;
     private final CTBlockerTextProvider textProvider;
 
     public CTControl(CTControlActions app, Frame owner) {
@@ -48,7 +49,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyC
         app.preferences().supportedLocales().bind(messages.locale());
         group = new ButtonGroup();
         controlWindow = new CTControlWindowImpl(owner, app.preferences(), CTControl.class.getResource(URL_ICON),
-                createMenu(messages, app.loadConfigs(false)));
+                                                createMenu(messages, app.loadConfigs(false)));
         controlWindow.showMe();
     }
 
@@ -56,20 +57,23 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyC
         JPopupMenu menu = new JPopupMenu();
         addConfigs(menu, configs);
         menu.add(new JSeparator(SwingConstants.HORIZONTAL));
-        menu.add(new CTLocalizableMenuItem(messages, new CTLocalizableAction(messages, (STR_NEW_CONFIG), (STR_NEW_CONFIG_TOOLTIP)) {
+        menu.add(new CTLocalizableMenuItem(messages, new CTLocalizableAction(messages, (STR_NEW_CONFIG),
+                                                                             (STR_NEW_CONFIG_TOOLTIP)) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 onNewConfig(configs, menu);
             }
         }));
         menu.add(new JSeparator(SwingConstants.HORIZONTAL));
-        menu.add(new CTLocalizableMenuItem(messages, new CTLocalizableAction(messages, (STR_UNARM), (STR_UNARM_TOOLTIP)) {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                unarm();
-            }
-        }));
-        menu.add(new CTLocalizableMenuItem(messages, new CTLocalizableAction(messages, (STR_PREFERENCES), (STR_PREFERENCES_TOOLTIP)) {
+        menu.add(new CTLocalizableMenuItem(messages,
+                                           new CTLocalizableAction(messages, (STR_UNARM), (STR_UNARM_TOOLTIP)) {
+                                               @Override
+                                               public void actionPerformed(ActionEvent e) {
+                                                   unarm();
+                                               }
+                                           }));
+        menu.add(new CTLocalizableMenuItem(messages, new CTLocalizableAction(messages, (STR_PREFERENCES),
+                                                                             (STR_PREFERENCES_TOOLTIP)) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 showPreferences();
@@ -183,7 +187,8 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyC
         boolean visible = textProvider.isVisible(task, currentMillis);
         controlWindow.setTextMode(visible);
         if (visible) {
-            controlWindow.showText(textProvider.getColor(task, currentMillis), textProvider.getBlockerText(task, currentMillis, false));
+            controlWindow.showText(textProvider.getColor(task, currentMillis),
+                                   textProvider.getBlockerText(task, currentMillis, false));
         }
     }
 

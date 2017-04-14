@@ -12,17 +12,18 @@ import java.util.Map;
 import java.util.prefs.Preferences;
 
 abstract class CTBasePreferences implements CTPreferencesManager {
+
     private static final String MSG_JAVA_UTIL_LOGGING_ERROR = "java.util.logging error";
 
     static {
         try {
             Class<?> loggerClass = Class.forName("sun.util.logging.PlatformLogger");
-            Class<?> levelClass = Class.forName("sun.util.logging.PlatformLogger$Level");
+            Class<?> levelClass  = Class.forName("sun.util.logging.PlatformLogger$Level");
             //noinspection unchecked
             loggerClass.getMethod("setLevel", levelClass)
-                    .invoke(loggerClass.getMethod("getLogger", String.class)
-                                    .invoke(null, "java.util.preferences"), //NON-NLS
-                            Enum.valueOf((Class<Enum>) levelClass, "OFF")); //NON-NLS
+                       .invoke(loggerClass.getMethod("getLogger", String.class).invoke(null, "java.util.preferences"),
+                               //NON-NLS
+                               Enum.valueOf((Class<Enum>) levelClass, "OFF")); //NON-NLS
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | ClassNotFoundException ex) {
             Log.warn(ex, MSG_JAVA_UTIL_LOGGING_ERROR);
         }
@@ -33,10 +34,6 @@ abstract class CTBasePreferences implements CTPreferencesManager {
 
     protected CTBasePreferences(Class<?> clazz) {
         preferences = Preferences.userNodeForPackage(clazz);
-    }
-
-    protected <T> void addProperty(CTPrefProperty<T> property) {
-        properties.put(property.name(), property);
     }
 
     @Override
@@ -51,6 +48,10 @@ abstract class CTBasePreferences implements CTPreferencesManager {
         for (CTPrefProperty<?> property : properties.values()) {
             CTPropertyChangeManager.getInstance().removePropertyChangeListener(property, listener);
         }
+    }
+
+    protected <T> void addProperty(CTPrefProperty<T> property) {
+        properties.put(property.name(), property);
     }
 
     @SuppressWarnings("unchecked")

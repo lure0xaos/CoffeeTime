@@ -6,15 +6,16 @@ import java.text.MessageFormat;
 import java.util.Objects;
 
 public abstract class CTSimpleProperty<T> extends CTBaseObservableProperty<T> {
-    private T value;
 
-    protected CTSimpleProperty(String name) {
-        super(name);
-    }
+    private T value;
 
     public CTSimpleProperty(String name, T def) {
         super(name, def);
         value = def;
+    }
+
+    protected CTSimpleProperty(String name) {
+        super(name);
     }
 
     @Override

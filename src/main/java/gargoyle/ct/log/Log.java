@@ -11,15 +11,17 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 public final class Log {
-    private static final String LOCATION_ERRORS = "messages/errors";
+
+    private static final String LOCATION_ERRORS    = "messages/errors";
     private static final String LOGGING_PROPERTIES = "/config/logging.properties";
-    private static final String MSG_NOT_FOUND = "configuration {0} not found";
+    private static final String MSG_NOT_FOUND      = "configuration {0} not found";
 
     static {
         try (InputStream stream = Log.class.getResourceAsStream(LOGGING_PROPERTIES)) {
             if (stream == null) {
                 Logger.getGlobal().warning(MessageFormat.format(MSG_NOT_FOUND, LOGGING_PROPERTIES));
-            } else {
+            }
+            else {
                 LogManager.getLogManager().readConfiguration(stream);
             }
         } catch (IOException ex) {
@@ -38,14 +40,12 @@ public final class Log {
         StackTraceElement ste = findCaller();
         if (ste != null) {
             String sourceClass = ste.getClassName();
-            Logger logger = Logger.getLogger(sourceClass);
+            Logger logger      = Logger.getLogger(sourceClass);
             if (logger.isLoggable(level)) {
                 String sourceMethod = ste.getMethodName();
-                ResourceBundle
-                        bundle =
-                        ResourceBundle.getBundle(LOCATION_ERRORS, Locale.getDefault(),
-                                Log.class.getClassLoader());
-                String msg = pattern;
+                ResourceBundle bundle = ResourceBundle.getBundle(LOCATION_ERRORS, Locale.getDefault(),
+                                                                 Log.class.getClassLoader());
+                String   msg    = pattern;
                 Object[] params = arguments;
                 if (pattern == null) {
                     msg = "";
@@ -53,7 +53,8 @@ public final class Log {
                 }
                 if (exception == null) {
                     logger.logrb(level, sourceClass, sourceMethod, bundle, msg, params);
-                } else {
+                }
+                else {
                     logger.logrb(level, sourceClass, sourceMethod, bundle, msg, params);
                     logger.logrb(level, sourceClass, sourceMethod, bundle, msg, exception);
                 }
@@ -62,8 +63,8 @@ public final class Log {
     }
 
     private static StackTraceElement findCaller() {
-        StackTraceElement[] trace = Thread.currentThread().getStackTrace();
-        int length = trace.length;
+        StackTraceElement[] trace  = Thread.currentThread().getStackTrace();
+        int                 length = trace.length;
         for (int i = 1; i < length; i++) {
             StackTraceElement ste = trace[i];
             if (!Objects.equals(Log.class.getName(), ste.getClassName())) {
