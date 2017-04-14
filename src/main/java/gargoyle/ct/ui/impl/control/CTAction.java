@@ -7,6 +7,7 @@ import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("ConstructorNotProtectedInAbstractClass")
 public abstract class CTAction implements Action {
 
     private static final String              ENABLED = "enabled";
@@ -82,13 +83,13 @@ public abstract class CTAction implements Action {
         return (Icon) getValue(Action.SMALL_ICON);
     }
 
+    protected final void setIcon(Icon icon) {
+        putValue(Action.SMALL_ICON, icon);
+    }
+
     @Override
     public final boolean isEnabled() {
         return (Boolean) getValue(ENABLED);
-    }
-
-    protected final void setIcon(Icon icon) {
-        putValue(Action.SMALL_ICON, icon);
     }
 
     @Override

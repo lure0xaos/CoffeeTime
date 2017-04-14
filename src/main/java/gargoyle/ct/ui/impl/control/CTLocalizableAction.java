@@ -3,15 +3,13 @@ package gargoyle.ct.ui.impl.control;
 import gargoyle.ct.messages.MessageProvider;
 
 import javax.swing.AbstractButton;
-import javax.swing.Action;
 import javax.swing.Icon;
-import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class CTLocalizableAction implements Action {
+@SuppressWarnings("ConstructorNotProtectedInAbstractClass")
+public abstract class CTLocalizableAction extends CTAction {
 
-    private static final String ENABLED     = "enabled";
     private static final String KEY_TEXT    = "text-key";
     private static final String KEY_TOOLTIP = "tooltip-key";
     private final MessageProvider messages;
@@ -47,17 +45,14 @@ public abstract class CTLocalizableAction implements Action {
         setEnabled(true);
     }
 
+    @Override
     public void init(AbstractButton menuItem) {
-        menuItem.setAction(this);
-        menuItem.setText(getText());
-        menuItem.setToolTipText(getToolTipText());
-        Icon icon = getIcon();
-        if (icon != null) {
-            menuItem.setIcon(icon);
-        }
+        super.init(menuItem);
+        menuItem.setText(getLocalizedText());
+        menuItem.setToolTipText(getToolTipLocalizedText());
     }
 
-    protected final String getText() {
+    protected final String getLocalizedText() {
         return messages.getMessage(getTextKey());
     }
 
@@ -79,7 +74,7 @@ public abstract class CTLocalizableAction implements Action {
         values.put(key, value);
     }
 
-    protected final String getToolTipText() {
+    protected final String getToolTipLocalizedText() {
         return messages.getMessage(getToolTipTextKey());
     }
 
@@ -87,33 +82,7 @@ public abstract class CTLocalizableAction implements Action {
         return String.valueOf(getValue(KEY_TOOLTIP));
     }
 
-    @Override
-    public final boolean isEnabled() {
-        return (Boolean) getValue(ENABLED);
-    }
-
     protected final void setToolTipTextKey(String toolTipTextKey) {
         putValue(KEY_TOOLTIP, toolTipTextKey);
-    }
-
-    protected final Icon getIcon() {
-        return (Icon) getValue(Action.SMALL_ICON);
-    }
-
-    protected final void setIcon(Icon icon) {
-        putValue(Action.SMALL_ICON, icon);
-    }
-
-    @Override
-    public final void setEnabled(boolean enabled) {
-        putValue(ENABLED, enabled);
-    }
-
-    @Override
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-    }
-
-    @Override
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
     }
 }

@@ -58,7 +58,7 @@ public final class UTF8Control extends Control {
         }
     }
 
-    private InputStream getStream(ClassLoader loader, boolean reload, String resourceName) throws IOException {
+    private static InputStream getStream(ClassLoader loader, boolean reload, String resourceName) throws IOException {
         if (reload) {
             URL url = loader.getResource(resourceName);
             if (url != null) {

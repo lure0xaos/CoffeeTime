@@ -23,7 +23,6 @@ public abstract class CTBaseObservableProperty<T> extends CTBaseProperty<T> impl
                                                           new CTPropertyChangeEvent<>(this, name(), oldValue, value));
     }
 
-    @SuppressWarnings("Convert2Lambda")
     @Override
     public <T2> void bindBi(CTObservableProperty<T2> property, Function<T, T2> mapper, Function<T2, T> mapper2) {
         bind(property, mapper);
@@ -51,7 +50,6 @@ public abstract class CTBaseObservableProperty<T> extends CTBaseProperty<T> impl
         property.set(mapper.apply(newValue));
     }
 
-    @SuppressWarnings("Convert2Lambda")
     @Override
     public void bindBi(CTObservableProperty<T> property) {
         bind(property);

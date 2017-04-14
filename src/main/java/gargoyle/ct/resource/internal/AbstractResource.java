@@ -72,7 +72,6 @@ abstract class AbstractResource implements Resource {
                     }
                     return false;
                 }
-                //noinspection CallToStringEqualsIgnoreCase
                 if (SCHEME_FILE.equalsIgnoreCase(url.getProtocol())) {
                     boolean exists = new File(url.toURI()).exists();
                     if (exists) {

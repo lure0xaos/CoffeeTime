@@ -15,7 +15,7 @@ public final class CTLocalizableMenuItem extends JMenuItem {
     }
 
     private void update(CTLocalizableAction action) {
-        setText(action.getText());
-        setToolTipText(action.getToolTipText());
+        setText(action.getLocalizedText());
+        setToolTipText(action.getToolTipLocalizedText());
     }
 }

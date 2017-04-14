@@ -33,7 +33,7 @@ public class CTConfig implements Serializable, ObjectInputValidation {
         this.name = name;
     }
 
-    private boolean isValid(long wholeMillis, long blockMillis, long warnMillis) {
+    public boolean isValid(long wholeMillis, long blockMillis, long warnMillis) {
         return wholeMillis > blockMillis && blockMillis > warnMillis;
     }
 
