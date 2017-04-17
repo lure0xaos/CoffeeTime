@@ -26,13 +26,9 @@ public final class UTF8Control extends Control {
         return getControl(StandardCharsets.UTF_8);
     }
 
-    public static UTF8Control getControl(Charset charset) {
+    public static synchronized UTF8Control getControl(Charset charset) {
         if (instance == null) {
-            synchronized (UTF8Control.class) {
-                if (instance == null) {
-                    instance = new UTF8Control(charset);
-                }
-            }
+            instance = new UTF8Control(charset);
         }
         return instance;
     }

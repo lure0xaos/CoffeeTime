@@ -167,7 +167,6 @@ public class CTLayoutBuilder {
         T[]     enumConstants = type.getEnumConstants();
         JSlider control;
         if (allowNull) {
-            //noinspection UseOfObsoleteCollectionType
             List<T> list = new ArrayList<>(Arrays.asList(enumConstants));
 //            list.add(0, null);
             control = new JSlider(new DefaultBoundedRangeModel(toIndex(property.get()), 1, 1, list.size()));

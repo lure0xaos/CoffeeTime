@@ -50,7 +50,7 @@ public class CTConfig implements Serializable, ObjectInputValidation {
         init(whole, block, warn, name(TimeUnit.MINUTES, whole, block));
     }
 
-    private String name(TimeUnit unit, long whole, long block) {
+    private static String name(TimeUnit unit, long whole, long block) {
         return MessageFormat.format(FORMAT_NAME, CTTimeUtil.fromMillis(unit, whole),
                                     CTTimeUtil.fromMillis(unit, block));
     }

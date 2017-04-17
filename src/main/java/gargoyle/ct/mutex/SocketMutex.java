@@ -17,13 +17,9 @@ public final class SocketMutex {
         this.port = port;
     }
 
-    public static SocketMutex getDefault() {
+    public static synchronized SocketMutex getDefault() {
         if (defaultMutex == null) {
-            synchronized (SocketMutex.class) {
-                if (defaultMutex == null) {
-                    defaultMutex = new SocketMutex(PORT);
-                }
-            }
+            defaultMutex = new SocketMutex(PORT);
         }
         return defaultMutex;
     }
