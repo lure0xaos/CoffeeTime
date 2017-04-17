@@ -83,12 +83,7 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
         pane.remove(textContent);
         pane.add(iconContent, BorderLayout.CENTER);
         iconContent.repaint();
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    void onMouseMoved(boolean reshow, boolean transparency) {
-        this.reshow = reshow;
-        transparency(transparency);
+        transparency(true);
     }
 
     private void transparency(boolean transparent) {
@@ -105,6 +100,12 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
         } catch (UnsupportedOperationException ex) {
             Log.warn(ex, MSG_TRANSPARENCY_NOT_SUPPORTED);
         }
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    void onMouseMoved(boolean reshow, boolean transparency) {
+        this.reshow = reshow;
+        transparency(transparency);
     }
 
     private void setComponentPopupMenu(JPopupMenu menu) {
