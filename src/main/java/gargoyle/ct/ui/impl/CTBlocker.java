@@ -32,13 +32,14 @@ public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindo
     private transient       CTBlockerTextProvider textProvider;
 
     private CTBlocker(CTPreferences preferences, GraphicsDevice device) {
+        this.preferences = preferences;
         textProvider = new CTBlockerTextProvider(preferences);
         setBounds(device.getDefaultConfiguration().getBounds());
         setAlwaysOnTop(true);
         toFront();
         Container container = getContentPane();
         container.setLayout(new BorderLayout());
-        content = new CTBlockerContent(textProvider, true);
+        content = new CTBlockerContent(preferences, true);
         container.add(content, BorderLayout.CENTER);
         addWindowFocusListener(new WindowAdapter() {
             @Override
@@ -46,7 +47,6 @@ public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindo
                 holdFocus(event);
             }
         });
-        this.preferences = preferences;
     }
 
     private void holdFocus(WindowEvent event) {

@@ -3,7 +3,6 @@ package gargoyle.ct.ui.impl.control;
 import gargoyle.ct.log.Log;
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.pref.CTPropertyChangeEvent;
-import gargoyle.ct.ui.CTBlockerTextProvider;
 import gargoyle.ct.ui.CTControlWindow;
 import gargoyle.ct.ui.impl.CTBlockerContent;
 import gargoyle.ct.ui.util.CTDragHelper;
@@ -22,6 +21,8 @@ import java.awt.GraphicsEnvironment;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.URL;
 
 public final class CTControlWindowImpl extends JWindow implements CTControlWindow {
@@ -40,11 +41,12 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
 
     public CTControlWindowImpl(Frame owner, CTPreferences preferences, URL imageURL, JPopupMenu menu) {
         super(owner);
+        this.preferences = preferences;
         UIManager.getDefaults().put(TOOL_TIP_MANAGER_ENABLE_TOOL_TIP_MODE, "");
         setAlwaysOnTop(true);
         Container pane = getContentPane();
         pane.setLayout(new BorderLayout());
-        textContent = new CTBlockerContent(new CTBlockerTextProvider(preferences), false);
+        textContent = new CTBlockerContent(preferences, false);
         iconContent = new CTIconContent(imageURL);
         showIconContent();
         pack();
@@ -74,7 +76,6 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
         };
         textContent.addMouseListener(updater);
         iconContent.addMouseListener(updater);
-        this.preferences = preferences;
     }
 
     private void showIconContent() {
@@ -192,5 +193,9 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
     public void showText(Color foreground, String text) {
         textContent.showText(foreground, text);
         textContent.repaint();
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
     }
 }

@@ -1,6 +1,7 @@
 package gargoyle.ct.ui.impl;
 
 import gargoyle.ct.log.Log;
+import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.task.CTTaskUpdatable;
 import gargoyle.ct.task.impl.CTTask;
 import gargoyle.ct.ui.CTBlockerTextProvider;
@@ -28,12 +29,15 @@ public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, C
     private static final int    GAP              = 10;
     private static final double MARGIN           = 1.1;
     private static final long   serialVersionUID = 1873262133224449177L;
+    private final transient CTPreferences         preferences;
     private final           boolean               big;
     private final           JLabel                lblInfo;
     private final           JLabel                lblMain;
-    private final transient CTBlockerTextProvider textProvider;
+    private transient       CTBlockerTextProvider textProvider;
 
-    public CTBlockerContent(CTBlockerTextProvider textProvider, boolean big) {
+    public CTBlockerContent(CTPreferences preferences, boolean big) {
+        this.preferences = preferences;
+        textProvider = new CTBlockerTextProvider(preferences);
         this.big = big;
         setLayout(new BorderLayout());
         lblMain = createMainLabel();
@@ -42,7 +46,6 @@ public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, C
         lblInfo = createInfoLabel();
         lblInfo.addComponentListener(new ContentComponentListener(this, lblInfo));
         add(lblInfo, BorderLayout.SOUTH);
-        this.textProvider = textProvider;
     }
 
     private JLabel createInfoLabel() {
@@ -123,7 +126,7 @@ public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, C
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
-//        textProvider = new CTBlockerTextProvider(); // FIXME
+        textProvider = new CTBlockerTextProvider(preferences);
     }
 
     private static class ContentComponentListener extends ComponentAdapter {
