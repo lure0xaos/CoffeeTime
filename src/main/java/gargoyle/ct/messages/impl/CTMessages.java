@@ -25,11 +25,11 @@ public class CTMessages implements MessageProviderEx {
     private       ResourceBundle  messages;
 
     public CTMessages(String baseName) {
-        this(null, baseName);
+        this(new CTLocaleProvider(), null, baseName);
     }
 
-    public CTMessages(MessageProvider parent, String baseName) {
-        localeProvider = new CTLocaleProvider();
+    public CTMessages(LocaleProvider localeProvider, MessageProvider parent, String baseName) {
+        this.localeProvider = localeProvider;
         this.parent = parent;
         load(baseName);
         localeProvider.locale().addPropertyChangeListener(event -> reload());
@@ -50,6 +50,14 @@ public class CTMessages implements MessageProviderEx {
 
     private void reload() {
         load(messages.getBaseBundleName());
+    }
+
+    public CTMessages(MessageProvider parent, String baseName) {
+        this(new CTLocaleProvider(), parent, baseName);
+    }
+
+    public CTMessages(LocaleProvider localeProvider, String baseName) {
+        this(localeProvider, null, baseName);
     }
 
     @Override
