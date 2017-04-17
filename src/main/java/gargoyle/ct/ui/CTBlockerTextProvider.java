@@ -2,6 +2,7 @@ package gargoyle.ct.ui;
 
 import gargoyle.ct.messages.MessageProvider;
 import gargoyle.ct.messages.impl.CTMessages;
+import gargoyle.ct.messages.impl.CTPreferencesLocaleProvider;
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.task.impl.CTTask;
 import gargoyle.ct.util.CTTimeUtil;
@@ -21,9 +22,7 @@ public class CTBlockerTextProvider {
     private final MessageProvider messages;
 
     public CTBlockerTextProvider(CTPreferences preferences) {
-        CTMessages messages = new CTMessages(LOC_MESSAGES);
-        preferences.supportedLocales().bind(messages.locale());
-        this.messages = messages;
+        messages = new CTMessages(new CTPreferencesLocaleProvider(preferences), LOC_MESSAGES);
     }
 
     public String getBlockerText(CTTask task, long currentMillis, boolean big) {

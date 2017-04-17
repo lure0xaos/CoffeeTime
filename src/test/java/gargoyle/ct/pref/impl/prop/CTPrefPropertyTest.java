@@ -1,6 +1,5 @@
 package gargoyle.ct.pref.impl.prop;
 
-import gargoyle.ct.CTBlockerTest;
 import gargoyle.ct.pref.CTPreferencesProvider;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +24,8 @@ public class CTPrefPropertyTest {
             return null;
         }).when(preferences).put(anyString(), anyString());
         provider = mock(CTPreferencesProvider.class);
-        when(provider.preferences()).thenReturn(Preferences.userNodeForPackage(CTBlockerTest.class));
+//        when(provider.preferences()).thenReturn(Preferences.userNodeForPackage(CTBlockerTest.class));
+        when(provider.preferences()).thenReturn(preferences);
     }
 
     @Test

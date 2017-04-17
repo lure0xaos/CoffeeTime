@@ -4,6 +4,7 @@ import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.config.convert.impl.CTConfigConverter;
 import gargoyle.ct.log.Log;
 import gargoyle.ct.messages.impl.CTMessages;
+import gargoyle.ct.messages.impl.CTPreferencesLocaleProvider;
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.ui.CTDialog;
 
@@ -27,9 +28,7 @@ public class CTNewConfigDialog implements CTDialog<CTConfig> {
 
     public CTNewConfigDialog(Component owner, CTPreferences preferences) {
         this.owner = owner;
-        CTMessages messages = new CTMessages(LOC_NEW_CONFIG);
-        preferences.supportedLocales().bind(messages.locale());
-        this.messages = messages;
+        messages = new CTMessages(new CTPreferencesLocaleProvider(preferences), LOC_NEW_CONFIG);
     }
 
     @Override

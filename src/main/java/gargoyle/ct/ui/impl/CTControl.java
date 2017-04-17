@@ -3,6 +3,7 @@ package gargoyle.ct.ui.impl;
 import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.config.CTConfigs;
 import gargoyle.ct.messages.impl.CTMessages;
+import gargoyle.ct.messages.impl.CTPreferencesLocaleProvider;
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.pref.CTPropertyChangeEvent;
 import gargoyle.ct.pref.CTPropertyChangeListener;
@@ -50,11 +51,12 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyC
     public CTControl(CTControlActions app, Frame owner) {
         this.app = app;
         textProvider = new CTBlockerTextProvider(app.preferences());
-        CTMessages messages = new CTMessages(LOC_MESSAGES);
-        app.preferences().supportedLocales().bind(messages.locale());
         group = new ButtonGroup();
-        controlWindow = new CTControlWindowImpl(owner, app.preferences(), CTControl.class.getResource(URL_ICON),
-                                                createMenu(messages, app.loadConfigs(false)));
+        controlWindow = new CTControlWindowImpl(owner,
+                                                app.preferences(),
+                                                CTControl.class.getResource(URL_ICON),
+                                                createMenu(new CTMessages(new CTPreferencesLocaleProvider(app.preferences()),
+                                                                          LOC_MESSAGES), app.loadConfigs(false)));
         controlWindow.showMe();
     }
 
