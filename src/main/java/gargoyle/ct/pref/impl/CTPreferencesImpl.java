@@ -11,14 +11,14 @@ public class CTPreferencesImpl extends CTBasePreferences implements CTPreference
     @SuppressWarnings("MagicNumber")
     public CTPreferencesImpl(Class<?> clazz) {
         super(clazz);
-        addProperty(new CTPrefBooleanProperty(preferences, BLOCK, false));
-        CTPrefIntegerProperty transparencyLevel = new CTPrefIntegerProperty(preferences, TRANSPARENCY_LEVEL, 30);
+        addProperty(new CTPrefBooleanProperty(this, BLOCK, false));
+        CTPrefIntegerProperty transparencyLevel = new CTPrefIntegerProperty(this, TRANSPARENCY_LEVEL, 30);
         addProperty(transparencyLevel);
         transparencyLevel.addPropertyChangeListener(event -> {
             if (event.getNewValue() < 1) event.getProperty().set(1);
         });
-        addProperty(new CTPrefBooleanProperty(preferences, TRANSPARENCY, true));
-        addProperty(new CTPrefEnumProperty<>(preferences, SUPPORTED_LOCALES.class, SUPPORTED_LOCALES.findSimilar()));
+        addProperty(new CTPrefBooleanProperty(this, TRANSPARENCY, true));
+        addProperty(new CTPrefEnumProperty<>(this, SUPPORTED_LOCALES.class, SUPPORTED_LOCALES.findSimilar()));
     }
 
     @Override

@@ -2,6 +2,7 @@ package gargoyle.ct.pref.impl;
 
 import gargoyle.ct.log.Log;
 import gargoyle.ct.pref.CTPreferencesManager;
+import gargoyle.ct.pref.CTPreferencesProvider;
 import gargoyle.ct.pref.CTPropertyChangeListener;
 import gargoyle.ct.pref.impl.prop.CTPrefProperty;
 import gargoyle.ct.prop.impl.CTPropertyChangeManager;
@@ -11,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.prefs.Preferences;
 
-abstract class CTBasePreferences implements CTPreferencesManager {
+abstract class CTBasePreferences implements CTPreferencesManager, CTPreferencesProvider {
 
     private static final String MSG_JAVA_UTIL_LOGGING_ERROR = "java.util.logging error";
 
@@ -38,30 +39,35 @@ abstract class CTBasePreferences implements CTPreferencesManager {
     }
 
     @Override
-    public void addPropertyChangeListener(CTPropertyChangeListener listener) {
+    public final void addPropertyChangeListener(CTPropertyChangeListener listener) {
         for (CTPrefProperty<?> property : properties.values()) {
             CTPropertyChangeManager.getInstance().addPropertyChangeListener(property, listener);
         }
     }
 
     @Override
-    public void removePropertyChangeListener(CTPropertyChangeListener listener) {
+    public final void removePropertyChangeListener(CTPropertyChangeListener listener) {
         for (CTPrefProperty<?> property : properties.values()) {
             CTPropertyChangeManager.getInstance().removePropertyChangeListener(property, listener);
         }
     }
 
-    protected <T> void addProperty(CTPrefProperty<T> property) {
+    @Override
+    public final Preferences preferences() {
+        return preferences;
+    }
+
+    protected final <T> void addProperty(CTPrefProperty<T> property) {
         properties.put(property.name(), property);
     }
 
     @SuppressWarnings("unchecked")
-    protected <T> CTPrefProperty<T> getProperty(String name) {
+    protected final <T> CTPrefProperty<T> getProperty(String name) {
         return (CTPrefProperty<T>) properties.get(name);
     }
 
     @SuppressWarnings("unchecked")
-    protected <E extends Enum<E>> CTPrefProperty<E> getProperty(Class<E> type) {
+    protected final <E extends Enum<E>> CTPrefProperty<E> getProperty(Class<E> type) {
         return (CTPrefProperty<E>) properties.get(type.getSimpleName());
     }
 }

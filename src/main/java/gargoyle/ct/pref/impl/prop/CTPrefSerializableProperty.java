@@ -1,17 +1,17 @@
 package gargoyle.ct.pref.impl.prop;
 
+import gargoyle.ct.pref.CTPreferencesProvider;
 import gargoyle.ct.pref.impl.convert.impl.SerializableConverter;
 
 import java.io.Serializable;
-import java.util.prefs.Preferences;
 
 public class CTPrefSerializableProperty<T extends Serializable> extends CTPrefProperty<T> {
 
-    public CTPrefSerializableProperty(Preferences preferences, String name) {
-        this(preferences, name, null);
+    public CTPrefSerializableProperty(CTPreferencesProvider provider, String name) {
+        this(provider, name, null);
     }
 
-    public CTPrefSerializableProperty(Preferences preferences, String name, T def) {
-        super(new SerializableConverter<>(), preferences, name, def);
+    public CTPrefSerializableProperty(CTPreferencesProvider provider, String name, T def) {
+        super(new SerializableConverter<>(), provider, name, def);
     }
 }

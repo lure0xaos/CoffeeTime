@@ -1,17 +1,16 @@
 package gargoyle.ct.pref.impl.prop;
 
+import gargoyle.ct.pref.CTPreferencesProvider;
 import gargoyle.ct.pref.impl.convert.impl.ByteConverter;
 import gargoyle.ct.prop.CTNumberProperty;
 
-import java.util.prefs.Preferences;
-
 public class CTPrefByteProperty extends CTPrefProperty<Byte> implements CTNumberProperty<Byte> {
 
-    public CTPrefByteProperty(Preferences preferences, String name) {
-        this(preferences, name, (byte) 0);
+    public CTPrefByteProperty(CTPreferencesProvider provider, String name) {
+        this(provider, name, (byte) 0);
     }
 
-    public CTPrefByteProperty(Preferences preferences, String name, Byte def) {
-        super(new ByteConverter(), preferences, name, def);
+    public CTPrefByteProperty(CTPreferencesProvider provider, String name, Byte def) {
+        super(new ByteConverter(), provider, name, def);
     }
 }

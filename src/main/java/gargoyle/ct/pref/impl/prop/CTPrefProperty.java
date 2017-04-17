@@ -1,6 +1,7 @@
 package gargoyle.ct.pref.impl.prop;
 
 import gargoyle.ct.log.Log;
+import gargoyle.ct.pref.CTPreferencesProvider;
 import gargoyle.ct.pref.impl.convert.Converter;
 import gargoyle.ct.prop.impl.CTBaseObservableProperty;
 
@@ -14,15 +15,15 @@ public class CTPrefProperty<T> extends CTBaseObservableProperty<T> {
     protected final Converter<T> converter;
     private final   Preferences  preferences;
 
-    protected CTPrefProperty(Converter<T> converter, Preferences preferences, String name) {
-        this(converter, preferences, name, null);
+    protected CTPrefProperty(Converter<T> converter, CTPreferencesProvider provider, String name) {
+        this(converter, provider, name, null);
     }
 
-    public CTPrefProperty(Converter<T> converter, Preferences preferences, String name, T def) {
+    public CTPrefProperty(Converter<T> converter, CTPreferencesProvider provider, String name, T def) {
         super(name);
         this.def = converter.format(def);
         this.converter = converter;
-        this.preferences = preferences;
+        preferences = provider.preferences();
     }
 
     @Override

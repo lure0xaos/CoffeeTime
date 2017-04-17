@@ -1,24 +1,23 @@
 package gargoyle.ct.pref.impl.prop;
 
+import gargoyle.ct.pref.CTPreferencesProvider;
 import gargoyle.ct.pref.impl.convert.impl.EnumConverter;
-
-import java.util.prefs.Preferences;
 
 public class CTPrefEnumProperty<E extends Enum<E>> extends CTPrefProperty<E> {
 
-    public CTPrefEnumProperty(Preferences preferences, Class<E> type, String name) {
-        this(preferences, type, name, null);
+    public CTPrefEnumProperty(CTPreferencesProvider provider, Class<E> type, String name) {
+        this(provider, type, name, null);
     }
 
-    public CTPrefEnumProperty(Preferences preferences, Class<E> type, String name, E def) {
-        super(new EnumConverter<>(type), preferences, name, def);
+    public CTPrefEnumProperty(CTPreferencesProvider provider, Class<E> type, String name, E def) {
+        super(new EnumConverter<>(type), provider, name, def);
     }
 
-    public CTPrefEnumProperty(Preferences preferences, Class<E> type) {
-        this(preferences, type, type.getSimpleName(), null);
+    public CTPrefEnumProperty(CTPreferencesProvider provider, Class<E> type) {
+        this(provider, type, type.getSimpleName(), null);
     }
 
-    public CTPrefEnumProperty(Preferences preferences, Class<E> type, E def) {
-        super(new EnumConverter<>(type), preferences, type.getSimpleName(), def);
+    public CTPrefEnumProperty(CTPreferencesProvider provider, Class<E> type, E def) {
+        super(new EnumConverter<>(type), provider, type.getSimpleName(), def);
     }
 }
