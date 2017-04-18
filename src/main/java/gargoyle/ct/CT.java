@@ -96,7 +96,7 @@ public final class CT implements CTApp {
             }
         }
         mutex = new FileMutex(CT.class.getSimpleName());
-        if (!debug && !mutex.acquire()) {
+        if (/*!debug && */!mutex.acquire()) {
             Log.error(MSG_ALREADY_RUNNING);
             return;
         }
