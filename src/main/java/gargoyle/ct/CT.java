@@ -224,11 +224,7 @@ public final class CT implements CTApp {
                 }
                 configs = new CTStandardConfigs();
                 configResource = CTConfigResource.forURL(LocalResource.getHomeDirectoryLocation(), CONFIG_NAME);
-                try (OutputStream stream = configResource.getOutputStream()) {
-                    CTStreamUtil.write(stream, configsConverter.format(TimeUnit.MINUTES, configs), CONFIG_CHARSET);
-                } catch (IOException ex) {
-                    Log.warn(NOT_FOUND_0, configResource);
-                }
+                saveConfigs(configs, configResource);
             }
             this.configResource = configResource;
         } else {
@@ -243,13 +239,7 @@ public final class CT implements CTApp {
 
     @Override
     public void saveConfigs(CTConfigs configs) {
-        if (configResource != null) {
-            try (OutputStream stream = configResource.getOutputStream()) {
-                CTStreamUtil.write(stream, configsConverter.format(TimeUnit.MINUTES, configs), CONFIG_CHARSET);
-            } catch (IOException ex) {
-                Log.warn(NOT_FOUND_0, configResource);
-            }
-        }
+        saveConfigs(configs, configResource);
     }
 
     @Override
@@ -273,5 +263,15 @@ public final class CT implements CTApp {
     @Override
     public void unarm() {
         timer.unarm();
+    }
+
+    private void saveConfigs(CTConfigs configs, Resource configResource) {
+        if (configResource != null) {
+            try (OutputStream stream = configResource.getOutputStream()) {
+                CTStreamUtil.write(stream, configsConverter.format(TimeUnit.MINUTES, configs), CONFIG_CHARSET);
+            } catch (IOException ex) {
+                Log.warn(NOT_FOUND_0, configResource);
+            }
+        }
     }
 }
