@@ -25,7 +25,7 @@ public class CTMessages implements MessageProviderEx {
     private       ResourceBundle  messages;
 
     public CTMessages(String baseName) {
-        this(new CTLocaleProvider(), null, baseName);
+        this(new CTFixedLocaleProvider(), null, baseName);
     }
 
     public CTMessages(LocaleProvider localeProvider, MessageProvider parent, String baseName) {
@@ -53,7 +53,7 @@ public class CTMessages implements MessageProviderEx {
     }
 
     public CTMessages(MessageProvider parent, String baseName) {
-        this(new CTLocaleProvider(), parent, baseName);
+        this(new CTFixedLocaleProvider(), parent, baseName);
     }
 
     public CTMessages(LocaleProvider localeProvider, String baseName) {
