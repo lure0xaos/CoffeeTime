@@ -1,5 +1,7 @@
 package gargoyle.ct.log;
 
+import gargoyle.ct.messages.util.UTF8Control;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
@@ -31,30 +33,53 @@ public final class Log {
     private Log() {
     }
 
-    public static void debug(Exception exception, String pattern, Object... arguments) {
+    public static void debug(Throwable exception, String pattern, Object... arguments) {
         _log(Level.FINE, exception, pattern, arguments);
     }
 
-    private static void _log(Level level, Exception exception, String pattern, Object... arguments) {
+    @SuppressWarnings("OverlyStrongTypeCast")
+    private static void _log(Level level, Throwable exception, String pattern, Object... arguments) {
         StackTraceElement ste = findCaller();
         if (ste != null) {
             String sourceClass = ste.getClassName();
             Logger logger      = Logger.getLogger(sourceClass);
             if (logger.isLoggable(level)) {
                 String sourceMethod = ste.getMethodName();
-                ResourceBundle bundle = ResourceBundle.getBundle(LOCATION_ERRORS, Locale.getDefault(),
-                                                                 Log.class.getClassLoader());
-                String   msg    = pattern;
-                Object[] params = arguments;
-                if (pattern == null) {
-                    msg = "";
-                    params = new Object[0];
+                ResourceBundle bundle = ResourceBundle.getBundle(LOCATION_ERRORS,
+                                                                 Locale.getDefault(),
+                                                                 UTF8Control.getControl());
+                if (pattern != null && exception == null) {
+                    logger.logrb(level, sourceClass, sourceMethod, bundle, pattern, arguments);
+                    return;
                 }
-                if (exception == null) {
-                    logger.logrb(level, sourceClass, sourceMethod, bundle, msg, params);
-                } else {
-                    logger.logrb(level, sourceClass, sourceMethod, bundle, msg, params);
-                    logger.logrb(level, sourceClass, sourceMethod, bundle, msg, exception);
+                if (pattern != null && exception != null) {
+                    logger.logrb(level, sourceClass, sourceMethod, bundle, pattern, arguments);
+                    logger.logrb(level,
+                                 sourceClass,
+                                 sourceMethod,
+                                 (ResourceBundle) null,
+                                 exception.getMessage(),
+                                 exception);
+                    return;
+                }
+                if (pattern == null && exception == null) {
+                    logger.logrb(level, sourceClass, sourceMethod, (ResourceBundle) null, "", (Object[]) null);
+                    return;
+                }
+                if (pattern == null && exception != null) {
+                    logger.logrb(level,
+                                 sourceClass,
+                                 sourceMethod,
+                                 (ResourceBundle) null,
+                                 exception.getLocalizedMessage(),
+                                 (Object[]) null);
+                    logger.logrb(level,
+                                 sourceClass,
+                                 sourceMethod,
+                                 (ResourceBundle) null,
+                                 exception.getMessage(),
+                                 exception);
+                    return;
                 }
             }
         }
@@ -76,7 +101,7 @@ public final class Log {
         _log(Level.FINE, null, pattern, arguments);
     }
 
-    public static void error(Exception exception, String pattern, Object... arguments) {
+    public static void error(Throwable exception, String pattern, Object... arguments) {
         _log(Level.SEVERE, exception, pattern, arguments);
     }
 
@@ -84,7 +109,7 @@ public final class Log {
         _log(Level.SEVERE, null, pattern, arguments);
     }
 
-    public static void info(Exception exception, String pattern, Object... arguments) {
+    public static void info(Throwable exception, String pattern, Object... arguments) {
         _log(Level.INFO, exception, pattern, arguments);
     }
 
@@ -92,7 +117,7 @@ public final class Log {
         _log(Level.INFO, null, pattern, arguments);
     }
 
-    public static void log(Level level, Exception exception, String pattern, Object... arguments) {
+    public static void log(Level level, Throwable exception, String pattern, Object... arguments) {
         _log(level, exception, pattern, arguments);
     }
 
@@ -100,7 +125,7 @@ public final class Log {
         _log(level, null, pattern, arguments);
     }
 
-    public static void warn(Exception exception, String pattern, Object... arguments) {
+    public static void warn(Throwable exception, String pattern, Object... arguments) {
         _log(Level.WARNING, exception, pattern, arguments);
     }
 
