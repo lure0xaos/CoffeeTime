@@ -1,11 +1,14 @@
 package gargoyle.ct.prop.impl;
 
+import gargoyle.ct.prop.CTProperty;
 import gargoyle.ct.prop.impl.simple.CTSimpleIntegerProperty;
+import gargoyle.ct.prop.impl.simple.CTSimpleProperty;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class CTSimplePropertyTest {
+
     @Test
     public void testBindBi() {
         CTSimpleIntegerProperty prop1 = new CTSimpleIntegerProperty("prop31", 1); //NON-NLS
@@ -43,8 +46,8 @@ public class CTSimplePropertyTest {
 
     @Test
     public void testBindSimple() {
-        CTSimpleIntegerProperty prop1 = new CTSimpleIntegerProperty("prop21", 1); //NON-NLS
-        CTSimpleIntegerProperty prop2 = new CTSimpleIntegerProperty("prop22", 2); //NON-NLS
+        CTSimpleProperty<Integer> prop1 = new CTSimpleIntegerProperty("prop21", 1); //NON-NLS
+        CTProperty<Integer>       prop2 = new CTSimpleIntegerProperty("prop22", 2); //NON-NLS
         prop1.bind(prop2);
         Integer setValue = 3;
         prop1.set(setValue);

@@ -55,8 +55,7 @@ public class VirtualResource extends AbstractResource {
     @Override
     public Resource withExtension(String extension) {
         String location = getLocation();
-        String loc = new StringBuilder().append(location.substring(0, location.lastIndexOf(CHAR_DOT)))
-                                        .append('.')
+        String loc = new StringBuilder().append(location.substring(0, location.lastIndexOf(CHAR_DOT))).append(CHAR_DOT)
                                         .append(extension)
                                         .toString();
         return createResource(null, loc);

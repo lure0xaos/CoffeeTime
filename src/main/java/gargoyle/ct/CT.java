@@ -3,6 +3,7 @@ package gargoyle.ct;
 import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.config.CTConfigs;
 import gargoyle.ct.config.CTStandardConfigs;
+import gargoyle.ct.config.convert.CTUnitConverter;
 import gargoyle.ct.config.convert.impl.CTConfigsConverter;
 import gargoyle.ct.log.Log;
 import gargoyle.ct.mutex.SocketMutex;
@@ -55,7 +56,7 @@ public final class CT implements CTApp {
     private static final String PAGE_0_NOT_FOUND      = "Page {0} not found";
     private static final String SLASH                 = "/";
     private final List<CTBlocker> blockers;
-    private final CTConfigsConverter configsConverter = new CTConfigsConverter();
+    private final CTUnitConverter<CTConfigs> configsConverter = new CTConfigsConverter();
     private final CTControl           control;
     private final Frame               owner;
     private final CTPreferences       preferences;
@@ -148,6 +149,7 @@ public final class CT implements CTApp {
         if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Action.BROWSE)) {
             ClassLoader loader = CT.class.getClassLoader();
             Locale      locale = Locale.getDefault();
+            //noinspection StringConcatenation
             for (Resource resource : new Resource[]{new ClasspathResource(loader, HELP_PAGE).forLocale(locale),
                                                     new ClasspathResource(loader,
                                                                           SLASH + HELP_PAGE).forLocale(locale)}) {
@@ -162,6 +164,7 @@ public final class CT implements CTApp {
                     }
                     return;
                 } else {
+                    //noinspection StringConcatenation
                     Log.debug(PAGE_0_NOT_FOUND, HELP_PAGE + ": " + (resource != null ? resource.getLocation() : null));
                 }
             }

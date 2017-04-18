@@ -1,6 +1,7 @@
 package gargoyle.ct.pref.impl.prop;
 
 import gargoyle.ct.pref.CTPreferencesProvider;
+import gargoyle.ct.prop.CTProperty;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -65,8 +66,8 @@ public class CTPrefPropertyTest {
 
     @Test
     public void testBindPref() {
-        CTPrefIntegerProperty prop1 = new CTPrefIntegerProperty(provider, "pref.prop21", 1); //NON-NLS
-        CTPrefIntegerProperty prop2 = new CTPrefIntegerProperty(provider, "pref.prop22", 2); //NON-NLS
+        CTPrefProperty<Integer> prop1 = new CTPrefIntegerProperty(provider, "pref.prop21", 1); //NON-NLS
+        CTProperty<Integer>     prop2 = new CTPrefIntegerProperty(provider, "pref.prop22", 2); //NON-NLS
         prop1.bind(prop2);
         Integer setValue = 3;
         prop1.set(setValue);

@@ -9,12 +9,12 @@ import gargoyle.ct.ui.CTInformer;
 import gargoyle.ct.ui.CTWindow;
 
 import javax.swing.BorderFactory;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -29,6 +29,7 @@ public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, C
     private static final int    GAP              = 10;
     private static final double MARGIN           = 1.1;
     private static final long   serialVersionUID = 1873262133224449177L;
+    @SuppressWarnings("InstanceVariableMayNotBeInitializedByReadObject")
     private final transient CTPreferences         preferences;
     private final           boolean               big;
     private final           JLabel                lblInfo;
@@ -71,7 +72,7 @@ public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, C
         return label;
     }
 
-    static void adjust(JComponent container, JLabel label) {
+    static void adjust(Component container, JLabel label) {
         if (!container.isVisible() || container.getHeight() == 0) return;
         Font font = new Font(Font.DIALOG, Font.PLAIN, FONT_SIZE);
         label.setFont(font);

@@ -33,6 +33,7 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
     private static final String TOOL_TIP_MANAGER_ENABLE_TOOL_TIP_MODE = "ToolTipManager.enableToolTipMode";
     private static final long   serialVersionUID                      = 6345130901927558555L;
     private final           CTIconContent    iconContent;
+    @SuppressWarnings("InstanceVariableMayNotBeInitializedByReadObject")
     private final transient CTPreferences    preferences;
     private final           CTBlockerContent textContent;
     private          boolean iconMode = true;

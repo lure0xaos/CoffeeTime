@@ -23,8 +23,8 @@ abstract class AbstractResource implements Resource {
     private static final String MSG_FOUND                = "{0} found";
     private static final String MSG_NOT_FOUND            = "{0} not found";
     private static final String PROP_UA                  = "User-Agent";
-    private static final String PROTOCOL_FILE            = "file";
-    private static final String SCHEME_FILE              = PROTOCOL_FILE;
+    private static final String SCHEME_FILE              = "file";
+    private static final String PROTOCOL_FILE            = SCHEME_FILE + ":/";
     private static final String USER_AGENT               =
             "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; " + "rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2 (.NET CLR " +
             "3.5.30729)";
@@ -105,8 +105,8 @@ abstract class AbstractResource implements Resource {
     public OutputStream getOutputStream() throws IOException {
         URL    url      = toURL();
         String protocol = url.getProtocol();
-        if (PROTOCOL_FILE.equals(protocol)) {
-            return new FileOutputStream(location.startsWith(PROTOCOL_FILE + ":/") ?
+        if (SCHEME_FILE.equals(protocol)) {
+            return new FileOutputStream(location.startsWith(PROTOCOL_FILE) ?
                                         location.substring(protocol.length() + 2) :
                                         location);
         }

@@ -10,9 +10,9 @@ import java.util.concurrent.TimeUnit;
 
 public final class CTConfigsConverter implements CTUnitConverter<CTConfigs> {
 
-    private static final String                 MSG_INVALID_CONVERT_LINE_0 = "skip invalid convert line: {0}";
-    private final        CTConfigConverter      configConverter            = new CTConfigConverter();
-    private final        CTConfigsDataConverter configsDataConverter       = new CTConfigsDataConverter();
+    private static final String                    MSG_INVALID_CONVERT_LINE_0 = "skip invalid convert line: {0}";
+    private final        CTUnitConverter<CTConfig> configConverter            = new CTConfigConverter();
+    private final        CTConfigsDataConverter    configsDataConverter       = new CTConfigsDataConverter();
 
     @Override
     public String format(TimeUnit unit, CTConfigs data) {

@@ -20,10 +20,9 @@ abstract class CTBasePreferences implements CTPreferencesManager, CTPreferencesP
         try {
             Class<?> loggerClass = Class.forName("sun.util.logging.PlatformLogger");
             Class<?> levelClass  = Class.forName("sun.util.logging.PlatformLogger$Level");
-            //noinspection unchecked
+            //noinspection unchecked,HardCodedStringLiteral
             loggerClass.getMethod("setLevel", levelClass)
                        .invoke(loggerClass.getMethod("getLogger", String.class).invoke(null, "java.util.preferences"),
-                               //NON-NLS
                                Enum.valueOf((Class<Enum>) levelClass, "OFF")); //NON-NLS
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | ClassNotFoundException
                 ex) {

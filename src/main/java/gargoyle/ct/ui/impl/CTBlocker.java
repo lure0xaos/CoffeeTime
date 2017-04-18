@@ -28,6 +28,7 @@ public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindo
 
     private static final long serialVersionUID = 4716380852101644265L;
     private final           CTBlockerContent      content;
+    @SuppressWarnings("InstanceVariableMayNotBeInitializedByReadObject")
     private final transient CTPreferences         preferences;
     private transient       CTBlockerTextProvider textProvider;
 

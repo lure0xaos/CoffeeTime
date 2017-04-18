@@ -12,7 +12,7 @@ public class CTPreferencesImpl extends CTBasePreferences implements CTPreference
     public CTPreferencesImpl(Class<?> clazz) {
         super(clazz);
         addProperty(new CTPrefBooleanProperty(this, BLOCK, false));
-        CTPrefIntegerProperty transparencyLevel = new CTPrefIntegerProperty(this, TRANSPARENCY_LEVEL, 30);
+        CTPrefProperty<Integer> transparencyLevel = new CTPrefIntegerProperty(this, TRANSPARENCY_LEVEL, 30);
         addProperty(transparencyLevel);
         transparencyLevel.addPropertyChangeListener(event -> {
             if (event.getNewValue() < 1) event.getProperty().set(1);

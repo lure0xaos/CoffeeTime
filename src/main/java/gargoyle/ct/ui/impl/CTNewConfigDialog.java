@@ -1,6 +1,7 @@
 package gargoyle.ct.ui.impl;
 
 import gargoyle.ct.config.CTConfig;
+import gargoyle.ct.config.convert.CTUnitConverter;
 import gargoyle.ct.config.convert.impl.CTConfigConverter;
 import gargoyle.ct.log.Log;
 import gargoyle.ct.messages.impl.CTMessages;
@@ -16,13 +17,13 @@ import java.text.ParseException;
 
 public class CTNewConfigDialog implements CTDialog<CTConfig> {
 
-    private static final String            LOC_NEW_CONFIG         = "messages/new_config";
-    private static final String            STR_CANCEL             = "cancel";
-    private static final String            STR_CONFIG_PATTERN     = "##U/##U/##U";
-    private static final String            STR_NEW_CONFIG_TOOLTIP = "new-config-field.tooltip";
-    private static final String            STR_OK                 = "ok";
-    private static final String            STR_TITLE              = "title";
-    private final        CTConfigConverter configConverter        = new CTConfigConverter();
+    private static final String                    LOC_NEW_CONFIG         = "messages/new_config";
+    private static final String                    STR_CANCEL             = "cancel";
+    private static final String                    STR_CONFIG_PATTERN     = "##U/##U/##U";
+    private static final String                    STR_NEW_CONFIG_TOOLTIP = "new-config-field.tooltip";
+    private static final String                    STR_OK                 = "ok";
+    private static final String                    STR_TITLE              = "new-config-title";
+    private final        CTUnitConverter<CTConfig> configConverter        = new CTConfigConverter();
     private final CTMessages messages;
     private final Component  owner;
 

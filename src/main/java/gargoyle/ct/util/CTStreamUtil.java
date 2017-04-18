@@ -2,11 +2,11 @@ package gargoyle.ct.util;
 
 import gargoyle.ct.log.Log;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
@@ -29,8 +29,9 @@ public final class CTStreamUtil {
     }
 
     public static void write(OutputStream stream, String content) {
-        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(stream, StandardCharsets.US_ASCII))) {
+        try (Writer writer = new OutputStreamWriter(stream, StandardCharsets.US_ASCII)) {
             writer.write(content);
+            writer.flush();
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

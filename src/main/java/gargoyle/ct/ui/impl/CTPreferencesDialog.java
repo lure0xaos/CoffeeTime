@@ -5,7 +5,7 @@ import gargoyle.ct.messages.impl.CTMessages;
 import gargoyle.ct.messages.impl.CTPreferencesLocaleProvider;
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.pref.CTPreferences.SUPPORTED_LOCALES;
-import gargoyle.ct.pref.impl.prop.CTPrefProperty;
+import gargoyle.ct.prop.CTProperty;
 import gargoyle.ct.ui.CTDialog;
 import gargoyle.ct.ui.util.CTLayoutBuilder;
 
@@ -21,7 +21,7 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
     private static final String STR_BLOCK_TOOLTIP              = "block.tooltip";
     private static final String STR_SUPPORTED_LOCALES          = "supported-locales";
     private static final String STR_SUPPORTED_LOCALES_TOOLTIP  = "supported-locales.tooltip";
-    private static final String STR_TITLE                      = "title";
+    private static final String STR_TITLE                      = "preferences-title";
     private static final String STR_TRANSPARENCY               = CTPreferences.TRANSPARENCY;
     private static final String STR_TRANSPARENCY_LEVEL         = CTPreferences.TRANSPARENCY_LEVEL;
     private static final String STR_TRANSPARENCY_LEVEL_TOOLTIP = "transparency-level.tooltip";
@@ -57,8 +57,7 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
         layoutBuilder.build();
     }
 
-    private static JSlider createTransparencyLevelControl(CTLayoutBuilder layoutBuilder,
-                                                          CTPrefProperty<Integer> property) {
+    private static JSlider createTransparencyLevelControl(CTLayoutBuilder layoutBuilder, CTProperty<Integer> property) {
         int     maxOpacity = (int) CTPreferences.OPACITY_PERCENT;
         JSlider control    = layoutBuilder.createSlider(property, 0, maxOpacity);
         control.setExtent(maxOpacity / 10);

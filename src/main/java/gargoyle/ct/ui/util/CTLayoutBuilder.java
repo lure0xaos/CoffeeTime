@@ -55,12 +55,12 @@ public class CTLayoutBuilder {
         controlConstraints = createConstraints(1.0, GridBagConstraints.REMAINDER);
     }
 
-    private static GridBagConstraints createConstraints(double widthx, int gridwidth) {
+    private static GridBagConstraints createConstraints(double weightX, int gridWidth) {
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.anchor = GridBagConstraints.NORTHWEST;
-        constraints.weightx = widthx;
-        constraints.gridwidth = gridwidth;
+        constraints.weightx = weightX;
+        constraints.gridwidth = gridWidth;
         constraints.insets = new Insets(GAP, GAP, GAP, GAP);
         return constraints;
     }
@@ -104,13 +104,13 @@ public class CTLayoutBuilder {
     public JSpinner createSpinner(CTProperty<Integer> property, Integer min, Integer max) {
         JSpinner control = new JSpinner(new SpinnerNumberModel());
         control.setValue(property.get());
-        control.addChangeListener(event -> property.set(minmax(min,
-                                                               max,
-                                                               Integer.valueOf(String.valueOf(control.getValue())))));
+        control.addChangeListener(event -> property.set(toRange(min,
+                                                                max,
+                                                                Integer.valueOf(String.valueOf(control.getValue())))));
         return control;
     }
 
-    private static Integer minmax(Integer min, Integer max, Integer value) {
+    private static Integer toRange(Integer min, Integer max, Integer value) {
         return Math.max(min, Math.min(max, value));
     }
 
@@ -118,7 +118,9 @@ public class CTLayoutBuilder {
         JSpinner control = new JSpinner(new SpinnerNumberModel());
         control.setValue(property.get().intValue());
         control.addChangeListener(event -> property.set(fromInt(type,
-                                                                minmax(min, max, toInt((Number) control.getValue())))));
+                                                                toRange(min,
+                                                                        max,
+                                                                        toInt((Number) control.getValue())))));
         return control;
     }
 
@@ -131,7 +133,7 @@ public class CTLayoutBuilder {
         }
     }
 
-    private static <T extends Number> int minmax(T min, T max, T value) {
+    private static <T extends Number> int toRange(T min, T max, T value) {
         return Math.max(toInt(min), Math.min(toInt(max), toInt(value)));
     }
 
@@ -159,7 +161,7 @@ public class CTLayoutBuilder {
     public JSlider createSlider(CTProperty<Integer> property, Integer min, Integer max) {
         JSlider control = new JSlider(toInt(min), toInt(max));
         control.setValue(property.get());
-        control.addChangeListener(event -> property.set(minmax(min, max, control.getValue())));
+        control.addChangeListener(event -> property.set(toRange(min, max, control.getValue())));
         return control;
     }
 
@@ -208,7 +210,7 @@ public class CTLayoutBuilder {
     public <T extends Number> JSlider createSlider(Class<T> type, CTNumberProperty<T> property, T min, T max) {
         JSlider control = new JSlider(toInt(min), toInt(max));
         control.setValue(property.get().intValue());
-        control.addChangeListener(event -> property.set(fromInt(type, minmax(min, max, control.getValue()))));
+        control.addChangeListener(event -> property.set(fromInt(type, toRange(min, max, control.getValue()))));
         return control;
     }
 

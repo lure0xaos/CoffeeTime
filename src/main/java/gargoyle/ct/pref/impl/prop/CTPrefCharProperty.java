@@ -5,6 +5,7 @@ import gargoyle.ct.pref.impl.convert.impl.CharConverter;
 
 public class CTPrefCharProperty extends CTPrefProperty<Character> {
 
+    @SuppressWarnings("MagicCharacter")
     public CTPrefCharProperty(CTPreferencesProvider provider, String name) {
         this(provider, name, '\0');
     }
