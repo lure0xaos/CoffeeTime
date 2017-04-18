@@ -7,7 +7,7 @@ import gargoyle.ct.config.convert.CTUnitConverter;
 import gargoyle.ct.config.convert.impl.CTConfigsConverter;
 import gargoyle.ct.log.Log;
 import gargoyle.ct.mutex.CTMutex;
-import gargoyle.ct.mutex.FileMutex;
+import gargoyle.ct.mutex.impl.FileMutex;
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.pref.impl.CTPreferencesImpl;
 import gargoyle.ct.prop.impl.CTPropertyChangeManager;

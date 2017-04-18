@@ -1,6 +1,7 @@
-package gargoyle.ct.mutex;
+package gargoyle.ct.mutex.impl;
 
 import gargoyle.ct.log.Log;
+import gargoyle.ct.mutex.CTMutex;
 
 import java.io.File;
 import java.io.IOException;

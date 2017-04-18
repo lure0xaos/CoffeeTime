@@ -1,5 +1,6 @@
 package gargoyle.ct.mutex;
 
+import gargoyle.ct.mutex.impl.FileMutex;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
