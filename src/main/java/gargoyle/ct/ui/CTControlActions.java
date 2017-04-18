@@ -2,7 +2,6 @@ package gargoyle.ct.ui;
 
 import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.config.CTConfigs;
-import gargoyle.ct.pref.CTPreferences;
 
 public interface CTControlActions {
 
@@ -13,8 +12,6 @@ public interface CTControlActions {
     void help();
 
     CTConfigs loadConfigs(boolean reload);
-
-    CTPreferences preferences();
 
     void saveConfigs(CTConfigs configs);
 

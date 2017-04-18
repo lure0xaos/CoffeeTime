@@ -4,7 +4,6 @@ import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.config.CTConfigs;
 import gargoyle.ct.messages.impl.CTMessages;
 import gargoyle.ct.messages.impl.CTPreferencesLocaleProvider;
-import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.pref.CTPropertyChangeEvent;
 import gargoyle.ct.pref.CTPropertyChangeListener;
 import gargoyle.ct.task.CTTaskUpdatable;
@@ -52,8 +51,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyC
         this.app = app;
         textProvider = new CTBlockerTextProvider(app.preferences());
         group = new ButtonGroup();
-        controlWindow = new CTControlWindowImpl(owner,
-                                                app.preferences(), app.getIcon(),
+        controlWindow = new CTControlWindowImpl(owner, app.preferences(), app.getIcon(),
                                                 createMenu(new CTMessages(new CTPreferencesLocaleProvider(app.preferences()),
                                                                           LOC_MESSAGES), app.loadConfigs(false)));
         controlWindow.showMe();
@@ -145,11 +143,6 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyC
     @Override
     public CTConfigs loadConfigs(boolean reload) {
         return app.loadConfigs(reload);
-    }
-
-    @Override
-    public CTPreferences preferences() {
-        return app.preferences();
     }
 
     @Override
