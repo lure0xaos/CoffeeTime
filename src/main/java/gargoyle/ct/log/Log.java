@@ -23,7 +23,6 @@ public final class Log {
         _log(LEVEL.DEBUG, exception, pattern, arguments);
     }
 
-    @SuppressWarnings("OverlyStrongTypeCast")
     private static void _log(LEVEL level, Throwable exception, String pattern, Object... arguments) {
         StackTraceElement ste = findCaller();
         if (ste != null) {
