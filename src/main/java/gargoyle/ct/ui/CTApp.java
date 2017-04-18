@@ -6,7 +6,11 @@ import java.net.URL;
 
 public interface CTApp extends CTControlActions {
 
-    URL getIcon();
+    URL getBigIcon();
 
-    CTPreferences preferences();
+    URL getMediumIcon();
+
+    URL getSmallIcon();
+
+    CTPreferences getPreferences();
 }

@@ -49,10 +49,11 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyC
 
     public CTControl(CTApp app, Frame owner) {
         this.app = app;
-        textProvider = new CTBlockerTextProvider(app.preferences());
+        textProvider = new CTBlockerTextProvider(app.getPreferences());
         group = new ButtonGroup();
-        controlWindow = new CTControlWindowImpl(owner, app.preferences(), app.getIcon(),
-                                                createMenu(new CTMessages(new CTPreferencesLocaleProvider(app.preferences()),
+        controlWindow = new CTControlWindowImpl(owner,
+                                                app.getPreferences(), app.getBigIcon(),
+                                                createMenu(new CTMessages(new CTPreferencesLocaleProvider(app.getPreferences()),
                                                                           LOC_MESSAGES), app.loadConfigs(false)));
         controlWindow.showMe();
     }

@@ -15,7 +15,6 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.text.MaskFormatter;
 import java.awt.Component;
-import java.awt.Image;
 import java.text.ParseException;
 
 public class CTNewConfigDialog implements CTDialog<CTConfig> {
@@ -26,7 +25,6 @@ public class CTNewConfigDialog implements CTDialog<CTConfig> {
     private static final String                    STR_NEW_CONFIG_TOOLTIP = "new-config-field.tooltip";
     private static final String                    STR_OK                 = "ok";
     private static final String                    STR_TITLE              = "new-config-title";
-    private static final int                       ICON_DIALOG_SIZE       = 32;
     private final        CTUnitConverter<CTConfig> configConverter        = new CTConfigConverter();
     private final CTMessages messages;
     private final Component  owner;
@@ -34,11 +32,8 @@ public class CTNewConfigDialog implements CTDialog<CTConfig> {
 
     public CTNewConfigDialog(CTApp app, Component owner) {
         this.owner = owner;
-        messages = new CTMessages(new CTPreferencesLocaleProvider(app.preferences()), LOC_NEW_CONFIG);
-        icon = new ImageIcon(new ImageIcon(app.getIcon()).getImage()
-                                                         .getScaledInstance(ICON_DIALOG_SIZE,
-                                                                            ICON_DIALOG_SIZE,
-                                                                            Image.SCALE_SMOOTH));
+        messages = new CTMessages(new CTPreferencesLocaleProvider(app.getPreferences()), LOC_NEW_CONFIG);
+        icon = new ImageIcon(app.getMediumIcon());
     }
 
     @Override
@@ -51,7 +46,8 @@ public class CTNewConfigDialog implements CTDialog<CTConfig> {
                                                           field,
                                                           messages.getMessage(STR_TITLE),
                                                           JOptionPane.OK_CANCEL_OPTION,
-                                                          JOptionPane.QUESTION_MESSAGE, icon,
+                                                          JOptionPane.QUESTION_MESSAGE,
+                                                          icon,
                                                           new Object[]{messages.getMessage(STR_OK),
                                                                        messages.getMessage(STR_CANCEL)},
                                                           null);

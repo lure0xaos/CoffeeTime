@@ -32,8 +32,8 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
 
     public CTPreferencesDialog(CTApp app, Window owner) {
         super(owner, ModalityType.MODELESS);
-        CTPreferences preferences = app.preferences();
-        setIconImage(new ImageIcon(app.getIcon()).getImage());
+        CTPreferences preferences = app.getPreferences();
+        setIconImage(new ImageIcon(app.getSmallIcon()).getImage());
         init(new CTMessages(new CTPreferencesLocaleProvider(preferences), LOC_MESSAGES), preferences, getContentPane());
         pack();
         setDefaultCloseOperation(HIDE_ON_CLOSE);

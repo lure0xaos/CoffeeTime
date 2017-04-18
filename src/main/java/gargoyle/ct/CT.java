@@ -59,7 +59,9 @@ public final class CT implements CTApp {
     private static final String NOT_FOUND_0           = "Not found {0}";
     private static final String PAGE_0_NOT_FOUND      = "Page {0} not found";
     private static final String SLASH                 = "/";
-    private static final String URL_ICON              = "/icon/64/icon64.png";
+    private static final String URL_ICON_BIG          = "/icon/64/icon64.png";
+    private static final String URL_ICON_MEDIUM       = "/icon/32/icon32.png";
+    private static final String URL_ICON_SMALL        = "/icon/16/icon16.png";
     private static CTMutex         mutex;
     private final  List<CTBlocker> blockers;
     private final CTUnitConverter<CTConfigs> configsConverter = new CTConfigsConverter();
@@ -136,8 +138,23 @@ public final class CT implements CTApp {
     }
 
     @Override
-    public URL getIcon() {
-        return CT.class.getResource(URL_ICON);
+    public URL getBigIcon() {
+        return CT.class.getResource(URL_ICON_BIG);
+    }
+
+    @Override
+    public URL getMediumIcon() {
+        return CT.class.getResource(URL_ICON_MEDIUM);
+    }
+
+    @Override
+    public URL getSmallIcon() {
+        return CT.class.getResource(URL_ICON_SMALL);
+    }
+
+    @Override
+    public CTPreferences getPreferences() {
+        return preferences;
     }
 
     @Override
@@ -226,11 +243,6 @@ public final class CT implements CTApp {
             }
         }
         return configs;
-    }
-
-    @Override
-    public CTPreferences preferences() {
-        return preferences;
     }
 
     @Override
