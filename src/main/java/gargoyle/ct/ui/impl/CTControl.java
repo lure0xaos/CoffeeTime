@@ -9,6 +9,7 @@ import gargoyle.ct.pref.CTPropertyChangeEvent;
 import gargoyle.ct.pref.CTPropertyChangeListener;
 import gargoyle.ct.task.CTTaskUpdatable;
 import gargoyle.ct.task.impl.CTTask;
+import gargoyle.ct.ui.CTApp;
 import gargoyle.ct.ui.CTBlockerTextProvider;
 import gargoyle.ct.ui.CTControlActions;
 import gargoyle.ct.ui.CTControlWindow;
@@ -42,19 +43,17 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyC
     private static final String STR_PREFERENCES_TOOLTIP = "preferences.tooltip";
     private static final String STR_UNARM               = "unarm";
     private static final String STR_UNARM_TOOLTIP       = "unarm.tooltip";
-    private static final String URL_ICON                = "/icon/64/icon64.png";
     private final CTControlActions      app;
     private final CTControlWindow       controlWindow;
     private final ButtonGroup           group;
     private final CTBlockerTextProvider textProvider;
 
-    public CTControl(CTControlActions app, Frame owner) {
+    public CTControl(CTApp app, Frame owner) {
         this.app = app;
         textProvider = new CTBlockerTextProvider(app.preferences());
         group = new ButtonGroup();
         controlWindow = new CTControlWindowImpl(owner,
-                                                app.preferences(),
-                                                CTControl.class.getResource(URL_ICON),
+                                                app.preferences(), app.getIcon(),
                                                 createMenu(new CTMessages(new CTPreferencesLocaleProvider(app.preferences()),
                                                                           LOC_MESSAGES), app.loadConfigs(false)));
         controlWindow.showMe();

@@ -37,6 +37,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -58,6 +59,7 @@ public final class CT implements CTApp {
     private static final String NOT_FOUND_0           = "Not found {0}";
     private static final String PAGE_0_NOT_FOUND      = "Page {0} not found";
     private static final String SLASH                 = "/";
+    private static final String URL_ICON              = "/icon/64/icon64.png";
     private static CTMutex         mutex;
     private final  List<CTBlocker> blockers;
     private final CTUnitConverter<CTConfigs> configsConverter = new CTConfigsConverter();
@@ -131,6 +133,11 @@ public final class CT implements CTApp {
 
     private void start() {
         control.arm(loadConfigs(false).getConfigs().iterator().next());
+    }
+
+    @Override
+    public URL getIcon() {
+        return CT.class.getResource(URL_ICON);
     }
 
     @Override
@@ -242,7 +249,7 @@ public final class CT implements CTApp {
     @Override
     public CTConfig showNewConfig() {
         try {
-            return new CTNewConfigDialog(owner, preferences).showMe();
+            return new CTNewConfigDialog(this, owner).showMe();
         } catch (IllegalArgumentException ex) {
             Log.error(ex.getMessage());
         }
@@ -252,7 +259,7 @@ public final class CT implements CTApp {
     @Override
     public void showPreferences() {
         if (preferencesDialog == null) {
-            preferencesDialog = new CTPreferencesDialog(preferences(), owner);
+            preferencesDialog = new CTPreferencesDialog(this, owner);
         }
         preferencesDialog.showMe();
     }

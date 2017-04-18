@@ -6,9 +6,11 @@ import gargoyle.ct.messages.impl.CTPreferencesLocaleProvider;
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.pref.CTPreferences.SUPPORTED_LOCALES;
 import gargoyle.ct.prop.CTProperty;
+import gargoyle.ct.ui.CTApp;
 import gargoyle.ct.ui.CTDialog;
 import gargoyle.ct.ui.util.CTLayoutBuilder;
 
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JSlider;
 import java.awt.Container;
@@ -28,8 +30,10 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
     private static final String STR_TRANSPARENCY_TOOLTIP       = "transparency.tooltip";
     private static final long   serialVersionUID               = 4767295798528273381L;
 
-    public CTPreferencesDialog(CTPreferences preferences, Window owner) {
+    public CTPreferencesDialog(CTApp app, Window owner) {
         super(owner, ModalityType.MODELESS);
+        CTPreferences preferences = app.preferences();
+        setIconImage(new ImageIcon(app.getIcon()).getImage());
         init(new CTMessages(new CTPreferencesLocaleProvider(preferences), LOC_MESSAGES), preferences, getContentPane());
         pack();
         setDefaultCloseOperation(HIDE_ON_CLOSE);
