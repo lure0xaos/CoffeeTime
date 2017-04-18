@@ -36,7 +36,6 @@ public final class FileMutex implements CTMutex {
                                                         System.getProperty(USER_HOME,
                                                                            System.getProperty(USER_DIR, ".")))),
                             mutex + SUFFIX);
-            file.deleteOnExit();
             randomAccessFile = new RandomAccessFile(file, "rw");
             channel = randomAccessFile.getChannel();
             fileLock = channel.tryLock();
@@ -44,6 +43,7 @@ public final class FileMutex implements CTMutex {
                 Runtime.getRuntime().addShutdownHook(new Thread(this::release));
                 return true;
             }
+            file.deleteOnExit();
         } catch (IOException ex) {
             Log.error(ex, MSG_MUTEX_ERROR);
             return false;
