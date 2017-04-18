@@ -1,6 +1,7 @@
 package gargoyle.ct;
 
-import gargoyle.ct.args.CTCmd;
+import gargoyle.ct.cmd.CTCmd;
+import gargoyle.ct.cmd.impl.CTCmdImpl;
 import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.config.CTConfigs;
 import gargoyle.ct.config.CTStandardConfigs;
@@ -98,7 +99,7 @@ public final class CT implements CTApp {
 
     public static void main(String[] args) {
         setSystemLookAndFeel();
-        CTCmd cmd = new CTCmd(args);
+        CTCmd cmd = new CTCmdImpl(args);
         new CT().init(cmd.isDebug(), cmd.getFakeTime()).start();
     }
 
