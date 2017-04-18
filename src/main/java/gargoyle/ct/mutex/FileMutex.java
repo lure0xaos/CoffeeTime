@@ -7,9 +7,14 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
+import java.nio.channels.OverlappingFileLockException;
 
 public final class FileMutex implements CTMutex {
 
+    private static final String SUFFIX    = ".lock";
+    private static final String TMPDIR    = "java.io.tmpdir";
+    private static final String USER_HOME = "user.home";
+    private static final String USER_DIR  = "user.dir";
     private final String           mutex;
     private       File             file;
     private       RandomAccessFile randomAccessFile;
@@ -22,8 +27,15 @@ public final class FileMutex implements CTMutex {
 
     @Override
     public synchronized boolean acquire() {
+        if (file != null && file.exists()) {
+            return false;
+        }
         try {
-            file = new File(mutex);
+            file = new File(new File(System.getProperty(TMPDIR,
+                                                        System.getProperty(USER_HOME,
+                                                                           System.getProperty(USER_DIR, ".")))),
+                            mutex + SUFFIX);
+            file.deleteOnExit();
             randomAccessFile = new RandomAccessFile(file, "rw");
             channel = randomAccessFile.getChannel();
             fileLock = channel.tryLock();
@@ -32,8 +44,10 @@ public final class FileMutex implements CTMutex {
                 return true;
             }
         } catch (IOException ex) {
-            // log.error("Unable to create and/or lock file: " + lockFile, e);
             Log.error(ex, MSG_MUTEX_ERROR);
+            return false;
+        } catch (OverlappingFileLockException ex) {
+            return false;
         }
         return false;
     }

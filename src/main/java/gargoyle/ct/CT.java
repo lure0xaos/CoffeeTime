@@ -7,7 +7,7 @@ import gargoyle.ct.config.convert.CTUnitConverter;
 import gargoyle.ct.config.convert.impl.CTConfigsConverter;
 import gargoyle.ct.log.Log;
 import gargoyle.ct.mutex.CTMutex;
-import gargoyle.ct.mutex.SocketMutex;
+import gargoyle.ct.mutex.FileMutex;
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.pref.impl.CTPreferencesImpl;
 import gargoyle.ct.prop.impl.CTPropertyChangeManager;
@@ -94,7 +94,7 @@ public final class CT implements CTApp {
                 debug = Boolean.parseBoolean(args[1]);
             }
         }
-        mutex = new SocketMutex(MUTEX);
+        mutex = new FileMutex(CT.class.getSimpleName());
         if (!debug && !mutex.acquire()) {
             Log.error(MSG_ALREADY_RUNNING);
             return;
