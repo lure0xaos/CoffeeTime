@@ -61,6 +61,7 @@ public final class CT implements CTApp {
     private static final String URL_ICON_BIG          = "/icon/64/icon64.png";
     private static final String URL_ICON_MEDIUM       = "/icon/32/icon32.png";
     private static final String URL_ICON_SMALL        = "/icon/16/icon16.png";
+    private static final String CONFIG_CHARSET        = StandardCharsets.UTF_8.name();
     private static CTMutex         mutex;
     private final  List<CTBlocker> blockers;
     private final CTUnitConverter<CTConfigs> configsConverter = new CTConfigsConverter();
@@ -207,8 +208,7 @@ public final class CT implements CTApp {
             CTConfigResource configResource = CTConfigResource.findLocalConfig(CONFIG_NAME);
             if (configResource != null && configResource.exists()) {
                 try (InputStream stream = configResource.getInputStream()) {
-                    configs = configsConverter.parse(CTStreamUtil.convertStreamToString(stream,
-                                                                                        StandardCharsets.UTF_8.name()));
+                    configs = configsConverter.parse(CTStreamUtil.convertStreamToString(stream, CONFIG_CHARSET));
                     if (configs.getConfigs().isEmpty()) {
                         configs = new CTStandardConfigs();
                     }
@@ -225,9 +225,7 @@ public final class CT implements CTApp {
                 configs = new CTStandardConfigs();
                 configResource = CTConfigResource.forURL(LocalResource.getHomeDirectoryLocation(), CONFIG_NAME);
                 try (OutputStream stream = configResource.getOutputStream()) {
-                    CTStreamUtil.write(stream,
-                                       configsConverter.format(TimeUnit.MINUTES, configs),
-                                       StandardCharsets.UTF_8.name());
+                    CTStreamUtil.write(stream, configsConverter.format(TimeUnit.MINUTES, configs), CONFIG_CHARSET);
                 } catch (IOException ex) {
                     Log.warn(NOT_FOUND_0, configResource);
                 }
@@ -235,8 +233,7 @@ public final class CT implements CTApp {
             this.configResource = configResource;
         } else {
             try (InputStream stream = configResource.getInputStream()) {
-                configs = configsConverter.parse(CTStreamUtil.convertStreamToString(stream,
-                                                                                    StandardCharsets.UTF_8.name()));
+                configs = configsConverter.parse(CTStreamUtil.convertStreamToString(stream, CONFIG_CHARSET));
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -248,9 +245,7 @@ public final class CT implements CTApp {
     public void saveConfigs(CTConfigs configs) {
         if (configResource != null) {
             try (OutputStream stream = configResource.getOutputStream()) {
-                CTStreamUtil.write(stream,
-                                   configsConverter.format(TimeUnit.MINUTES, configs),
-                                   StandardCharsets.UTF_8.name());
+                CTStreamUtil.write(stream, configsConverter.format(TimeUnit.MINUTES, configs), CONFIG_CHARSET);
             } catch (IOException ex) {
                 Log.warn(NOT_FOUND_0, configResource);
             }
