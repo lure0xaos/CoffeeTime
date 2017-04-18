@@ -1,88 +1,54 @@
 package gargoyle.ct.log;
 
+import gargoyle.ct.log.LogHelper.LEVEL;
 import gargoyle.ct.messages.util.UTF8Control;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
 
 public final class Log {
 
-    private static final String LOCATION_ERRORS    = "messages/errors";
     private static final String LOGGING_PROPERTIES = "/config/logging.properties";
-    private static final String MSG_NOT_FOUND      = "configuration {0} not found";
+    private static final String LOCATION_ERRORS    = "messages/errors";
 
     static {
-        try (InputStream stream = Log.class.getResourceAsStream(LOGGING_PROPERTIES)) {
-            if (stream == null) {
-                Logger.getGlobal().warning(MessageFormat.format(MSG_NOT_FOUND, LOGGING_PROPERTIES));
-            } else {
-                LogManager.getLogManager().readConfiguration(stream);
-            }
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
+        LogHelper.config(LOGGING_PROPERTIES);
     }
 
     private Log() {
     }
 
     public static void debug(Throwable exception, String pattern, Object... arguments) {
-        _log(Level.FINE, exception, pattern, arguments);
+        _log(LEVEL.DEBUG, exception, pattern, arguments);
     }
 
     @SuppressWarnings("OverlyStrongTypeCast")
-    private static void _log(Level level, Throwable exception, String pattern, Object... arguments) {
+    private static void _log(LEVEL level, Throwable exception, String pattern, Object... arguments) {
         StackTraceElement ste = findCaller();
         if (ste != null) {
-            String sourceClass = ste.getClassName();
-            Logger logger      = Logger.getLogger(sourceClass);
-            if (logger.isLoggable(level)) {
-                String sourceMethod = ste.getMethodName();
-                ResourceBundle bundle = ResourceBundle.getBundle(LOCATION_ERRORS,
-                                                                 Locale.getDefault(),
-                                                                 UTF8Control.getControl());
-                if (pattern != null && exception == null) {
-                    logger.logrb(level, sourceClass, sourceMethod, bundle, pattern, arguments);
+            String source = ste.getClassName();
+            if (LogHelper.isLoggable(source, level)) {
+                String method = ste.getMethodName();
+                if (pattern != null) {
+                    LogHelper.log(source, level, source, method, getResourceBundle(), pattern, arguments);
+                    if (exception != null) {
+                        LogHelper.log(source, level, source, method, exception.getMessage(), exception);
+                    }
                     return;
                 }
-                if (pattern != null && exception != null) {
-                    logger.logrb(level, sourceClass, sourceMethod, bundle, pattern, arguments);
-                    logger.logrb(level,
-                                 sourceClass,
-                                 sourceMethod,
-                                 (ResourceBundle) null,
-                                 exception.getMessage(),
-                                 exception);
+                if (exception != null) {
+                    LogHelper.log(source, level, source, method, null, exception.getLocalizedMessage(), null);
+                    LogHelper.log(source, level, source, method, exception.getMessage(), exception);
                     return;
                 }
-                if (pattern == null && exception == null) {
-                    logger.logrb(level, sourceClass, sourceMethod, (ResourceBundle) null, "", (Object[]) null);
-                    return;
-                }
-                if (pattern == null && exception != null) {
-                    logger.logrb(level,
-                                 sourceClass,
-                                 sourceMethod,
-                                 (ResourceBundle) null,
-                                 exception.getLocalizedMessage(),
-                                 (Object[]) null);
-                    logger.logrb(level,
-                                 sourceClass,
-                                 sourceMethod,
-                                 (ResourceBundle) null,
-                                 exception.getMessage(),
-                                 exception);
-                    return;
-                }
+                LogHelper.log(source, level, source, method, null, "", null);
             }
         }
+    }
+
+    private static ResourceBundle getResourceBundle() {
+        return ResourceBundle.getBundle(LOCATION_ERRORS, Locale.getDefault(), UTF8Control.getControl());
     }
 
     private static StackTraceElement findCaller() {
@@ -98,38 +64,38 @@ public final class Log {
     }
 
     public static void debug(String pattern, Object... arguments) {
-        _log(Level.FINE, null, pattern, arguments);
+        _log(LEVEL.DEBUG, null, pattern, arguments);
     }
 
     public static void error(Throwable exception, String pattern, Object... arguments) {
-        _log(Level.SEVERE, exception, pattern, arguments);
+        _log(LEVEL.ERROR, exception, pattern, arguments);
     }
 
     public static void error(String pattern, Object... arguments) {
-        _log(Level.SEVERE, null, pattern, arguments);
+        _log(LEVEL.ERROR, null, pattern, arguments);
     }
 
     public static void info(Throwable exception, String pattern, Object... arguments) {
-        _log(Level.INFO, exception, pattern, arguments);
+        _log(LEVEL.INFO, exception, pattern, arguments);
     }
 
     public static void info(String pattern, Object... arguments) {
-        _log(Level.INFO, null, pattern, arguments);
+        _log(LEVEL.INFO, null, pattern, arguments);
     }
 
-    public static void log(Level level, Throwable exception, String pattern, Object... arguments) {
+    public static void log(LEVEL level, Throwable exception, String pattern, Object... arguments) {
         _log(level, exception, pattern, arguments);
     }
 
-    public static void log(Level level, String pattern, Object... arguments) {
+    public static void log(LEVEL level, String pattern, Object... arguments) {
         _log(level, null, pattern, arguments);
     }
 
     public static void warn(Throwable exception, String pattern, Object... arguments) {
-        _log(Level.WARNING, exception, pattern, arguments);
+        _log(LEVEL.WARNING, exception, pattern, arguments);
     }
 
     public static void warn(String pattern, Object... arguments) {
-        _log(Level.WARNING, null, pattern, arguments);
+        _log(LEVEL.WARNING, null, pattern, arguments);
     }
 }
