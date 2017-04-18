@@ -2,24 +2,16 @@ package gargoyle.ct;
 
 import gargoyle.ct.log.Log;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
-import java.util.logging.Logger;
 
 public class CTLogTest {
 
-    private Deque<LogRecord> records;
-
-    @Before
-    public void setUp() {
-        records = new LinkedList<>();
-        Logger.getLogger(CTLogTest.class.getName()).addHandler(new ListHandler(records));
-    }
+    private static final Deque<LogRecord> records = new LinkedList<>();
 
     @Test
     public void testLog() {
@@ -27,12 +19,12 @@ public class CTLogTest {
         Assert.assertEquals(CTLogTest.class.getName(), records.getLast().getSourceClassName());
     }
 
-    private static class ListHandler extends Handler {
+    public static class ListHandler extends Handler {
 
         private final Deque<LogRecord> records;
 
-        public ListHandler(Deque<LogRecord> records) {
-            this.records = records;
+        public ListHandler() {
+            records = CTLogTest.records;
         }
 
         @Override
