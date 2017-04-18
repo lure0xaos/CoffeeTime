@@ -37,6 +37,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
@@ -183,7 +184,8 @@ public final class CT implements CTApp {
             CTConfigResource configResource = CTConfigResource.findLocalConfig(CONFIG_NAME);
             if (configResource != null && configResource.exists()) {
                 try (InputStream stream = configResource.getInputStream()) {
-                    configs = configsConverter.parse(CTStreamUtil.convertStreamToString(stream));
+                    configs = configsConverter.parse(CTStreamUtil.convertStreamToString(stream,
+                                                                                        StandardCharsets.UTF_8.name()));
                     if (configs.getConfigs().isEmpty()) {
                         configs = new CTStandardConfigs();
                     }
@@ -200,7 +202,9 @@ public final class CT implements CTApp {
                 configs = new CTStandardConfigs();
                 configResource = CTConfigResource.forURL(LocalResource.getHomeDirectoryLocation(), CONFIG_NAME);
                 try (OutputStream stream = configResource.getOutputStream()) {
-                    CTStreamUtil.write(stream, configsConverter.format(TimeUnit.MINUTES, configs));
+                    CTStreamUtil.write(stream,
+                                       configsConverter.format(TimeUnit.MINUTES, configs),
+                                       StandardCharsets.UTF_8.name());
                 } catch (IOException ex) {
                     Log.warn(NOT_FOUND_0, configResource);
                 }
@@ -208,7 +212,8 @@ public final class CT implements CTApp {
             this.configResource = configResource;
         } else {
             try (InputStream stream = configResource.getInputStream()) {
-                configs = configsConverter.parse(CTStreamUtil.convertStreamToString(stream));
+                configs = configsConverter.parse(CTStreamUtil.convertStreamToString(stream,
+                                                                                    StandardCharsets.UTF_8.name()));
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -225,7 +230,9 @@ public final class CT implements CTApp {
     public void saveConfigs(CTConfigs configs) {
         if (configResource != null) {
             try (OutputStream stream = configResource.getOutputStream()) {
-                CTStreamUtil.write(stream, configsConverter.format(TimeUnit.MINUTES, configs));
+                CTStreamUtil.write(stream,
+                                   configsConverter.format(TimeUnit.MINUTES, configs),
+                                   StandardCharsets.UTF_8.name());
             } catch (IOException ex) {
                 Log.warn(NOT_FOUND_0, configResource);
             }

@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public final class CTStreamUtil {
@@ -17,10 +16,8 @@ public final class CTStreamUtil {
     private CTStreamUtil() {
     }
 
-    public static String convertStreamToString(InputStream is) {
-        try (Scanner scanner = new Scanner(is,
-                                           StandardCharsets.US_ASCII.name()); final Scanner s = scanner.useDelimiter(
-                DELIMITER)) {
+    public static String convertStreamToString(InputStream is, String charsetName) {
+        try (Scanner scanner = new Scanner(is, charsetName); Scanner s = scanner.useDelimiter(DELIMITER)) {
             return s.hasNext() ? s.next() : "";
         } catch (RuntimeException ex) {
             Log.error(ex, ex.getMessage());
@@ -28,8 +25,8 @@ public final class CTStreamUtil {
         }
     }
 
-    public static void write(OutputStream stream, String content) {
-        try (Writer writer = new OutputStreamWriter(stream, StandardCharsets.US_ASCII)) {
+    public static void write(OutputStream stream, String content, String charsetName) {
+        try (Writer writer = new OutputStreamWriter(stream, charsetName)) {
             writer.write(content);
             writer.flush();
         } catch (IOException ex) {
