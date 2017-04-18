@@ -6,6 +6,7 @@ import gargoyle.ct.config.CTStandardConfigs;
 import gargoyle.ct.config.convert.CTUnitConverter;
 import gargoyle.ct.config.convert.impl.CTConfigsConverter;
 import gargoyle.ct.log.Log;
+import gargoyle.ct.mutex.CTMutex;
 import gargoyle.ct.mutex.SocketMutex;
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.pref.impl.CTPreferencesImpl;
@@ -45,6 +46,7 @@ import java.util.concurrent.TimeUnit;
 
 public final class CT implements CTApp {
 
+    public static final  int    MUTEX                 = 34567;
     private static final String CONFIG_NAME           = "CT.cfg";
     private static final String DOT                   = ".";
     private static final String HELP_PAGE             = "html/help.html";
@@ -55,7 +57,8 @@ public final class CT implements CTApp {
     private static final String NOT_FOUND_0           = "Not found {0}";
     private static final String PAGE_0_NOT_FOUND      = "Page {0} not found";
     private static final String SLASH                 = "/";
-    private final List<CTBlocker> blockers;
+    private static CTMutex         mutex;
+    private final  List<CTBlocker> blockers;
     private final CTUnitConverter<CTConfigs> configsConverter = new CTConfigsConverter();
     private final CTControl           control;
     private final Frame               owner;
@@ -91,7 +94,8 @@ public final class CT implements CTApp {
                 debug = Boolean.parseBoolean(args[1]);
             }
         }
-        if (!debug && !SocketMutex.getDefault().acquire()) {
+        mutex = new SocketMutex(MUTEX);
+        if (!debug && !mutex.acquire()) {
             Log.error(MSG_ALREADY_RUNNING);
             return;
         }
@@ -139,7 +143,7 @@ public final class CT implements CTApp {
             blocker.dispose();
         }
         timer.terminate();
-        SocketMutex.getDefault().release();
+        mutex.release();
         preferences.removePropertyChangeListener(control);
         CTPropertyChangeManager.getInstance().removePropertyChangeListeners();
     }

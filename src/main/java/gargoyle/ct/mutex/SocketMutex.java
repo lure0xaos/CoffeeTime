@@ -5,25 +5,16 @@ import gargoyle.ct.log.Log;
 import java.io.IOException;
 import java.net.ServerSocket;
 
-public final class SocketMutex {
+public final class SocketMutex implements CTMutex {
 
-    private static final String MSG_MUTEX_ERROR = "mutex error";
-    private static final int    PORT            = 34567;
-    private static SocketMutex  defaultMutex;
-    private final  int          port;
-    private        ServerSocket mutex;
+    private final int          port;
+    private       ServerSocket mutex;
 
-    private SocketMutex(int port) {
+    public SocketMutex(int port) {
         this.port = port;
     }
 
-    public static synchronized SocketMutex getDefault() {
-        if (defaultMutex == null) {
-            defaultMutex = new SocketMutex(PORT);
-        }
-        return defaultMutex;
-    }
-
+    @Override
     public synchronized boolean acquire() {
         try {
             mutex = new ServerSocket(port);
@@ -33,6 +24,7 @@ public final class SocketMutex {
         }
     }
 
+    @Override
     public synchronized void release() {
         try {
             if (mutex != null) {
