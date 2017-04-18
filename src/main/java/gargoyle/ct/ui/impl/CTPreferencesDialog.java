@@ -58,7 +58,7 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
     }
 
     private static JSlider createTransparencyLevelControl(CTLayoutBuilder layoutBuilder, CTProperty<Integer> property) {
-        int     maxOpacity = (int) CTPreferences.OPACITY_PERCENT;
+        int     maxOpacity = CTPreferences.OPACITY_PERCENT;
         JSlider control    = layoutBuilder.createSlider(property, 0, maxOpacity);
         control.setExtent(maxOpacity / 10);
         control.setPaintLabels(true);

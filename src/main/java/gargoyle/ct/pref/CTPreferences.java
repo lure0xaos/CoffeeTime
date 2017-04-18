@@ -8,7 +8,7 @@ import java.util.Objects;
 public interface CTPreferences extends CTPreferencesManager {
 
     String BLOCK              = "block";
-    float  OPACITY_PERCENT    = 100.0f;
+    int    OPACITY_PERCENT    = 100;
     String TRANSPARENCY       = "transparency";
     String TRANSPARENCY_LEVEL = "transparency-level";
 

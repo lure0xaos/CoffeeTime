@@ -47,10 +47,7 @@ public final class UTF8Control extends Control {
         String bundleName   = toBundleName(baseName, locale);
         String resourceName = toResourceName(bundleName, PROPERTIES);
         try (InputStream stream = getStream(loader, reload, resourceName)) {
-            if (stream != null) {
-                return new PropertyResourceBundle(new InputStreamReader(stream, charset));
-            }
-            return null;
+            return stream != null ? new PropertyResourceBundle(new InputStreamReader(stream, charset)) : null;
         }
     }
 

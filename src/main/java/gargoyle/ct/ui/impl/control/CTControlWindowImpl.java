@@ -90,14 +90,13 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
     private void transparency(boolean transparent) {
         CTPreferences preferences = this.preferences;
         try {
-            int oldOpacity = Math.round(getOpacity() * CTPreferences.OPACITY_PERCENT);
+            int oldOpacity = (int) Math.round((double) getOpacity() * CTPreferences.OPACITY_PERCENT);
             int newOpacity = iconMode && preferences.transparency().get() && transparent ?
-                             preferences.transparencyLevel().get() :
-                             (int) CTPreferences.OPACITY_PERCENT;
+                             preferences.transparencyLevel().get() : CTPreferences.OPACITY_PERCENT;
             if (oldOpacity == newOpacity) {
                 return;
             }
-            setOpacity(newOpacity / CTPreferences.OPACITY_PERCENT);
+            setOpacity((float) (newOpacity / (double) CTPreferences.OPACITY_PERCENT));
         } catch (UnsupportedOperationException ex) {
             Log.warn(ex, MSG_TRANSPARENCY_NOT_SUPPORTED);
         }
