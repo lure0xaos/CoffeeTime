@@ -8,5 +8,5 @@ public interface CTApp extends CTControlActions {
 
     URL getIcon();
 
-    CTPreferences preferences();
+    CTPreferences getPreferences();
 }

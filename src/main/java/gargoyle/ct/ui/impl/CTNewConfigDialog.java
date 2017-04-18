@@ -34,7 +34,7 @@ public class CTNewConfigDialog implements CTDialog<CTConfig> {
 
     public CTNewConfigDialog(CTApp app, Component owner) {
         this.owner = owner;
-        messages = new CTMessages(new CTPreferencesLocaleProvider(app.preferences()), LOC_NEW_CONFIG);
+        messages = new CTMessages(new CTPreferencesLocaleProvider(app.getPreferences()), LOC_NEW_CONFIG);
         icon = new ImageIcon(new ImageIcon(app.getIcon()).getImage()
                                                          .getScaledInstance(ICON_DIALOG_SIZE,
                                                                             ICON_DIALOG_SIZE,
