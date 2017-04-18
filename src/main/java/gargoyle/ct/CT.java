@@ -48,7 +48,6 @@ import java.util.concurrent.TimeUnit;
 
 public final class CT implements CTApp {
 
-    public static final  int    MUTEX                 = 34567;
     private static final String CONFIG_NAME           = "CT.cfg";
     private static final String DOT                   = ".";
     private static final String HELP_PAGE             = "html/help.html";
