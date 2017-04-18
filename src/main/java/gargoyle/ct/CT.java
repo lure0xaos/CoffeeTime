@@ -158,6 +158,11 @@ public final class CT implements CTApp {
     }
 
     @Override
+    public CTPreferences getPreferences() {
+        return preferences;
+    }
+
+    @Override
     public void arm(CTConfig config) {
         timer.arm(config, timeHelper.currentTimeMillis());
     }
