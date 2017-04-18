@@ -44,7 +44,6 @@ public final class FileMutex implements CTMutex {
                 file.deleteOnExit();
                 return true;
             }
-            file.deleteOnExit();
         } catch (IOException ex) {
             Log.error(ex, MSG_MUTEX_ERROR);
             return false;
