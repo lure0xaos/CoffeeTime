@@ -122,7 +122,7 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
     }
 
     private void setComponentPopupMenu(JPopupMenu menu) {
-//        textContent.setComponentPopupMenu(menu);
+        textContent.setComponentPopupMenu(menu);
         iconContent.setComponentPopupMenu(menu);
     }
 
