@@ -18,6 +18,8 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GraphicsEnvironment;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -58,6 +60,17 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
         CTDragHelper.makeDraggable(textContent, SNAP);
         CTDragHelper.makeDraggable(iconContent, SNAP);
         CTDragHelper.makeDraggable(this, SNAP);
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                owner.setSize(e.getComponent().getSize());
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {
+                owner.setLocation(e.getComponent().getLocation());
+            }
+        });
         ToolTipManager toolTipManager = ToolTipManager.sharedInstance();
         toolTipManager.setDismissDelay(1000);
         toolTipManager.setInitialDelay(100);
@@ -109,7 +122,7 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
     }
 
     private void setComponentPopupMenu(JPopupMenu menu) {
-        textContent.setComponentPopupMenu(menu);
+//        textContent.setComponentPopupMenu(menu);
         iconContent.setComponentPopupMenu(menu);
     }
 
@@ -135,6 +148,10 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
         if (CTPreferences.TRANSPARENCY.equals(key) || CTPreferences.TRANSPARENCY_LEVEL.equals(key)) {
             transparency(true);
         }
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
     }
 
     @Override
@@ -194,9 +211,5 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
     public void showText(Color foreground, String text) {
         textContent.showText(foreground, text);
         textContent.repaint();
-    }
-
-    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-        in.defaultReadObject();
     }
 }
