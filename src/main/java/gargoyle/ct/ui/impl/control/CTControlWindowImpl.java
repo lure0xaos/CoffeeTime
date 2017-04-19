@@ -60,17 +60,7 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
         CTDragHelper.makeDraggable(textContent, SNAP);
         CTDragHelper.makeDraggable(iconContent, SNAP);
         CTDragHelper.makeDraggable(this, SNAP);
-        addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                owner.setSize(e.getComponent().getSize());
-            }
-
-            @Override
-            public void componentMoved(ComponentEvent e) {
-                owner.setLocation(e.getComponent().getLocation());
-            }
-        });
+        addComponentListener(new OwnerUpdater(owner));
         ToolTipManager toolTipManager = ToolTipManager.sharedInstance();
         toolTipManager.setDismissDelay(1000);
         toolTipManager.setInitialDelay(100);
@@ -105,7 +95,8 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
         try {
             int oldOpacity = (int) Math.round((double) getOpacity() * CTPreferences.OPACITY_PERCENT);
             int newOpacity = iconMode && preferences.transparency().get() && transparent ?
-                             preferences.transparencyLevel().get() : CTPreferences.OPACITY_PERCENT;
+                             preferences.transparencyLevel().get() :
+                             CTPreferences.OPACITY_PERCENT;
             if (oldOpacity == newOpacity) {
                 return;
             }
@@ -211,5 +202,22 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
     public void showText(Color foreground, String text) {
         textContent.showText(foreground, text);
         textContent.repaint();
+    }
+
+    private static class OwnerUpdater extends ComponentAdapter {
+
+        private final Frame owner;
+
+        public OwnerUpdater(Frame owner) {this.owner = owner;}
+
+        @Override
+        public void componentResized(ComponentEvent e) {
+            owner.setSize(e.getComponent().getSize());
+        }
+
+        @Override
+        public void componentMoved(ComponentEvent e) {
+            owner.setLocation(e.getComponent().getLocation());
+        }
     }
 }
