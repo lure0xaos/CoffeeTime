@@ -6,10 +6,12 @@ import java.text.MessageFormat;
 
 public abstract class CTBaseROProperty<T> implements CTROProperty<T> {
 
-    protected final String name;
-    private final   T      value;
+    protected final String   name;
+    private final   T        value;
+    private final   Class<T> type;
 
     protected CTBaseROProperty(String name, T value) {
+        type = (Class<T>) value.getClass();
         this.name = name;
         this.value = value;
     }
@@ -17,6 +19,11 @@ public abstract class CTBaseROProperty<T> implements CTROProperty<T> {
     @Override
     public T get() {
         return value;
+    }
+
+    @Override
+    public Class<T> type() {
+        return type;
     }
 
     public String name() {

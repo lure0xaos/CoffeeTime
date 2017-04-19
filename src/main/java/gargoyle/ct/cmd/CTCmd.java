@@ -1,6 +1,6 @@
 package gargoyle.ct.cmd;
 
-public interface CTCmd {
+public interface CTCmd extends CTAnyCmd {
 
     long getFakeTime();
 

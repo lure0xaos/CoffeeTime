@@ -10,7 +10,7 @@ public class CTComponentLocaleProperty extends CTBaseObservableProperty<SUPPORTE
     private final Component component;
 
     public CTComponentLocaleProperty(Component component) {
-        super(component.getName());
+        super(SUPPORTED_LOCALES.class, component.getName());
         this.component = component;
     }
 

@@ -6,9 +6,11 @@ import java.text.MessageFormat;
 
 public abstract class CTBaseProperty<T> implements CTProperty<T> {
 
-    protected final String name;
+    protected final String   name;
+    private final   Class<T> type;
 
-    protected CTBaseProperty(String name) {
+    protected CTBaseProperty(Class<T> type, String name) {
+        this.type = type;
         this.name = name;
     }
 
@@ -24,5 +26,10 @@ public abstract class CTBaseProperty<T> implements CTProperty<T> {
     @Override
     public String toString() {
         return MessageFormat.format("CTBaseProperty'{'name=''{0}'''}'", name);
+    }
+
+    @Override
+    public Class<T> type() {
+        return type;
     }
 }

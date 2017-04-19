@@ -1,5 +1,6 @@
 package gargoyle.ct;
 
+import gargoyle.ct.cmd.CTAnyCmd;
 import gargoyle.ct.cmd.CTCmd;
 import gargoyle.ct.cmd.impl.CTCmdImpl;
 import gargoyle.ct.config.CTConfig;
@@ -100,7 +101,16 @@ public final class CT implements CTApp {
     public static void main(String[] args) {
         setSystemLookAndFeel();
         CTCmd cmd = new CTCmdImpl(args);
-        new CT().init(cmd.isDebug(), cmd.getFakeTime()).start();
+        new CT().init(cmd.isDebug(), cmd.getFakeTime()).overridePreferences(cmd).start();
+    }
+
+    private CT overridePreferences(CTAnyCmd cmd) {
+        for (String name : preferences.getPropertyNames()) {
+            if (cmd.has(name)) {
+                preferences.getProperty(name).set(cmd.get(preferences.getProperty(name).type(), name));
+            }
+        }
+        return this;
     }
 
     private CT init(boolean debug, long fakeTime) {
@@ -128,26 +138,6 @@ public final class CT implements CTApp {
 
     private void start() {
         control.arm(loadConfigs(false).getConfigs().iterator().next());
-    }
-
-    @Override
-    public URL getBigIcon() {
-        return CT.class.getResource(URL_ICON_BIG);
-    }
-
-    @Override
-    public URL getMediumIcon() {
-        return CT.class.getResource(URL_ICON_MEDIUM);
-    }
-
-    @Override
-    public URL getSmallIcon() {
-        return CT.class.getResource(URL_ICON_SMALL);
-    }
-
-    @Override
-    public CTPreferences getPreferences() {
-        return preferences;
     }
 
     @Override
@@ -266,5 +256,25 @@ public final class CT implements CTApp {
                 Log.warn(NOT_FOUND_0, configResource);
             }
         }
+    }
+
+    @Override
+    public URL getBigIcon() {
+        return CT.class.getResource(URL_ICON_BIG);
+    }
+
+    @Override
+    public URL getMediumIcon() {
+        return CT.class.getResource(URL_ICON_MEDIUM);
+    }
+
+    @Override
+    public URL getSmallIcon() {
+        return CT.class.getResource(URL_ICON_SMALL);
+    }
+
+    @Override
+    public CTPreferences getPreferences() {
+        return preferences;
     }
 }

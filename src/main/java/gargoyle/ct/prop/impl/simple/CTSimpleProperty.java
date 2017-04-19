@@ -10,22 +10,12 @@ public abstract class CTSimpleProperty<T> extends CTBaseObservableProperty<T> {
     private T value;
 
     protected CTSimpleProperty(String name, T def) {
-        super(name);
+        super((Class<T>) def.getClass(), name);
         value = def;
     }
 
-    protected CTSimpleProperty(String name) {
-        super(name);
-    }
-
-    @Override
-    public String toString() {
-        return MessageFormat.format("CTSimpleProperty'{'name=''{0}'', value={1}'}'", name, value);
-    }
-
-    @Override
-    public T get() {
-        return value;
+    protected CTSimpleProperty(Class<T> type, String name) {
+        super(type, name);
     }
 
     @Override
@@ -43,5 +33,15 @@ public abstract class CTSimpleProperty<T> extends CTBaseObservableProperty<T> {
         } catch (InterruptedException ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    @Override
+    public T get() {
+        return value;
+    }
+
+    @Override
+    public String toString() {
+        return MessageFormat.format("CTSimpleProperty'{'name=''{0}'', value={1}'}'", name, value);
     }
 }

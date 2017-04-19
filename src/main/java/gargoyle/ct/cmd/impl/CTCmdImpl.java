@@ -16,6 +16,18 @@ public class CTCmdImpl implements CTCmd {
     }
 
     @Override
+    public <T> T get(Class<T> type, String key) {return args.get(type, key);}
+
+    @Override
+    public <T> T get(String key, T def) {return args.get(key, def);}
+
+    @Override
+    public String get(String key, String def) {return args.getString(key, def);}
+
+    @Override
+    public boolean has(String key) {return args.hasArg(key);}
+
+    @Override
     public long getFakeTime() {
         try {
             return args.hasArg(0) ? CTTimeUtil.parseHHMMSS(args.getString(0)) : 0;
@@ -27,6 +39,6 @@ public class CTCmdImpl implements CTCmd {
 
     @Override
     public boolean isDebug() {
-        return args.size() == 1 || args.size() == 2 && args.getBoolean(1);
+        return args.size() == 1 || args.size() > 1 && args.getBoolean(1);
     }
 }

@@ -2,6 +2,12 @@ package gargoyle.ct.cmd.args;
 
 public interface CTArgs {
 
+    <T> T get(Class<T> type, String key);
+
+    <T> T get(int index, T def);
+
+    <T> T get(String key, T def);
+
     boolean getBoolean(int index);
 
     boolean getBoolean(String key);
