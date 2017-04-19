@@ -18,7 +18,7 @@ public class CTCmdImpl implements CTCmd {
     @Override
     public long getFakeTime() {
         try {
-            return args.hasArg(0) ? 0 : CTTimeUtil.parseHHMMSS(args.getString(0));
+            return args.hasArg(0) ? CTTimeUtil.parseHHMMSS(args.getString(0)) : 0;
         } catch (NumberFormatException ex) {
             Log.info(MSG_FAKE_TIME_INVALID);
             return 0;
