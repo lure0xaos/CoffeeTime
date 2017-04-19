@@ -1,6 +1,7 @@
 package gargoyle.ct.cmd.impl;
 
 import gargoyle.ct.cmd.CTCmd;
+import gargoyle.ct.cmd.args.CTArgs;
 import gargoyle.ct.cmd.args.impl.CTArgsImpl;
 import gargoyle.ct.log.Log;
 import gargoyle.ct.util.CTTimeUtil;
@@ -8,7 +9,7 @@ import gargoyle.ct.util.CTTimeUtil;
 public class CTCmdImpl implements CTCmd {
 
     private static final String MSG_FAKE_TIME_INVALID = "fake time not set";
-    private final CTArgsImpl args;
+    private final CTArgs args;
 
     public CTCmdImpl(String[] args) {
         this.args = new CTArgsImpl(args);
