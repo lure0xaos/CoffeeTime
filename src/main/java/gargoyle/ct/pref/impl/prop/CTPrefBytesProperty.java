@@ -1,7 +1,7 @@
 package gargoyle.ct.pref.impl.prop;
 
+import gargoyle.ct.convert.impl.BytesConverter;
 import gargoyle.ct.pref.CTPreferencesProvider;
-import gargoyle.ct.pref.impl.convert.impl.BytesConverter;
 
 public class CTPrefBytesProperty extends CTPrefProperty<byte[]> {
 

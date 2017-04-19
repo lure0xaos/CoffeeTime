@@ -1,4 +1,4 @@
-package gargoyle.ct.pref.impl.convert;
+package gargoyle.ct.convert;
 
 public interface Converter<T> {
 

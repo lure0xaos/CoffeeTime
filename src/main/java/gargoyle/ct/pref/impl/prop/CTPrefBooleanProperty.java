@@ -1,7 +1,7 @@
 package gargoyle.ct.pref.impl.prop;
 
+import gargoyle.ct.convert.impl.BooleanConverter;
 import gargoyle.ct.pref.CTPreferencesProvider;
-import gargoyle.ct.pref.impl.convert.impl.BooleanConverter;
 
 public class CTPrefBooleanProperty extends CTPrefProperty<Boolean> {
 

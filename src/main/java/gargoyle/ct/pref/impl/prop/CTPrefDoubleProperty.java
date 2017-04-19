@@ -1,7 +1,7 @@
 package gargoyle.ct.pref.impl.prop;
 
+import gargoyle.ct.convert.impl.DoubleConverter;
 import gargoyle.ct.pref.CTPreferencesProvider;
-import gargoyle.ct.pref.impl.convert.impl.DoubleConverter;
 import gargoyle.ct.prop.CTNumberProperty;
 
 public class CTPrefDoubleProperty extends CTPrefProperty<Double> implements CTNumberProperty<Double> {

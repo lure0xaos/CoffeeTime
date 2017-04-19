@@ -1,6 +1,5 @@
 package gargoyle.ct.convert.impl;
 
-import gargoyle.ct.pref.impl.convert.impl.BytesConverter;
 import org.junit.Test;
 
 import java.text.MessageFormat;

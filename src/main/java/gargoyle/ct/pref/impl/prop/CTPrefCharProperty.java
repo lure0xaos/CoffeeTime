@@ -1,7 +1,7 @@
 package gargoyle.ct.pref.impl.prop;
 
+import gargoyle.ct.convert.impl.CharConverter;
 import gargoyle.ct.pref.CTPreferencesProvider;
-import gargoyle.ct.pref.impl.convert.impl.CharConverter;
 
 public class CTPrefCharProperty extends CTPrefProperty<Character> {
 

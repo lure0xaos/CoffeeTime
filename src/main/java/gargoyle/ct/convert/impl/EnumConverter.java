@@ -1,7 +1,7 @@
-package gargoyle.ct.pref.impl.convert.impl;
+package gargoyle.ct.convert.impl;
 
+import gargoyle.ct.convert.Converter;
 import gargoyle.ct.log.Log;
-import gargoyle.ct.pref.impl.convert.Converter;
 
 public class EnumConverter<E extends Enum<E>> implements Converter<E> {
 

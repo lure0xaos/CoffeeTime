@@ -1,8 +1,8 @@
 package gargoyle.ct.pref.impl.prop;
 
+import gargoyle.ct.convert.Converter;
 import gargoyle.ct.log.Log;
 import gargoyle.ct.pref.CTPreferencesProvider;
-import gargoyle.ct.pref.impl.convert.Converter;
 import gargoyle.ct.prop.impl.CTBaseObservableProperty;
 
 import java.util.Objects;
@@ -27,6 +27,22 @@ public class CTPrefProperty<T> extends CTBaseObservableProperty<T> {
     }
 
     @Override
+    public final void set(T value) {
+        T oldValue = get();
+        if (Objects.equals(oldValue, value)) {
+            return;
+        }
+        preferences.put(name, value == null ? null : converter.format(value));
+        sync();
+        firePropertyChange(value, oldValue);
+    }
+
+    @Override
+    public final T get() {
+        return get(converter.parse(def));
+    }
+
+    @Override
     public T get(T def) {
         String value = preferences.get(name, null);
         if (value == null) {
@@ -38,22 +54,6 @@ public class CTPrefProperty<T> extends CTBaseObservableProperty<T> {
             Log.warn(ex, ex.getMessage());
             return def;
         }
-    }
-
-    @Override
-    public final T get() {
-        return get(converter.parse(def));
-    }
-
-    @Override
-    public final void set(T value) {
-        T oldValue = get();
-        if (Objects.equals(oldValue, value)) {
-            return;
-        }
-        preferences.put(name, value == null ? null : converter.format(value));
-        sync();
-        firePropertyChange(value, oldValue);
     }
 
     private void sync() {

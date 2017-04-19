@@ -1,7 +1,7 @@
 package gargoyle.ct.pref.impl.prop;
 
+import gargoyle.ct.convert.impl.EnumConverter;
 import gargoyle.ct.pref.CTPreferencesProvider;
-import gargoyle.ct.pref.impl.convert.impl.EnumConverter;
 
 public class CTPrefEnumProperty<E extends Enum<E>> extends CTPrefProperty<E> {
 
