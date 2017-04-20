@@ -9,6 +9,7 @@ import gargoyle.ct.prop.CTNumberProperty;
 import gargoyle.ct.prop.CTObservableProperty;
 import gargoyle.ct.prop.CTProperty;
 import gargoyle.ct.ui.impl.CTLocalizableLabel;
+import gargoyle.ct.util.CTNumberUtil;
 
 import javax.swing.DefaultBoundedRangeModel;
 import javax.swing.JCheckBox;
@@ -31,7 +32,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -72,6 +72,10 @@ public class CTLayoutBuilder {
         pane.add(control);
     }
 
+    public void build() {
+        pane.validate();
+    }
+
     public JCheckBox createCheckBox(CTProperty<Boolean> property) {
         JCheckBox control = new JCheckBox();
         control.setSelected(property.get());
@@ -79,89 +83,37 @@ public class CTLayoutBuilder {
         return control;
     }
 
-    public JToggleButton createToggleButton(CTProperty<Boolean> property,
-                                            CTObservableProperty<SUPPORTED_LOCALES> localeProperty) {
-        JToggleButton control = new JToggleButton();
-        control.setSelected(property.get());
-        Locale initialLocale = localeProperty.get().getLocale();
-        control.setText(control.isSelected() ? getYesString(initialLocale) : getNoString(initialLocale));
-        control.addActionListener(event -> {
-            Locale currentLocale = localeProperty.get().getLocale();
-            control.setText(control.isSelected() ? getYesString(currentLocale) : getNoString(currentLocale));
-            property.set(control.isSelected());
-        });
-        return control;
-    }
-
-    private static String getNoString(Locale locale) {
-        return UIManager.getString("OptionPane.noButtonText", locale);
-    }
-
-    private static String getYesString(Locale locale) {
-        return UIManager.getString("OptionPane.yesButtonText", locale);
-    }
-
-    public JSpinner createSpinner(CTProperty<Integer> property, Integer min, Integer max) {
-        JSpinner control = new JSpinner(new SpinnerNumberModel());
-        control.setValue(property.get());
-        control.addChangeListener(event -> property.set(toRange(min,
-                                                                max,
-                                                                Integer.valueOf(String.valueOf(control.getValue())))));
-        return control;
-    }
-
-    private static Integer toRange(Integer min, Integer max, Integer value) {
-        return Math.max(min, Math.min(max, value));
-    }
-
-    public <T extends Number> JSpinner createSpinner(Class<T> type, CTProperty<T> property, T min, T max) {
-        JSpinner control = new JSpinner(new SpinnerNumberModel());
-        control.setValue(property.get().intValue());
-        control.addChangeListener(event -> property.set(fromInt(type,
-                                                                toRange(min,
-                                                                        max,
-                                                                        toInt((Number) control.getValue())))));
-        return control;
-    }
-
-    @SuppressWarnings("unchecked")
-    private static <T extends Number> T fromInt(Class<T> type, int value) {
-        try {
-            return (T) type.getMethod("valueOf", String.class).invoke(null, String.valueOf(value));
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-    private static <T extends Number> int toRange(T min, T max, T value) {
-        return Math.max(toInt(min), Math.min(toInt(max), toInt(value)));
-    }
-
-    private static <T extends Number> int toInt(T value) {
-        return Integer.parseInt(String.valueOf(value));
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T extends Enum<T>> JSpinner createSpinner(Class<T> type, CTProperty<T> property, boolean allowNull) {
-        T[]      enumConstants = type.getEnumConstants();
-        JSpinner control;
+    @SuppressWarnings({"unchecked", "TypeMayBeWeakened", "SameParameterValue"})
+    public <E extends Enum<E>> JComboBox<E> createComboBox(Class<E> type, CTPrefProperty<E> property,
+                                                           boolean allowNull) {
+        E[]          enumConstants = type.getEnumConstants();
+        JComboBox<E> control;
         if (allowNull) {
             //noinspection UseOfObsoleteCollectionType
-            Vector<T> list = new Vector<>(Arrays.asList(enumConstants));
+            Vector<E> list = new Vector<>(Arrays.asList(enumConstants));
             list.add(0, null);
-            control = new JSpinner(new SpinnerListModel(list));
+            control = new JComboBox<>(list);
         } else {
-            control = new JSpinner(new SpinnerListModel(enumConstants));
+            control = new JComboBox<>(enumConstants);
         }
-        control.setValue(property.get());
-        control.addChangeListener(event -> property.set((T) control.getValue()));
+        control.setSelectedItem(property.get());
+        control.addActionListener(event -> property.set((E) control.getSelectedItem()));
         return control;
+    }
+
+    public JLabel createLocalizableLabel(MessageProvider messages, LocaleProvider provider, String textKey,
+                                         String toolTipTextKey) {
+        return new CTLocalizableLabel(messages, provider, textKey, toolTipTextKey, SwingConstants.TRAILING);
+    }
+
+    public JLabel createLocalizableLabel(MessageProviderEx messages, String textKey, String toolTipTextKey) {
+        return new CTLocalizableLabel(messages, messages, textKey, toolTipTextKey, SwingConstants.TRAILING);
     }
 
     public JSlider createSlider(CTProperty<Integer> property, Integer min, Integer max) {
-        JSlider control = new JSlider(toInt(min), toInt(max));
+        JSlider control = new JSlider(CTNumberUtil.toInt(min), CTNumberUtil.toInt(max));
         control.setValue(property.get());
-        control.addChangeListener(event -> property.set(toRange(min, max, control.getValue())));
+        control.addChangeListener(event -> property.set(CTNumberUtil.toRange(min, max, control.getValue())));
         return control;
     }
 
@@ -208,16 +160,55 @@ public class CTLayoutBuilder {
     }
 
     public <T extends Number> JSlider createSlider(Class<T> type, CTNumberProperty<T> property, T min, T max) {
-        JSlider control = new JSlider(toInt(min), toInt(max));
+        JSlider control = new JSlider(CTNumberUtil.toInt(min), CTNumberUtil.toInt(max));
         control.setValue(property.get().intValue());
-        control.addChangeListener(event -> property.set(fromInt(type, toRange(min, max, control.getValue()))));
+        control.addChangeListener(event -> property.set(CTNumberUtil.fromInt(type,
+                                                                             CTNumberUtil.toRange(min,
+                                                                                                  max,
+                                                                                                  control.getValue())
+                                                                            )));
         return control;
     }
 
-    public JTextField createTextField(CTProperty<String> property) {
-        JTextField control = new JTextField();
-        control.setText(property.get());
-        control.addKeyListener(new PropertyKeyAdapter(property, control));
+    public JSpinner createSpinner(CTProperty<Integer> property, Integer min, Integer max) {
+        JSpinner control = new JSpinner(new SpinnerNumberModel());
+        control.setValue(property.get());
+        control.addChangeListener(event -> {
+            Object value = control.getValue();
+            property.set(CTNumberUtil.toRange(min, max, CTNumberUtil.getInteger(value)));
+        });
+        return control;
+    }
+
+    public <T extends Number> JSpinner createSpinner(Class<T> type, CTProperty<T> property, T min, T max) {
+        JSpinner control = new JSpinner(new SpinnerNumberModel());
+        control.setValue(property.get().intValue());
+        control.addChangeListener(event -> property.set(CTNumberUtil.fromInt(type,
+                                                                             CTNumberUtil.toRange(min,
+                                                                                                  max,
+                                                                                                  CTNumberUtil.toInt(
+                                                                                                          (Number)
+                                                                                                                  control
+                                                                                                          .getValue()
+                                                                                                                    )
+                                                                                                 ))));
+        return control;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends Enum<T>> JSpinner createSpinner(Class<T> type, CTProperty<T> property, boolean allowNull) {
+        T[]      enumConstants = type.getEnumConstants();
+        JSpinner control;
+        if (allowNull) {
+            //noinspection UseOfObsoleteCollectionType
+            Vector<T> list = new Vector<>(Arrays.asList(enumConstants));
+            list.add(0, null);
+            control = new JSpinner(new SpinnerListModel(list));
+        } else {
+            control = new JSpinner(new SpinnerListModel(enumConstants));
+        }
+        control.setValue(property.get());
+        control.addChangeListener(event -> property.set((T) control.getValue()));
         return control;
     }
 
@@ -228,35 +219,33 @@ public class CTLayoutBuilder {
         return control;
     }
 
-    public JLabel createLocalizableLabel(MessageProvider messages, LocaleProvider provider, String textKey,
-                                         String toolTipTextKey) {
-        return new CTLocalizableLabel(messages, provider, textKey, toolTipTextKey, SwingConstants.TRAILING);
-    }
-
-    public JLabel createLocalizableLabel(MessageProviderEx messages, String textKey, String toolTipTextKey) {
-        return new CTLocalizableLabel(messages, messages, textKey, toolTipTextKey, SwingConstants.TRAILING);
-    }
-
-    @SuppressWarnings({"unchecked", "TypeMayBeWeakened", "SameParameterValue"})
-    public <E extends Enum<E>> JComboBox<E> createComboBox(Class<E> type, CTPrefProperty<E> property,
-                                                           boolean allowNull) {
-        E[]          enumConstants = type.getEnumConstants();
-        JComboBox<E> control;
-        if (allowNull) {
-            //noinspection UseOfObsoleteCollectionType
-            Vector<E> list = new Vector<>(Arrays.asList(enumConstants));
-            list.add(0, null);
-            control = new JComboBox<>(list);
-        } else {
-            control = new JComboBox<>(enumConstants);
-        }
-        control.setSelectedItem(property.get());
-        control.addActionListener(event -> property.set((E) control.getSelectedItem()));
+    public JTextField createTextField(CTProperty<String> property) {
+        JTextField control = new JTextField();
+        control.setText(property.get());
+        control.addKeyListener(new PropertyKeyAdapter(property, control));
         return control;
     }
 
-    public void build() {
-        pane.validate();
+    public JToggleButton createToggleButton(CTProperty<Boolean> property,
+                                            CTObservableProperty<SUPPORTED_LOCALES> localeProperty) {
+        JToggleButton control = new JToggleButton();
+        control.setSelected(property.get());
+        Locale initialLocale = localeProperty.get().getLocale();
+        control.setText(control.isSelected() ? getYesString(initialLocale) : getNoString(initialLocale));
+        control.addActionListener(event -> {
+            Locale currentLocale = localeProperty.get().getLocale();
+            control.setText(control.isSelected() ? getYesString(currentLocale) : getNoString(currentLocale));
+            property.set(control.isSelected());
+        });
+        return control;
+    }
+
+    private static String getNoString(Locale locale) {
+        return UIManager.getString("OptionPane.noButtonText", locale);
+    }
+
+    private static String getYesString(Locale locale) {
+        return UIManager.getString("OptionPane.yesButtonText", locale);
     }
 
     private static class PropertyKeyAdapter extends KeyAdapter {

@@ -13,6 +13,7 @@ import gargoyle.ct.mutex.CTMutex;
 import gargoyle.ct.mutex.impl.FileMutex;
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.pref.impl.CTPreferencesImpl;
+import gargoyle.ct.pref.impl.prop.CTPrefProperty;
 import gargoyle.ct.prop.impl.CTPropertyChangeManager;
 import gargoyle.ct.resource.Resource;
 import gargoyle.ct.resource.impl.CTConfigResource;
@@ -28,6 +29,7 @@ import gargoyle.ct.ui.impl.CTControl;
 import gargoyle.ct.ui.impl.CTNewConfigDialog;
 import gargoyle.ct.ui.impl.CTPreferencesDialog;
 import gargoyle.ct.ui.impl.control.CTShowingFrame;
+import gargoyle.ct.util.CTNumberUtil;
 import gargoyle.ct.util.CTStreamUtil;
 
 import javax.swing.UIManager;
@@ -63,6 +65,8 @@ public final class CT implements CTApp {
     private static final String URL_ICON_MEDIUM     = "/icon/32/icon32.png";
     private static final String URL_ICON_SMALL      = "/icon/16/icon16.png";
     private static final String CONFIG_CHARSET      = StandardCharsets.UTF_8.name();
+    private static final String MSG_DEBUG_MODE      = "debug mode";
+    private static final String MSG_FAKE_TIME_SET_0 = "fake time set {0, time, HH:mm:ss}";
     private final List<CTBlocker> blockers;
     private final CTUnitConverter<CTConfigs> configsConverter = new CTConfigsConverter();
     private final CTControl           control;
@@ -107,15 +111,20 @@ public final class CT implements CTApp {
     private CT overridePreferences(CTAnyCmd cmd) {
         for (String name : preferences.getPropertyNames()) {
             if (cmd.has(name)) {
-                preferences.getProperty(name).set(cmd.get(preferences.getProperty(name).type(), name));
+                CTPrefProperty<Object> property = preferences.getProperty(name);
+                property.set(cmd.get(name, CTNumberUtil.getDefault(property.type())));
             }
         }
         return this;
     }
 
     private CT init(boolean debug, long fakeTime) {
+        if (debug) {
+            Log.info(MSG_DEBUG_MODE);
+        }
         if (fakeTime != 0) {
             setFakeTime(fakeTime);
+            Log.info(MSG_FAKE_TIME_SET_0, fakeTime);
         }
         for (CTBlocker blocker : blockers) {
             blocker.debug(debug);

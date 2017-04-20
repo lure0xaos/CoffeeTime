@@ -4,6 +4,8 @@ public interface CTArgs {
 
     <T> T get(Class<T> type, String key);
 
+    <T> T get(Class<T> type, String key, T def);
+
     <T> T get(int index, T def);
 
     <T> T get(String key, T def);

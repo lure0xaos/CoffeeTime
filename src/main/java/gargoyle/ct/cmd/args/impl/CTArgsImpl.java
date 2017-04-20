@@ -12,6 +12,7 @@ import gargoyle.ct.convert.impl.IntegerConverter;
 import gargoyle.ct.convert.impl.LongConverter;
 import gargoyle.ct.convert.impl.ShortConverter;
 import gargoyle.ct.convert.impl.StringConverter;
+import gargoyle.ct.log.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,9 +22,13 @@ import java.util.Map;
 
 public class CTArgsImpl implements CTArgs {
 
-    private static final String                                           EQ                 = "=";
-    private static final Map<Class<?>, Class<? extends Converter<?>>>     converterTypes     = new HashMap<>();
-    private static final Map<Class<? extends Converter<?>>, Converter<?>> converterInstances = new HashMap<>();
+    private static final String                                           EQ                   = "=";
+    private static final Map<Class<?>, Class<? extends Converter<?>>>     converterTypes       = new HashMap<>();
+    private static final Map<Class<? extends Converter<?>>, Converter<?>> converterInstances   = new HashMap<>();
+    private static final String                                           MSG_INVALID_ARGUMENT = "Invalid argument " +
+                                                                                                 "\"{0}\" value " +
+                                                                                                 "\"{1}\", using " +
+                                                                                                 "default \"{2}\"";
 
     static {
         addConverterClass(Boolean.class, BooleanConverter.class);
@@ -76,6 +81,11 @@ public class CTArgsImpl implements CTArgs {
     @Override
     public <T> T get(Class<T> type, String key) {
         return byKey(key, getConverter(type), null);
+    }
+
+    @Override
+    public <T> T get(Class<T> type, String key, T def) {
+        return byKey(key, getConverter(type), def);
     }
 
     @SuppressWarnings("unchecked")
@@ -320,14 +330,24 @@ public class CTArgsImpl implements CTArgs {
         if (!converterInstances.containsKey(converterClass)) {
             try {
                 converterInstances.put(converterClass, converterClass.newInstance());
-            } catch (InstantiationException | IllegalAccessException e) {
-                throw new RuntimeException(e);
+            } catch (InstantiationException | IllegalAccessException ex) {
+                throw new RuntimeException(ex);
             }
         }
         return (Converter<T>) converterInstances.get(converterClass);
     }
 
     private <T> T byKey(String key, Converter<T> converter, T def) {
-        return params.containsKey(key) ? converter.parse(params.get(key)) : def;
+        if (params.containsKey(key)) {
+            String value = params.get(key);
+            try {
+                return converter.parse(value);
+            } catch (IllegalArgumentException ex) {
+                Log.error(MSG_INVALID_ARGUMENT, key, value, def);
+                return def;
+            }
+        } else {
+            return def;
+        }
     }
 }
