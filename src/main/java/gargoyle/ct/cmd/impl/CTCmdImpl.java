@@ -4,7 +4,7 @@ import gargoyle.ct.cmd.CTCmd;
 import gargoyle.ct.log.Log;
 import gargoyle.ct.util.CTTimeUtil;
 
-public class CTCmdImpl extends CTAnyCmdImpl implements CTCmd {
+public class CTCmdImpl extends /*CTBaseCmdImpl*/CTAnyCmdImpl implements CTCmd {
 
     private static final String MSG_FAKE_TIME_INVALID = "fake time not set";
 
