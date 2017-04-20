@@ -12,9 +12,9 @@ import java.util.prefs.Preferences;
 
 public class CTPrefProperty<T> extends CTBaseObservableProperty<T> {
 
-    protected final String       def;
-    protected final Converter<T> converter;
-    private final   Preferences  preferences;
+    private final String       def;
+    private final Converter<T> converter;
+    private final Preferences  preferences;
 
     protected CTPrefProperty(Class<T> type, CTPreferencesProvider provider, String name, T def) {
         this(type, Converters.get(type), provider, name, def);

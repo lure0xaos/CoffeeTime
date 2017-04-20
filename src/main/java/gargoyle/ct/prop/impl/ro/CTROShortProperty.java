@@ -4,10 +4,6 @@ import gargoyle.ct.prop.CTRONumberProperty;
 
 public class CTROShortProperty extends CTBaseROProperty<Short> implements CTRONumberProperty<Short> {
 
-    public CTROShortProperty(String name) {
-        this(name, (short) 0);
-    }
-
     public CTROShortProperty(String name, Short value) {
         super(name, value);
     }

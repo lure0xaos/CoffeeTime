@@ -31,7 +31,7 @@ abstract class CTBasePreferences implements CTPreferencesManager, CTPreferencesP
         }
     }
 
-    protected final Preferences preferences;
+    private final Preferences preferences;
     private final Map<String, CTPrefProperty<?>> properties = new HashMap<>();
 
     protected CTBasePreferences(Class<?> clazz) {

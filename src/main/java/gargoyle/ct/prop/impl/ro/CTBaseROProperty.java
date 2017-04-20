@@ -6,9 +6,9 @@ import java.text.MessageFormat;
 
 public abstract class CTBaseROProperty<T> implements CTROProperty<T> {
 
-    protected final String   name;
-    private final   T        value;
-    private final   Class<T> type;
+    private final String   name;
+    private final T        value;
+    private final Class<T> type;
 
     protected CTBaseROProperty(String name, T value) {
         type = (Class<T>) value.getClass();

@@ -8,10 +8,8 @@ public interface CTPreferencesManager {
 
     void addPropertyChangeListener(CTPropertyChangeListener listener);
 
-    @SuppressWarnings("unchecked")
     <T> CTPrefProperty<T> getProperty(String name);
 
-    @SuppressWarnings("unchecked")
     <E extends Enum<E>> CTPrefProperty<E> getProperty(Class<E> type);
 
     Set<String> getPropertyNames();
