@@ -1,6 +1,6 @@
 package gargoyle.ct.prop;
 
-public interface CTProperty<T> extends CTROProperty<T> {
+public interface CTProperty<T> extends CTReadOnlyProperty<T> {
 
     void set(T value);
 }

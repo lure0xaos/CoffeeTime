@@ -61,15 +61,15 @@ public class VirtualResource extends AbstractResource {
         return createResource(null, loc);
     }
 
-    @Override
-    public URL toURL() throws IOException {
-        return Objects.equals(baseResource, this) ? super.toURL() : new URL(baseResource.toURL(), getLocation());
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     protected VirtualResource createResource(Resource base, String location) {
         return base == null ? new VirtualResource(location) : new VirtualResource(base, location);
+    }
+
+    @Override
+    public URL toURL() throws IOException {
+        return Objects.equals(baseResource, this) ? super.toURL() : new URL(baseResource.toURL(), getLocation());
     }
 
     public String getRelativeLocation() {

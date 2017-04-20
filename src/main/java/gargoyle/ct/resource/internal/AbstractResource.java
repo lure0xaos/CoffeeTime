@@ -34,6 +34,8 @@ abstract class AbstractResource implements Resource {
         this.location = location;
     }
 
+    protected abstract <R extends Resource> R createResource(R base, String location);
+
     @Override
     public boolean exists() {
         try {
@@ -122,6 +124,4 @@ abstract class AbstractResource implements Resource {
     public String toString() {
         return MessageFormat.format("AbstractResource [location={0}]", location);
     }
-
-    protected abstract <R extends Resource> R createResource(R base, String location);
 }

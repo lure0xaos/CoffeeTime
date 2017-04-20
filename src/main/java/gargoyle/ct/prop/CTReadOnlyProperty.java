@@ -1,6 +1,6 @@
 package gargoyle.ct.prop;
 
-public interface CTROProperty<T> {
+public interface CTReadOnlyProperty<T> {
 
     T get();
 

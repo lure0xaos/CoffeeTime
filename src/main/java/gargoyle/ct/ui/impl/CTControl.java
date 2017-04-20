@@ -51,8 +51,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyC
         this.app = app;
         textProvider = new CTBlockerTextProvider(app.getPreferences());
         group = new ButtonGroup();
-        controlWindow = new CTControlWindowImpl(owner,
-                                                app.getPreferences(), app.getBigIcon(),
+        controlWindow = new CTControlWindowImpl(owner, app.getPreferences(), app.getBigIcon(),
                                                 createMenu(new CTMessages(new CTPreferencesLocaleProvider(app.getPreferences()),
                                                                           LOC_MESSAGES), app.loadConfigs(false)));
         controlWindow.showMe();

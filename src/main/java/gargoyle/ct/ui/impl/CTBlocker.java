@@ -125,13 +125,13 @@ public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindo
         }
     }
 
-    @Override
-    public void setBackground(Color color) {
-        content.setBackground(color);
-    }
-
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
         textProvider = new CTBlockerTextProvider(preferences);
+    }
+
+    @Override
+    public void setBackground(Color color) {
+        content.setBackground(color);
     }
 }

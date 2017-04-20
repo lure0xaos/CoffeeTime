@@ -10,7 +10,7 @@ public interface CTApp extends CTControlActions {
 
     URL getMediumIcon();
 
-    URL getSmallIcon();
-
     CTPreferences getPreferences();
+
+    URL getSmallIcon();
 }
