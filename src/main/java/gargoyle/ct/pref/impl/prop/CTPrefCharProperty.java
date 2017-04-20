@@ -1,6 +1,5 @@
 package gargoyle.ct.pref.impl.prop;
 
-import gargoyle.ct.convert.impl.CharConverter;
 import gargoyle.ct.pref.CTPreferencesProvider;
 
 public class CTPrefCharProperty extends CTPrefProperty<Character> {
@@ -11,6 +10,6 @@ public class CTPrefCharProperty extends CTPrefProperty<Character> {
     }
 
     public CTPrefCharProperty(CTPreferencesProvider provider, String name, Character def) {
-        super(Character.class, new CharConverter(), provider, name, def);
+        super(Character.class, provider, name, def);
     }
 }

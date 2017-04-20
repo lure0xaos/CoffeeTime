@@ -1,6 +1,5 @@
 package gargoyle.ct.pref.impl.prop;
 
-import gargoyle.ct.convert.impl.DoubleConverter;
 import gargoyle.ct.pref.CTPreferencesProvider;
 import gargoyle.ct.prop.CTNumberProperty;
 
@@ -11,6 +10,6 @@ public class CTPrefDoubleProperty extends CTPrefProperty<Double> implements CTNu
     }
 
     public CTPrefDoubleProperty(CTPreferencesProvider provider, String name, double def) {
-        super(Double.class, new DoubleConverter(), provider, name, def);
+        super(Double.class, provider, name, def);
     }
 }

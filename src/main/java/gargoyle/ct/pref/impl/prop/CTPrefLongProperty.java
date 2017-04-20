@@ -1,6 +1,5 @@
 package gargoyle.ct.pref.impl.prop;
 
-import gargoyle.ct.convert.impl.LongConverter;
 import gargoyle.ct.pref.CTPreferencesProvider;
 import gargoyle.ct.prop.CTNumberProperty;
 
@@ -11,6 +10,6 @@ public class CTPrefLongProperty extends CTPrefProperty<Long> implements CTNumber
     }
 
     public CTPrefLongProperty(CTPreferencesProvider provider, String name, Long def) {
-        super(Long.class, new LongConverter(), provider, name, def);
+        super(Long.class, provider, name, def);
     }
 }

@@ -1,6 +1,5 @@
 package gargoyle.ct.pref.impl.prop;
 
-import gargoyle.ct.convert.impl.FloatConverter;
 import gargoyle.ct.pref.CTPreferencesProvider;
 import gargoyle.ct.prop.CTNumberProperty;
 
@@ -11,6 +10,6 @@ public class CTPrefFloatProperty extends CTPrefProperty<Float> implements CTNumb
     }
 
     public CTPrefFloatProperty(CTPreferencesProvider provider, String name, float def) {
-        super(Float.class, new FloatConverter(), provider, name, def);
+        super(Float.class, provider, name, def);
     }
 }

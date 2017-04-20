@@ -1,6 +1,5 @@
 package gargoyle.ct.pref.impl.prop;
 
-import gargoyle.ct.convert.impl.BooleanConverter;
 import gargoyle.ct.pref.CTPreferencesProvider;
 
 public class CTPrefBooleanProperty extends CTPrefProperty<Boolean> {
@@ -10,6 +9,6 @@ public class CTPrefBooleanProperty extends CTPrefProperty<Boolean> {
     }
 
     public CTPrefBooleanProperty(CTPreferencesProvider provider, String name, boolean def) {
-        super(Boolean.class, new BooleanConverter(), provider, name, def);
+        super(Boolean.class, provider, name, def);
     }
 }

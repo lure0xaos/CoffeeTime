@@ -1,6 +1,5 @@
 package gargoyle.ct.pref.impl.prop;
 
-import gargoyle.ct.convert.impl.ShortConverter;
 import gargoyle.ct.pref.CTPreferencesProvider;
 import gargoyle.ct.prop.CTNumberProperty;
 
@@ -11,6 +10,6 @@ public class CTPrefShortProperty extends CTPrefProperty<Short> implements CTNumb
     }
 
     public CTPrefShortProperty(CTPreferencesProvider provider, String name, Short def) {
-        super(Short.class, new ShortConverter(), provider, name, def);
+        super(Short.class, provider, name, def);
     }
 }

@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 public class CTConvSerializableProperty<T extends Serializable> extends CTConvProperty<T> {
 
-    public CTConvSerializableProperty(String name, String value) {
-        super(new SerializableConverter<>(), name, value);
+    public CTConvSerializableProperty(Class<T> type, String name, String value) {
+        super(type, new SerializableConverter<>(), name, value);
     }
 }
