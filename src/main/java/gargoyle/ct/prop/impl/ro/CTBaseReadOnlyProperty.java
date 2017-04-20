@@ -10,7 +10,11 @@ public abstract class CTBaseReadOnlyProperty<T> implements CTReadOnlyProperty<T>
     private final T        value;
     private final Class<T> type;
 
+    @SuppressWarnings("unchecked")
     protected CTBaseReadOnlyProperty(String name, T value) {
+        if (value == null) {
+            throw new IllegalArgumentException("ReadOnly value cannot be null");
+        }
         type = (Class<T>) value.getClass();
         this.name = name;
         this.value = value;

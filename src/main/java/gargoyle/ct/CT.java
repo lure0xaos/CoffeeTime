@@ -278,12 +278,12 @@ public final class CT implements CTApp {
     }
 
     @Override
-    public URL getSmallIcon() {
-        return CT.class.getResource(URL_ICON_SMALL);
+    public CTPreferences getPreferences() {
+        return preferences;
     }
 
     @Override
-    public CTPreferences getPreferences() {
-        return preferences;
+    public URL getSmallIcon() {
+        return CT.class.getResource(URL_ICON_SMALL);
     }
 }

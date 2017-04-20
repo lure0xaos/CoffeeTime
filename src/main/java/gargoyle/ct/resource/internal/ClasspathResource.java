@@ -24,12 +24,10 @@ public class ClasspathResource extends VirtualResource {
     }
 
     @Override
-    public boolean exists() {
-        try {
-            return exists(toURL());
-        } catch (IOException ex) {
-            return false;
-        }
+    protected ClasspathResource createResource(Resource base, String location) {
+        return base == null ?
+               new ClasspathResource(loader, location) :
+               new ClasspathResource(getLoader(base), base, location);
     }
 
     @Override
@@ -37,17 +35,19 @@ public class ClasspathResource extends VirtualResource {
         return loader.getResource(getLocation());
     }
 
-    @Override
-    protected ClasspathResource createResource(Resource base, String location) {
-        return base == null ?
-               new ClasspathResource(loader, location) :
-               new ClasspathResource(getLoader(base), base, location);
-    }
-
     private ClassLoader getLoader(Resource resource) {
         if (resource instanceof ClasspathResource) {
             return ((ClasspathResource) resource).loader;
         }
         return loader;
+    }
+
+    @Override
+    public boolean exists() {
+        try {
+            return exists(toURL());
+        } catch (IOException ex) {
+            return false;
+        }
     }
 }
