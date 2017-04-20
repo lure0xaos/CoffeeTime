@@ -2,16 +2,7 @@ package gargoyle.ct.cmd.args.impl;
 
 import gargoyle.ct.cmd.args.CTArgs;
 import gargoyle.ct.convert.Converter;
-import gargoyle.ct.convert.impl.BooleanConverter;
-import gargoyle.ct.convert.impl.ByteConverter;
-import gargoyle.ct.convert.impl.BytesConverter;
-import gargoyle.ct.convert.impl.CharConverter;
-import gargoyle.ct.convert.impl.DoubleConverter;
-import gargoyle.ct.convert.impl.FloatConverter;
-import gargoyle.ct.convert.impl.IntegerConverter;
-import gargoyle.ct.convert.impl.LongConverter;
-import gargoyle.ct.convert.impl.ShortConverter;
-import gargoyle.ct.convert.impl.StringConverter;
+import gargoyle.ct.convert.Converters;
 import gargoyle.ct.log.Log;
 
 import java.util.ArrayList;
@@ -22,27 +13,8 @@ import java.util.Map;
 
 public class CTArgsImpl implements CTArgs {
 
-    private static final String                                           EQ                   = "=";
-    private static final Map<Class<?>, Class<? extends Converter<?>>>     converterTypes       = new HashMap<>();
-    private static final Map<Class<? extends Converter<?>>, Converter<?>> converterInstances   = new HashMap<>();
-    private static final String                                           MSG_INVALID_ARGUMENT = "Invalid argument " +
-                                                                                                 "\"{0}\" value " +
-                                                                                                 "\"{1}\", using " +
-                                                                                                 "default \"{2}\"";
-
-    static {
-        addConverterClass(Boolean.class, BooleanConverter.class);
-        addConverterClass(Byte.class, ByteConverter.class);
-        addConverterClass(byte[].class, BytesConverter.class);
-        addConverterClass(Character.class, CharConverter.class);
-        addConverterClass(Double.class, DoubleConverter.class);
-        addConverterClass(Float.class, FloatConverter.class);
-        addConverterClass(Integer.class, IntegerConverter.class);
-        addConverterClass(Long.class, LongConverter.class);
-        addConverterClass(Short.class, ShortConverter.class);
-        addConverterClass(String.class, StringConverter.class);
-    }
-
+    private static final String EQ                   = "=";
+    private static final String MSG_INVALID_ARGUMENT = "Invalid argument \"{0}\" value \"{1}\", using default \"{2}\"";
     private final Map<String, String> params;
     private final List<String>        keys;
 
@@ -74,30 +46,26 @@ public class CTArgsImpl implements CTArgs {
         }
     }
 
-    private static <T> void addConverterClass(Class<T> type, Class<? extends Converter<T>> converterClass) {
-        converterTypes.put(type, converterClass);
-    }
-
     @Override
     public <T> T get(Class<T> type, String key) {
-        return byKey(key, getConverter(type), null);
+        return byKey(key, Converters.get(type), null);
     }
 
     @Override
     public <T> T get(Class<T> type, String key, T def) {
-        return byKey(key, getConverter(type), def);
+        return byKey(key, Converters.get(type), def);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T> T get(int index, T def) {
-        return byIndex(index, getConverter((Class<T>) def.getClass()), def);
+        return byIndex(index, Converters.get((Class<T>) def.getClass()), def);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T> T get(String key, T def) {
-        return byKey(key, getConverter((Class<T>) def.getClass()), def);
+        return byKey(key, Converters.get((Class<T>) def.getClass()), def);
     }
 
     @Override
@@ -112,12 +80,12 @@ public class CTArgsImpl implements CTArgs {
 
     @Override
     public boolean getBoolean(int index, boolean def) {
-        return byIndex(index, getConverter(Boolean.class), def);
+        return byIndex(index, Converters.get(Boolean.class), def);
     }
 
     @Override
     public boolean getBoolean(String key, boolean def) {
-        return byKey(key, getConverter(Boolean.class), def);
+        return byKey(key, Converters.get(Boolean.class), def);
     }
 
     @Override
@@ -132,12 +100,12 @@ public class CTArgsImpl implements CTArgs {
 
     @Override
     public byte getByte(int index, byte def) {
-        return byIndex(index, getConverter(Byte.class), def);
+        return byIndex(index, Converters.get(Byte.class), def);
     }
 
     @Override
     public byte getByte(String key, byte def) {
-        return byKey(key, getConverter(Byte.class), def);
+        return byKey(key, Converters.get(Byte.class), def);
     }
 
     @Override
@@ -152,12 +120,12 @@ public class CTArgsImpl implements CTArgs {
 
     @Override
     public byte[] getBytes(int index, byte[] def) {
-        return byIndex(index, getConverter(byte[].class), def);
+        return byIndex(index, Converters.get(byte[].class), def);
     }
 
     @Override
     public byte[] getBytes(String key, byte[] def) {
-        return byKey(key, getConverter(byte[].class), def);
+        return byKey(key, Converters.get(byte[].class), def);
     }
 
     @SuppressWarnings("MagicCharacter")
@@ -174,12 +142,12 @@ public class CTArgsImpl implements CTArgs {
 
     @Override
     public char getChar(int index, char def) {
-        return byIndex(index, getConverter(Character.class), def);
+        return byIndex(index, Converters.get(Character.class), def);
     }
 
     @Override
     public char getChar(String key, char def) {
-        return byKey(key, getConverter(Character.class), def);// NON-NLS
+        return byKey(key, Converters.get(Character.class), def);// NON-NLS
     }
 
     @Override
@@ -194,12 +162,12 @@ public class CTArgsImpl implements CTArgs {
 
     @Override
     public double getDouble(int index, double def) {
-        return byIndex(index, getConverter(Double.class), def);
+        return byIndex(index, Converters.get(Double.class), def);
     }
 
     @Override
     public double getDouble(String key, double def) {
-        return byKey(key, getConverter(Double.class), def);
+        return byKey(key, Converters.get(Double.class), def);
     }
 
     @Override
@@ -214,12 +182,12 @@ public class CTArgsImpl implements CTArgs {
 
     @Override
     public float getFloat(int index, float def) {
-        return byIndex(index, getConverter(Float.class), def);
+        return byIndex(index, Converters.get(Float.class), def);
     }
 
     @Override
     public float getFloat(String key, float def) {
-        return byKey(key, getConverter(Float.class), def);
+        return byKey(key, Converters.get(Float.class), def);
     }
 
     @Override
@@ -234,12 +202,12 @@ public class CTArgsImpl implements CTArgs {
 
     @Override
     public int getInteger(int index, int def) {
-        return byIndex(index, getConverter(Integer.class), def);
+        return byIndex(index, Converters.get(Integer.class), def);
     }
 
     @Override
     public int getInteger(String key, int def) {
-        return byKey(key, getConverter(Integer.class), def);
+        return byKey(key, Converters.get(Integer.class), def);
     }
 
     @Override
@@ -254,12 +222,12 @@ public class CTArgsImpl implements CTArgs {
 
     @Override
     public long getLong(int index, long def) {
-        return byIndex(index, getConverter(Long.class), def);
+        return byIndex(index, Converters.get(Long.class), def);
     }
 
     @Override
     public long getLong(String key, long def) {
-        return byKey(key, getConverter(Long.class), def);
+        return byKey(key, Converters.get(Long.class), def);
     }
 
     @Override
@@ -274,12 +242,12 @@ public class CTArgsImpl implements CTArgs {
 
     @Override
     public short getShort(int index, short def) {
-        return byIndex(index, getConverter(Short.class), def);
+        return byIndex(index, Converters.get(Short.class), def);
     }
 
     @Override
     public short getShort(String key, short def) {
-        return byKey(key, getConverter(Short.class), def);
+        return byKey(key, Converters.get(Short.class), def);
     }
 
     @Override
@@ -294,12 +262,12 @@ public class CTArgsImpl implements CTArgs {
 
     @Override
     public String getString(int index, String def) {
-        return byIndex(index, getConverter(String.class), def);
+        return byIndex(index, Converters.get(String.class), def);
     }
 
     @Override
     public String getString(String key, String def) {
-        return byKey(key, getConverter(String.class), def);
+        return byKey(key, Converters.get(String.class), def);
     }
 
     @Override
@@ -319,22 +287,6 @@ public class CTArgsImpl implements CTArgs {
 
     private <T> T byIndex(int index, Converter<T> converter, T def) {
         return params.size() > index ? byKey(keys.get(index), converter, def) : def;
-    }
-
-    @SuppressWarnings("unchecked")
-    private static synchronized <T> Converter<T> getConverter(Class<T> type) {
-        if (!converterTypes.containsKey(type)) {
-            throw new IllegalArgumentException(type.toGenericString());
-        }
-        Class<? extends Converter<?>> converterClass = converterTypes.get(type);
-        if (!converterInstances.containsKey(converterClass)) {
-            try {
-                converterInstances.put(converterClass, converterClass.newInstance());
-            } catch (InstantiationException | IllegalAccessException ex) {
-                throw new RuntimeException(ex);
-            }
-        }
-        return (Converter<T>) converterInstances.get(converterClass);
     }
 
     private <T> T byKey(String key, Converter<T> converter, T def) {
