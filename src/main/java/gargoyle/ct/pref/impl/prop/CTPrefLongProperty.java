@@ -11,6 +11,6 @@ public class CTPrefLongProperty extends CTPrefProperty<Long> implements CTNumber
     }
 
     public CTPrefLongProperty(CTPreferencesProvider provider, String name, Long def) {
-        super(new LongConverter(), provider, name, def);
+        super(Long.class, new LongConverter(), provider, name, def);
     }
 }

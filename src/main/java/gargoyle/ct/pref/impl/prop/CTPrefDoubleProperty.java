@@ -11,6 +11,6 @@ public class CTPrefDoubleProperty extends CTPrefProperty<Double> implements CTNu
     }
 
     public CTPrefDoubleProperty(CTPreferencesProvider provider, String name, double def) {
-        super(new DoubleConverter(), provider, name, def);
+        super(Double.class, new DoubleConverter(), provider, name, def);
     }
 }

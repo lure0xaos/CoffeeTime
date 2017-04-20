@@ -7,11 +7,11 @@ import java.io.Serializable;
 
 public class CTPrefSerializableProperty<T extends Serializable> extends CTPrefProperty<T> {
 
-    public CTPrefSerializableProperty(CTPreferencesProvider provider, String name) {
-        this(provider, name, null);
+    public CTPrefSerializableProperty(Class<T> type, CTPreferencesProvider provider, String name) {
+        this(type, provider, name, null);
     }
 
-    public CTPrefSerializableProperty(CTPreferencesProvider provider, String name, T def) {
-        super(new SerializableConverter<>(), provider, name, def);
+    public CTPrefSerializableProperty(Class<T> type, CTPreferencesProvider provider, String name, T def) {
+        super(type, new SerializableConverter<>(), provider, name, def);
     }
 }

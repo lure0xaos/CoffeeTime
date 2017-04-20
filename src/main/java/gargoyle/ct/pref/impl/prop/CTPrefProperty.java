@@ -15,19 +15,12 @@ public class CTPrefProperty<T> extends CTBaseObservableProperty<T> {
     protected final Converter<T> converter;
     private final   Preferences  preferences;
 
-    public CTPrefProperty(Converter<T> converter, CTPreferencesProvider provider, String name, T def) {
-        this((Class<T>) def.getClass(), converter, provider, name, def);
-    }
-
-    private CTPrefProperty(Class<T> type, Converter<T> converter, CTPreferencesProvider provider, String name, T def) {
+    protected CTPrefProperty(Class<T> type, Converter<T> converter, CTPreferencesProvider provider, String name,
+                             T def) {
         super(type, name);
         this.def = converter.format(def);
         this.converter = converter;
         preferences = provider.preferences();
-    }
-
-    protected CTPrefProperty(Class<T> type, Converter<T> converter, CTPreferencesProvider provider, String name) {
-        this(type, converter, provider, name, null);
     }
 
     @Override

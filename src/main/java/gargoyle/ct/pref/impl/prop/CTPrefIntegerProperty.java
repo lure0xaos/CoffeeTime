@@ -11,6 +11,6 @@ public class CTPrefIntegerProperty extends CTPrefProperty<Integer> implements CT
     }
 
     public CTPrefIntegerProperty(CTPreferencesProvider provider, String name, int def) {
-        super(new IntegerConverter(), provider, name, def);
+        super(Integer.class, new IntegerConverter(), provider, name, def);
     }
 }

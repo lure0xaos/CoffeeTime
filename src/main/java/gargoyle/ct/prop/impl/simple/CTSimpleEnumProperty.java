@@ -3,7 +3,7 @@ package gargoyle.ct.prop.impl.simple;
 public class CTSimpleEnumProperty<E extends Enum<E>> extends CTSimpleProperty<E> {
 
     public CTSimpleEnumProperty(Class<E> type, String name) {
-        this(type, name, null);
+        super(type, name);
     }
 
     public CTSimpleEnumProperty(Class<E> type, String name, E def) {
@@ -11,7 +11,7 @@ public class CTSimpleEnumProperty<E extends Enum<E>> extends CTSimpleProperty<E>
     }
 
     public CTSimpleEnumProperty(Class<E> type) {
-        this(type, type.getSimpleName(), null);
+        super(type, type.getSimpleName());
     }
 
     public CTSimpleEnumProperty(Class<E> type, E def) {

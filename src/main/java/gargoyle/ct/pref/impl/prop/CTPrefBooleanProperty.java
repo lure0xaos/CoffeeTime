@@ -10,6 +10,6 @@ public class CTPrefBooleanProperty extends CTPrefProperty<Boolean> {
     }
 
     public CTPrefBooleanProperty(CTPreferencesProvider provider, String name, boolean def) {
-        super(new BooleanConverter(), provider, name, def);
+        super(Boolean.class, new BooleanConverter(), provider, name, def);
     }
 }

@@ -11,6 +11,6 @@ public class CTPrefFloatProperty extends CTPrefProperty<Float> implements CTNumb
     }
 
     public CTPrefFloatProperty(CTPreferencesProvider provider, String name, float def) {
-        super(new FloatConverter(), provider, name, def);
+        super(Float.class, new FloatConverter(), provider, name, def);
     }
 }

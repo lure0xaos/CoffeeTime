@@ -11,6 +11,6 @@ public class CTPrefCharProperty extends CTPrefProperty<Character> {
     }
 
     public CTPrefCharProperty(CTPreferencesProvider provider, String name, Character def) {
-        super(new CharConverter(), provider, name, def);
+        super(Character.class, new CharConverter(), provider, name, def);
     }
 }

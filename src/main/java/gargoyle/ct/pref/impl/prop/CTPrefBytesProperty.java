@@ -10,6 +10,6 @@ public class CTPrefBytesProperty extends CTPrefProperty<byte[]> {
     }
 
     public CTPrefBytesProperty(CTPreferencesProvider provider, String name, byte[] def) {
-        super(new BytesConverter(), provider, name, def);
+        super(byte[].class, new BytesConverter(), provider, name, def);
     }
 }

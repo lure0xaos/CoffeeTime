@@ -11,6 +11,6 @@ public class CTPrefByteProperty extends CTPrefProperty<Byte> implements CTNumber
     }
 
     public CTPrefByteProperty(CTPreferencesProvider provider, String name, Byte def) {
-        super(new ByteConverter(), provider, name, def);
+        super(Byte.class, new ByteConverter(), provider, name, def);
     }
 }

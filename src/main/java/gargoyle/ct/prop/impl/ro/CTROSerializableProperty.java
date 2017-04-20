@@ -4,10 +4,6 @@ import java.io.Serializable;
 
 public class CTROSerializableProperty<T extends Serializable> extends CTBaseROProperty<T> {
 
-    public CTROSerializableProperty(String name) {
-        this(name, null);
-    }
-
     public CTROSerializableProperty(String name, T value) {
         super(name, value);
     }

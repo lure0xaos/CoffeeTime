@@ -11,6 +11,6 @@ public class CTPrefShortProperty extends CTPrefProperty<Short> implements CTNumb
     }
 
     public CTPrefShortProperty(CTPreferencesProvider provider, String name, Short def) {
-        super(new ShortConverter(), provider, name, def);
+        super(Short.class, new ShortConverter(), provider, name, def);
     }
 }
