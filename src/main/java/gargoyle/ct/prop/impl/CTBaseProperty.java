@@ -19,17 +19,18 @@ public abstract class CTBaseProperty<T> implements CTProperty<T> {
         return value == null ? def : value;
     }
 
+    @Override
     public String name() {
         return name;
     }
 
     @Override
-    public String toString() {
-        return MessageFormat.format("CTBaseProperty'{'name=''{0}'''}'", name);
+    public Class<T> type() {
+        return type;
     }
 
     @Override
-    public Class<T> type() {
-        return type;
+    public String toString() {
+        return MessageFormat.format("CTBaseProperty'{'name=''{0}'''}'", name);
     }
 }

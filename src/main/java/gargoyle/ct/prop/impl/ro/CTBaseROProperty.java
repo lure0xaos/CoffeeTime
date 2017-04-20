@@ -22,12 +22,13 @@ public abstract class CTBaseROProperty<T> implements CTROProperty<T> {
     }
 
     @Override
-    public Class<T> type() {
-        return type;
-    }
-
     public String name() {
         return name;
+    }
+
+    @Override
+    public Class<T> type() {
+        return type;
     }
 
     @Override
