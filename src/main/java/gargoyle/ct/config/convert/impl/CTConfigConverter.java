@@ -11,7 +11,7 @@ public final class CTConfigConverter implements CTUnitConverter<CTConfig> {
 
     @Override
     public String format(TimeUnit unit, CTConfig data) {
-        return configDataConverter.format(TimeUnit.MINUTES, data.getWhole(), data.getBlock(), data.getWarn());
+        return configDataConverter.format(unit, data.getWhole(), data.getBlock(), data.getWarn());
     }
 
     @Override
