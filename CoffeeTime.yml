@@ -1,0 +1,10 @@
+name: Coffee Time
+desc: blocks computer every (hour etc.) for (5,10 minutes etc...), assisting you to save your health
+site: https://github.com/lure0xaos/CoffeeTime
+tags:
+- eye-care
+- java
+- up-for-grabs
+upforgrabs:
+  name: up-for-grabs
+  link: https://github.com/lure0xaos/CoffeeTime/labels/up%20for%20grabs
