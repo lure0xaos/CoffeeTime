@@ -151,12 +151,12 @@ public class CTArgsImpl implements CTArgs {
 
     @Override
     public double getDouble(int index) {
-        return getDouble(index, 0d);
+        return getDouble(index, 0.0d);
     }
 
     @Override
     public double getDouble(String key) {
-        return getDouble(key, 0d);
+        return getDouble(key, 0.0d);
     }
 
     @Override
@@ -171,12 +171,12 @@ public class CTArgsImpl implements CTArgs {
 
     @Override
     public float getFloat(int index) {
-        return getFloat(index, 0f);
+        return getFloat(index, 0.0f);
     }
 
     @Override
     public float getFloat(String key) {
-        return getFloat(key, 0f);
+        return getFloat(key, 0.0f);
     }
 
     @Override

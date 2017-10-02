@@ -19,15 +19,17 @@ import java.awt.Window;
 
 public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
     private static final String LOC_MESSAGES = "messages.preferences";
-    private static final String STR_BLOCK = CTPreferences.BLOCK;
+    private static final String STR_BLOCK = CTPreferences.PREF_BLOCK;
     private static final String STR_BLOCK_TOOLTIP = "block.tooltip";
-    private static final String STR_ICON_STYLE = "icon-style";
+    private static final String STR_ICON_STYLE = CTPreferences.PREF_ICON_STYLE;
+    private static final String STR_SOUND = CTPreferences.PREF_SOUND;
+    private static final String STR_SOUND_TOOLTIP = "sound.tooltip";
     private static final String STR_ICON_STYLE_TOOLTIP = "icon-style.tooltip";
     private static final String STR_SUPPORTED_LOCALES = "supported-locales";
     private static final String STR_SUPPORTED_LOCALES_TOOLTIP = "supported-locales.tooltip";
     private static final String STR_TITLE = "preferences-title";
-    private static final String STR_TRANSPARENCY = CTPreferences.TRANSPARENCY;
-    private static final String STR_TRANSPARENCY_LEVEL = CTPreferences.TRANSPARENCY_LEVEL;
+    private static final String STR_TRANSPARENCY = CTPreferences.PREF_TRANSPARENCY;
+    private static final String STR_TRANSPARENCY_LEVEL = CTPreferences.PREF_TRANSPARENCY_LEVEL;
     private static final String STR_TRANSPARENCY_LEVEL_TOOLTIP = "transparency-level.tooltip";
     private static final String STR_TRANSPARENCY_TOOLTIP = "transparency.tooltip";
     private static final long serialVersionUID = 4767295798528273381L;
@@ -46,6 +48,8 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
         setTitle(messages.getMessage(STR_TITLE));
         layoutBuilder.addLabeledControl(layoutBuilder.createLocalizableLabel(messages, STR_BLOCK, STR_BLOCK_TOOLTIP),
                 layoutBuilder.createCheckBox(preferences.block()));
+        layoutBuilder.addLabeledControl(layoutBuilder.createLocalizableLabel(messages, STR_SOUND, STR_SOUND_TOOLTIP),
+                layoutBuilder.createCheckBox(preferences.sound()));
         layoutBuilder.addLabeledControl(layoutBuilder.createLocalizableLabel(messages,
                 STR_TRANSPARENCY,
                 STR_TRANSPARENCY_TOOLTIP),

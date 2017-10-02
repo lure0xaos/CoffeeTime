@@ -13,15 +13,15 @@ public interface Resource {
     /**
      * checks if this {@link Resource} really exists
      *
-     * @return
+     * @return true if exists
      */
     boolean exists();
 
     /**
      * get localized resource for {@link Locale}
      *
-     * @param locale
-     * @return
+     * @param locale locale
+     * @return localized resource
      */
     Resource forLocale(Locale locale);
 
@@ -29,21 +29,21 @@ public interface Resource {
      * opens resource for reading
      *
      * @return InputStream to read from
-     * @throws IOException
+     * @throws IOException on error
      */
     InputStream getInputStream() throws IOException;
 
     /**
      * current locale
      *
-     * @return
+     * @return for localized
      */
     Locale getLocale();
 
     /**
      * abstract resource path
      *
-     * @return
+     * @return location
      */
     String getLocation();
 
@@ -51,28 +51,28 @@ public interface Resource {
      * opens resource for writing, if supported
      *
      * @return OutputStream to write to
-     * @throws IOException
+     * @throws IOException on error
      */
     OutputStream getOutputStream() throws IOException;
 
     /**
      * if is base resource or derived
      *
-     * @return
+     * @return true for non-localized
      */
     boolean isBase();
 
     /**
      * readable (exists)
      *
-     * @return
+     * @return if can read
      */
     boolean isReadable();
 
     /**
      * writable
      *
-     * @return
+     * @return if can write
      */
     boolean isWritable();
 
@@ -80,14 +80,14 @@ public interface Resource {
      * absolute resource URL
      *
      * @return URL
-     * @throws IOException
+     * @throws IOException on error
      */
     URL toURL() throws IOException;
 
     /**
      * get bound resource with another extension
      *
-     * @param extension - extenstion, such as txt
+     * @param extension - extension, such as txt
      * @return new {@link Resource}
      */
     @SuppressWarnings("SameParameterValue")

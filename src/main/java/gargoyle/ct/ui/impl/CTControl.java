@@ -18,6 +18,7 @@ import gargoyle.ct.ui.impl.control.CTConfigMenuItem;
 import gargoyle.ct.ui.impl.control.CTControlWindowImpl;
 import gargoyle.ct.ui.impl.control.CTLocalizableAction;
 import gargoyle.ct.ui.impl.control.CTLocalizableMenuItem;
+import gargoyle.ct.util.Defend;
 
 import javax.swing.AbstractButton;
 import javax.swing.Action;
@@ -28,6 +29,7 @@ import javax.swing.SwingConstants;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyChangeListener<Object> {
@@ -50,6 +52,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyC
     private final CTControlWindow controlWindow;
     private final ButtonGroup group;
     private final CTBlockerTextProvider textProvider;
+    JPopupMenu menu;
     private CTLocalizableMenuItem stopMenuItem;
 
     public CTControl(CTApp app, Frame owner) {
@@ -63,90 +66,9 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyC
         controlWindow.showMe();
     }
 
-    @Override
-    public void arm(CTConfig config) {
-        AbstractButton item = findItem(config);
-        if (item != null) {
-            stopMenuItem.setEnabled(true);
-            group.clearSelection();
-            group.setSelected(item.getModel(), true);
-            app.arm(config);
-        }
-    }
-
-    private void addConfigs(JPopupMenu menu, CTConfigs configs) {
-        for (CTConfig config : configs.getConfigs()) {
-            addConfig(menu, config);
-        }
-    }
-
-    private void addConfig(JPopupMenu menu, CTConfig config) {
-        CTConfigMenuItem menuItem = new CTConfigMenuItem(new CTConfigAction(this, config));
-        group.add(menuItem);
-        menu.insert(menuItem, group.getButtonCount() - 1);
-    }
-
-    void onNewConfig(CTConfigs configs, JPopupMenu menu) {
-        CTConfig config = showNewConfig();
-        if (config != null && config.isValid() && !configs.hasConfig(config)) {
-            configs.addConfig(config);
-            addConfig(menu, config);
-            saveConfigs(configs);
-        }
-    }
-
-    @Override
-    public void about() {
-        app.about();
-    }
-
-    @Override
-    public void browseConfigs() {
-        app.browseConfigs();
-    }
-
-    @Override
-    public void unarm() {
-        stopMenuItem.setEnabled(false);
-        group.clearSelection();
-        app.unarm();
-    }
-
-    @Override
-    public void exit() {
-        controlWindow.destroy();
-        app.unarm();
-        app.exit();
-    }
-
-    @Override
-    public void help() {
-        app.help();
-    }
-
-    @Override
-    public CTConfigs loadConfigs(boolean reload) {
-        return app.loadConfigs(reload);
-    }
-
-    @Override
-    public void saveConfigs(CTConfigs configs) {
-        app.saveConfigs(configs);
-    }
-
-    @Override
-    public CTConfig showNewConfig() {
-        return app.showNewConfig();
-    }
-
-    @Override
-    public void showPreferences() {
-        app.showPreferences();
-    }
-
     private JPopupMenu createMenu(CTMessages messages, CTConfigs configs) {
-        JPopupMenu menu = new JPopupMenu();
-        addConfigs(menu, configs);
+        menu = new JPopupMenu();
+        addConfigs(menu, configs, null);
         menu.add(new JSeparator(SwingConstants.HORIZONTAL));
         menu.add(new CTLocalizableMenuItem(messages,
                 new CTLocalizableAction(messages, STR_NEW_CONFIG, STR_NEW_CONFIG_TOOLTIP) {
@@ -200,6 +122,129 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyC
             }
         }));
         return menu;
+    }
+
+    private void addConfigs(JPopupMenu menu, CTConfigs configs, CTConfig toArm) {
+        Defend.isTrue(toArm == null || configs.hasConfig(toArm), "invalid config");
+        for (CTConfig config : configs.getConfigs()) {
+            addConfig(menu, config);
+        }
+        if (toArm != null) {
+            arm(toArm);
+        }
+    }
+
+    private void addConfig(JPopupMenu menu, CTConfig config) {
+        CTConfigMenuItem menuItem = new CTConfigMenuItem(new CTConfigAction(this, config));
+        group.add(menuItem);
+        menu.insert(menuItem, group.getButtonCount() - 1);
+    }
+
+    void onNewConfig(CTConfigs configs, JPopupMenu menu) {
+        CTConfig config = showNewConfig();
+        if (config != null && config.isValid() && !configs.hasConfig(config)) {
+            configs.addConfig(config);
+            addConfig(menu, config);
+            saveConfigs(configs);
+        }
+    }
+
+    @Override
+    public void about() {
+        app.about();
+    }
+
+    @Override
+    public void arm(CTConfig config) {
+        AbstractButton item = findItem(config);
+        if (item != null) {
+            stopMenuItem.setEnabled(true);
+            group.clearSelection();
+            group.setSelected(item.getModel(), true);
+            if (item.getAction() instanceof CTConfigAction) {
+                app.arm(((CTConfigAction) item.getAction()).getConfig());
+            }
+        }
+    }
+
+    @Override
+    public void browseConfigs() {
+        app.browseConfigs();
+    }
+
+    @Override
+    public void exit() {
+        controlWindow.destroy();
+        app.unarm();
+        app.exit();
+    }
+
+    @Override
+    public void help() {
+        app.help();
+    }
+
+    @Override
+    public CTConfigs loadConfigs(boolean reload) {
+        CTConfigs configs = app.loadConfigs(reload);
+        if (reload) {
+            replaceConfigs(menu, configs);
+        }
+        return configs;
+    }
+
+    @Override
+    public void saveConfigs(CTConfigs configs) {
+        app.saveConfigs(configs);
+    }
+
+    @Override
+    public CTConfig showNewConfig() {
+        return app.showNewConfig();
+    }
+
+    @Override
+    public void showPreferences() {
+        app.showPreferences();
+    }
+
+    @Override
+    public void unarm() {
+        stopMenuItem.setEnabled(false);
+        group.clearSelection();
+        app.unarm();
+    }
+
+    private void replaceConfigs(JPopupMenu menu, CTConfigs configs) {
+        CTConfig selectedConfig = getSelectedConfig();
+        removeConfigs(menu);
+        addConfigs(menu, configs, selectedConfig);
+        // if (selectedConfig != null && findItem(selectedConfig) != null) {
+        //     arm(selectedConfig);
+        // }
+    }
+
+    private CTConfig getSelectedConfig() {
+        CTConfig selectedConfig = null;
+        List<AbstractButton> elements = Collections.list(group.getElements());
+        for (AbstractButton element : elements) {
+            Defend.instanceOf(element, CTConfigMenuItem.class, "not a config added");
+            if (element.getModel().isSelected()) {
+                if (element.getAction() instanceof CTConfigAction) {
+                    selectedConfig = ((CTConfigAction) element.getAction()).getConfig();
+                }
+            }
+        }
+        return selectedConfig;
+    }
+
+    private void removeConfigs(JPopupMenu menu) {
+        List<AbstractButton> elements = Collections.list(group.getElements());
+        for (AbstractButton element : elements) {
+            Defend.instanceOf(element, CTConfigMenuItem.class, "not a config to remove");
+            group.remove(element);
+            menu.remove(element);
+        }
     }
 
     private AbstractButton findItem(CTConfig config) {

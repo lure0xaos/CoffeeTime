@@ -45,7 +45,7 @@ public abstract class CTBaseObservableProperty<T> extends CTBaseProperty<T> impl
         });
     }
 
-    private <T2> void onLateBind(CTProperty<T2> property, Function<T, T2> mapper, T newValue) {
+    <T2> void onLateBind(CTProperty<T2> property, Function<T, T2> mapper, T newValue) {
         property.set(mapper.apply(newValue));
     }
 
@@ -71,7 +71,7 @@ public abstract class CTBaseObservableProperty<T> extends CTBaseProperty<T> impl
         });
     }
 
-    private void onLateBind(CTProperty<T> property, T newValue) {
+    void onLateBind(CTProperty<T> property, T newValue) {
         property.set(newValue);
     }
 

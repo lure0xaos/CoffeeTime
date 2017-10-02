@@ -49,7 +49,7 @@ public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindo
         });
     }
 
-    private void holdFocus(WindowEvent event) {
+    void holdFocus(WindowEvent event) {
         if (isVisible()) {
             event.getWindow().requestFocus();
         }

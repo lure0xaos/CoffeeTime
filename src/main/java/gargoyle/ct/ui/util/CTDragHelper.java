@@ -1,5 +1,7 @@
 package gargoyle.ct.ui.util;
 
+import gargoyle.ct.util.CTNumberUtil;
+
 import javax.swing.SwingUtilities;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -64,8 +66,8 @@ public final class CTDragHelper {
         Dimension screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getSize();
         comp.setLocationRelativeTo(owner);
         comp.setLocation(
-                Math.max(0, Math.min(comp.getX(), screenSize.width - comp.getWidth())),
-                Math.max(0, Math.min(comp.getY(), screenSize.height - comp.getHeight()))
+                CTNumberUtil.toRange(comp.getX(), 0, screenSize.width - comp.getWidth()),
+                CTNumberUtil.toRange(comp.getY(), 0, screenSize.height - comp.getHeight())
         );
     }
 }

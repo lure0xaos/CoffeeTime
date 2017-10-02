@@ -11,20 +11,51 @@ public final class CTNumberUtil {
     private CTNumberUtil() {
     }
 
-    @SuppressWarnings({"unchecked", "JavaReflectionMemberAccess"})
+    @SuppressWarnings({"unchecked", "JavaReflectionMemberAccess", "ChainOfInstanceofChecks"})
     public static <T extends Number> T fromInt(Class<T> type, int value) {
         try {
+            if (type == Integer.class) {
+                return (T) Integer.valueOf(value);
+            }
+            if (type == Long.class) {
+                return (T) Long.valueOf(value);
+            }
+            if (type == Double.class) {
+                return (T) Double.valueOf(value);
+            }
+            if (type == Float.class) {
+                return (T) Float.valueOf(value);
+            }
+            if (type == Byte.class) {
+                return (T) Byte.valueOf((byte) value);
+            }
             return (T) type.getMethod(METHOD_VALUE_OF, String.class).invoke(null, String.valueOf(value));
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
             throw new RuntimeException(ex);
         }
     }
 
-    public static Object getDefault(Class<?> type) {
-        Object def;
+    @SuppressWarnings({"unchecked", "ChainOfInstanceofChecks"})
+    public static <T> T getDefault(Class<T> type) {
+        if (type == Integer.class) {
+            return (T) Integer.valueOf(0);
+        }
+        if (type == Long.class) {
+            return (T) Long.valueOf(0);
+        }
+        if (type == Double.class) {
+            return (T) Double.valueOf(0);
+        }
+        if (type == Float.class) {
+            return (T) Float.valueOf(0);
+        }
+        if (type == Byte.class) {
+            return (T) Byte.valueOf((byte) 0);
+        }
+        T def;
         try {
             def = Number.class.isAssignableFrom(type) ?
-                    type.getMethod(METHOD_VALUE_OF, String.class).invoke(null, "0") :
+                    (T) type.getMethod(METHOD_VALUE_OF, String.class).invoke(null, "0") :
                     type.newInstance();
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | InstantiationException
                 ex) {
@@ -37,7 +68,11 @@ public final class CTNumberUtil {
         return Integer.valueOf(String.valueOf(value));
     }
 
-    public static Integer toRange(Integer min, Integer max, Integer value) {
+    public static int toRange(int value, int min, int max) {
+        return Math.max(min, Math.min(max, value));
+    }
+
+    public static Integer toRange(Integer value, Integer min, Integer max) {
         return Math.max(min, Math.min(max, value));
     }
 

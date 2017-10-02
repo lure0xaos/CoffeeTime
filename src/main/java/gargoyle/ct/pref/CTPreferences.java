@@ -8,18 +8,21 @@ import java.util.Locale;
 import java.util.Objects;
 
 public interface CTPreferences extends CTPreferencesManager {
-    String BLOCK = "block";
-    String CONFIG = "config";
-    String ICON_STYLE_NAME = "icon-style";
+    String PREF_BLOCK = "block";
+    String PREF_CONFIG = "config";
+    String PREF_ICON_STYLE = "icon-style";
     int OPACITY_PERCENT = 100;
-    String TRANSPARENCY = "transparency";
-    String TRANSPARENCY_LEVEL = "transparency-level";
+    String PREF_SOUND = "sound";
+    String PREF_TRANSPARENCY = "transparency";
+    String PREF_TRANSPARENCY_LEVEL = "transparency-level";
 
     CTPrefProperty<Boolean> block();
 
     CTPrefProperty<CTConfig> config();
 
     CTPrefProperty<ICON_STYLE> iconStyle();
+
+    CTPrefProperty<Boolean> sound();
 
     CTPrefProperty<SUPPORTED_LOCALES> supportedLocales();
 

@@ -33,6 +33,7 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
     private static final String MSG_TOOLTIP_ERROR = "tooltip error";
     private static final String MSG_TRANSPARENCY_NOT_SUPPORTED = "transparency not supported";
     private static final int SNAP = 20;
+    private static final int TOOLTIP_OFFSET = 30;
     private static final String TOOL_TIP_MANAGER_ENABLE_TOOL_TIP_MODE = "ToolTipManager.enableToolTipMode";
     private static final long serialVersionUID = 6345130901927558555L;
     private final CTIconContent iconContent;
@@ -62,12 +63,7 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
         CTDragHelper.makeDraggable(iconContent, SNAP);
         CTDragHelper.makeDraggable(this, SNAP);
         addComponentListener(new OwnerUpdater(owner));
-        ToolTipManager toolTipManager = ToolTipManager.sharedInstance();
-        toolTipManager.setDismissDelay(1000);
-        toolTipManager.setInitialDelay(100);
-        toolTipManager.setReshowDelay(100);
-        toolTipManager.setEnabled(true);
-        toolTipManager.setLightWeightPopupEnabled(true);
+        initToolTip();
         MouseListener updater = new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent event) {
@@ -81,6 +77,16 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
         };
         textContent.addMouseListener(updater);
         iconContent.addMouseListener(updater);
+    }
+
+    @SuppressWarnings("MethodMayBeStatic")
+    private void initToolTip() {
+        ToolTipManager toolTipManager = ToolTipManager.sharedInstance();
+        toolTipManager.setDismissDelay(1000);
+        toolTipManager.setInitialDelay(100);
+        toolTipManager.setReshowDelay(100);
+        toolTipManager.setEnabled(true);
+        toolTipManager.setLightWeightPopupEnabled(true);
     }
 
     private void showIconContent() {
@@ -137,7 +143,7 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
     @Override
     public void onPropertyChange(CTPropertyChangeEvent event) {
         String key = event.getName();
-        if (CTPreferences.TRANSPARENCY.equals(key) || CTPreferences.TRANSPARENCY_LEVEL.equals(key)) {
+        if (CTPreferences.PREF_TRANSPARENCY.equals(key) || CTPreferences.PREF_TRANSPARENCY_LEVEL.equals(key)) {
             transparency(true);
         }
     }
@@ -177,7 +183,7 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
             try {
                 PointerInfo pointerInfo = MouseInfo.getPointerInfo();
                 double v = pointerInfo.getDevice().getDisplayMode().getHeight() - pointerInfo.getLocation().getY();
-                int delta = v < 100 ? -30 : 30;
+                int delta = v < 100 ? -TOOLTIP_OFFSET : TOOLTIP_OFFSET;
                 if (textContent.isVisible()) {
                     ToolTipManager.sharedInstance()
                             .mouseMoved(new MouseEvent(textContent,

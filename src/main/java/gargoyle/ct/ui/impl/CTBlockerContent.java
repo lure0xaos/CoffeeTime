@@ -71,7 +71,7 @@ public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, C
         return label;
     }
 
-    private static void adjust(Component container, JLabel label) {
+    static void adjust(Component container, JLabel label) {
         if (!container.isVisible() || container.getHeight() == 0) return;
         Font font = new Font(Font.DIALOG, Font.PLAIN, FONT_SIZE);
         label.setFont(font);

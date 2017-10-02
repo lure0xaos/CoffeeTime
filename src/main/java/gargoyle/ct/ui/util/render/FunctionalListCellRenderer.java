@@ -22,6 +22,7 @@ public class FunctionalListCellRenderer<E> implements ListCellRenderer<E> {
             boolean isSelected,
             boolean cellHasFocus) {
         String message = messageProvider.apply(value);
+        //noinspection unchecked
         return originalRenderer.getListCellRendererComponent(list, message, index, isSelected, cellHasFocus);
     }
 }

@@ -9,8 +9,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+@SuppressWarnings("StaticMethodOnlyUsedInOneClass")
 public final class CTTimeUtil {
-
     private static final String HH_MM_SS = "HH:mm:ss";
     private static final String MM = "mm";
     private static final String MM_SS = "mm:ss";

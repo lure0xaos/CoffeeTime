@@ -36,11 +36,13 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Dictionary;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.Vector;
 
+@SuppressWarnings("MethodMayBeStatic")
 public class CTLayoutBuilder {
     private static final int GAP = 5;
     private final GridBagConstraints controlConstraints;
@@ -112,11 +114,16 @@ public class CTLayoutBuilder {
         return new CTLocalizableLabel(messages, messages, textKey, toolTipTextKey, SwingConstants.TRAILING);
     }
 
-    public JSlider createSlider(CTProperty<Integer> property, Integer min, Integer max) {
-        JSlider control = new JSlider(CTNumberUtil.toInt(min), CTNumberUtil.toInt(max));
-        control.setValue(property.get());
-        control.addChangeListener(event -> property.set(CTNumberUtil.toRange(min, max, control.getValue())));
-        return control;
+    @SuppressWarnings("UseOfPropertiesAsHashtable")
+    private static <T extends Enum<T>> Dictionary getLabels(Class<T> type) {
+        Properties properties = new Properties();
+        T[] enumConstants = type.getEnumConstants();
+        int length = enumConstants.length;
+        for (int i = 0; i < length; i++) {
+            T value = enumConstants[i];
+            properties.put(i, new JLabel(String.valueOf(value)));
+        }
+        return properties;
     }
 
     public <T extends Enum<T>> JSlider createSlider(Class<T> type, CTProperty<T> property, boolean allowNull) {
@@ -142,15 +149,11 @@ public class CTLayoutBuilder {
         return control;
     }
 
-    @SuppressWarnings("UseOfPropertiesAsHashtable")
-    private static <T extends Enum<T>> Properties getLabels(Class<T> type) {
-        Properties properties = new Properties();
-        T[] enumConstants = type.getEnumConstants();
-        for (int i = 0; i < enumConstants.length; i++) {
-            T value = enumConstants[i];
-            properties.put(i, new JLabel(value.toString()));
-        }
-        return properties;
+    public JSlider createSlider(CTProperty<Integer> property, Integer min, Integer max) {
+        JSlider control = new JSlider(CTNumberUtil.toInt(min), CTNumberUtil.toInt(max));
+        control.setValue(property.get());
+        control.addChangeListener(event -> property.set(CTNumberUtil.toRange((Integer) control.getValue(), min, max)));
+        return control;
     }
 
     private static <T extends Enum<T>> int toIndex(T value) {
@@ -177,7 +180,7 @@ public class CTLayoutBuilder {
         control.setValue(property.get());
         control.addChangeListener(event -> {
             Object value = control.getValue();
-            property.set(CTNumberUtil.toRange(min, max, CTNumberUtil.getInteger(value)));
+            property.set(CTNumberUtil.toRange(CTNumberUtil.getInteger(value), min, max));
         });
         return control;
     }
@@ -186,13 +189,7 @@ public class CTLayoutBuilder {
         JSpinner control = new JSpinner(new SpinnerNumberModel());
         control.setValue(property.get().intValue());
         control.addChangeListener(event -> property.set(CTNumberUtil.fromInt(type,
-                CTNumberUtil.toRange(min,
-                        max,
-                        CTNumberUtil.toInt(
-                                (Number)
-                                        control
-                                                .getValue()
-                        )
+                CTNumberUtil.toRange(min, max, CTNumberUtil.toInt((Number) control.getValue())
                 ))));
         return control;
     }

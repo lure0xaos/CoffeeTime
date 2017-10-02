@@ -29,9 +29,12 @@ import gargoyle.ct.ui.impl.CTBlocker;
 import gargoyle.ct.ui.impl.CTControl;
 import gargoyle.ct.ui.impl.CTNewConfigDialog;
 import gargoyle.ct.ui.impl.CTPreferencesDialog;
+import gargoyle.ct.ui.impl.CTSoundUpdatable;
 import gargoyle.ct.ui.impl.control.CTShowingFrame;
 import gargoyle.ct.util.CTNumberUtil;
 import gargoyle.ct.util.CTStreamUtil;
+import gargoyle.ct.ver.CTVersionInfo;
+import gargoyle.ct.ver.impl.CTVersionInfoImpl;
 
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -76,6 +79,7 @@ public final class CT implements CTApp {
     private final CTPreferences preferences;
     private final CTTimeHelper timeHelper;
     private final CTTimer timer;
+    private final CTVersionInfo versionInfo;
     private Resource configResource;
     private CTMutex mutex;
     private CTPreferencesDialog preferencesDialog;
@@ -96,7 +100,9 @@ public final class CT implements CTApp {
         this.control = control;
         preferences.addPropertyChangeListener(control);
         updatables.add(control);
+        updatables.add(new CTSoundUpdatable(preferences));
         timer = new CTTimer(timeHelper, updatables);
+        versionInfo = new CTVersionInfoImpl();
     }
 
     private boolean checkRunning() {
@@ -170,7 +176,8 @@ public final class CT implements CTApp {
 
     @Override
     public void browseConfigs() {
-        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Action.EDIT)) {
+        if (Desktop.isDesktopSupported()) {
+            Desktop desktop = Desktop.getDesktop();
             File file;
             try {
                 String path = configResource.toURL().getPath();
@@ -178,18 +185,27 @@ public final class CT implements CTApp {
             } catch (IOException e) {
                 throw new RuntimeException(e.getLocalizedMessage(), e);
             }
-            try {
-                Desktop.getDesktop().edit(file);
-            } catch (IOException e) {
-                if (Desktop.getDesktop().isSupported(Action.OPEN))
-                    try {
-                        Desktop.getDesktop().open(file);
-                    } catch (IOException e1) {
-                        Log.error(e1, e1.getLocalizedMessage());
-                        JOptionPane.showMessageDialog(owner, e1.getLocalizedMessage(), "", JOptionPane.ERROR_MESSAGE);
-                    }
+            if (desktop.isSupported(Action.EDIT)) {
+                try {
+                    desktop.edit(file);
+                    return;
+                } catch (IOException e) {
+                    Log.error(e, e.getLocalizedMessage());
+                }
+            }
+            if (desktop.isSupported(Action.OPEN)) {
+                try {
+                    desktop.open(file);
+                } catch (IOException e) {
+                    showError(e);
+                }
             }
         }
+    }
+
+    private void showError(Exception e) {
+        Log.error(e, e.getMessage());
+        JOptionPane.showMessageDialog(owner, e.getLocalizedMessage(), versionInfo.getProjectName(), JOptionPane.ERROR_MESSAGE);
     }
 
     @Override
@@ -295,6 +311,16 @@ public final class CT implements CTApp {
         timer.unarm();
     }
 
+    @Override
+    public CTPreferences getPreferences() {
+        return preferences;
+    }
+
+    @Override
+    public CTVersionInfo getVersionInfo() {
+        return versionInfo;
+    }
+
     private void saveConfigs(CTConfigs configs, Resource configResource) {
         if (configResource != null) {
             try (OutputStream stream = configResource.getOutputStream()) {
@@ -317,11 +343,6 @@ public final class CT implements CTApp {
         String bw = preferences.iconStyle().get(CTPreferences.ICON_STYLE.BW).getPath();
         return CT.class.getResource(
                 MessageFormat.format(URL_ICON_MEDIUM_W, bw));
-    }
-
-    @Override
-    public CTPreferences getPreferences() {
-        return preferences;
     }
 
     @Override

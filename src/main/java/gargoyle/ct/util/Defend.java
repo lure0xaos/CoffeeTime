@@ -56,17 +56,23 @@ public final class Defend {
         }
     }
 
-    public static <T> void numeric(String value, String message, Object... arguments) {
-        try {
-            notNull(new BigDecimal(value), message);
-        } catch (NumberFormatException e) {
-            fail(message);
+    public static <T> void instanceOf(T value, Class<? extends T> type, String message, Object... arguments) {
+        if (!type.isInstance(value)) {
+            fail(message, arguments);
         }
     }
 
     public static <T> void notNull(T value, String message, Object... arguments) {
         if (value == null) {
             fail(message);
+        }
+    }
+
+    public static <T> void numeric(String value, String message, Object... arguments) {
+        try {
+            notNull(new BigDecimal(value), message);
+        } catch (NumberFormatException e) {
+            fail(message, arguments);
         }
     }
 }
