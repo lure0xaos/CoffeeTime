@@ -2,6 +2,7 @@ package gargoyle.ct.task.impl;
 
 import gargoyle.ct.task.CTTaskUpdatable;
 import gargoyle.ct.task.helper.CTTimeHelper;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.TimerTask;
@@ -21,6 +22,7 @@ public class CTTimerTask extends TimerTask {
         this.timeHelper = timeHelper;
     }
 
+    @NotNull
     public CTTask getTask() {
         return task;
     }

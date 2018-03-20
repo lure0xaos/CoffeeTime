@@ -1,6 +1,7 @@
 package gargoyle.ct.prop.impl.simple;
 
 import gargoyle.ct.prop.impl.CTBaseObservableProperty;
+import org.jetbrains.annotations.NotNull;
 
 import java.text.MessageFormat;
 import java.util.Objects;
@@ -40,6 +41,7 @@ public abstract class CTSimpleProperty<T> extends CTBaseObservableProperty<T> {
         return value;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return MessageFormat.format("CTSimpleProperty'{'name=''{0}'', value={1}'}'", name, value);

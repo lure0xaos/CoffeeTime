@@ -2,6 +2,8 @@ package gargoyle.ct.resource.internal;
 
 import gargoyle.ct.messages.util.UTF8Control;
 import gargoyle.ct.resource.Resource;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,8 +33,9 @@ public class VirtualResource extends AbstractResource {
         baseResource = this;
     }
 
+    @Nullable
     @Override
-    public Resource forLocale(Locale locale) {
+    public Resource forLocale(@NotNull Locale locale) {
         String location = baseResource.getLocation();
         int l = location.lastIndexOf(CHAR_DOT);
         String baseName = location.substring(0, l);
@@ -52,12 +55,14 @@ public class VirtualResource extends AbstractResource {
         return baseResource;
     }
 
+    @Nullable
     @SuppressWarnings("unchecked")
     @Override
-    protected VirtualResource createResource(Resource base, String location) {
+    protected VirtualResource createResource(@Nullable Resource base, String location) {
         return base == null ? new VirtualResource(location) : new VirtualResource(base, location);
     }
 
+    @Nullable
     @Override
     public URL toURL() throws IOException {
         return Objects.equals(baseResource, this) ? super.toURL() : new URL(baseResource.toURL(), getLocation());
@@ -68,12 +73,14 @@ public class VirtualResource extends AbstractResource {
         return locale;
     }
 
+    @NotNull
     public String getBaseName() {
         String location = getLocation();
         int l = location.lastIndexOf(DOT);
         return l < 0 ? location : location.substring(0, l);
     }
 
+    @Nullable
     @SuppressWarnings("StringBufferReplaceableByString")
     @Override
     public Resource withExtension(String extension) {
@@ -90,11 +97,13 @@ public class VirtualResource extends AbstractResource {
         return baseResource == this;
     }
 
+    @NotNull
     public String getExtension() {
         String location = getLocation();
         return location.substring(location.lastIndexOf(DOT) + 1);
     }
 
+    @NotNull
     public String getName() {
         String location = super.getLocation();
         int l1 = location.lastIndexOf('/');

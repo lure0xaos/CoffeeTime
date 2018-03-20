@@ -1,6 +1,7 @@
 package gargoyle.ct.convert.impl;
 
 import gargoyle.ct.convert.Converter;
+import org.jetbrains.annotations.NotNull;
 
 public class LongConverter implements Converter<Long> {
     @Override
@@ -8,8 +9,9 @@ public class LongConverter implements Converter<Long> {
         return String.valueOf(data);
     }
 
+    @NotNull
     @Override
-    public Long parse(String data) {
+    public Long parse(@NotNull String data) {
         return Long.valueOf(data);
     }
 }

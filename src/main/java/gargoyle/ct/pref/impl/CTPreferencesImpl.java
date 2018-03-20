@@ -10,12 +10,13 @@ import gargoyle.ct.pref.impl.prop.CTPrefEnumProperty;
 import gargoyle.ct.pref.impl.prop.CTPrefIntegerProperty;
 import gargoyle.ct.pref.impl.prop.CTPrefObjectProperty;
 import gargoyle.ct.pref.impl.prop.CTPrefProperty;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
 
 public class CTPreferencesImpl extends CTBasePreferences implements CTPreferences {
     @SuppressWarnings("MagicNumber")
-    public CTPreferencesImpl(Class<?> clazz) {
+    public CTPreferencesImpl(@NotNull Class<?> clazz) {
         super(clazz);
         addProperty(new CTPrefBooleanProperty(this, PREF_BLOCK, false));
         CTPrefProperty<Integer> transparencyLevel = new CTPrefIntegerProperty(this, PREF_TRANSPARENCY_LEVEL, 30);
@@ -30,36 +31,43 @@ public class CTPreferencesImpl extends CTBasePreferences implements CTPreference
         addProperty(new CTPrefObjectProperty<>(CTConfig.class, this, PREF_CONFIG, new ConfigConverterAdapter()));
     }
 
+    @NotNull
     @Override
     public CTPrefProperty<Boolean> block() {
         return getProperty(PREF_BLOCK);
     }
 
+    @NotNull
     @Override
     public CTPrefProperty<CTConfig> config() {
         return getProperty(PREF_CONFIG);
     }
 
+    @NotNull
     @Override
     public CTPrefProperty<ICON_STYLE> iconStyle() {
         return getProperty(PREF_ICON_STYLE);
     }
 
+    @NotNull
     @Override
     public CTPrefProperty<SUPPORTED_LOCALES> supportedLocales() {
         return getProperty(SUPPORTED_LOCALES.class);
     }
 
+    @NotNull
     @Override
     public CTPrefProperty<Boolean> sound() {
         return getProperty(PREF_SOUND);
     }
 
+    @NotNull
     @Override
     public CTPrefProperty<Boolean> transparency() {
         return getProperty(PREF_TRANSPARENCY);
     }
 
+    @NotNull
     @Override
     public CTPrefProperty<Integer> transparencyLevel() {
         return getProperty(PREF_TRANSPARENCY_LEVEL);
@@ -68,11 +76,13 @@ public class CTPreferencesImpl extends CTBasePreferences implements CTPreference
     private static class ConfigConverterAdapter implements Converter<CTConfig> {
         private final CTUnitConverter<CTConfig> converter = new CTConfigConverter();
 
+        @NotNull
         @Override
         public String format(CTConfig data) {
             return converter.format(TimeUnit.MINUTES, data);
         }
 
+        @NotNull
         @Override
         public CTConfig parse(String data) {
             return converter.parse(data);

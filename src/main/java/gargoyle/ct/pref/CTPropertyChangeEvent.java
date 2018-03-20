@@ -1,6 +1,7 @@
 package gargoyle.ct.pref;
 
 import gargoyle.ct.prop.CTProperty;
+import org.jetbrains.annotations.NotNull;
 
 import java.text.MessageFormat;
 
@@ -33,6 +34,7 @@ public class CTPropertyChangeEvent<T> {
         return property;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return MessageFormat.format("CTPropertyChangeEvent'{'property={0}'}'", property);

@@ -4,6 +4,7 @@ import gargoyle.ct.log.Log;
 import gargoyle.ct.pref.CTPropertyChangeEvent;
 import gargoyle.ct.pref.CTPropertyChangeListener;
 import gargoyle.ct.prop.CTProperty;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
@@ -34,6 +35,7 @@ public class CTPropertyChangeManager {
         list.add(listener);
     }
 
+    @Nullable
     public <T> Thread firePropertyChange(CTProperty<T> property, CTPropertyChangeEvent<T> event) {
         if (listeners.containsKey(property)) {
             List<CTPropertyChangeListener> listeners = this.listeners.get(property);

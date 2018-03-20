@@ -1,5 +1,7 @@
 package gargoyle.ct.log;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
@@ -26,7 +28,7 @@ final class LogHelper {
         }
     }
 
-    static boolean isLoggable(String logger, LEVEL level) {
+    static boolean isLoggable(String logger, @NotNull LEVEL level) {
         return getLogger(logger).isLoggable(getLevel(level));
     }
 
@@ -38,12 +40,12 @@ final class LogHelper {
         return Level.parse(level.getLevel());
     }
 
-    static void log(String logger, LEVEL level, String sourceClass, String sourceMethod, ResourceBundle bundle,
+    static void log(String logger, @NotNull LEVEL level, String sourceClass, String sourceMethod, ResourceBundle bundle,
                     String message, Object[] arguments) {
         getLogger(logger).logrb(getLevel(level), sourceClass, sourceMethod, bundle, message, arguments);
     }
 
-    static void log(String logger, LEVEL level, String sourceClass, String sourceMethod, String message,
+    static void log(String logger, @NotNull LEVEL level, String sourceClass, String sourceMethod, String message,
                     Throwable exception) {
         getLogger(logger).logrb(getLevel(level), sourceClass, sourceMethod, (ResourceBundle) null, message, exception);
     }

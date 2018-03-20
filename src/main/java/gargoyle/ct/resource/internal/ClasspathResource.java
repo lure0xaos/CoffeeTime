@@ -1,6 +1,7 @@
 package gargoyle.ct.resource.internal;
 
 import gargoyle.ct.resource.Resource;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.net.URL;
@@ -25,13 +26,15 @@ public class ClasspathResource extends VirtualResource {
         this.loader = loader;
     }
 
+    @Nullable
     @Override
-    protected ClasspathResource createResource(Resource base, String location) {
+    protected ClasspathResource createResource(@Nullable Resource base, String location) {
         return base == null ?
                 new ClasspathResource(loader, location) :
                 new ClasspathResource(getLoader(base), base, location);
     }
 
+    @Nullable
     @Override
     public URL toURL() throws IOException {
         return loader.getResource(getLocation());

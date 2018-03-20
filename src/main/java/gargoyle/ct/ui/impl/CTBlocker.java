@@ -6,6 +6,7 @@ import gargoyle.ct.task.impl.CTTask;
 import gargoyle.ct.ui.CTBlockerTextProvider;
 import gargoyle.ct.ui.CTInformer;
 import gargoyle.ct.ui.CTWindow;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.JWindow;
 import java.awt.BorderLayout;
@@ -26,12 +27,14 @@ import java.util.List;
 
 public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindow, CTInformer {
     private static final long serialVersionUID = 4716380852101644265L;
+    @NotNull
     private final CTBlockerContent content;
+    @NotNull
     @SuppressWarnings("InstanceVariableMayNotBeInitializedByReadObject")
     private final transient CTPreferences preferences;
     private transient CTBlockerTextProvider textProvider;
 
-    private CTBlocker(CTPreferences preferences, GraphicsDevice device) {
+    private CTBlocker(@NotNull CTPreferences preferences, GraphicsDevice device) {
         this.preferences = preferences;
         textProvider = new CTBlockerTextProvider(preferences);
         setBounds(device.getDefaultConfiguration().getBounds());
@@ -43,19 +46,19 @@ public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindo
         container.add(content, BorderLayout.CENTER);
         addWindowFocusListener(new WindowAdapter() {
             @Override
-            public void windowLostFocus(WindowEvent event) {
+            public void windowLostFocus(@NotNull WindowEvent event) {
                 holdFocus(event);
             }
         });
     }
 
-    void holdFocus(WindowEvent event) {
+    void holdFocus(@NotNull WindowEvent event) {
         if (isVisible()) {
             event.getWindow().requestFocus();
         }
     }
 
-    public static List<CTBlocker> forAllDevices(CTPreferences preferences) {
+    public static List<CTBlocker> forAllDevices(@NotNull CTPreferences preferences) {
         List<CTBlocker> devices = new ArrayList<>();
         for (GraphicsDevice device : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
             devices.add(new CTBlocker(preferences, device));
@@ -63,11 +66,11 @@ public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindo
         return Collections.unmodifiableList(devices);
     }
 
-    public static CTBlocker forDefaultDevice(CTPreferences preferences) {
+    public static CTBlocker forDefaultDevice(@NotNull CTPreferences preferences) {
         return new CTBlocker(preferences, GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice());
     }
 
-    public static CTBlocker forDevice(CTPreferences preferences, GraphicsDevice device) {
+    public static CTBlocker forDevice(@NotNull CTPreferences preferences, @NotNull GraphicsDevice device) {
         return new CTBlocker(preferences, device);
     }
 
@@ -100,7 +103,7 @@ public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindo
     }
 
     @Override
-    public void doUpdate(CTTask task, long currentMillis) {
+    public void doUpdate(@NotNull CTTask task, long currentMillis) {
         content.doUpdate(task, currentMillis);
         boolean block = preferences.block().get();
         boolean visible = block && textProvider.isVisible(task, currentMillis);

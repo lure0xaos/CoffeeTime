@@ -1,5 +1,7 @@
 package gargoyle.ct.util;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -31,7 +33,7 @@ public final class CTTimeUtil {
         return format(HH_MM_SS, currentMillis);
     }
 
-    private static String format(String format, long currentMillis) {
+    private static String format(@NotNull String format, long currentMillis) {
         return Instant.ofEpochMilli(currentMillis).atOffset(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern(format));
     }
 
@@ -51,7 +53,7 @@ public final class CTTimeUtil {
         return currentMillis >= startMillis && currentMillis <= endMillis;
     }
 
-    public static boolean isBetween(TimeUnit unit, long current, long start, long end) {
+    public static boolean isBetween(@NotNull TimeUnit unit, long current, long start, long end) {
         return toMillis(unit, current) >= toMillis(unit, start) && toMillis(unit, current) <= toMillis(unit, end);
     }
 
@@ -59,7 +61,7 @@ public final class CTTimeUtil {
         return unit.toMillis(duration);
     }
 
-    public static boolean isInPeriod(TimeUnit unit, long currentMillis, int period, int delay) {
+    public static boolean isInPeriod(@NotNull TimeUnit unit, long currentMillis, int period, int delay) {
         return fromMillis(unit, currentMillis) % period < delay;
     }
 
@@ -83,7 +85,7 @@ public final class CTTimeUtil {
                 .toEpochMilli();
     }
 
-    public static long timeElapsedFrom(TimeUnit unit, long currentMillis, long begin) {
+    public static long timeElapsedFrom(@NotNull TimeUnit unit, long currentMillis, long begin) {
         return fromMillis(unit, timeElapsedFrom(currentMillis, begin));
     }
 
@@ -91,7 +93,7 @@ public final class CTTimeUtil {
         return currentMillis - begin;
     }
 
-    public static long timeRemainsTo(TimeUnit unit, long currentMillis, long end) {
+    public static long timeRemainsTo(@NotNull TimeUnit unit, long currentMillis, long end) {
         return fromMillis(unit, timeRemainsTo(currentMillis, end));
     }
 

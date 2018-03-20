@@ -6,6 +6,8 @@ import gargoyle.ct.messages.impl.CTPreferencesLocaleProvider;
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.task.impl.CTTask;
 import gargoyle.ct.util.CTTimeUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.Color;
 import java.util.concurrent.TimeUnit;
@@ -19,13 +21,15 @@ public class CTBlockerTextProvider {
     private static final String STR_BLOCKED_SMALL = "blocked_w-small";
     private static final String STR_WARN_BIG = "warn_w-big";
     private static final String STR_WARN_SMALL = "warn_w-small";
+    @NotNull
     private final MessageProvider messages;
 
-    public CTBlockerTextProvider(CTPreferences preferences) {
+    public CTBlockerTextProvider(@NotNull CTPreferences preferences) {
         messages = new CTMessages(new CTPreferencesLocaleProvider(preferences), LOC_MESSAGES);
     }
 
-    public String getBlockerText(CTTask task, long currentMillis, boolean big) {
+    @Nullable
+    public String getBlockerText(@NotNull CTTask task, long currentMillis, boolean big) {
         if (task.isReady()) {
             if (task.isBlocked(currentMillis)) {
                 return messages.getMessage(big ? STR_BLOCKED_BIG : STR_BLOCKED_SMALL,
@@ -43,7 +47,8 @@ public class CTBlockerTextProvider {
         return null;
     }
 
-    public Color getColor(CTTask task, long currentMillis) {
+    @Nullable
+    public Color getColor(@NotNull CTTask task, long currentMillis) {
         if (task.isReady()) {
             if (task.isBlocked(currentMillis)) {
                 return Color.WHITE;
@@ -55,12 +60,14 @@ public class CTBlockerTextProvider {
         return null;
     }
 
+    @NotNull
     @SuppressWarnings("unused")
     public String getInfoText(CTTask task, long currentMillis) {
         return CTTimeUtil.formatHHMMSS(currentMillis);
     }
 
-    public String getToolTipText(CTTask task, long currentMillis) {
+    @NotNull
+    public String getToolTipText(@NotNull CTTask task, long currentMillis) {
         String toolTipText = CTTimeUtil.formatHHMMSS(currentMillis);
         if (task.isReady()) {
             if (task.isBlocked(currentMillis)) {
@@ -79,7 +86,7 @@ public class CTBlockerTextProvider {
         return toolTipText;
     }
 
-    public boolean isVisible(CTTask task, long currentMillis) {
+    public boolean isVisible(@NotNull CTTask task, long currentMillis) {
         if (task.isReady()) {
             if (task.isBlocked(currentMillis)) {
                 return true;

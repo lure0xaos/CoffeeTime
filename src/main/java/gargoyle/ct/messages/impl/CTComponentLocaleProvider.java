@@ -4,6 +4,7 @@ import gargoyle.ct.messages.LocaleProvider;
 import gargoyle.ct.pref.CTPreferences.SUPPORTED_LOCALES;
 import gargoyle.ct.prop.CTObservableProperty;
 import gargoyle.ct.ui.prop.CTComponentLocaleProperty;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.Component;
 import java.util.Locale;
@@ -11,7 +12,7 @@ import java.util.Locale;
 public final class CTComponentLocaleProvider implements LocaleProvider {
     private final CTObservableProperty<SUPPORTED_LOCALES> locale;
 
-    public CTComponentLocaleProvider(Component component) {
+    public CTComponentLocaleProvider(@NotNull Component component) {
         this(new CTComponentLocaleProperty(component));
     }
 

@@ -2,6 +2,7 @@ package gargoyle.ct.task.impl;
 
 import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.util.CTTimeUtil;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
 
@@ -26,7 +27,7 @@ public class CTTask {
         this.started = started;
     }
 
-    public long getStarted(TimeUnit unit) {
+    public long getStarted(@NotNull TimeUnit unit) {
         return CTTimeUtil.fromMillis(unit, started);
     }
 
@@ -64,7 +65,7 @@ public class CTTask {
                 CTTimeUtil.isBetween(currentMillis, getWarnStart(currentMillis), getBlockStart(currentMillis));
     }
 
-    public void setStarted(TimeUnit unit, long started) {
+    public void setStarted(@NotNull TimeUnit unit, long started) {
         this.started = CTTimeUtil.toMillis(unit, started);
     }
 }

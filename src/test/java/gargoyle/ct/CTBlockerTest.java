@@ -5,6 +5,8 @@ import gargoyle.ct.messages.impl.CTMessages;
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.pref.impl.CTPreferencesImpl;
 import gargoyle.ct.ui.impl.CTBlocker;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.Color;
 import java.util.List;
@@ -27,8 +29,9 @@ public class CTBlockerTest implements MessageProvider {
         }
     }
 
+    @Nullable
     @Override
-    public String getMessage(String message, Object... args) {
+    public String getMessage(@NotNull String message, Object... args) {
         return messages == null ? null : messages.getMessage(message, args);
     }
 }

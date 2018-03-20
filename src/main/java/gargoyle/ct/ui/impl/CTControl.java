@@ -19,6 +19,8 @@ import gargoyle.ct.ui.impl.control.CTControlWindowImpl;
 import gargoyle.ct.ui.impl.control.CTLocalizableAction;
 import gargoyle.ct.ui.impl.control.CTLocalizableMenuItem;
 import gargoyle.ct.util.Defend;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.AbstractButton;
 import javax.swing.Action;
@@ -48,9 +50,13 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyC
     private static final String STR_PREFERENCES_TOOLTIP = "preferences.tooltip";
     private static final String STR_UNARM = "unarm";
     private static final String STR_UNARM_TOOLTIP = "unarm.tooltip";
+    @NotNull
     private final CTControlActions app;
+    @NotNull
     private final CTControlWindow controlWindow;
+    @NotNull
     private final ButtonGroup group;
+    @NotNull
     private final CTBlockerTextProvider textProvider;
     JPopupMenu menu;
     private CTLocalizableMenuItem stopMenuItem;
@@ -66,7 +72,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyC
         controlWindow.showMe();
     }
 
-    private JPopupMenu createMenu(CTMessages messages, CTConfigs configs) {
+    private JPopupMenu createMenu(@NotNull CTMessages messages, @NotNull CTConfigs configs) {
         menu = new JPopupMenu();
         addConfigs(menu, configs, null);
         menu.add(new JSeparator(SwingConstants.HORIZONTAL));
@@ -124,7 +130,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyC
         return menu;
     }
 
-    private void addConfigs(JPopupMenu menu, CTConfigs configs, CTConfig toArm) {
+    private void addConfigs(@NotNull JPopupMenu menu, CTConfigs configs, @Nullable CTConfig toArm) {
         Defend.isTrue(toArm == null || configs.hasConfig(toArm), "invalid config");
         for (CTConfig config : configs.getConfigs()) {
             addConfig(menu, config);
@@ -134,13 +140,13 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyC
         }
     }
 
-    private void addConfig(JPopupMenu menu, CTConfig config) {
+    private void addConfig(JPopupMenu menu, @NotNull CTConfig config) {
         CTConfigMenuItem menuItem = new CTConfigMenuItem(new CTConfigAction(this, config));
         group.add(menuItem);
         menu.insert(menuItem, group.getButtonCount() - 1);
     }
 
-    void onNewConfig(CTConfigs configs, JPopupMenu menu) {
+    void onNewConfig(@NotNull CTConfigs configs, @NotNull JPopupMenu menu) {
         CTConfig config = showNewConfig();
         if (config != null && config.isValid() && !configs.hasConfig(config)) {
             configs.addConfig(config);
@@ -215,7 +221,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyC
         app.unarm();
     }
 
-    private void replaceConfigs(JPopupMenu menu, CTConfigs configs) {
+    private void replaceConfigs(@NotNull JPopupMenu menu, @NotNull CTConfigs configs) {
         CTConfig selectedConfig = getSelectedConfig();
         removeConfigs(menu);
         addConfigs(menu, configs, selectedConfig);
@@ -224,6 +230,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyC
         // }
     }
 
+    @Nullable
     private CTConfig getSelectedConfig() {
         CTConfig selectedConfig = null;
         List<AbstractButton> elements = Collections.list(group.getElements());
@@ -238,7 +245,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyC
         return selectedConfig;
     }
 
-    private void removeConfigs(JPopupMenu menu) {
+    private void removeConfigs(@NotNull JPopupMenu menu) {
         List<AbstractButton> elements = Collections.list(group.getElements());
         for (AbstractButton element : elements) {
             Defend.instanceOf(element, CTConfigMenuItem.class, "not a config to remove");
@@ -260,7 +267,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyC
     }
 
     @Override
-    public void doUpdate(CTTask task, long currentMillis) {
+    public void doUpdate(@NotNull CTTask task, long currentMillis) {
         controlWindow.setToolTipText(textProvider.getToolTipText(task, currentMillis));
 //        lblInfo.setText(textProvider.getInfoText(task, currentMillis));
         boolean visible = textProvider.isVisible(task, currentMillis);

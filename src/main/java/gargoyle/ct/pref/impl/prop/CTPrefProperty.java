@@ -5,22 +5,26 @@ import gargoyle.ct.convert.Converters;
 import gargoyle.ct.log.Log;
 import gargoyle.ct.pref.CTPreferencesProvider;
 import gargoyle.ct.prop.impl.CTBaseObservableProperty;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 public class CTPrefProperty<T> extends CTBaseObservableProperty<T> {
+    @NotNull
     private final Converter<T> converter;
+    @Nullable
     private final String def;
     private final Preferences preferences;
 
-    protected CTPrefProperty(Class<T> type, CTPreferencesProvider provider, String name, T def) {
+    protected CTPrefProperty(@NotNull Class<T> type, @NotNull CTPreferencesProvider provider, String name, T def) {
         this(type, Converters.get(type), provider, name, def);
     }
 
-    protected CTPrefProperty(Class<T> type, Converter<T> converter, CTPreferencesProvider provider, String name,
-                             T def) {
+    protected CTPrefProperty(Class<T> type, @NotNull Converter<T> converter, CTPreferencesProvider provider, String name,
+                             @Nullable T def) {
         super(type, name);
         this.converter = converter;
         this.def = def == null ? null : converter.format(def);
@@ -28,7 +32,7 @@ public class CTPrefProperty<T> extends CTBaseObservableProperty<T> {
     }
 
     @Override
-    public final void set(T value) {
+    public final void set(@Nullable T value) {
         T oldValue = get();
         if (Objects.equals(oldValue, value)) {
             return;

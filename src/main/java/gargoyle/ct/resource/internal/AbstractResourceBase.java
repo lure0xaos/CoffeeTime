@@ -1,5 +1,8 @@
 package gargoyle.ct.resource.internal;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -24,7 +27,7 @@ public class AbstractResourceBase {
     private static final String VALUE_USER_AGENT =
             "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2 (.NET CLR 3.5.30729)";
 
-    protected boolean isReadable(URL url) {
+    protected boolean isReadable(@NotNull URL url) {
         if (!exists(url)) {
             return false;
         }
@@ -35,7 +38,7 @@ public class AbstractResourceBase {
         }
     }
 
-    protected boolean exists(URL url) {
+    protected boolean exists(@Nullable URL url) {
         if (url == null) {
             return false;
         }
@@ -69,16 +72,17 @@ public class AbstractResourceBase {
                 }
             }
             return fail(protocol);
-        } catch (IOException | URISyntaxException ex) {
+        } catch (@NotNull IOException | URISyntaxException ex) {
             return false;
         }
     }
 
+    @NotNull
     private <T> T fail(String protocol) {
         throw new UnsupportedOperationException("unsupported protocol: " + protocol);
     }
 
-    protected InputStream getInputStream(URL url) throws IOException {
+    protected InputStream getInputStream(@NotNull URL url) throws IOException {
         final String protocol = url.getProtocol();
         if (SCHEME_HTTP.equalsIgnoreCase(protocol)) {
             URLConnection connection = url.openConnection();
@@ -106,7 +110,7 @@ public class AbstractResourceBase {
         return fail(protocol);
     }
 
-    protected boolean isWritable(URL url) {
+    protected boolean isWritable(@NotNull URL url) {
         try (OutputStream outputStream = getOutputStream(url, false)) {
             return true;
         } catch (IOException e) {
@@ -114,7 +118,7 @@ public class AbstractResourceBase {
         }
     }
 
-    protected OutputStream getOutputStream(URL url, boolean create) throws IOException {
+    protected OutputStream getOutputStream(@NotNull URL url, boolean create) throws IOException {
         final String protocol = url.getProtocol();
         if (SCHEME_HTTP.equalsIgnoreCase(protocol)) {
             URLConnection connection = url.openConnection();

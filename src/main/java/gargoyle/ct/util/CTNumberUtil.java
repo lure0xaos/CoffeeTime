@@ -1,5 +1,7 @@
 package gargoyle.ct.util;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 
@@ -11,8 +13,9 @@ public final class CTNumberUtil {
     private CTNumberUtil() {
     }
 
+    @NotNull
     @SuppressWarnings({"unchecked", "JavaReflectionMemberAccess", "ChainOfInstanceofChecks"})
-    public static <T extends Number> T fromInt(Class<T> type, int value) {
+    public static <T extends Number> T fromInt(@NotNull Class<T> type, int value) {
         try {
             if (type == Integer.class) {
                 return (T) Integer.valueOf(value);
@@ -30,13 +33,13 @@ public final class CTNumberUtil {
                 return (T) Byte.valueOf((byte) value);
             }
             return (T) type.getMethod(METHOD_VALUE_OF, String.class).invoke(null, String.valueOf(value));
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
+        } catch (@NotNull IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
             throw new RuntimeException(ex);
         }
     }
 
     @SuppressWarnings({"unchecked", "ChainOfInstanceofChecks"})
-    public static <T> T getDefault(Class<T> type) {
+    public static <T> T getDefault(@NotNull Class<T> type) {
         if (type == Integer.class) {
             return (T) Integer.valueOf(0);
         }
@@ -57,7 +60,7 @@ public final class CTNumberUtil {
             def = Number.class.isAssignableFrom(type) ?
                     (T) type.getMethod(METHOD_VALUE_OF, String.class).invoke(null, "0") :
                     type.newInstance();
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | InstantiationException
+        } catch (@NotNull IllegalAccessException | InvocationTargetException | NoSuchMethodException | InstantiationException
                 ex) {
             throw new RuntimeException(MessageFormat.format(MSG_CANNOT_CREATE_INSTANCE_OF_0, type), ex);
         }

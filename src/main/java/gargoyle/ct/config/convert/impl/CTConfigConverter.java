@@ -2,6 +2,7 @@ package gargoyle.ct.config.convert.impl;
 
 import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.config.convert.CTUnitConverter;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
 
@@ -14,7 +15,7 @@ public final class CTConfigConverter implements CTUnitConverter<CTConfig> {
     }
 
     @Override
-    public CTConfig parse(String line) {
+    public CTConfig parse(@NotNull String line) {
         long[] data = configDataConverter.parse(line);
         return new CTConfig(data[0], data[1], data[2]);
     }

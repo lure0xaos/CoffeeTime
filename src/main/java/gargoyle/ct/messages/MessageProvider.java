@@ -1,6 +1,8 @@
 package gargoyle.ct.messages;
 
+import org.jetbrains.annotations.Nullable;
+
 @FunctionalInterface
 public interface MessageProvider {
-    String getMessage(String message, Object... args);
+    @Nullable String getMessage(String message, Object... args);
 }

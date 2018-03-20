@@ -1,5 +1,7 @@
 package gargoyle.ct.util;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -20,6 +22,7 @@ public final class CTSerializationUtil {
      * @return - same object
      * @throws IOException any other error
      */
+    @NotNull
     public static <T> T pipe(T orig) throws IOException {
         byte[] serialized = serialize(orig);
         return deserialize(serialized);
@@ -34,8 +37,9 @@ public final class CTSerializationUtil {
      * @throws IOException any other error
      * @see ObjectInput#readObject()
      */
+    @NotNull
     @SuppressWarnings({"unchecked", "MethodCanBeVariableArityMethod"})
-    public static <T> T deserialize(byte[] bytes) throws IOException {
+    public static <T> T deserialize(@NotNull byte[] bytes) throws IOException {
         try (final ObjectInput ois = new ObjectInputStream(new ByteArrayInputStream(bytes))) {
             try {
                 return (T) ois.readObject();

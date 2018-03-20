@@ -3,6 +3,7 @@ package gargoyle.ct;
 import gargoyle.ct.messages.impl.CTMessages;
 import gargoyle.ct.resource.Resource;
 import gargoyle.ct.resource.internal.TempLocalResource;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.logging.Logger;
@@ -15,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CTTempLocalResourceTest {
     private final Logger logger = LoggerFactory.getLogger(CTTempLocalResourceTest.class);
+    @Nullable
     private Resource resource;
 
     @Test

@@ -2,6 +2,7 @@ package gargoyle.ct.convert.impl;
 
 import gargoyle.ct.convert.Converter;
 import gargoyle.ct.util.CTSerializationUtil;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -18,8 +19,9 @@ public class SerializableConverter<T extends Serializable> implements Converter<
         }
     }
 
+    @NotNull
     @Override
-    public T parse(String data) {
+    public T parse(@NotNull String data) {
         try {
             return CTSerializationUtil.deserialize(converter.parse(data));
         } catch (IOException ex) {

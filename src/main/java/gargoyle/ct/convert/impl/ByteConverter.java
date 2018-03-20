@@ -1,6 +1,7 @@
 package gargoyle.ct.convert.impl;
 
 import gargoyle.ct.convert.Converter;
+import org.jetbrains.annotations.NotNull;
 
 public class ByteConverter implements Converter<Byte> {
     @Override
@@ -9,7 +10,7 @@ public class ByteConverter implements Converter<Byte> {
     }
 
     @Override
-    public Byte parse(String data) {
+    public Byte parse(@NotNull String data) {
         return Byte.valueOf(data);
     }
 }

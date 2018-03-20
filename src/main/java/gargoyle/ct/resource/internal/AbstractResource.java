@@ -1,6 +1,8 @@
 package gargoyle.ct.resource.internal;
 
 import gargoyle.ct.resource.Resource;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,6 +20,7 @@ abstract class AbstractResource extends AbstractResourceBase implements Resource
         this.location = location;
     }
 
+    @Nullable
     protected abstract <R extends Resource> R createResource(R base, String location);
 
     @Override
@@ -74,11 +77,13 @@ abstract class AbstractResource extends AbstractResourceBase implements Resource
         }
     }
 
+    @Nullable
     @Override
     public URL toURL() throws IOException {
         return new URL(location);
     }
 
+    @NotNull
     @Override
     public String toString() {
         return MessageFormat.format("{1} [location={0}]", location, getClass().getSimpleName());

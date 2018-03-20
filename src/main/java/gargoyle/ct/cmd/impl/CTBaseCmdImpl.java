@@ -1,6 +1,7 @@
 package gargoyle.ct.cmd.impl;
 
 import gargoyle.ct.prop.CTReadOnlyProperty;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,17 +14,19 @@ class CTBaseCmdImpl extends CTAnyCmdImpl {
         super(args);
     }
 
-    protected final <T> void addProperty(CTReadOnlyProperty<T> property) {
+    protected final <T> void addProperty(@NotNull CTReadOnlyProperty<T> property) {
         properties.put(property.name(), property);
     }
 
     //    @Override
+    @NotNull
     @SuppressWarnings("unchecked")
     public final <T> CTReadOnlyProperty<T> getProperty(String name) {
         return (CTReadOnlyProperty<T>) properties.get(name);
     }
 
     //    @Override
+    @NotNull
     @SuppressWarnings("unchecked")
     public final <E extends Enum<E>> CTReadOnlyProperty<E> getProperty(Class<E> type) {
         return (CTReadOnlyProperty<E>) properties.get(type.getSimpleName());

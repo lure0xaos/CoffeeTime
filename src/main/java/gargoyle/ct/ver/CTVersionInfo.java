@@ -1,13 +1,15 @@
 package gargoyle.ct.ver;
 
+import org.jetbrains.annotations.Nullable;
+
 public interface CTVersionInfo {
-    String getOrganizationName();
+    @Nullable String getOrganizationName();
 
-    String getOrganizationUrl();
+    @Nullable String getOrganizationUrl();
 
-    String getProjectDescription();
+    @Nullable String getProjectDescription();
 
-    String getProjectName();
+    @Nullable String getProjectName();
 
-    String getProjectVersion();
+    @Nullable String getProjectVersion();
 }

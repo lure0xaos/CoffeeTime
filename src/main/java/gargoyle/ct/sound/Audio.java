@@ -1,8 +1,11 @@
 package gargoyle.ct.sound;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.net.URL;
 
 public class Audio {
+    @NotNull
     public static AudioClip play(URL url) {
         AudioClip clip = load(url);
         clip.play();

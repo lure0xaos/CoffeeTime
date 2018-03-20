@@ -7,6 +7,7 @@ import gargoyle.ct.messages.MessageProviderEx;
 import gargoyle.ct.messages.util.UTF8Control;
 import gargoyle.ct.pref.CTPreferences.SUPPORTED_LOCALES;
 import gargoyle.ct.prop.CTObservableProperty;
+import org.jetbrains.annotations.NotNull;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
@@ -19,22 +20,23 @@ public class CTMessages implements MessageProviderEx {
     private static final String CAN_T_PARSE_MESSAGE_0_1_2 = "can''t parse message:{0}->{1}({2})";
     private static final String MSG_NO_BUNDLE = "Can''t find bundle {0}";
     private static final String MSG_NO_MESSAGE = "Can''t find resource for bundle {0}, key {1}";
+    @NotNull
     private final LocaleProvider localeProvider;
     private final MessageProvider parent;
     private ResourceBundle messages;
 
-    public CTMessages(String baseName) {
+    public CTMessages(@NotNull String baseName) {
         this(new CTFixedLocaleProvider(), null, baseName);
     }
 
-    public CTMessages(LocaleProvider localeProvider, MessageProvider parent, String baseName) {
+    public CTMessages(LocaleProvider localeProvider, MessageProvider parent, @NotNull String baseName) {
         this.localeProvider = localeProvider;
         this.parent = parent;
         load(baseName);
         localeProvider.locale().addPropertyChangeListener(event -> reload());
     }
 
-    private void load(String baseName) {
+    private void load(@NotNull String baseName) {
         try {
             messages = ResourceBundle.getBundle(baseName, localeProvider.getLocale(), UTF8Control.getControl());
         } catch (MissingResourceException ex) {
@@ -52,11 +54,11 @@ public class CTMessages implements MessageProviderEx {
         load(messages.getBaseBundleName());
     }
 
-    public CTMessages(MessageProvider parent, String baseName) {
+    public CTMessages(MessageProvider parent, @NotNull String baseName) {
         this(new CTFixedLocaleProvider(), parent, baseName);
     }
 
-    public CTMessages(LocaleProvider localeProvider, String baseName) {
+    public CTMessages(@NotNull LocaleProvider localeProvider, @NotNull String baseName) {
         this(localeProvider, null, baseName);
     }
 
@@ -76,7 +78,7 @@ public class CTMessages implements MessageProviderEx {
     }
 
     @Override
-    public String getMessage(String message, Object... args) {
+    public String getMessage(@NotNull String message, Object... args) {
         if (!Objects.equals(messages.getLocale(), localeProvider.getLocale())) {
             reload();
         }

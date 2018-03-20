@@ -2,6 +2,8 @@ package gargoyle.ct.log;
 
 import gargoyle.ct.log.LogHelper.LEVEL;
 import gargoyle.ct.messages.util.UTF8Control;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -22,7 +24,7 @@ public final class Log {
         _log(LEVEL.DEBUG, exception, pattern, arguments);
     }
 
-    private static void _log(LEVEL level, Throwable exception, String pattern, Object... arguments) {
+    private static void _log(@NotNull LEVEL level, @Nullable Throwable exception, @Nullable String pattern, Object... arguments) {
         StackTraceElement ste = findCaller();
         if (ste != null) {
             String source = ste.getClassName();
@@ -81,11 +83,11 @@ public final class Log {
         _log(LEVEL.INFO, null, pattern, arguments);
     }
 
-    public static void log(LEVEL level, Throwable exception, String pattern, Object... arguments) {
+    public static void log(@NotNull LEVEL level, Throwable exception, String pattern, Object... arguments) {
         _log(level, exception, pattern, arguments);
     }
 
-    public static void log(LEVEL level, String pattern, Object... arguments) {
+    public static void log(@NotNull LEVEL level, String pattern, Object... arguments) {
         _log(level, null, pattern, arguments);
     }
 

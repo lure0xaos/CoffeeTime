@@ -3,8 +3,10 @@ package gargoyle.ct.cmd.impl;
 import gargoyle.ct.cmd.CTAnyCmd;
 import gargoyle.ct.cmd.args.CTArgs;
 import gargoyle.ct.cmd.args.impl.CTArgsImpl;
+import org.jetbrains.annotations.NotNull;
 
 class CTAnyCmdImpl implements CTAnyCmd {
+    @NotNull
     protected final CTArgs args;
 
     CTAnyCmdImpl(String[] args) {

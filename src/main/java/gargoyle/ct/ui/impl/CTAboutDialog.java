@@ -8,6 +8,8 @@ import gargoyle.ct.ui.CTIconProvider;
 import gargoyle.ct.ui.util.CTDragHelper;
 import gargoyle.ct.ui.util.render.GraphPaperLayout;
 import gargoyle.ct.ver.CTVersionInfo;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
@@ -41,8 +43,11 @@ public final class CTAboutDialog extends JDialog implements CTDialog<Void> {
     private static final String LABEL_PROJECT_VERSION = "label_project_version";
     private static final String LOC_ABOUT = "messages/about";
     private static final long serialVersionUID = 4721343233167467386L;
+    @NotNull
     private final transient CTMessages about;
+    @NotNull
     private final Window owner;
+    @NotNull
     private final transient CTVersionInfo version;
 
     public CTAboutDialog(CTApp app, Window owner) {
@@ -53,11 +58,11 @@ public final class CTAboutDialog extends JDialog implements CTDialog<Void> {
         init(app);
     }
 
-    private void addHyperlink(String descriptionKey, String content, URI address, int y) {
+    private void addHyperlink(@NotNull String descriptionKey, String content, URI address, int y) {
         addField(descriptionKey, content, address, y);
     }
 
-    private void addField(String descriptionKey, String content, URI address, int y) {
+    private void addField(@NotNull String descriptionKey, String content, @Nullable URI address, int y) {
         Container pane = getContentPane();
         JLabel descriptionLabel = new JLabel(String.format(FORMAT_LABEL, about.getMessage(descriptionKey)));
         adjustFontSize(descriptionLabel, FONT_SMALL);
@@ -75,7 +80,7 @@ public final class CTAboutDialog extends JDialog implements CTDialog<Void> {
         component.setFont(font.deriveFont(font.getSize() * mul));
     }
 
-    private void addHyperlink(String descriptionKey, String content, String address, int y) {
+    private void addHyperlink(@NotNull String descriptionKey, String content, @NotNull String address, int y) {
         try {
             addField(descriptionKey, content, new URI(address), y);
         } catch (URISyntaxException e) {
@@ -83,7 +88,7 @@ public final class CTAboutDialog extends JDialog implements CTDialog<Void> {
         }
     }
 
-    private void addLabel(String descriptionKey, String content, int y) {
+    private void addLabel(@NotNull String descriptionKey, String content, int y) {
         addField(descriptionKey, content, null, y);
     }
 
@@ -128,7 +133,7 @@ public final class CTAboutDialog extends JDialog implements CTDialog<Void> {
                     if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
                         Desktop.getDesktop().browse(address);
                     }
-                } catch (UnsupportedOperationException | IOException ex) {
+                } catch (@NotNull UnsupportedOperationException | IOException ex) {
                     Log.error(ex, ex.getLocalizedMessage());
                 }
             }
@@ -149,6 +154,7 @@ public final class CTAboutDialog extends JDialog implements CTDialog<Void> {
             dialog.dispose();
         }
 
+        @NotNull
         @Override
         public OkAction clone() throws CloneNotSupportedException {
             return (OkAction) super.clone();

@@ -3,6 +3,7 @@ package gargoyle.ct;
 import gargoyle.ct.config.CTConfigs;
 import gargoyle.ct.config.CTStandardConfigs;
 import gargoyle.ct.config.convert.impl.CTConfigsConverter;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CTConfigsTimeConverterTest {
+    @Nullable
     private CTConfigsConverter converter;
 
     @BeforeEach

@@ -3,6 +3,7 @@ package gargoyle.ct.config.convert.impl;
 import gargoyle.ct.config.convert.CTUnitConverter;
 import gargoyle.ct.util.CTTimeUtil;
 import gargoyle.ct.util.Defend;
+import org.jetbrains.annotations.NotNull;
 
 import java.text.MessageFormat;
 import java.util.concurrent.TimeUnit;
@@ -64,8 +65,9 @@ public final class CTConfigDataConverter implements CTUnitConverter<long[]> {
                 unitChar);
     }
 
+    @NotNull
     @Override
-    public long[] parse(String line) {
+    public long[] parse(@NotNull String line) {
         Defend.notEmptyTrimmed(line, MSG_EMPTY_LINE);
         String trimmedLine = line.trim();
         Defend.isFalse(COMMENTS.contains(trimmedLine.substring(0, 1)), MessageFormat.format(MSG_COMMENTED_LINE_0,

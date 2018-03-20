@@ -1,6 +1,7 @@
 package gargoyle.ct.ui.impl.control;
 
 import gargoyle.ct.messages.MessageProvider;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.AbstractButton;
 import javax.swing.Icon;
@@ -42,12 +43,13 @@ public abstract class CTLocalizableAction extends CTAction {
     }
 
     @Override
-    public void init(AbstractButton menuItem) {
+    public void init(@NotNull AbstractButton menuItem) {
         super.init(menuItem);
         menuItem.setText(getLocalizedText());
         menuItem.setToolTipText(getToolTipLocalizedText());
     }
 
+    @NotNull
     protected final String getLocalizedText() {
         String textKey = getTextKey();
         return textKey == null || textKey.isEmpty() ? "" : messages.getMessage(textKey);
@@ -61,6 +63,7 @@ public abstract class CTLocalizableAction extends CTAction {
         putValue(KEY_TEXT, textKey);
     }
 
+    @NotNull
     protected final String getToolTipLocalizedText() {
         String toolTipTextKey = getToolTipTextKey();
         return toolTipTextKey == null || toolTipTextKey.isEmpty() ? "" : messages.getMessage(toolTipTextKey);

@@ -10,6 +10,7 @@ import gargoyle.ct.convert.impl.IntegerConverter;
 import gargoyle.ct.convert.impl.LongConverter;
 import gargoyle.ct.convert.impl.ShortConverter;
 import gargoyle.ct.convert.impl.StringConverter;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,8 +26,9 @@ public final class Converters {
     private Converters() {
     }
 
+    @NotNull
     @SuppressWarnings("unchecked")
-    public static <T> Converter<T> get(Class<T> type) {
+    public static <T> Converter<T> get(@NotNull Class<T> type) {
         if (!types.containsKey(type)) {
             throw new IllegalArgumentException(type.toGenericString());
         }
@@ -37,7 +39,7 @@ public final class Converters {
         }
         try {
             converter = (Converter<T>) clazz.newInstance();
-        } catch (InstantiationException | IllegalAccessException ex) {
+        } catch (@NotNull InstantiationException | IllegalAccessException ex) {
             throw new RuntimeException(ex);
         }
         instances.put(clazz, converter);

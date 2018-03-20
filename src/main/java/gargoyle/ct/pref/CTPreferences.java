@@ -3,6 +3,7 @@ package gargoyle.ct.pref;
 import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.messages.Described;
 import gargoyle.ct.pref.impl.prop.CTPrefProperty;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -16,19 +17,19 @@ public interface CTPreferences extends CTPreferencesManager {
     String PREF_TRANSPARENCY = "transparency";
     String PREF_TRANSPARENCY_LEVEL = "transparency-level";
 
-    CTPrefProperty<Boolean> block();
+    @NotNull CTPrefProperty<Boolean> block();
 
-    CTPrefProperty<CTConfig> config();
+    @NotNull CTPrefProperty<CTConfig> config();
 
-    CTPrefProperty<ICON_STYLE> iconStyle();
+    @NotNull CTPrefProperty<ICON_STYLE> iconStyle();
 
-    CTPrefProperty<Boolean> sound();
+    @NotNull CTPrefProperty<Boolean> sound();
 
-    CTPrefProperty<SUPPORTED_LOCALES> supportedLocales();
+    @NotNull CTPrefProperty<SUPPORTED_LOCALES> supportedLocales();
 
-    CTPrefProperty<Boolean> transparency();
+    @NotNull CTPrefProperty<Boolean> transparency();
 
-    CTPrefProperty<Integer> transparencyLevel();
+    @NotNull CTPrefProperty<Integer> transparencyLevel();
 
     enum ICON_STYLE implements Described {
         BW("bw", "icon-style.bw"),

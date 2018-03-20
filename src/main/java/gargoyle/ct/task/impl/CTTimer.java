@@ -3,6 +3,7 @@ package gargoyle.ct.task.impl;
 import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.task.CTTaskUpdatable;
 import gargoyle.ct.task.helper.CTTimeHelper;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Timer;
@@ -10,7 +11,9 @@ import java.util.Timer;
 public class CTTimer {
     private static final int CHECK_DELAY = 100;
     private static final int CHECK_PERIOD = 500;
+    @NotNull
     private final Timer timer;
+    @NotNull
     private final CTTimerTask timerTask;
 
     public CTTimer(CTTimeHelper timeHelper, CTTaskUpdatable... updatables) {

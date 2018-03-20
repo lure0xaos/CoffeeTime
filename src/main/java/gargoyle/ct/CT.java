@@ -35,6 +35,8 @@ import gargoyle.ct.util.CTNumberUtil;
 import gargoyle.ct.util.CTStreamUtil;
 import gargoyle.ct.ver.CTVersionInfo;
 import gargoyle.ct.ver.impl.CTVersionInfoImpl;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -72,14 +74,22 @@ public final class CT implements CTApp {
     private static final String URL_ICON_BIG_W = "/icon/{0}/64/icon64.png";
     private static final String URL_ICON_MEDIUM_W = "/icon/{0}/32/icon32.png";
     private static final String URL_ICON_SMALL_W = "/icon/{0}/16/icon16.png";
+    @NotNull
     private final List<CTBlocker> blockers;
     private final CTUnitConverter<CTConfigs> configsConverter = new CTConfigsConverter();
+    @NotNull
     private final CTControl control;
+    @NotNull
     private final Frame owner;
+    @NotNull
     private final CTPreferences preferences;
+    @NotNull
     private final CTTimeHelper timeHelper;
+    @NotNull
     private final CTTimer timer;
+    @NotNull
     private final CTVersionInfo versionInfo;
+    @Nullable
     private Resource configResource;
     private CTMutex mutex;
     private CTPreferencesDialog preferencesDialog;
@@ -116,7 +126,8 @@ public final class CT implements CTApp {
         new CT().init(cmd.isDebug(), cmd.getFakeTime()).overridePreferences(cmd).start();
     }
 
-    private CT overridePreferences(CTAnyCmd cmd) {
+    @NotNull
+    private CT overridePreferences(@NotNull CTAnyCmd cmd) {
         for (String name : preferences.getPropertyNames()) {
             if (cmd.has(name)) {
                 CTPrefProperty<Object> property = preferences.getProperty(name);
@@ -126,6 +137,7 @@ public final class CT implements CTApp {
         return this;
     }
 
+    @NotNull
     private CT init(boolean debug, long fakeTime) {
         if (debug) {
             Log.info(MSG_DEBUG_MODE);
@@ -147,7 +159,7 @@ public final class CT implements CTApp {
     private static void setSystemLookAndFeel() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | UnsupportedLookAndFeelException | IllegalAccessException |
+        } catch (@NotNull ClassNotFoundException | UnsupportedLookAndFeelException | IllegalAccessException |
                 InstantiationException ex) {
             throw new RuntimeException(ex);
         }
@@ -203,7 +215,7 @@ public final class CT implements CTApp {
         }
     }
 
-    private void showError(Exception e) {
+    private void showError(@NotNull Exception e) {
         Log.error(e, e.getMessage());
         JOptionPane.showMessageDialog(owner, e.getLocalizedMessage(), versionInfo.getProjectName(), JOptionPane.ERROR_MESSAGE);
     }
@@ -311,17 +323,19 @@ public final class CT implements CTApp {
         timer.unarm();
     }
 
+    @NotNull
     @Override
     public CTPreferences getPreferences() {
         return preferences;
     }
 
+    @NotNull
     @Override
     public CTVersionInfo getVersionInfo() {
         return versionInfo;
     }
 
-    private void saveConfigs(CTConfigs configs, Resource configResource) {
+    private void saveConfigs(CTConfigs configs, @Nullable Resource configResource) {
         if (configResource != null) {
             try (OutputStream stream = configResource.getOutputStream()) {
                 CTStreamUtil.write(stream, configsConverter.format(TimeUnit.MINUTES, configs), CONFIG_CHARSET);

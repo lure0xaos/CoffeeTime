@@ -2,6 +2,7 @@ package gargoyle.ct.mutex.impl;
 
 import gargoyle.ct.log.Log;
 import gargoyle.ct.mutex.CTMutex;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,9 +17,13 @@ public final class FileMutex implements CTMutex {
     private static final String USER_DIR = "user.dir";
     private static final String USER_HOME = "user.home";
     private final String mutex;
+    @Nullable
     private FileChannel channel;
+    @Nullable
     private File file;
+    @Nullable
     private FileLock fileLock;
+    @Nullable
     private RandomAccessFile randomAccessFile;
 
     public FileMutex(String mutex) {

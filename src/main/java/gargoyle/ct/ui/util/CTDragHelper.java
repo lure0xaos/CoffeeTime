@@ -1,6 +1,7 @@
 package gargoyle.ct.ui.util;
 
 import gargoyle.ct.util.CTNumberUtil;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.SwingUtilities;
 import java.awt.Component;
@@ -17,15 +18,15 @@ public final class CTDragHelper {
     private CTDragHelper() {
     }
 
-    public static void makeDraggable(Component component, int snap) {
+    public static void makeDraggable(@NotNull Component component, int snap) {
         makeDraggable0(component, snap, SwingUtilities.getWindowAncestor(component));
     }
 
-    private static void makeDraggable0(Component component, int snap, Component window) {
+    private static void makeDraggable0(Component component, int snap, @NotNull Component window) {
         Point mouseDownLocation = new Point();
         component.addMouseListener(new MouseAdapter() {
             @Override
-            public void mousePressed(MouseEvent event) {
+            public void mousePressed(@NotNull MouseEvent event) {
                 mouseDownLocation.setLocation(event.getPoint());
             }
 
@@ -36,7 +37,7 @@ public final class CTDragHelper {
         });
         component.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
-            public void mouseDragged(MouseEvent event) {
+            public void mouseDragged(@NotNull MouseEvent event) {
                 Point currentLocation = event.getLocationOnScreen();
                 Point point = new Point(currentLocation.x - mouseDownLocation.x,
                         currentLocation.y - mouseDownLocation.y);
@@ -46,7 +47,7 @@ public final class CTDragHelper {
         });
     }
 
-    static void snap(Point p, Dimension size, int snap) {
+    static void snap(Point p, @NotNull Dimension size, int snap) {
         Rectangle bounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
         if (p.x - bounds.x < snap) {
             p.x = bounds.x;

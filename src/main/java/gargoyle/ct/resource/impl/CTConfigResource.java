@@ -3,6 +3,7 @@ package gargoyle.ct.resource.impl;
 import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.resource.Resource;
 import gargoyle.ct.resource.internal.LocalResource;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -14,12 +15,12 @@ import java.net.URL;
 public final class CTConfigResource extends LocalResource {
     private static final String SLASH = "/";
 
-    private CTConfigResource(URL url) {
+    private CTConfigResource(@NotNull URL url) {
         super(url);
     }
 
     @SuppressWarnings("MethodOverridesStaticMethodOfSuperclass")
-    public static CTConfigResource findLocalConfig(String name, boolean existing) {
+    public static CTConfigResource findLocalConfig(@NotNull String name, boolean existing) {
         LocalResource local = LocalResource.findLocal(name);
         try {
             return local == null ? null : existing && !local.exists() ? null : new CTConfigResource(local.toURL());
@@ -28,7 +29,7 @@ public final class CTConfigResource extends LocalResource {
         }
     }
 
-    public static CTConfigResource forURL(URL url) {
+    public static CTConfigResource forURL(@NotNull URL url) {
         return new CTConfigResource(url);
     }
 

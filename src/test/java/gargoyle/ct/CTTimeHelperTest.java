@@ -3,6 +3,7 @@ package gargoyle.ct;
 import gargoyle.ct.task.helper.CTTimeHelper;
 import gargoyle.ct.task.helper.impl.CTTimeHelperImpl;
 import gargoyle.ct.util.CTTimeUtil;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CTTimeHelperTest {
+    @Nullable
     private CTTimeHelper helper;
 
     @BeforeEach

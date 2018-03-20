@@ -2,10 +2,12 @@ package gargoyle.ct.ui.impl.control;
 
 import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.ui.impl.CTControl;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.event.ActionEvent;
 
 public final class CTConfigAction extends CTAction {
+    @NotNull
     private final CTConfig config;
     private final CTControl control;
 
@@ -22,6 +24,7 @@ public final class CTConfigAction extends CTAction {
         control.arm(config);
     }
 
+    @NotNull
     public CTConfig getConfig() {
         return config;
     }

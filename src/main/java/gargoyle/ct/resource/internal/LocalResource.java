@@ -1,6 +1,8 @@
 package gargoyle.ct.resource.internal;
 
 import gargoyle.ct.resource.Resource;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,8 +25,9 @@ public class LocalResource extends VirtualResource {
         super(url.toExternalForm());
     }
 
+    @Nullable
     @SuppressWarnings("ObjectAllocationInLoop")
-    protected static LocalResource findLocal(String name) {
+    protected static LocalResource findLocal(@NotNull String name) {
         LocalResource writable = null;
         int writablePriority = Integer.MIN_VALUE;
         for (LocalLocation root : getReadableLocations()) {
@@ -76,6 +79,7 @@ public class LocalResource extends VirtualResource {
         }
     }
 
+    @NotNull
     public File toFile() throws IOException {
         URL url = toURL();
         String path = url.getPath();
@@ -111,7 +115,7 @@ public class LocalResource extends VirtualResource {
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(@Nullable Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             LocalLocation that = (LocalLocation) o;
@@ -123,7 +127,7 @@ public class LocalResource extends VirtualResource {
         private static final long serialVersionUID = 3293380242047042026L;
 
         @Override
-        public int compare(LocalLocation o1, LocalLocation o2) {
+        public int compare(@NotNull LocalLocation o1, @NotNull LocalLocation o2) {
             return Integer.compare(o1.getReadPriority(), o2.getReadPriority());
         }
     }
@@ -132,7 +136,7 @@ public class LocalResource extends VirtualResource {
         private static final long serialVersionUID = 1771423086301596535L;
 
         @Override
-        public int compare(LocalLocation o1, LocalLocation o2) {
+        public int compare(@NotNull LocalLocation o1, @NotNull LocalLocation o2) {
             return Integer.compare(o1.getWritePriority(), o2.getWritePriority());
         }
     }

@@ -4,6 +4,8 @@ import gargoyle.ct.cmd.args.CTArgs;
 import gargoyle.ct.convert.Converter;
 import gargoyle.ct.convert.Converters;
 import gargoyle.ct.log.Log;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,7 +16,9 @@ import java.util.Map;
 public class CTArgsImpl implements CTArgs {
     private static final String EQ = "=";
     private static final String MSG_INVALID_ARGUMENT = "Invalid argument \"{0}\" value \"{1}\", using default \"{2}\"";
+    @NotNull
     private final List<String> keys;
+    @NotNull
     private final Map<String, String> params;
 
     public CTArgsImpl(String[] args) {
@@ -26,7 +30,7 @@ public class CTArgsImpl implements CTArgs {
     }
 
     @SuppressWarnings("TypeMayBeWeakened")
-    private static void init(String[] args, Map<String, String> params, List<String> keys) {
+    private static void init(@Nullable String[] args, @NotNull Map<String, String> params, @NotNull List<String> keys) {
         if (args != null) {
             for (String arg : args) {
                 if (arg != null) {
@@ -46,24 +50,24 @@ public class CTArgsImpl implements CTArgs {
     }
 
     @Override
-    public <T> T get(Class<T> type, String key) {
+    public <T> T get(@NotNull Class<T> type, String key) {
         return byKey(key, Converters.get(type), null);
     }
 
     @Override
-    public <T> T get(Class<T> type, String key, T def) {
+    public <T> T get(@NotNull Class<T> type, String key, T def) {
         return byKey(key, Converters.get(type), def);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T get(int index, T def) {
+    public <T> T get(int index, @NotNull T def) {
         return byIndex(index, Converters.get((Class<T>) def.getClass()), def);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T get(String key, T def) {
+    public <T> T get(String key, @NotNull T def) {
         return byKey(key, Converters.get((Class<T>) def.getClass()), def);
     }
 
@@ -284,11 +288,11 @@ public class CTArgsImpl implements CTArgs {
         return params.size();
     }
 
-    private <T> T byIndex(int index, Converter<T> converter, T def) {
+    private <T> T byIndex(int index, @NotNull Converter<T> converter, T def) {
         return params.size() > index ? byKey(keys.get(index), converter, def) : def;
     }
 
-    private <T> T byKey(String key, Converter<T> converter, T def) {
+    private <T> T byKey(String key, @NotNull Converter<T> converter, T def) {
         if (params.containsKey(key)) {
             String value = params.get(key);
             try {

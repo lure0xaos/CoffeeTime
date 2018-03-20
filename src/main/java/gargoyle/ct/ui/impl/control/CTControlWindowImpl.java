@@ -8,6 +8,8 @@ import gargoyle.ct.ui.CTIconProvider;
 import gargoyle.ct.ui.impl.CTBlockerContent;
 import gargoyle.ct.ui.util.CTDragHelper;
 import gargoyle.ct.util.CTTimeUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.JPopupMenu;
 import javax.swing.JWindow;
@@ -36,15 +38,18 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
     private static final int TOOLTIP_OFFSET = 30;
     private static final String TOOL_TIP_MANAGER_ENABLE_TOOL_TIP_MODE = "ToolTipManager.enableToolTipMode";
     private static final long serialVersionUID = 6345130901927558555L;
+    @NotNull
     private final CTIconContent iconContent;
+    @NotNull
     @SuppressWarnings("InstanceVariableMayNotBeInitializedByReadObject")
     private final transient CTPreferences preferences;
+    @NotNull
     private final CTBlockerContent textContent;
     private boolean iconMode = true;
     private volatile boolean live = true;
     private volatile boolean reshow;
 
-    public CTControlWindowImpl(Frame owner, CTPreferences preferences, CTIconProvider iconProvider, JPopupMenu menu) {
+    public CTControlWindowImpl(Frame owner, @NotNull CTPreferences preferences, @NotNull CTIconProvider iconProvider, JPopupMenu menu) {
         super(owner);
         this.preferences = preferences;
         UIManager.getDefaults().put(TOOL_TIP_MANAGER_ENABLE_TOOL_TIP_MODE, "");
@@ -176,7 +181,7 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
     }
 
     @Override
-    public void setToolTipText(String text) {
+    public void setToolTipText(@Nullable String text) {
         textContent.setToolTipText(text);
         iconContent.setToolTipText(text);
         if (reshow && text != null && !text.isEmpty()) {
@@ -226,12 +231,12 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
         }
 
         @Override
-        public void componentResized(ComponentEvent e) {
+        public void componentResized(@NotNull ComponentEvent e) {
             owner.setSize(e.getComponent().getSize());
         }
 
         @Override
-        public void componentMoved(ComponentEvent e) {
+        public void componentMoved(@NotNull ComponentEvent e) {
             owner.setLocation(e.getComponent().getLocation());
         }
     }

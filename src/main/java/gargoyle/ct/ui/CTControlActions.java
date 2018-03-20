@@ -2,6 +2,7 @@ package gargoyle.ct.ui;
 
 import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.config.CTConfigs;
+import org.jetbrains.annotations.Nullable;
 
 public interface CTControlActions {
     void about();
@@ -18,7 +19,7 @@ public interface CTControlActions {
 
     void saveConfigs(CTConfigs configs);
 
-    CTConfig showNewConfig();
+    @Nullable CTConfig showNewConfig();
 
     void showPreferences();
 

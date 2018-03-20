@@ -1,6 +1,8 @@
 package gargoyle.ct.ui;
 
+import org.jetbrains.annotations.Nullable;
+
 @FunctionalInterface
 public interface CTDialog<R> {
-    R showMe();
+    @Nullable R showMe();
 }

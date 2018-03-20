@@ -7,6 +7,7 @@ import gargoyle.ct.task.impl.CTTask;
 import gargoyle.ct.ui.CTBlockerTextProvider;
 import gargoyle.ct.ui.CTInformer;
 import gargoyle.ct.ui.CTWindow;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -29,13 +30,16 @@ public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, C
     private static final double MARGIN = 1.1;
     private static final long serialVersionUID = 1873262133224449177L;
     private final boolean big;
+    @NotNull
     private final JLabel lblInfo;
+    @NotNull
     private final JLabel lblMain;
+    @NotNull
     @SuppressWarnings("InstanceVariableMayNotBeInitializedByReadObject")
     private final transient CTPreferences preferences;
     private transient CTBlockerTextProvider textProvider;
 
-    public CTBlockerContent(CTPreferences preferences, boolean big) {
+    public CTBlockerContent(@NotNull CTPreferences preferences, boolean big) {
         this.preferences = preferences;
         textProvider = new CTBlockerTextProvider(preferences);
         this.big = big;
@@ -48,6 +52,7 @@ public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, C
         add(lblInfo, BorderLayout.SOUTH);
     }
 
+    @NotNull
     private JLabel createInfoLabel() {
         JLabel label = new JLabel();
         label.setOpaque(true);
@@ -60,6 +65,7 @@ public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, C
         return label;
     }
 
+    @NotNull
     private JLabel createMainLabel() {
         JLabel label = new JLabel();
         label.setOpaque(true);
@@ -71,7 +77,7 @@ public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, C
         return label;
     }
 
-    static void adjust(Component container, JLabel label) {
+    static void adjust(Component container, @NotNull JLabel label) {
         if (!container.isVisible() || container.getHeight() == 0) return;
         Font font = new Font(Font.DIALOG, Font.PLAIN, FONT_SIZE);
         label.setFont(font);
@@ -93,7 +99,7 @@ public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, C
     }
 
     @Override
-    public void doUpdate(CTTask task, long currentMillis) {
+    public void doUpdate(@NotNull CTTask task, long currentMillis) {
         lblInfo.setText(textProvider.getInfoText(task, currentMillis));
         boolean visible = textProvider.isVisible(task, currentMillis);
         setVisible(visible);

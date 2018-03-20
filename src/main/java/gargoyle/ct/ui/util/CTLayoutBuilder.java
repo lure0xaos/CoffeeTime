@@ -12,6 +12,7 @@ import gargoyle.ct.prop.CTProperty;
 import gargoyle.ct.ui.impl.CTLocalizableLabel;
 import gargoyle.ct.ui.util.render.MessageProviderListCellRenderer;
 import gargoyle.ct.util.CTNumberUtil;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.DefaultBoundedRangeModel;
 import javax.swing.JCheckBox;
@@ -45,9 +46,13 @@ import java.util.Vector;
 @SuppressWarnings("MethodMayBeStatic")
 public class CTLayoutBuilder {
     private static final int GAP = 5;
+    @NotNull
     private final GridBagConstraints controlConstraints;
+    @NotNull
     private final GridBagConstraints labelConstraints;
+    @NotNull
     private final GridBagLayout layout;
+    @NotNull
     private final Container pane;
 
     public CTLayoutBuilder(Container pane) {
@@ -58,6 +63,7 @@ public class CTLayoutBuilder {
         controlConstraints = createConstraints(1.0, GridBagConstraints.REMAINDER);
     }
 
+    @NotNull
     private static GridBagConstraints createConstraints(double weightX, int gridWidth) {
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -79,7 +85,8 @@ public class CTLayoutBuilder {
         pane.validate();
     }
 
-    public JCheckBox createCheckBox(CTProperty<Boolean> property) {
+    @NotNull
+    public JCheckBox createCheckBox(@NotNull CTProperty<Boolean> property) {
         JCheckBox control = new JCheckBox();
         control.setSelected(property.get());
         control.addActionListener(event -> property.set(control.isSelected()));
@@ -87,7 +94,7 @@ public class CTLayoutBuilder {
     }
 
     @SuppressWarnings({"unchecked", "TypeMayBeWeakened", "SameParameterValue"})
-    public <E extends Enum<E> & Described> JComboBox<E> createComboBox(MessageProvider messages, Class<E> type, CTPrefProperty<E> property,
+    public <E extends Enum<E> & Described> JComboBox<E> createComboBox(@NotNull MessageProvider messages, @NotNull Class<E> type, @NotNull CTPrefProperty<E> property,
                                                                        boolean allowNull) {
         E[] enumConstants = type.getEnumConstants();
         JComboBox<E> control;
@@ -105,15 +112,18 @@ public class CTLayoutBuilder {
         return control;
     }
 
-    public JLabel createLocalizableLabel(MessageProvider messages, LocaleProvider provider, String textKey,
+    @NotNull
+    public JLabel createLocalizableLabel(@NotNull MessageProvider messages, @NotNull LocaleProvider provider, String textKey,
                                          String toolTipTextKey) {
         return new CTLocalizableLabel(messages, provider, textKey, toolTipTextKey, SwingConstants.TRAILING);
     }
 
-    public JLabel createLocalizableLabel(MessageProviderEx messages, String textKey, String toolTipTextKey) {
+    @NotNull
+    public JLabel createLocalizableLabel(@NotNull MessageProviderEx messages, String textKey, String toolTipTextKey) {
         return new CTLocalizableLabel(messages, messages, textKey, toolTipTextKey, SwingConstants.TRAILING);
     }
 
+    @NotNull
     @SuppressWarnings("UseOfPropertiesAsHashtable")
     private static <T extends Enum<T>> Dictionary getLabels(Class<T> type) {
         Properties properties = new Properties();
@@ -126,7 +136,7 @@ public class CTLayoutBuilder {
         return properties;
     }
 
-    public <T extends Enum<T>> JSlider createSlider(Class<T> type, CTProperty<T> property, boolean allowNull) {
+    public <T extends Enum<T>> JSlider createSlider(@NotNull Class<T> type, @NotNull CTProperty<T> property, boolean allowNull) {
         T[] enumConstants = type.getEnumConstants();
         JSlider control;
         if (allowNull) {
@@ -149,7 +159,8 @@ public class CTLayoutBuilder {
         return control;
     }
 
-    public JSlider createSlider(CTProperty<Integer> property, Integer min, Integer max) {
+    @NotNull
+    public JSlider createSlider(@NotNull CTProperty<Integer> property, Integer min, Integer max) {
         JSlider control = new JSlider(CTNumberUtil.toInt(min), CTNumberUtil.toInt(max));
         control.setValue(property.get());
         control.addChangeListener(event -> property.set(CTNumberUtil.toRange((Integer) control.getValue(), min, max)));
@@ -164,7 +175,8 @@ public class CTLayoutBuilder {
         return type.getEnumConstants()[index];
     }
 
-    public <T extends Number> JSlider createSlider(Class<T> type, CTNumberProperty<T> property, T min, T max) {
+    @NotNull
+    public <T extends Number> JSlider createSlider(@NotNull Class<T> type, @NotNull CTNumberProperty<T> property, T min, T max) {
         JSlider control = new JSlider(CTNumberUtil.toInt(min), CTNumberUtil.toInt(max));
         control.setValue(property.get().intValue());
         control.addChangeListener(event -> property.set(CTNumberUtil.fromInt(type,
@@ -175,7 +187,8 @@ public class CTLayoutBuilder {
         return control;
     }
 
-    public JSpinner createSpinner(CTProperty<Integer> property, Integer min, Integer max) {
+    @NotNull
+    public JSpinner createSpinner(@NotNull CTProperty<Integer> property, Integer min, Integer max) {
         JSpinner control = new JSpinner(new SpinnerNumberModel());
         control.setValue(property.get());
         control.addChangeListener(event -> {
@@ -185,7 +198,8 @@ public class CTLayoutBuilder {
         return control;
     }
 
-    public <T extends Number> JSpinner createSpinner(Class<T> type, CTProperty<T> property, T min, T max) {
+    @NotNull
+    public <T extends Number> JSpinner createSpinner(@NotNull Class<T> type, @NotNull CTProperty<T> property, T min, T max) {
         JSpinner control = new JSpinner(new SpinnerNumberModel());
         control.setValue(property.get().intValue());
         control.addChangeListener(event -> property.set(CTNumberUtil.fromInt(type,
@@ -195,7 +209,7 @@ public class CTLayoutBuilder {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends Enum<T>> JSpinner createSpinner(Class<T> type, CTProperty<T> property, boolean allowNull) {
+    public <T extends Enum<T>> JSpinner createSpinner(@NotNull Class<T> type, @NotNull CTProperty<T> property, boolean allowNull) {
         T[] enumConstants = type.getEnumConstants();
         JSpinner control;
         if (allowNull) {
@@ -211,22 +225,25 @@ public class CTLayoutBuilder {
         return control;
     }
 
-    public JTextArea createTextArea(CTProperty<String> property) {
+    @NotNull
+    public JTextArea createTextArea(@NotNull CTProperty<String> property) {
         JTextArea control = new JTextArea();
         control.setText(property.get());
         control.addKeyListener(new PropertyKeyAdapter(property, control));
         return control;
     }
 
-    public JTextField createTextField(CTProperty<String> property) {
+    @NotNull
+    public JTextField createTextField(@NotNull CTProperty<String> property) {
         JTextField control = new JTextField();
         control.setText(property.get());
         control.addKeyListener(new PropertyKeyAdapter(property, control));
         return control;
     }
 
-    public JToggleButton createToggleButton(CTProperty<Boolean> property,
-                                            CTObservableProperty<SUPPORTED_LOCALES> localeProperty) {
+    @NotNull
+    public JToggleButton createToggleButton(@NotNull CTProperty<Boolean> property,
+                                            @NotNull CTObservableProperty<SUPPORTED_LOCALES> localeProperty) {
         JToggleButton control = new JToggleButton();
         control.setSelected(property.get());
         Locale initialLocale = localeProperty.get().getLocale();

@@ -2,6 +2,8 @@ package gargoyle.ct.config;
 
 import gargoyle.ct.util.CTTimeUtil;
 import gargoyle.ct.util.Defend;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.InvalidObjectException;
 import java.io.ObjectInputValidation;
@@ -23,7 +25,7 @@ public class CTConfig implements Serializable, ObjectInputValidation {
         init(0, 0, 0, STR_INVALID);
     }
 
-    public long getWhole(TimeUnit unit) {
+    public long getWhole(@NotNull TimeUnit unit) {
         return CTTimeUtil.fromMillis(unit, whole);
     }
 
@@ -31,7 +33,7 @@ public class CTConfig implements Serializable, ObjectInputValidation {
         return wholeMillis > blockMillis && blockMillis > warnMillis;
     }
 
-    public CTConfig(TimeUnit unit, long whole, long block, long warn) {
+    public CTConfig(@NotNull TimeUnit unit, long whole, long block, long warn) {
         this(CTTimeUtil.toMillis(unit, whole), CTTimeUtil.toMillis(unit, block), CTTimeUtil.toMillis(unit, warn));
         name = name(unit, CTTimeUtil.toMillis(unit, whole), CTTimeUtil.toMillis(unit, block));
     }
@@ -44,13 +46,13 @@ public class CTConfig implements Serializable, ObjectInputValidation {
         init(whole, block, warn, name(TimeUnit.MINUTES, whole, block));
     }
 
-    private static String name(TimeUnit unit, long whole, long block) {
+    private static String name(@NotNull TimeUnit unit, long whole, long block) {
         return MessageFormat.format(FORMAT_NAME,
                 CTTimeUtil.fromMillis(unit, whole),
                 CTTimeUtil.fromMillis(unit, block));
     }
 
-    public long getBlock(TimeUnit unit) {
+    public long getBlock(@NotNull TimeUnit unit) {
         return CTTimeUtil.fromMillis(unit, block);
     }
 
@@ -74,7 +76,7 @@ public class CTConfig implements Serializable, ObjectInputValidation {
         this.warn = warn;
     }
 
-    public long getWarn(TimeUnit unit) {
+    public long getWarn(@NotNull TimeUnit unit) {
         return CTTimeUtil.fromMillis(unit, warn);
     }
 
@@ -105,7 +107,7 @@ public class CTConfig implements Serializable, ObjectInputValidation {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;
         }
@@ -119,6 +121,7 @@ public class CTConfig implements Serializable, ObjectInputValidation {
         return block == other.block && warn == other.warn && whole == other.whole;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return MessageFormat.format("CTConfig [name={0}, whole={1}, block={2}, warn={3}]", name, whole, block, warn);
@@ -128,19 +131,20 @@ public class CTConfig implements Serializable, ObjectInputValidation {
         this.block = block;
     }
 
-    public String name(TimeUnit unit) {
+    @NotNull
+    public String name(@NotNull TimeUnit unit) {
         return name(unit, whole, block);
     }
 
-    public void setBlock(TimeUnit unit, long block) {
+    public void setBlock(@NotNull TimeUnit unit, long block) {
         this.block = CTTimeUtil.toMillis(unit, block);
     }
 
-    public void setWarn(TimeUnit unit, long warn) {
+    public void setWarn(@NotNull TimeUnit unit, long warn) {
         this.warn = CTTimeUtil.toMillis(unit, warn);
     }
 
-    public void setWhole(TimeUnit unit, long whole) {
+    public void setWhole(@NotNull TimeUnit unit, long whole) {
         this.whole = CTTimeUtil.toMillis(unit, whole);
     }
 

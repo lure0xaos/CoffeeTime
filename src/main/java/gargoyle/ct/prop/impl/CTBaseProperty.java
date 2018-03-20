@@ -1,6 +1,7 @@
 package gargoyle.ct.prop.impl;
 
 import gargoyle.ct.prop.CTProperty;
+import org.jetbrains.annotations.NotNull;
 
 import java.text.MessageFormat;
 
@@ -33,6 +34,7 @@ public abstract class CTBaseProperty<T> implements CTProperty<T> {
         return type;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return MessageFormat.format("CTBaseProperty'{'name=''{0}'''}'", name);

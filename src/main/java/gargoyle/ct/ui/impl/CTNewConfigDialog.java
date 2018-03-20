@@ -9,6 +9,8 @@ import gargoyle.ct.messages.impl.CTPreferencesLocaleProvider;
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.ui.CTDialog;
 import gargoyle.ct.ui.CTIconProvider;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -26,21 +28,23 @@ public class CTNewConfigDialog implements CTDialog<CTConfig> {
     private static final String STR_OK = "ok";
     private static final String STR_TITLE = "new-config-title";
     private final CTUnitConverter<CTConfig> configConverter = new CTConfigConverter();
+    @NotNull
     private final CTMessages messages;
     private final Component owner;
     private Icon icon;
 
-    public CTNewConfigDialog(Component owner, CTPreferences preferences, CTIconProvider iconProvider) {
+    public CTNewConfigDialog(Component owner, @NotNull CTPreferences preferences, @NotNull CTIconProvider iconProvider) {
         this.owner = owner;
         messages = new CTMessages(new CTPreferencesLocaleProvider(preferences), LOC_NEW_CONFIG);
         updateIcon(iconProvider);
         preferences.iconStyle().addPropertyChangeListener(event -> updateIcon(iconProvider));
     }
 
-    void updateIcon(CTIconProvider iconProvider) {
+    void updateIcon(@NotNull CTIconProvider iconProvider) {
         icon = new ImageIcon(iconProvider.getMediumIcon());
     }
 
+    @Nullable
     @Override
     public CTConfig showMe() {
         while (true) {

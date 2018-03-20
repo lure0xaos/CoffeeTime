@@ -3,6 +3,7 @@ package gargoyle.ct;
 import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.task.impl.CTTask;
 import gargoyle.ct.util.CTTimeUtil;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,7 @@ public class CTTaskTest {
     private static final String TEST_SLEEPING_FAILED_0_1 = "testSleeping failed: {0} {1}";
     private static final String TEST_WARN_FAILED_0_1 = "testWarn failed: {0} {1}";
     private long actual;
+    @Nullable
     private CTTask task;
 
     @BeforeEach

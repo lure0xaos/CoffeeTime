@@ -2,12 +2,13 @@ package gargoyle.ct.ui;
 
 import gargoyle.ct.task.CTTaskUpdatable;
 import gargoyle.ct.task.impl.CTTask;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class CTStateUpdatable implements CTTaskUpdatable {
     private State state;
 
     @Override
-    public void doUpdate(CTTask task, long currentMillis) {
+    public void doUpdate(@NotNull CTTask task, long currentMillis) {
         if (task.isSleeping(currentMillis)) {
             changeState(this.state, State.SLEEP);
         }

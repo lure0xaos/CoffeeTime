@@ -1,5 +1,8 @@
 package gargoyle.ct.ui.impl.control;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.Icon;
@@ -44,7 +47,7 @@ public abstract class CTAction implements Action {
         setEnabled(true);
     }
 
-    public void init(AbstractButton menuItem) {
+    public void init(@NotNull AbstractButton menuItem) {
         menuItem.setAction(this);
         menuItem.setText(getText());
         menuItem.setToolTipText(getToolTipText());
@@ -70,6 +73,7 @@ public abstract class CTAction implements Action {
         putValue(Action.SHORT_DESCRIPTION, text);
     }
 
+    @NotNull
     protected final Icon getIcon() {
         return (Icon) getValue(Action.SMALL_ICON);
     }
@@ -101,7 +105,7 @@ public abstract class CTAction implements Action {
     }
 
     @SuppressWarnings("InstanceVariableUsedBeforeInitialized")
-    protected final synchronized void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
+    protected final synchronized void firePropertyChange(String propertyName, @Nullable Object oldValue, @Nullable Object newValue) {
         if (changeSupport == null || oldValue != null && newValue != null && oldValue.equals(newValue)) {
             return;
         }

@@ -1,17 +1,18 @@
 package gargoyle.ct.pref;
 
 import gargoyle.ct.pref.impl.prop.CTPrefProperty;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
 public interface CTPreferencesManager {
     void addPropertyChangeListener(CTPropertyChangeListener listener);
 
-    <T> CTPrefProperty<T> getProperty(String name);
+    @NotNull <T> CTPrefProperty<T> getProperty(String name);
 
-    <E extends Enum<E>> CTPrefProperty<E> getProperty(Class<E> type);
+    @NotNull <E extends Enum<E>> CTPrefProperty<E> getProperty(Class<E> type);
 
-    Set<String> getPropertyNames();
+    @NotNull Set<String> getPropertyNames();
 
     boolean hasProperty(String name);
 

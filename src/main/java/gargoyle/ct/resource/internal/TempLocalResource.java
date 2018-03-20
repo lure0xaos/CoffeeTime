@@ -1,6 +1,8 @@
 package gargoyle.ct.resource.internal;
 
 import gargoyle.ct.resource.Resource;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,8 +20,9 @@ public class TempLocalResource extends ClasspathResource {
         super(location);
     }
 
+    @NotNull
     @Override
-    protected TempLocalResource createResource(Resource base, String location) {
+    protected TempLocalResource createResource(@Nullable Resource base, String location) {
         ClassLoader loader = getLoader(base);
         Resource resource = base == null ?
                 new ClasspathResource(location) : new ClasspathResource(loader, base, location);
@@ -36,6 +39,7 @@ public class TempLocalResource extends ClasspathResource {
         }
     }
 
+    @NotNull
     @Override
     public URL toURL() throws IOException {
         return new File(getLocation()).toURI().toURL();
@@ -50,6 +54,7 @@ public class TempLocalResource extends ClasspathResource {
         }
     }
 
+    @NotNull
     public File toFile() throws IOException {
         return new File(toURL().getPath().substring(1));
     }

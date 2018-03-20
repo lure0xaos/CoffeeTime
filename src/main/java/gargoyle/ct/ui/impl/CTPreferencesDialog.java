@@ -10,6 +10,8 @@ import gargoyle.ct.ui.CTApp;
 import gargoyle.ct.ui.CTDialog;
 import gargoyle.ct.ui.util.CTDragHelper;
 import gargoyle.ct.ui.util.CTLayoutBuilder;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
@@ -43,7 +45,7 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
         setDefaultCloseOperation(HIDE_ON_CLOSE);
     }
 
-    private void init(MessageProviderEx messages, CTPreferences preferences, Container pane) {
+    private void init(MessageProviderEx messages, CTPreferences preferences, @NotNull Container pane) {
         CTLayoutBuilder layoutBuilder = new CTLayoutBuilder(pane);
         setTitle(messages.getMessage(STR_TITLE));
         layoutBuilder.addLabeledControl(layoutBuilder.createLocalizableLabel(messages, STR_BLOCK, STR_BLOCK_TOOLTIP),
@@ -73,7 +75,8 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
         layoutBuilder.build();
     }
 
-    private static JSlider createTransparencyLevelControl(CTLayoutBuilder layoutBuilder, CTProperty<Integer> property) {
+    @NotNull
+    private static JSlider createTransparencyLevelControl(CTLayoutBuilder layoutBuilder, @NotNull CTProperty<Integer> property) {
         int maxOpacity = CTPreferences.OPACITY_PERCENT;
         JSlider control = layoutBuilder.createSlider(property, 0, maxOpacity);
         control.setExtent(maxOpacity / 10);
@@ -84,6 +87,7 @@ public class CTPreferencesDialog extends JDialog implements CTDialog<Void> {
         return control;
     }
 
+    @Nullable
     @Override
     public Void showMe() {
         setVisible(true);

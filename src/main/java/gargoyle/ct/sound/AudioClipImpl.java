@@ -2,6 +2,7 @@ package gargoyle.ct.sound;
 
 import gargoyle.ct.log.Log;
 import gargoyle.ct.util.Defend;
+import org.jetbrains.annotations.NotNull;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -26,7 +27,7 @@ public class AudioClipImpl implements AudioClip {
             clip.open(stream);
             clip.addLineListener(new AudioClipListener());
             released = true;
-        } catch (IOException | UnsupportedAudioFileException | LineUnavailableException exc) {
+        } catch (@NotNull IOException | UnsupportedAudioFileException | LineUnavailableException exc) {
             Log.error(exc.getLocalizedMessage(), exc);
             released = false;
         }
@@ -74,7 +75,7 @@ public class AudioClipImpl implements AudioClip {
 
     private class AudioClipListener implements LineListener {
         @Override
-        public void update(LineEvent event) {
+        public void update(@NotNull LineEvent event) {
             if (event.getType() == LineEvent.Type.STOP) {
                 playing = false;
             }

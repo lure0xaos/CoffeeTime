@@ -1,5 +1,7 @@
 package gargoyle.ct.resource;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -23,7 +25,7 @@ public interface Resource {
      * @param locale locale
      * @return localized resource
      */
-    Resource forLocale(Locale locale);
+    @Nullable Resource forLocale(Locale locale);
 
     /**
      * opens resource for reading
@@ -82,7 +84,7 @@ public interface Resource {
      * @return URL
      * @throws IOException on error
      */
-    URL toURL() throws IOException;
+    @Nullable URL toURL() throws IOException;
 
     /**
      * get bound resource with another extension
@@ -90,6 +92,7 @@ public interface Resource {
      * @param extension - extension, such as txt
      * @return new {@link Resource}
      */
+    @Nullable
     @SuppressWarnings("SameParameterValue")
     Resource withExtension(String extension);
 }

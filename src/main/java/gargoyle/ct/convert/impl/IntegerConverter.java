@@ -1,6 +1,7 @@
 package gargoyle.ct.convert.impl;
 
 import gargoyle.ct.convert.Converter;
+import org.jetbrains.annotations.NotNull;
 
 public class IntegerConverter implements Converter<Integer> {
     @Override
@@ -8,8 +9,9 @@ public class IntegerConverter implements Converter<Integer> {
         return String.valueOf(data);
     }
 
+    @NotNull
     @Override
-    public Integer parse(String data) {
+    public Integer parse(@NotNull String data) {
         return Integer.valueOf(data);
     }
 }

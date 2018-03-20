@@ -30,6 +30,8 @@
  */
 package gargoyle.ct.ui.util.render;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -76,6 +78,7 @@ public class GraphPaperLayout implements LayoutManager2 {
     private static final float HCENTER = 0.5f;
     private static final float VCENTER = 0.5f;
     final int hgap;            //horizontal gap
+    @NotNull
     final Map<Component, Rectangle> components; //constraints (Rectangles)
     final int vgap;            //vertical gap
     @SuppressWarnings("FieldAccessedSynchronizedAndUnsynchronized")
@@ -93,7 +96,7 @@ public class GraphPaperLayout implements LayoutManager2 {
      * Creates a graph paper layout with the given grid size, with no vertical
      * or horizontal padding.
      */
-    public GraphPaperLayout(Dimension gridSize) {
+    public GraphPaperLayout(@NotNull Dimension gridSize) {
         this(gridSize, 0, 0);
     }
 
@@ -159,7 +162,8 @@ public class GraphPaperLayout implements LayoutManager2 {
      *                    calculating minimum size.
      * @return the largest cell size required.
      */
-    protected Dimension getLargestCellSize(Container parent,
+    @NotNull
+    protected Dimension getLargestCellSize(@NotNull Container parent,
                                            boolean isPreferred) {
         int componentCount = parent.getComponentCount();
         Dimension maxCellSize = new Dimension(0, 0);
@@ -186,7 +190,8 @@ public class GraphPaperLayout implements LayoutManager2 {
      * @param parent the component to be laid out
      * @see #minimumLayoutSize
      */
-    public Dimension preferredLayoutSize(Container parent) {
+    @NotNull
+    public Dimension preferredLayoutSize(@NotNull Container parent) {
         return getLayoutSize(parent, true);
     }
 
@@ -197,7 +202,8 @@ public class GraphPaperLayout implements LayoutManager2 {
      * @param parent the component to be laid out
      * @see #preferredLayoutSize
      */
-    public Dimension minimumLayoutSize(Container parent) {
+    @NotNull
+    public Dimension minimumLayoutSize(@NotNull Container parent) {
         return getLayoutSize(parent, false);
     }
 
@@ -230,7 +236,8 @@ public class GraphPaperLayout implements LayoutManager2 {
      * container.
      * @see GraphPaperLayout#getLargestCellSize
      */
-    protected Dimension getLayoutSize(Container parent, boolean isPreferred) {
+    @NotNull
+    protected Dimension getLayoutSize(@NotNull Container parent, boolean isPreferred) {
         Dimension largestSize = getLargestCellSize(parent, isPreferred);
         Insets insets = parent.getInsets();
         largestSize.width = largestSize.width * gridSize.width +
@@ -245,7 +252,7 @@ public class GraphPaperLayout implements LayoutManager2 {
      *
      * @param parent the component which needs to be laid out
      */
-    public void layoutContainer(Container parent) {
+    public void layoutContainer(@NotNull Container parent) {
         synchronized (parent.getTreeLock()) {
             Insets insets = parent.getInsets();
             int componentCount = parent.getComponentCount();
@@ -303,7 +310,7 @@ public class GraphPaperLayout implements LayoutManager2 {
         }
     }
 
-    public void setConstraints(Component comp, Rectangle constraints) {
+    public void setConstraints(Component comp, @NotNull Rectangle constraints) {
         components.put(comp, new Rectangle(constraints));
     }
 
@@ -314,6 +321,7 @@ public class GraphPaperLayout implements LayoutManager2 {
      * @see Component#getPreferredSize()
      * @see LayoutManager
      */
+    @NotNull
     public Dimension maximumLayoutSize(Container target) {
         return new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE);
     }
@@ -352,6 +360,7 @@ public class GraphPaperLayout implements LayoutManager2 {
     /**
      * @return the size of the graph paper in logical units (n x m)
      */
+    @NotNull
     public Dimension getGridSize() {
         return new Dimension(gridSize);
     }
@@ -359,7 +368,7 @@ public class GraphPaperLayout implements LayoutManager2 {
     /**
      * Set the size of the graph paper in logical units (n x m)
      */
-    public void setGridSize(Dimension d) {
+    public void setGridSize(@NotNull Dimension d) {
         setGridSize(d.width, d.height);
     }
 

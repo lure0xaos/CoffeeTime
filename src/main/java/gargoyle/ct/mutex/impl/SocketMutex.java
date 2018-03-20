@@ -2,12 +2,14 @@ package gargoyle.ct.mutex.impl;
 
 import gargoyle.ct.log.Log;
 import gargoyle.ct.mutex.CTMutex;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 
 public final class SocketMutex implements CTMutex {
     private final int port;
+    @Nullable
     private ServerSocket mutex;
 
     public SocketMutex(int port) {

@@ -2,9 +2,10 @@ package gargoyle.ct.ui;
 
 import gargoyle.ct.pref.CTPreferences;
 import gargoyle.ct.ver.CTVersionInfo;
+import org.jetbrains.annotations.NotNull;
 
 public interface CTApp extends CTControlActions, CTIconProvider {
-    CTPreferences getPreferences();
+    @NotNull CTPreferences getPreferences();
 
-    CTVersionInfo getVersionInfo();
+    @NotNull CTVersionInfo getVersionInfo();
 }

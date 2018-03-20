@@ -1,5 +1,8 @@
 package gargoyle.ct.config;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.InvalidObjectException;
 import java.io.Serializable;
 import java.text.MessageFormat;
@@ -15,7 +18,7 @@ public class CTConfigs implements Serializable {
     private static final long serialVersionUID = 2024075953874239351L;
     private final Map<String, CTConfig> configs = new LinkedHashMap<>();
 
-    public CTConfigs(CTConfig... configs) {
+    public CTConfigs(@NotNull CTConfig... configs) {
         setConfigs(configs);
     }
 
@@ -28,7 +31,7 @@ public class CTConfigs implements Serializable {
         }
     }
 
-    public void addConfig(CTConfig config) {
+    public void addConfig(@NotNull CTConfig config) {
         synchronized (configs) {
             String name = config.getName();
             if (!configs.containsKey(name)) {
@@ -38,7 +41,7 @@ public class CTConfigs implements Serializable {
     }
 
     @SuppressWarnings("TypeMayBeWeakened")
-    public CTConfigs(List<CTConfig> configs) {
+    public CTConfigs(@NotNull List<CTConfig> configs) {
         setConfigs(configs);
     }
 
@@ -46,6 +49,7 @@ public class CTConfigs implements Serializable {
         return configs.get(name);
     }
 
+    @NotNull
     public List<CTConfig> getConfigs() {
         return Collections.unmodifiableList(new LinkedList<>(configs.values()));
     }
@@ -59,7 +63,7 @@ public class CTConfigs implements Serializable {
         }
     }
 
-    public boolean hasConfig(CTConfig config) {
+    public boolean hasConfig(@NotNull CTConfig config) {
         return configs.containsKey(config.getName());
     }
 
@@ -72,7 +76,7 @@ public class CTConfigs implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;
         }
@@ -93,6 +97,7 @@ public class CTConfigs implements Serializable {
         return true;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return MessageFormat.format("CTConfigs [configs={0}]", configs);
