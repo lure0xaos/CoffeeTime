@@ -28,7 +28,7 @@ public class LocalResource extends VirtualResource {
         LocalResource writable = null;
         int writablePriority = Integer.MIN_VALUE;
         for (LocalLocation root : getReadableLocations()) {
-            if (root != null) {
+            if (root != null && root.getUrl() != null) {
                 try {
                     LocalResource resource = new LocalResource(new URL(root.getUrl(), name));
                     if (resource.exists()) {
