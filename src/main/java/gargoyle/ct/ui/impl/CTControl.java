@@ -79,7 +79,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyC
         menu.add(new CTLocalizableMenuItem(messages,
                 new CTLocalizableAction(messages, STR_NEW_CONFIG, STR_NEW_CONFIG_TOOLTIP) {
                     @Override
-                    public void actionPerformed(ActionEvent event) {
+                    public void actionPerformed(ActionEvent e) {
                         onNewConfig(configs, menu);
                     }
                 }));
@@ -87,7 +87,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyC
         stopMenuItem = new CTLocalizableMenuItem(messages, new CTLocalizableAction(messages, STR_UNARM,
                 STR_UNARM_TOOLTIP) {
             @Override
-            public void actionPerformed(ActionEvent event) {
+            public void actionPerformed(ActionEvent e) {
                 unarm();
             }
         });
@@ -97,7 +97,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyC
         menu.add(new CTLocalizableMenuItem(messages,
                 new CTLocalizableAction(messages, STR_BROWSE_CONFIGS, STR_BROWSE_CONFIGS_TOOLTIP) {
                     @Override
-                    public void actionPerformed(ActionEvent event) {
+                    public void actionPerformed(ActionEvent e) {
                         browseConfigs();
                     }
                 }));
@@ -105,25 +105,25 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyC
         menu.add(new CTLocalizableMenuItem(messages,
                 new CTLocalizableAction(messages, STR_PREFERENCES, STR_PREFERENCES_TOOLTIP) {
                     @Override
-                    public void actionPerformed(ActionEvent event) {
+                    public void actionPerformed(ActionEvent e) {
                         showPreferences();
                     }
                 }));
         menu.add(new CTLocalizableMenuItem(messages, new CTLocalizableAction(messages, STR_HELP, STR_HELP_TOOLTIP) {
             @Override
-            public void actionPerformed(ActionEvent event) {
+            public void actionPerformed(ActionEvent e) {
                 help();
             }
         }));
         menu.add(new CTLocalizableMenuItem(messages, new CTLocalizableAction(messages, STR_ABOUT, "") {
             @Override
-            public void actionPerformed(ActionEvent event) {
+            public void actionPerformed(ActionEvent e) {
                 about();
             }
         }));
         menu.add(new CTLocalizableMenuItem(messages, new CTLocalizableAction(messages, STR_EXIT, STR_EXIT_TOOLTIP) {
             @Override
-            public void actionPerformed(ActionEvent event) {
+            public void actionPerformed(ActionEvent e) {
                 exit();
             }
         }));

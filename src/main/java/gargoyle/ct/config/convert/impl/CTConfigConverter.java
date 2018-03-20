@@ -9,14 +9,16 @@ import java.util.concurrent.TimeUnit;
 public final class CTConfigConverter implements CTUnitConverter<CTConfig> {
     private final CTConfigDataConverter configDataConverter = new CTConfigDataConverter();
 
+    @NotNull
     @Override
     public String format(TimeUnit unit, CTConfig data) {
         return configDataConverter.format(TimeUnit.MINUTES, data.getWhole(), data.getBlock(), data.getWarn());
     }
 
+    @NotNull
     @Override
-    public CTConfig parse(@NotNull String line) {
-        long[] data = configDataConverter.parse(line);
-        return new CTConfig(data[0], data[1], data[2]);
+    public CTConfig parse(@NotNull String data) {
+        long[] parsed = configDataConverter.parse(data);
+        return new CTConfig(parsed[0], parsed[1], parsed[2]);
     }
 }

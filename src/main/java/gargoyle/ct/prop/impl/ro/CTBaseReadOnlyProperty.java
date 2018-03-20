@@ -27,6 +27,7 @@ public abstract class CTBaseReadOnlyProperty<T> implements CTReadOnlyProperty<T>
         return value;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public boolean isPresent() {
         return value != null;

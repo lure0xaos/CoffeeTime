@@ -46,8 +46,8 @@ public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindo
         container.add(content, BorderLayout.CENTER);
         addWindowFocusListener(new WindowAdapter() {
             @Override
-            public void windowLostFocus(@NotNull WindowEvent event) {
-                holdFocus(event);
+            public void windowLostFocus(@NotNull WindowEvent e) {
+                holdFocus(e);
             }
         });
     }
@@ -78,7 +78,7 @@ public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindo
         setAlwaysOnTop(!debug);
         MouseListener clickToDestroy = new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent event) {
+            public void mouseClicked(MouseEvent e) {
                 destroy();
             }
         };
@@ -133,7 +133,7 @@ public final class CTBlocker extends JWindow implements CTTaskUpdatable, CTWindo
     }
 
     @Override
-    public void setBackground(Color color) {
-        content.setBackground(color);
+    public void setBackground(Color bgColor) {
+        content.setBackground(bgColor);
     }
 }

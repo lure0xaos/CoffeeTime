@@ -77,6 +77,7 @@ public class CTMessages implements MessageProviderEx {
         return localeProvider.locale();
     }
 
+    @NotNull
     @Override
     public String getMessage(@NotNull String message, Object... args) {
         if (!Objects.equals(messages.getLocale(), localeProvider.getLocale())) {

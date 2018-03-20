@@ -35,13 +35,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Dictionary;
-import java.util.List;
-import java.util.Locale;
-import java.util.Properties;
-import java.util.Vector;
+import java.util.*;
 
 @SuppressWarnings("MethodMayBeStatic")
 public class CTLayoutBuilder {
@@ -140,7 +134,7 @@ public class CTLayoutBuilder {
         T[] enumConstants = type.getEnumConstants();
         JSlider control;
         if (allowNull) {
-            List<T> list = new ArrayList<>(Arrays.asList(enumConstants));
+            Collection<T> list = new ArrayList<>(Arrays.asList(enumConstants));
 //            list.add(0, null);
             control = new JSlider(new DefaultBoundedRangeModel(toIndex(property.get()), 1, 1, list.size()));
         } else {
@@ -274,7 +268,7 @@ public class CTLayoutBuilder {
         }
 
         @Override
-        public void keyTyped(KeyEvent event) {
+        public void keyTyped(KeyEvent e) {
             property.set(control.getText());
         }
     }

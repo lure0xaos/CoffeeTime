@@ -73,7 +73,7 @@ public abstract class CTAction implements Action {
         putValue(Action.SHORT_DESCRIPTION, text);
     }
 
-    @NotNull
+    @Nullable
     protected final Icon getIcon() {
         return (Icon) getValue(Action.SMALL_ICON);
     }
@@ -82,6 +82,7 @@ public abstract class CTAction implements Action {
         putValue(Action.SMALL_ICON, icon);
     }
 
+    @Nullable
     @Override
     public final Object getValue(String key) {
         return values.get(key);
@@ -96,12 +97,13 @@ public abstract class CTAction implements Action {
 
     @Override
     public final boolean isEnabled() {
-        return (Boolean) getValue(ENABLED);
+        Object value = getValue(ENABLED);
+        return value == null ? false : (Boolean) value;
     }
 
     @Override
-    public final void setEnabled(boolean enabled) {
-        putValue(ENABLED, enabled);
+    public final void setEnabled(boolean b) {
+        putValue(ENABLED, b);
     }
 
     @SuppressWarnings("InstanceVariableUsedBeforeInitialized")

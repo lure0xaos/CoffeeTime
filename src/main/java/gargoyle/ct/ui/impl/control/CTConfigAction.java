@@ -20,7 +20,7 @@ public final class CTConfigAction extends CTAction {
     }
 
     @Override
-    public void actionPerformed(ActionEvent event) {
+    public void actionPerformed(ActionEvent e) {
         control.arm(config);
     }
 

@@ -54,7 +54,7 @@ public class AudioClipImpl implements AudioClip {
                 clip.setFramePosition(0);
                 clip.start();
                 playing = true;
-            } else if (!isPlaying()) {
+            } else if (!playing) {
                 clip.setFramePosition(0);
                 clip.start();
                 playing = true;

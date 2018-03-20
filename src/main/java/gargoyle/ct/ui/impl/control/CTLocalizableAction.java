@@ -49,6 +49,7 @@ public abstract class CTLocalizableAction extends CTAction {
         menuItem.setToolTipText(getToolTipLocalizedText());
     }
 
+    @SuppressWarnings("ConstantConditions")
     @NotNull
     protected final String getLocalizedText() {
         String textKey = getTextKey();
@@ -63,6 +64,7 @@ public abstract class CTLocalizableAction extends CTAction {
         putValue(KEY_TEXT, textKey);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @NotNull
     protected final String getToolTipLocalizedText() {
         String toolTipTextKey = getToolTipTextKey();

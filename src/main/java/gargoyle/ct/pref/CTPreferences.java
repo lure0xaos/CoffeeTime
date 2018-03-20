@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Locale;
 import java.util.Objects;
 
+@SuppressWarnings("ConstantDeclaredInInterface")
 public interface CTPreferences extends CTPreferencesManager {
     String PREF_BLOCK = "block";
     String PREF_CONFIG = "config";

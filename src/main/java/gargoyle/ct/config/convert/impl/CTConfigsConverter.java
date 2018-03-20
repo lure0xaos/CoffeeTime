@@ -14,6 +14,7 @@ public final class CTConfigsConverter implements CTUnitConverter<CTConfigs> {
     private final CTUnitConverter<CTConfig> configConverter = new CTConfigConverter();
     private final CTConfigsDataConverter configsDataConverter = new CTConfigsDataConverter();
 
+    @NotNull
     @Override
     public String format(TimeUnit unit, CTConfigs data) {
         List<CTConfig> configs = data.getConfigs();
@@ -25,16 +26,17 @@ public final class CTConfigsConverter implements CTUnitConverter<CTConfigs> {
         return configsDataConverter.format(unit, formats);
     }
 
+    @NotNull
     @Override
-    public CTConfigs parse(@NotNull String line) {
-        String[] data = configsDataConverter.parse(line);
-        int length = data.length;
+    public CTConfigs parse(@NotNull String data) {
+        String[] parsed = configsDataConverter.parse(data);
+        int length = parsed.length;
         CTConfig[] configs = new CTConfig[length];
         for (int i = 0; i < length; i++) {
             try {
-                configs[i] = configConverter.parse(data[i]);
+                configs[i] = configConverter.parse(parsed[i]);
             } catch (IllegalArgumentException ex) {
-                Log.error(MSG_INVALID_CONVERT_LINE_0, data[i]);
+                Log.error(MSG_INVALID_CONVERT_LINE_0, parsed[i]);
             }
         }
         return new CTConfigs(configs);

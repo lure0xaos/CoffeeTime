@@ -56,6 +56,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public final class CT implements CTApp {
@@ -188,11 +189,11 @@ public final class CT implements CTApp {
 
     @Override
     public void browseConfigs() {
-        if (Desktop.isDesktopSupported()) {
+        if (configResource != null && Desktop.isDesktopSupported()) {
             Desktop desktop = Desktop.getDesktop();
             File file;
             try {
-                String path = configResource.toURL().getPath();
+                String path = Objects.requireNonNull(configResource.toURL()).getPath();
                 file = new File(path.startsWith(SLASH) ? path.substring(1) : path);
             } catch (IOException e) {
                 throw new RuntimeException(e.getLocalizedMessage(), e);
@@ -303,7 +304,7 @@ public final class CT implements CTApp {
     @Override
     public CTConfig showNewConfig() {
         try {
-            return new CTNewConfigDialog(owner, this.getPreferences(), this).showMe();
+            return new CTNewConfigDialog(owner, preferences, this).showMe();
         } catch (IllegalArgumentException ex) {
             Log.error(ex.getMessage());
         }

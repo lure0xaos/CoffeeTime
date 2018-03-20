@@ -26,19 +26,19 @@ public final class CTDragHelper {
         Point mouseDownLocation = new Point();
         component.addMouseListener(new MouseAdapter() {
             @Override
-            public void mousePressed(@NotNull MouseEvent event) {
-                mouseDownLocation.setLocation(event.getPoint());
+            public void mousePressed(@NotNull MouseEvent e) {
+                mouseDownLocation.setLocation(e.getPoint());
             }
 
             @Override
-            public void mouseReleased(MouseEvent event) {
+            public void mouseReleased(MouseEvent e) {
                 mouseDownLocation.setLocation(0, 0);
             }
         });
         component.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
-            public void mouseDragged(@NotNull MouseEvent event) {
-                Point currentLocation = event.getLocationOnScreen();
+            public void mouseDragged(@NotNull MouseEvent e) {
+                Point currentLocation = e.getLocationOnScreen();
                 Point point = new Point(currentLocation.x - mouseDownLocation.x,
                         currentLocation.y - mouseDownLocation.y);
                 snap(point, window.getSize(), snap);

@@ -29,6 +29,7 @@ public class CTConfig implements Serializable, ObjectInputValidation {
         return CTTimeUtil.fromMillis(unit, whole);
     }
 
+    @SuppressWarnings("MethodMayBeStatic")
     public boolean isValid(long wholeMillis, long blockMillis, long warnMillis) {
         return wholeMillis > blockMillis && blockMillis > warnMillis;
     }

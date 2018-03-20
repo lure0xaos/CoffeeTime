@@ -128,11 +128,9 @@ public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, C
     }
 
     @Override
-    public void setBackground(Color color) {
+    public void setBackground(Color bg) {
 //        super.setBackground(color);
-        if (lblMain != null) {
-            lblMain.setBackground(color);
-        }
+        lblMain.setBackground(bg);
     }
 
     private static class ContentComponentListener extends ComponentAdapter {
@@ -146,12 +144,12 @@ public final class CTBlockerContent extends JPanel implements CTTaskUpdatable, C
         }
 
         @Override
-        public void componentResized(ComponentEvent event) {
+        public void componentResized(ComponentEvent e) {
             adjust(container, label);
         }
 
         @Override
-        public void componentShown(ComponentEvent event) {
+        public void componentShown(ComponentEvent e) {
             adjust(container, label);
         }
     }

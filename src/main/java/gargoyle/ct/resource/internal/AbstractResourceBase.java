@@ -18,7 +18,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.jar.JarFile;
 
 @SuppressWarnings("MethodMayBeStatic")
-public class AbstractResourceBase {
+public abstract class AbstractResourceBase {
     private static final String KEY_USER_AGENT = "User-Agent";
     private static final String METHOD_HEAD = "HEAD";
     private static final String SCHEME_FILE = "file";
@@ -131,6 +131,7 @@ public class AbstractResourceBase {
         if (SCHEME_FILE.equalsIgnoreCase(protocol)) {
             try {
                 Path path = Paths.get(url.toURI());
+                //noinspection BooleanVariableAlwaysNegated
                 boolean exists = Files.exists(path);
                 try {
                     return Files.newOutputStream(path, StandardOpenOption.CREATE);

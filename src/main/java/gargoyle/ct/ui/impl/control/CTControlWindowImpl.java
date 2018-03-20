@@ -71,12 +71,12 @@ public final class CTControlWindowImpl extends JWindow implements CTControlWindo
         initToolTip();
         MouseListener updater = new MouseAdapter() {
             @Override
-            public void mouseEntered(MouseEvent event) {
+            public void mouseEntered(MouseEvent e) {
                 onMouseMoved(true, false);
             }
 
             @Override
-            public void mouseExited(MouseEvent event) {
+            public void mouseExited(MouseEvent e) {
                 onMouseMoved(false, true);
             }
         };

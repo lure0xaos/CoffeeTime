@@ -27,6 +27,7 @@ public final class CTConfigDataConverter implements CTUnitConverter<long[]> {
     private static final String UNIT_MINUTES = "M";
     private static final String UNIT_SECONDS = "S";
 
+    @NotNull
     @Override
     public String format(TimeUnit unit, long... data) {
         String unitChar;
@@ -67,16 +68,16 @@ public final class CTConfigDataConverter implements CTUnitConverter<long[]> {
 
     @NotNull
     @Override
-    public long[] parse(@NotNull String line) {
-        Defend.notEmptyTrimmed(line, MSG_EMPTY_LINE);
-        String trimmedLine = line.trim();
+    public long[] parse(@NotNull String data) {
+        Defend.notEmptyTrimmed(data, MSG_EMPTY_LINE);
+        String trimmedLine = data.trim();
         Defend.isFalse(COMMENTS.contains(trimmedLine.substring(0, 1)), MessageFormat.format(MSG_COMMENTED_LINE_0,
-                line));
-        long[] data = new long[3];
+                data));
+        long[] longs = new long[3];
         Matcher m = PATTERN_PARSE.matcher(trimmedLine);
         if (m.find()) {
             int groupCount = m.groupCount();
-            Defend.equals(groupCount, 6, MessageFormat.format(MSG_CANNOT_PARSE_LINE_0, line));
+            Defend.equals(groupCount, 6, MessageFormat.format(MSG_CANNOT_PARSE_LINE_0, data));
             for (int g = 1; g <= groupCount; g += 2) {
                 String q = m.group(g);
                 String u = m.group(g + 1);
@@ -94,18 +95,18 @@ public final class CTConfigDataConverter implements CTUnitConverter<long[]> {
                     default:
                         throw new IllegalArgumentException(MessageFormat.format(
                                 MSG_CANNOT_PARSE_LINE_0_INVALID_TIME_UNIT_1,
-                                line,
+                                data,
                                 u));
                 }
                 try {
-                    data[g / 2] = CTTimeUtil.toMillis(unit, Long.parseLong(q));
+                    longs[g / 2] = CTTimeUtil.toMillis(unit, Long.parseLong(q));
                 } catch (NumberFormatException ex) {
-                    throw new IllegalArgumentException(MessageFormat.format(MSG_CANNOT_PARSE_LINE_0, line), ex);
+                    throw new IllegalArgumentException(MessageFormat.format(MSG_CANNOT_PARSE_LINE_0, data), ex);
                 }
             }
         } else {
-            throw new IllegalArgumentException(line);
+            throw new IllegalArgumentException(data);
         }
-        return data;
+        return longs;
     }
 }

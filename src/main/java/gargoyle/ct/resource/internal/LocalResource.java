@@ -79,9 +79,12 @@ public class LocalResource extends VirtualResource {
         }
     }
 
-    @NotNull
+    @Nullable
     public File toFile() throws IOException {
         URL url = toURL();
+        if (url == null) {
+            return null;
+        }
         String path = url.getPath();
         return new File(path.startsWith(File.separator) ? path.substring(1) : path); // XXX hacky
     }
@@ -115,10 +118,10 @@ public class LocalResource extends VirtualResource {
         }
 
         @Override
-        public boolean equals(@Nullable Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            LocalLocation that = (LocalLocation) o;
+        public boolean equals(@Nullable Object obj) {
+            if (this == obj) return true;
+            if (obj == null || getClass() != obj.getClass()) return false;
+            LocalLocation that = (LocalLocation) obj;
             return url.toExternalForm().equals(that.url.toExternalForm());
         }
     }

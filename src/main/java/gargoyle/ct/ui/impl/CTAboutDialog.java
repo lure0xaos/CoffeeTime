@@ -80,9 +80,9 @@ public final class CTAboutDialog extends JDialog implements CTDialog<Void> {
         component.setFont(font.deriveFont(font.getSize() * mul));
     }
 
-    private void addHyperlink(@NotNull String descriptionKey, String content, @NotNull String address, int y) {
+    private void addHyperlink(@NotNull String descriptionKey, String content, @Nullable String address, int y) {
         try {
-            addField(descriptionKey, content, new URI(address), y);
+            addField(descriptionKey, content, address == null ? null : new URI(address), y);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -128,7 +128,7 @@ public final class CTAboutDialog extends JDialog implements CTDialog<Void> {
 
         private class HyperlinkLabelMouseAdapter extends MouseAdapter {
             @Override
-            public void mouseClicked(MouseEvent evt) {
+            public void mouseClicked(MouseEvent e) {
                 try {
                     if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
                         Desktop.getDesktop().browse(address);

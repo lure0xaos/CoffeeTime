@@ -87,14 +87,7 @@ public class CTConfigs implements Serializable {
             return false;
         }
         CTConfigs other = (CTConfigs) obj;
-        if (configs == null) {
-            if (other.configs != null) {
-                return false;
-            }
-        } else if (!Objects.equals(configs, other.configs)) {
-            return false;
-        }
-        return true;
+        return configs == null ? other.configs == null : Objects.equals(configs, other.configs);
     }
 
     @NotNull

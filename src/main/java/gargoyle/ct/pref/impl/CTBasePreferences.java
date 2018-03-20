@@ -63,6 +63,7 @@ abstract class CTBasePreferences implements CTPreferencesManager, CTPreferencesP
         return (CTPrefProperty<E>) properties.get(type.getSimpleName());
     }
 
+    @NotNull
     @Override
     public final Set<String> getPropertyNames() {
         return properties.keySet();

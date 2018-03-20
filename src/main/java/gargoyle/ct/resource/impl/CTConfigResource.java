@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Objects;
 
 /**
  * {@link CTConfig} as {@link Resource}
@@ -23,7 +24,7 @@ public final class CTConfigResource extends LocalResource {
     public static CTConfigResource findLocalConfig(@NotNull String name, boolean existing) {
         LocalResource local = LocalResource.findLocal(name);
         try {
-            return local == null ? null : existing && !local.exists() ? null : new CTConfigResource(local.toURL());
+            return (local == null) ? null : ((existing && !local.exists()) ? null : new CTConfigResource(Objects.requireNonNull(local.toURL())));
         } catch (IOException ex) {
             return null;
         }

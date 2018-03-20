@@ -105,7 +105,7 @@ public class VirtualResource extends AbstractResource {
 
     @NotNull
     public String getName() {
-        String location = super.getLocation();
+        String location = getLocation();
         int l1 = location.lastIndexOf('/');
         if (l1 < 0) {
             int l2 = location.lastIndexOf(File.separatorChar);
