@@ -12,12 +12,9 @@ import gargoyle.ct.ui.CTIconProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JFormattedTextField;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import javax.swing.text.MaskFormatter;
-import java.awt.Component;
+import java.awt.*;
 import java.text.ParseException;
 
 public class CTNewConfigDialog implements CTDialog<CTConfig> {

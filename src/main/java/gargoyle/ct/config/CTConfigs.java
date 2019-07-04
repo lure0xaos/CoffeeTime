@@ -6,12 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.InvalidObjectException;
 import java.io.Serializable;
 import java.text.MessageFormat;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class CTConfigs implements Serializable {
     private static final String MSG_NOT_VALID_CONVERT_0 = "not valid convert: {0}";

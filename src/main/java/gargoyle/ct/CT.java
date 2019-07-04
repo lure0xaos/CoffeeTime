@@ -1,7 +1,6 @@
 package gargoyle.ct;
 
-import gargoyle.ct.cmd.CTAnyCmd;
-import gargoyle.ct.cmd.CTCmd;
+import gargoyle.ct.cmd.args.CTArgs;
 import gargoyle.ct.cmd.impl.CTCmdImpl;
 import gargoyle.ct.config.CTConfig;
 import gargoyle.ct.config.CTConfigs;
@@ -24,12 +23,7 @@ import gargoyle.ct.task.helper.CTTimeHelper;
 import gargoyle.ct.task.helper.impl.CTTimeHelperImpl;
 import gargoyle.ct.task.impl.CTTimer;
 import gargoyle.ct.ui.CTApp;
-import gargoyle.ct.ui.impl.CTAboutDialog;
-import gargoyle.ct.ui.impl.CTBlocker;
-import gargoyle.ct.ui.impl.CTControl;
-import gargoyle.ct.ui.impl.CTNewConfigDialog;
-import gargoyle.ct.ui.impl.CTPreferencesDialog;
-import gargoyle.ct.ui.impl.CTSoundUpdatable;
+import gargoyle.ct.ui.impl.*;
 import gargoyle.ct.ui.impl.control.CTShowingFrame;
 import gargoyle.ct.util.CTNumberUtil;
 import gargoyle.ct.util.CTStreamUtil;
@@ -38,12 +32,9 @@ import gargoyle.ct.ver.impl.CTVersionInfoImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.JOptionPane;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import java.awt.Desktop;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.Desktop.Action;
-import java.awt.Frame;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -96,6 +87,7 @@ public final class CT implements CTApp {
     private CTPreferencesDialog preferencesDialog;
 
     private CT() {
+        mutex = new FileMutex(CT.class.getSimpleName());
         if (checkRunning()) {
             throw new RuntimeException(MSG_ALREADY_RUNNING);
         }
@@ -117,18 +109,17 @@ public final class CT implements CTApp {
     }
 
     private boolean checkRunning() {
-        mutex = new FileMutex(CT.class.getSimpleName());
         return !mutex.acquire();
     }
 
     public static void main(String[] args) {
         setSystemLookAndFeel();
-        CTCmd cmd = new CTCmdImpl(args);
+        CTCmdImpl cmd = new CTCmdImpl(args);
         new CT().init(cmd.isDebug(), cmd.getFakeTime()).overridePreferences(cmd).start();
     }
 
     @NotNull
-    private CT overridePreferences(@NotNull CTAnyCmd cmd) {
+    private CT overridePreferences(@NotNull CTArgs cmd) {
         for (String name : preferences.getPropertyNames()) {
             if (cmd.has(name)) {
                 CTPrefProperty<Object> property = preferences.getProperty(name);

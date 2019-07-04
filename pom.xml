@@ -158,13 +158,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>javafx</artifactId>
-            <version>${javafx.version}</version>
-            <systemPath>${java.home}/lib/ext/jfxrt.jar</systemPath>
-            <scope>system</scope>
-        </dependency>
-        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>5.0.0</version>

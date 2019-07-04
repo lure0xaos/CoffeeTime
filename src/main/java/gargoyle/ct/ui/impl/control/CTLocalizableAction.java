@@ -3,8 +3,7 @@ package gargoyle.ct.ui.impl.control;
 import gargoyle.ct.messages.MessageProvider;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.AbstractButton;
-import javax.swing.Icon;
+import javax.swing.*;
 
 @SuppressWarnings("ConstructorNotProtectedInAbstractClass")
 public abstract class CTLocalizableAction extends CTAction {
