@@ -77,7 +77,6 @@ public class CTLayoutBuilder {
         E[] enumConstants = type.getEnumConstants();
         JComboBox<E> control;
         if (allowNull) {
-            //noinspection UseOfObsoleteCollectionType
             Vector<E> list = new Vector<>(Arrays.asList(enumConstants));
             list.add(0, null);
             control = new JComboBox<>(list);

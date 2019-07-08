@@ -11,9 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import static gargoyle.ct.config.CTStandardConfigs.BLOCK_10M;
-import static gargoyle.ct.config.CTStandardConfigs.WARN_3M;
-import static gargoyle.ct.config.CTStandardConfigs.WHOLE_1H;
+import static gargoyle.ct.config.CTStandardConfigs.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -26,14 +24,14 @@ public class CTSerializationTest {
     }
 
     @Test
-    public void testConfigSerialization() throws IOException, ClassNotFoundException {
+    public void testConfigSerialization() throws IOException {
         CTConfig orig = new CTConfig(TimeUnit.MINUTES, WHOLE_1H, BLOCK_10M, WARN_3M);
         CTConfig restored = CTSerializationUtil.pipe(orig);
         assertEquals(orig, restored, "config serialization piping failed");
     }
 
     @Test
-    public void testConfigsSerialization() throws Exception {
+    public void testConfigsSerialization() throws IOException {
         CTConfigs orig = new CTStandardConfigs();
         CTConfigs restored = CTSerializationUtil.pipe(orig);
         assertEquals(orig, restored, "configs serialization piping failed");

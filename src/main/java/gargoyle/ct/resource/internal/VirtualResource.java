@@ -45,7 +45,7 @@ public class VirtualResource extends AbstractResource {
             VirtualResource resource = null;
             try {
                 resource = createResource(baseResource, loc);
-            } catch (Exception ignored) {
+            } catch (RuntimeException ignored) {
             }
             if (resource != null && resource.exists()) {
                 resource.locale = locale;

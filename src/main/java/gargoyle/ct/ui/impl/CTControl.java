@@ -245,6 +245,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyC
         }
     }
 
+    @Nullable
     private AbstractButton findItem(CTConfig config) {
         for (AbstractButton button : Collections.list(group.getElements())) {
             Action action = button.getAction();

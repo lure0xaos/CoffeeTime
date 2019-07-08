@@ -23,7 +23,6 @@ public class CTArgsImpl implements CTArgs {
         this.params = (params);
     }
 
-    @SuppressWarnings("TypeMayBeWeakened")
     private static void init(@Nullable String[] args, @NotNull Map<String, String> params) {
         if (args != null) {
             for (String arg : args) {

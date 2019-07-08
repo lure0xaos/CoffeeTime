@@ -32,6 +32,7 @@ public final class Log {
         return ResourceBundle.getBundle(LOCATION_ERRORS, Locale.getDefault(), UTF8Control.getControl());
     }
 
+    @Nullable
     private static StackTraceElement findCaller() {
         StackTraceElement[] trace = Thread.currentThread().getStackTrace();
         int length = trace.length;

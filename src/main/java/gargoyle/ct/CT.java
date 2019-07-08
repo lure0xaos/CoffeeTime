@@ -7,6 +7,7 @@ import gargoyle.ct.config.CTConfigs;
 import gargoyle.ct.config.CTStandardConfigs;
 import gargoyle.ct.config.convert.CTUnitConverter;
 import gargoyle.ct.config.convert.impl.CTConfigsConverter;
+import gargoyle.ct.ex.CTException;
 import gargoyle.ct.log.Log;
 import gargoyle.ct.mutex.CTMutex;
 import gargoyle.ct.mutex.impl.FileMutex;
@@ -61,6 +62,9 @@ public final class CT implements CTApp {
     private static final String MSG_DEBUG_MODE = "debug mode";
     private static final String MSG_FAKE_TIME_SET_0 = "fake time set {0, time, HH:mm:ss}";
     private static final String NOT_FOUND_0 = "Not found {0}";
+    private static final String MSG_CANNOT_SET_LOOK_AND_FEEL = "Cannot set LookAndFeel";
+    private static final String MSG_CANNOT_OPEN_CONFIG = "Cannot open config";
+    private static final String MSG_CANNOT_READ_CONFIG = "Cannot read config";
     private static final String PAGE_0_NOT_FOUND = "Page {0} not found";
     private static final String SLASH = "/";
     private static final String URL_ICON_BIG_W = "/icon/{0}/64/icon64.png";
@@ -83,13 +87,13 @@ public final class CT implements CTApp {
     private final CTVersionInfo versionInfo;
     @Nullable
     private Resource configResource;
-    private CTMutex mutex;
+    private final CTMutex mutex;
     private CTPreferencesDialog preferencesDialog;
 
     private CT() {
         mutex = new FileMutex(CT.class.getSimpleName());
         if (checkRunning()) {
-            throw new RuntimeException(MSG_ALREADY_RUNNING);
+            throw new CTException(MSG_ALREADY_RUNNING);
         }
         CTPreferences preferences = new CTPreferencesImpl(CT.class);
         this.preferences = preferences;
@@ -153,7 +157,7 @@ public final class CT implements CTApp {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (@NotNull ClassNotFoundException | UnsupportedLookAndFeelException | IllegalAccessException |
                 InstantiationException ex) {
-            throw new RuntimeException(ex);
+            throw new CTException(MSG_CANNOT_SET_LOOK_AND_FEEL, ex);
         }
     }
 
@@ -187,7 +191,7 @@ public final class CT implements CTApp {
                 String path = Objects.requireNonNull(configResource.toURL()).getPath();
                 file = new File(path.startsWith(SLASH) ? path.substring(1) : path);
             } catch (IOException e) {
-                throw new RuntimeException(e.getLocalizedMessage(), e);
+                throw new CTException(MSG_CANNOT_OPEN_CONFIG, e);
             }
             if (desktop.isSupported(Action.EDIT)) {
                 try {
@@ -232,7 +236,7 @@ public final class CT implements CTApp {
             for (Resource resource : new Resource[]{new ClasspathResource(loader, HELP_PAGE).forLocale(locale),
                     new ClasspathResource(loader,
                             SLASH + HELP_PAGE).forLocale(locale)}) {
-                if (resource != null && resource.exists()) {
+                if (resource.exists()) {
                     try (InputStream stream = resource.getInputStream()) {
                         File tempFile = File.createTempFile(CT.class.getName(), DOT + HTML);
                         Files.copy(stream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -244,7 +248,7 @@ public final class CT implements CTApp {
                     return;
                 } else {
                     //noinspection StringConcatenation
-                    Log.debug(PAGE_0_NOT_FOUND, HELP_PAGE + ": " + (resource != null ? resource.getLocation() : null));
+                    Log.debug(PAGE_0_NOT_FOUND, HELP_PAGE + ": " + resource.getLocation());
                 }
             }
             Log.error(PAGE_0_NOT_FOUND, HELP_PAGE);
@@ -281,7 +285,7 @@ public final class CT implements CTApp {
             try (InputStream stream = configResource.getInputStream()) {
                 configs = configsConverter.parse(CTStreamUtil.convertStreamToString(stream, CONFIG_CHARSET));
             } catch (IOException ex) {
-                throw new RuntimeException(ex);
+                throw new CTException(MSG_CANNOT_READ_CONFIG, ex);
             }
         }
         return configs;
@@ -292,6 +296,7 @@ public final class CT implements CTApp {
         saveConfigs(configs, configResource);
     }
 
+    @Nullable
     @Override
     public CTConfig showNewConfig() {
         try {

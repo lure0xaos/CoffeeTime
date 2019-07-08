@@ -12,7 +12,7 @@ public final class MessageProviderListCellRenderer<E extends Described> extends 
         super(originalRenderer, e -> {
             try {
                 return e == null ? "" : messageProvider.getMessage(e.getDescription());
-            } catch (Exception e1) {
+            } catch (RuntimeException e1) {
                 return e.getDescription();
             }
         });

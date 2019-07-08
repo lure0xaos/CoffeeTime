@@ -6,10 +6,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class LoggerFactoryConfig {
+public final class LoggerFactoryConfig {
 
     public static final String MSG_NOT_FOUND = "configuration {0} not found";
     static final String LOGGING_PROPERTIES = "/config/logging.properties";
+
+    private LoggerFactoryConfig() {
+    }
 
     public static Class<? extends ILoggerFactory> getLoggerFactoryClass() {
         return JULLoggerFactory.class;

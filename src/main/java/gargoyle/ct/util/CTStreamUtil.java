@@ -27,8 +27,10 @@ public final class CTStreamUtil {
         try (Writer writer = new OutputStreamWriter(stream, charsetName)) {
             writer.write(content);
             writer.flush();
+        } catch (UnsupportedEncodingException ex) {
+            throw new IllegalArgumentException(ex);
         } catch (IOException ex) {
-            throw new RuntimeException(ex);
+            throw new ResourceException(ex.getLocalizedMessage(), ex);
         }
     }
 }

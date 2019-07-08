@@ -1,5 +1,6 @@
 package gargoyle.ct.ui.impl;
 
+import gargoyle.ct.ex.CTException;
 import gargoyle.ct.log.Log;
 import gargoyle.ct.messages.impl.CTMessages;
 import gargoyle.ct.ui.CTApp;
@@ -72,7 +73,7 @@ public final class CTAboutDialog extends JDialog implements CTDialog<Void> {
         try {
             addField(descriptionKey, content, address == null ? null : new URI(address), y);
         } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
+            throw new CTException(descriptionKey, e);
         }
     }
 
@@ -97,7 +98,7 @@ public final class CTAboutDialog extends JDialog implements CTDialog<Void> {
 
     @Override
     public Void showMe() {
-        CTDragHelper.setLocationRelativeTo(this, this.owner);
+        CTDragHelper.setLocationRelativeTo(this, owner);
         setVisible(true);
         return null;
     }

@@ -45,30 +45,31 @@ public class CTNewConfigDialog implements CTDialog<CTConfig> {
     @Override
     public CTConfig showMe() {
         while (true) {
+            JFormattedTextField field;
             try {
-                JFormattedTextField field = new JFormattedTextField(new MaskFormatter(STR_CONFIG_PATTERN));
-                field.setToolTipText(messages.getMessage(STR_NEW_CONFIG_TOOLTIP));
-                int result = JOptionPane.showOptionDialog(owner,
-                        field,
-                        messages.getMessage(STR_TITLE),
-                        JOptionPane.OK_CANCEL_OPTION,
-                        JOptionPane.QUESTION_MESSAGE,
-                        icon,
-                        new Object[]{messages.getMessage(STR_OK),
-                                messages.getMessage(STR_CANCEL)},
-                        null);
-                if (result == JOptionPane.OK_OPTION) {
-                    try {
-                        return configConverter.parse(String.valueOf(field.getValue()));
-                    } catch (IllegalArgumentException ex) {
-                        Log.debug(ex, ex.getMessage());
-                    }
+                field = new JFormattedTextField(new MaskFormatter(STR_CONFIG_PATTERN));
+            } catch (ParseException e) {
+                throw new IllegalArgumentException(STR_CONFIG_PATTERN, e);
+            }
+            field.setToolTipText(messages.getMessage(STR_NEW_CONFIG_TOOLTIP));
+            int result = JOptionPane.showOptionDialog(owner,
+                    field,
+                    messages.getMessage(STR_TITLE),
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    icon,
+                    new Object[]{messages.getMessage(STR_OK),
+                            messages.getMessage(STR_CANCEL)},
+                    null);
+            if (result == JOptionPane.OK_OPTION) {
+                try {
+                    return configConverter.parse(String.valueOf(field.getValue()));
+                } catch (IllegalArgumentException ex) {
+                    Log.debug(ex, ex.getMessage());
                 }
-                if (result == JOptionPane.CANCEL_OPTION || result == JOptionPane.NO_OPTION) {
-                    return null;
-                }
-            } catch (ParseException ex) {
-                throw new RuntimeException(ex);
+            }
+            if (result == JOptionPane.CANCEL_OPTION || result == JOptionPane.NO_OPTION) {
+                return null;
             }
         }
     }
