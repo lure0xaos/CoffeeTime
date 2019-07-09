@@ -5,7 +5,6 @@ import gargoyle.ct.convert.Converter;
 import gargoyle.ct.convert.Converters;
 import gargoyle.ct.log.Log;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -18,23 +17,20 @@ public class CTArgsImpl implements CTArgs {
     private final LinkedHashMap<String, String> params;
 
     public CTArgsImpl(String[] args) {
-        LinkedHashMap<String, String> params = new LinkedHashMap<>();
-        init(args, params);
-        this.params = (params);
-    }
-
-    private static void init(@Nullable String[] args, @NotNull Map<String, String> params) {
-        if (args != null) {
-            for (String arg : args) {
-                if (arg != null) {
-                    if (arg.contains(EQ)) {
-                        String[] pair = arg.split(EQ, 2);
-                        String key = pair[0].trim();
-                        params.put(key, pair[1].trim());
-                    }
-                    else {
-                        String value = arg.trim();
-                        params.put(value, value);
+        synchronized (this) {
+            params = new LinkedHashMap<>();
+            if (args != null) {
+                for (String arg : args) {
+                    if (arg != null) {
+                        if (arg.contains(EQ)) {
+                            String[] pair = arg.split(EQ, 2);
+                            String key = pair[0].trim();
+                            (params).put(key, pair[1].trim());
+                        }
+                        else {
+                            String value = arg.trim();
+                            (params).put(value, value);
+                        }
                     }
                 }
             }

@@ -29,7 +29,7 @@ public final class CTConfigDataConverter implements CTUnitConverter<long[]> {
 
     @NotNull
     @Override
-    public String format(TimeUnit unit, long... data) {
+    public String format(@NotNull TimeUnit unit, long... data) {
         String unitChar;
         switch (unit) {
             case HOURS:

@@ -28,7 +28,6 @@ import java.util.Objects;
 public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyChangeListener<Object> {
     private static final String LOC_MESSAGES = "messages.control";
     private static final String STR_ABOUT = "about";
-    private static final String STR_ABOUT_TOOLTIP = "about.tooltip";
     private static final String STR_BROWSE_CONFIGS = "browse-configs";
     private static final String STR_BROWSE_CONFIGS_TOOLTIP = "browse-configs.tooltip";
     private static final String STR_EXIT = "exit";
@@ -49,10 +48,10 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyC
     private final ButtonGroup group;
     @NotNull
     private final CTBlockerTextProvider textProvider;
-    JPopupMenu menu;
+    private JPopupMenu menu;
     private CTLocalizableMenuItem stopMenuItem;
 
-    public CTControl(CTApp app, Frame owner) {
+    public CTControl(@NotNull CTApp app, Frame owner) {
         this.app = app;
         CTPreferences preferences = app.getPreferences();
         textProvider = new CTBlockerTextProvider(preferences);
@@ -121,7 +120,7 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyC
         return menu;
     }
 
-    private void addConfigs(@NotNull JPopupMenu menu, CTConfigs configs, @Nullable CTConfig toArm) {
+    private void addConfigs(@NotNull JPopupMenu menu, @NotNull CTConfigs configs, @Nullable CTConfig toArm) {
         Defend.isTrue(toArm == null || configs.hasConfig(toArm), "invalid config");
         for (CTConfig config : configs.getConfigs()) {
             addConfig(menu, config);
@@ -131,13 +130,13 @@ public class CTControl implements CTControlActions, CTTaskUpdatable, CTPropertyC
         }
     }
 
-    private void addConfig(JPopupMenu menu, @NotNull CTConfig config) {
+    private void addConfig(@NotNull JPopupMenu menu, @NotNull CTConfig config) {
         CTConfigMenuItem menuItem = new CTConfigMenuItem(new CTConfigAction(this, config));
         group.add(menuItem);
         menu.insert(menuItem, group.getButtonCount() - 1);
     }
 
-    void onNewConfig(@NotNull CTConfigs configs, @NotNull JPopupMenu menu) {
+    private void onNewConfig(@NotNull CTConfigs configs, @NotNull JPopupMenu menu) {
         CTConfig config = showNewConfig();
         if (config != null && config.isValid() && !configs.hasConfig(config)) {
             configs.addConfig(config);
