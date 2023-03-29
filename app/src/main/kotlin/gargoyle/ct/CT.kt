@@ -3,8 +3,6 @@ package gargoyle.ct
 import gargoyle.ct.config.CTConfig
 import gargoyle.ct.config.CTConfigs
 import gargoyle.ct.config.CTStandardConfigs
-import gargoyle.ct.config.convert.CTUnitConverter
-import gargoyle.ct.config.convert.impl.CTConfigsConverter
 import gargoyle.ct.ex.CTException
 import gargoyle.ct.preferences.CTPreferences
 import gargoyle.ct.preferences.CTPreferences.IconStyle
@@ -22,14 +20,19 @@ import gargoyle.ct.util.cmd.impl.CTCmdImpl
 import gargoyle.ct.util.log.Log
 import gargoyle.ct.util.mutex.CTMutex
 import gargoyle.ct.util.mutex.impl.FileMutex
-import gargoyle.ct.util.pref.prop.CTPrefProperty
-import gargoyle.ct.util.prop.impl.CTPropertyChangeManager
 import gargoyle.ct.util.resource.Resource
 import gargoyle.ct.util.resource.internal.ClassResource
 import gargoyle.ct.util.resource.internal.LocalResource
-import gargoyle.ct.util.util.*
+import gargoyle.ct.util.util.className
+import gargoyle.ct.util.util.getResource
+import gargoyle.ct.util.util.getResourceBundle
+import gargoyle.ct.util.util.simpleClassName
 import gargoyle.ct.util.ver.CTVersionInfo
 import gargoyle.ct.util.ver.impl.CTVersionInfoImpl
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromStream
+import kotlinx.serialization.json.encodeToStream
 import java.awt.Desktop
 import java.awt.Frame
 import java.io.File
@@ -40,14 +43,14 @@ import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.text.MessageFormat
 import java.util.*
-import java.util.concurrent.TimeUnit
 import javax.swing.JOptionPane
 import javax.swing.UIManager
 import javax.swing.UnsupportedLookAndFeelException
+import kotlin.reflect.KMutableProperty0
+import kotlin.reflect.full.memberProperties
 
 class CT private constructor() : CTApp {
     private val blockers: List<CTBlocker>
-    private val configsConverter: CTUnitConverter<CTConfigs> = CTConfigsConverter()
     private val control: CTControl
     private val owner: Frame = CTShowingFrame()
     override val preferences: CTPreferences
@@ -72,7 +75,6 @@ class CT private constructor() : CTApp {
         val updatables: MutableList<CTTaskUpdatable> = ArrayList(blockers)
         val control = CTControl(this, owner)
         this.control = control
-        preferences.addPropertyChangeListener(control)
         updatables.add(control)
         updatables.add(CTSoundUpdatable(preferences))
         timer = CTTimer(timeHelper, updatables)
@@ -83,13 +85,12 @@ class CT private constructor() : CTApp {
         return !mutex.acquire()
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun overridePreferences(cmd: CTArgs): CT {
-        for (name in preferences.propertyNames) {
-            if (cmd.has(name)) {
-                val property: CTPrefProperty<Any> = preferences.getProperty(name)
-                property.set(cmd[name, CTNumberUtil.getDefault(property.type())])
-            }
-        }
+        preferences::class.memberProperties
+            .filter { cmd.has(it.name) && it is KMutableProperty0<*> }
+            .map { (it as KMutableProperty0<Any>) }
+            .forEach { it.set(cmd[it.name, it.get()]) }
         return this
     }
 
@@ -112,10 +113,10 @@ class CT private constructor() : CTApp {
     }
 
     private fun start() {
-        val property = preferences.config()
+        val property = preferences.config
         val configs = loadConfigs(false).getConfigs()
-        if (property.isPresent && configs.contains(property.get())) {
-            control.arm(property.get())
+        if (configs.contains(property)) {
+            control.arm(property)
         } else {
             configs.firstOrNull()?.let { control.arm(it) }
         }
@@ -126,7 +127,7 @@ class CT private constructor() : CTApp {
     }
 
     override fun arm(config: CTConfig) {
-        preferences.config().set(config)
+        preferences.config = config
         timer.arm(config, timeHelper.currentTimeMillis)
     }
 
@@ -168,8 +169,6 @@ class CT private constructor() : CTApp {
         }
         timer.terminate()
         mutex.release()
-        preferences.removePropertyChangeListener(control)
-        CTPropertyChangeManager.instance.removePropertyChangeListeners()
     }
 
     override fun help() {
@@ -199,6 +198,7 @@ class CT private constructor() : CTApp {
         }
     }
 
+    @OptIn(ExperimentalSerializationApi::class)
     override fun loadConfigs(reload: Boolean): CTConfigs {
         var configs: CTConfigs
         if (configResource == null || reload) {
@@ -206,7 +206,7 @@ class CT private constructor() : CTApp {
             if (configResource != null && configResource.exists()) {
                 try {
                     configResource.inputStream.use { stream ->
-                        configs = configsConverter.parse(CTStreamUtil.convertStreamToString(stream, CONFIG_CHARSET))
+                        configs = Json.decodeFromStream(stream)
                         if (configs.getConfigs().isEmpty()) {
                             configs = CTStandardConfigs
                         }
@@ -226,7 +226,7 @@ class CT private constructor() : CTApp {
         } else {
             try {
                 configResource!!.inputStream.use { stream ->
-                    configs = configsConverter.parse(CTStreamUtil.convertStreamToString(stream, CONFIG_CHARSET))
+                    configs = Json.decodeFromStream(stream)
                 }
             } catch (ex: IOException) {
                 throw CTException(MSG_CANNOT_READ_CONFIG, ex)
@@ -256,11 +256,12 @@ class CT private constructor() : CTApp {
         timer.unarm()
     }
 
+    @Suppress("OPT_IN_USAGE")
     private fun saveConfigs(configs: CTConfigs, configResource: Resource?) {
         if (configResource != null) {
             try {
                 configResource.outputStream.use {
-                    CTStreamUtil.write(it, configsConverter.format(TimeUnit.MINUTES, configs), CONFIG_CHARSET)
+                    Json.encodeToStream(configs, it)
                 }
             } catch (ex: IOException) {
                 Log.warn(NOT_FOUND_0, configResource)
@@ -270,13 +271,13 @@ class CT private constructor() : CTApp {
 
     override val bigIcon: URL
         get() =
-            CT::class.getResource(MessageFormat.format(URL_ICON_BIG_W, preferences.iconStyle()[IconStyle.BW].path))
+            CT::class.getResource(MessageFormat.format(URL_ICON_BIG_W, (preferences.iconStyle ?: IconStyle.BW).path))
     override val mediumIcon: URL
         get() =
-            CT::class.getResource(MessageFormat.format(URL_ICON_MEDIUM_W, preferences.iconStyle()[IconStyle.BW].path))
+            CT::class.getResource(MessageFormat.format(URL_ICON_MEDIUM_W, (preferences.iconStyle ?: IconStyle.BW).path))
     override val smallIcon: URL
         get() =
-            CT::class.getResource(MessageFormat.format(URL_ICON_SMALL_W, preferences.iconStyle()[IconStyle.BW].path))
+            CT::class.getResource(MessageFormat.format(URL_ICON_SMALL_W, (preferences.iconStyle ?: IconStyle.BW).path))
 
     companion object {
         private val CONFIG_CHARSET = StandardCharsets.UTF_8.name()

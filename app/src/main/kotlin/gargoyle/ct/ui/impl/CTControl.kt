@@ -11,15 +11,13 @@ import gargoyle.ct.ui.CTControlActions
 import gargoyle.ct.ui.CTControlWindow
 import gargoyle.ct.ui.impl.control.*
 import gargoyle.ct.util.messages.impl.CTMessages
-import gargoyle.ct.util.pref.CTPropertyChangeEvent
-import gargoyle.ct.util.pref.CTPropertyChangeListener
 import gargoyle.ct.util.util.getResourceBundle
 import java.awt.Frame
 import java.awt.event.ActionEvent
 import java.util.*
 import javax.swing.*
 
-class CTControl(app: CTApp, owner: Frame) : CTControlActions, CTTaskUpdatable, CTPropertyChangeListener<Any> {
+class CTControl(app: CTApp, owner: Frame) : CTControlActions, CTTaskUpdatable {
     private val app: CTControlActions
     private val controlWindow: CTControlWindow
     private val group: ButtonGroup
@@ -222,10 +220,6 @@ class CTControl(app: CTApp, owner: Frame) : CTControlActions, CTTaskUpdatable, C
                 textProvider.getBlockerText(task, currentMillis, false)
             )
         }
-    }
-
-    override fun onPropertyChange(event: CTPropertyChangeEvent<Any>) {
-        controlWindow.onPropertyChange(event)
     }
 
     companion object {

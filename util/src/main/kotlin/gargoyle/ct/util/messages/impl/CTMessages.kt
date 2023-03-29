@@ -3,8 +3,7 @@ package gargoyle.ct.util.messages.impl
 import gargoyle.ct.util.messages.LocaleProvider
 import gargoyle.ct.util.messages.MessageProvider
 import gargoyle.ct.util.messages.MessageProviderEx
-import gargoyle.ct.util.messages.SupportedLocales
-import gargoyle.ct.util.prop.CTObservableProperty
+import gargoyle.ct.util.prop.PropertyObservableDelegate
 import gargoyle.ct.util.util.get
 import java.text.MessageFormat
 import java.util.*
@@ -19,17 +18,15 @@ class CTMessages(
     private lateinit var messages: ResourceBundle
 
     private fun reload() {
-        messages = loader(localeProvider.getLocale())
+        messages = loader(localeProvider.locale)
     }
 
-    override fun getLocale(): Locale = localeProvider.getLocale()
-
-    override fun setLocale(locale: Locale): Unit = localeProvider.setLocale(locale)
-
-    override fun locale(): CTObservableProperty<SupportedLocales> = localeProvider.locale()
+    override var locale: Locale by PropertyObservableDelegate(localeProvider::locale) { _, _, _ ->
+        reload()
+    }
 
     override fun getMessage(message: String, vararg args: Any): String {
-        if (messages.locale != localeProvider.getLocale()) {
+        if (messages.locale != localeProvider.locale) {
             reload()
         }
         return try {
@@ -51,7 +48,6 @@ class CTMessages(
 
     init {
         reload()
-        localeProvider.locale().addPropertyChangeListener { reload() }
     }
 
 }

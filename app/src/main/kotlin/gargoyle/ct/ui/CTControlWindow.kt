@@ -1,9 +1,7 @@
 package gargoyle.ct.ui
 
-import gargoyle.ct.util.pref.CTPropertyChangeListener
 
-
-interface CTControlWindow : CTWindow, CTInformer, CTPropertyChangeListener<Any> {
+interface CTControlWindow : CTWindow, CTInformer {
     fun setTextMode(textMode: Boolean)
     fun setToolTipText(text: String)
 }

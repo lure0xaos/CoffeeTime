@@ -1,7 +1,6 @@
 package gargoyle.ct.ui.impl
 
 import gargoyle.ct.config.CTConfig
-import gargoyle.ct.config.convert.CTUnitConverter
 import gargoyle.ct.config.convert.impl.CTConfigConverter
 import gargoyle.ct.messages.locale.CTPreferencesLocaleProvider
 import gargoyle.ct.preferences.CTPreferences
@@ -10,7 +9,9 @@ import gargoyle.ct.ui.CTDialog
 import gargoyle.ct.ui.CTIconProvider
 import gargoyle.ct.util.log.Log
 import gargoyle.ct.util.messages.impl.CTMessages
+import gargoyle.ct.util.prop.PropertyObservableDelegate
 import gargoyle.ct.util.util.getResourceBundle
+import kotlinx.serialization.json.Json
 import java.awt.Component
 import java.text.ParseException
 import javax.swing.Icon
@@ -18,10 +19,11 @@ import javax.swing.ImageIcon
 import javax.swing.JFormattedTextField
 import javax.swing.JOptionPane
 import javax.swing.text.MaskFormatter
+import kotlin.reflect.KProperty
 
 class CTNewConfigDialog(private val owner: Component, preferences: CTPreferences, iconProvider: CTIconProvider) :
     CTDialog<CTConfig?> {
-    private val configConverter: CTUnitConverter<CTConfig> = CTConfigConverter()
+    private val configConverter: CTConfigConverter = CTConfigConverter()
     private val messages: CTMessages
     private var icon: Icon? = null
 
@@ -31,8 +33,10 @@ class CTNewConfigDialog(private val owner: Component, preferences: CTPreferences
             CTPreferencesLocaleProvider(preferences)
         )
         updateIcon(iconProvider)
-        preferences.iconStyle()
-            .addPropertyChangeListener { updateIcon(iconProvider) }
+        @Suppress("UNUSED_VARIABLE")
+        val iconStyle by PropertyObservableDelegate(preferences::iconStyle) { _: KProperty<*>, _: CTPreferences.IconStyle, _: CTPreferences.IconStyle ->
+            updateIcon(iconProvider)
+        }
     }
 
     fun updateIcon(iconProvider: CTIconProvider) {
@@ -61,7 +65,7 @@ class CTNewConfigDialog(private val owner: Component, preferences: CTPreferences
             )
             if (result == JOptionPane.OK_OPTION) {
                 try {
-                    return configConverter.parse(field.value.toString())
+                    return Json.decodeFromString(configConverter, field.value.toString())
                 } catch (ex: IllegalArgumentException) {
                     Log.debug(ex, ex.message ?: "")
                 }

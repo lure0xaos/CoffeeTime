@@ -2,11 +2,9 @@ package gargoyle.ct.ui.util
 
 import gargoyle.ct.ui.impl.CTLocalizableLabel
 import gargoyle.ct.ui.util.render.MessageProviderListCellRenderer
-import gargoyle.ct.util.messages.*
-import gargoyle.ct.util.pref.prop.CTPrefProperty
-import gargoyle.ct.util.prop.CTNumberProperty
-import gargoyle.ct.util.prop.CTObservableProperty
-import gargoyle.ct.util.prop.CTProperty
+import gargoyle.ct.util.messages.LocaleProvider
+import gargoyle.ct.util.messages.MessageProvider
+import gargoyle.ct.util.messages.MessageProviderEx
 import gargoyle.ct.util.util.CTNumberUtil
 import java.awt.Container
 import java.awt.GridBagConstraints
@@ -18,6 +16,7 @@ import java.util.*
 import javax.swing.*
 import javax.swing.text.JTextComponent
 import kotlin.reflect.KClass
+import kotlin.reflect.KMutableProperty0
 
 class CTLayoutBuilder(pane: Container) {
     private val controlConstraints: GridBagConstraints
@@ -43,7 +42,7 @@ class CTLayoutBuilder(pane: Container) {
         pane.validate()
     }
 
-    fun createCheckBox(property: CTProperty<Boolean>): JCheckBox {
+    fun createCheckBox(property: KMutableProperty0<Boolean>): JCheckBox {
         val control = JCheckBox()
         control.isSelected = property.get()
         control.addActionListener { property.set(control.isSelected) }
@@ -52,9 +51,9 @@ class CTLayoutBuilder(pane: Container) {
 
     @Suppress("UNCHECKED_CAST")
     fun <E> createComboBox(
-        messages: MessageProvider, type: KClass<E>, property: CTPrefProperty<E>,
+        messages: MessageProvider, type: KClass<E>, property: KMutableProperty0<E>,
         allowNull: Boolean
-    ): JComboBox<E> where E : Enum<E>, E : Described? {
+    ): JComboBox<E> where E : Enum<E> {
         val enumConstants = type.java.enumConstants
         val control: JComboBox<E> = if (allowNull) {
             val list = Vector(listOf(*enumConstants))
@@ -62,6 +61,24 @@ class CTLayoutBuilder(pane: Container) {
             JComboBox(list)
         } else {
             JComboBox(enumConstants)
+        }
+        control.selectedItem = property.get()
+        control.addActionListener { property.set(control.selectedItem as E) }
+        control.renderer = MessageProviderListCellRenderer(control.renderer, messages)
+        return control
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    fun <E> createComboBox(
+        messages: MessageProvider, enumConstants: List<E>, property: KMutableProperty0<E>,
+        allowNull: Boolean
+    ): JComboBox<E> where E : Any {
+        val control: JComboBox<E> = if (allowNull) {
+            val list = Vector(enumConstants)
+            list.add(0, null)
+            JComboBox(list)
+        } else {
+            JComboBox(Vector(enumConstants))
         }
         control.selectedItem = property.get()
         control.addActionListener { property.set(control.selectedItem as E) }
@@ -80,7 +97,7 @@ class CTLayoutBuilder(pane: Container) {
         return CTLocalizableLabel(messages, messages, textKey, toolTipTextKey, SwingConstants.TRAILING)
     }
 
-    fun <T : Enum<T>> createSlider(type: KClass<T>, property: CTProperty<T>, allowNull: Boolean): JSlider {
+    fun <T : Enum<T>> createSlider(type: KClass<T>, property: KMutableProperty0<T>, allowNull: Boolean): JSlider {
         val enumConstants = type.java.enumConstants
         val control: JSlider = if (allowNull) {
             val list: Collection<T> = ArrayList(listOf(*enumConstants))
@@ -99,14 +116,14 @@ class CTLayoutBuilder(pane: Container) {
         return control
     }
 
-    fun createSlider(property: CTProperty<Int>, min: Int, max: Int): JSlider {
+    fun createSlider(property: KMutableProperty0<Int>, min: Int, max: Int): JSlider {
         val control = JSlider(CTNumberUtil.toInt(min), CTNumberUtil.toInt(max))
         control.value = property.get()
         control.addChangeListener { property.set(CTNumberUtil.toRange(control.value, min, max)) }
         return control
     }
 
-    fun <T : Number> createSlider(type: KClass<T>, property: CTNumberProperty<T>, min: T, max: T): JSlider {
+    fun <T : Number> createSlider(type: KClass<T>, property: KMutableProperty0<T>, min: T, max: T): JSlider {
         val control = JSlider(CTNumberUtil.toInt(min), CTNumberUtil.toInt(max))
         control.value = property.get().toInt()
         control.addChangeListener {
@@ -124,7 +141,7 @@ class CTLayoutBuilder(pane: Container) {
         return control
     }
 
-    fun createSpinner(property: CTProperty<Int>, min: Int, max: Int): JSpinner {
+    fun createSpinner(property: KMutableProperty0<Int>, min: Int, max: Int): JSpinner {
         val control = JSpinner(SpinnerNumberModel())
         control.value = property.get()
         control.addChangeListener {
@@ -134,7 +151,7 @@ class CTLayoutBuilder(pane: Container) {
         return control
     }
 
-    fun <T : Number> createSpinner(type: KClass<T>, property: CTProperty<T>, min: T, max: T): JSpinner {
+    fun <T : Number> createSpinner(type: KClass<T>, property: KMutableProperty0<T>, min: T, max: T): JSpinner {
         val control = JSpinner(SpinnerNumberModel())
         control.value = property.get().toInt()
         control.addChangeListener {
@@ -150,7 +167,7 @@ class CTLayoutBuilder(pane: Container) {
         return control
     }
 
-    fun <T : Enum<T>> createSpinner(type: KClass<T>, property: CTProperty<T>, allowNull: Boolean): JSpinner {
+    fun <T : Enum<T>> createSpinner(type: KClass<T>, property: KMutableProperty0<T>, allowNull: Boolean): JSpinner {
         val enumConstants = type.java.enumConstants
         val control: JSpinner = if (allowNull) {
             val list = Vector(listOf(*enumConstants))
@@ -167,14 +184,14 @@ class CTLayoutBuilder(pane: Container) {
         return control
     }
 
-    fun createTextArea(property: CTProperty<String>): JTextArea {
+    fun createTextArea(property: KMutableProperty0<String>): JTextArea {
         val control = JTextArea()
         control.text = property.get()
         control.addKeyListener(PropertyKeyAdapter(property, control))
         return control
     }
 
-    fun createTextField(property: CTProperty<String>): JTextField {
+    fun createTextField(property: KMutableProperty0<String>): JTextField {
         val control = JTextField()
         control.text = property.get()
         control.addKeyListener(PropertyKeyAdapter(property, control))
@@ -182,22 +199,25 @@ class CTLayoutBuilder(pane: Container) {
     }
 
     fun createToggleButton(
-        property: CTProperty<Boolean>,
-        localeProperty: CTObservableProperty<SupportedLocales>
+        property: KMutableProperty0<Boolean>,
+        localeProperty: KMutableProperty0<Locale>
     ): JToggleButton {
         val control = JToggleButton()
         control.isSelected = property.get()
-        val initialLocale = localeProperty.get().locale
+        val initialLocale = localeProperty.get()
         control.text = if (control.isSelected) getYesString(initialLocale) else getNoString(initialLocale)
         control.addActionListener {
-            val currentLocale = localeProperty.get().locale
+            val currentLocale = localeProperty.get()
             control.text = if (control.isSelected) getYesString(currentLocale) else getNoString(currentLocale)
             property.set(control.isSelected)
         }
         return control
     }
 
-    private class PropertyKeyAdapter(private val property: CTProperty<String>, private val control: JTextComponent) :
+    private class PropertyKeyAdapter(
+        private val property: KMutableProperty0<String>,
+        private val control: JTextComponent
+    ) :
         KeyAdapter() {
         override fun keyTyped(e: KeyEvent) {
             property.set(control.text)
@@ -228,8 +248,10 @@ class CTLayoutBuilder(pane: Container) {
 
         private fun <T : Enum<T>> fromIndex(type: KClass<T>, index: Int): T = type.java.enumConstants[index]
 
-        private fun getNoString(locale: Locale): String = UIManager.getString("OptionPane.noButtonText", locale)
+        private fun getNoString(locale: java.util.Locale): String =
+            UIManager.getString("OptionPane.noButtonText", locale)
 
-        private fun getYesString(locale: Locale): String = UIManager.getString("OptionPane.yesButtonText", locale)
+        private fun getYesString(locale: java.util.Locale): String =
+            UIManager.getString("OptionPane.yesButtonText", locale)
     }
 }

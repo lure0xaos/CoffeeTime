@@ -1,6 +1,5 @@
 package gargoyle.ct.ui.util.render
 
-import gargoyle.ct.util.messages.Described
 import gargoyle.ct.util.messages.MessageProvider
 import java.util.function.Function
 import javax.swing.ListCellRenderer
@@ -11,8 +10,8 @@ class MessageProviderListCellRenderer<E>(
     messageProvider: MessageProvider
 ) : FunctionalListCellRenderer<E>(originalRenderer as ListCellRenderer<E>, Function { e: E ->
     try {
-        messageProvider.getMessage(e.description)
-    } catch (e1: RuntimeException) {
-        e.description
+        messageProvider.getMessage(e.toString())
+    } catch (e1: Exception) {
+        e.toString()
     }
-}) where E : Any, E : Described
+}) where E : Any

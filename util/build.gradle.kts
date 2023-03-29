@@ -1,15 +1,16 @@
+import de.comahe.i18n4k.gradle.plugin.i18n4k
 import java.text.SimpleDateFormat
 import java.util.*
-
-val javaVersion: String = JavaVersion.VERSION_11.toString()
 
 group = "gargoyle.coffee-time"
 version = project.extra["project.version"].toString()
 
 plugins {
-    kotlin("jvm") version "1.6.21"
-
-    id("org.javamodularity.moduleplugin") version ("1.8.11")
+    `java-library`
+    kotlin("jvm")
+    kotlin("plugin.serialization")
+    id("org.javamodularity.moduleplugin")
+    id("de.comahe.i18n4k")
 }
 
 repositories {
@@ -18,20 +19,27 @@ repositories {
 
 dependencies {
     implementation(kotlin("reflect"))
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-properties:1.5.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+    implementation("de.comahe.i18n4k:i18n4k-core:0.5.0")
+    implementation("de.comahe.i18n4k:i18n4k-core-jvm:0.5.0")
+}
+
+i18n4k {
+    sourceCodeLocales = listOf("en", "ru")
+    inputDirectory = "src/main/resources"
 }
 
 tasks.compileJava {
     modularity.inferModulePath.set(true)
-    sourceCompatibility = javaVersion
-    targetCompatibility = javaVersion
     options.encoding = Charsets.UTF_8.toString()
 }
 
 tasks.compileKotlin {
     destinationDirectory.set(tasks.compileJava.get().destinationDirectory)
-    targetCompatibility = javaVersion
+//    targetCompatibility = javaVersion
     kotlinOptions {
-        jvmTarget = javaVersion
     }
 }
 
@@ -53,4 +61,6 @@ tasks.processResources {
             line.replace(Regex("\\$\\{([^}]+)\\}"), transform).replace(Regex("@([^@]+)@"), transform)
         }
     }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    dependsOn(tasks.named("generateI18n4kFiles"))
 }

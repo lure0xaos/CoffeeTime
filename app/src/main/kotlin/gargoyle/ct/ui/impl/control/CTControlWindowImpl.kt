@@ -6,12 +6,11 @@ import gargoyle.ct.ui.CTIconProvider
 import gargoyle.ct.ui.impl.CTBlockerContent
 import gargoyle.ct.ui.util.CTDragHelper
 import gargoyle.ct.util.log.Log
-import gargoyle.ct.util.pref.CTPropertyChangeEvent
+import gargoyle.ct.util.prop.PropertyObservableDelegate
 import gargoyle.ct.util.util.CTTimeUtil
 import java.awt.*
 import java.awt.event.*
 import java.io.ObjectInputStream
-import java.io.Serial
 import javax.swing.JPopupMenu
 import javax.swing.JWindow
 import javax.swing.ToolTipManager
@@ -61,6 +60,16 @@ class CTControlWindowImpl(
         }
         textContent.addMouseListener(updater)
         iconContent.addMouseListener(updater)
+
+        @Suppress("UNUSED_VARIABLE")
+        var transparency by PropertyObservableDelegate(preferences::transparency) { _, _, _ ->
+            transparency(true)
+        }
+
+        @Suppress("UNUSED_VARIABLE")
+        var transparencyLevel by PropertyObservableDelegate(preferences::transparencyLevel) { _, _, _ ->
+            transparency(true)
+        }
     }
 
     private fun initToolTip() {
@@ -85,8 +94,7 @@ class CTControlWindowImpl(
         try {
             val oldOpacity = (opacity.toDouble() * CTPreferences.OPACITY_PERCENT).roundToLong().toInt()
             val newOpacity =
-                if (iconMode && preferences.transparency().get() && transparent) preferences.transparencyLevel()
-                    .get() else CTPreferences.OPACITY_PERCENT
+                if (iconMode && preferences.transparency && transparent) preferences.transparencyLevel else CTPreferences.OPACITY_PERCENT
             if (oldOpacity == newOpacity) {
                 return
             }
@@ -124,14 +132,6 @@ class CTControlWindowImpl(
         }
     }
 
-    override fun onPropertyChange(event: CTPropertyChangeEvent<Any>) {
-        val key = event.name
-        if (CTPreferences.PREF_TRANSPARENCY == key || CTPreferences.PREF_TRANSPARENCY_LEVEL == key) {
-            transparency(true)
-        }
-    }
-
-    @Serial
     private fun readObject(`in`: ObjectInputStream) {
         `in`.defaultReadObject()
     }
@@ -144,7 +144,7 @@ class CTControlWindowImpl(
         }
         iconMode = newIconMode
         transparency(true)
-        if (textMode && !preferences.block().get()) {
+        if (textMode && !preferences.block) {
             showTextContent()
         } else {
             showIconContent()
@@ -196,7 +196,7 @@ class CTControlWindowImpl(
                             )
                         )
                 }
-            } catch (ex: RuntimeException) {
+            } catch (ex: Exception) {
                 Log.debug(ex, MSG_TOOLTIP_ERROR)
             }
         }

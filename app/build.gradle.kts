@@ -1,10 +1,8 @@
+import de.comahe.i18n4k.gradle.plugin.i18n4k
 import java.text.SimpleDateFormat
 import java.util.*
 
-val javaVersion: String = JavaVersion.VERSION_11.toString()
-
 val appMainClass: String = "gargoyle.ct.CT"
-val appModule: String = "CoffeeTime"
 val appName: String = "CoffeeTime"
 
 val os: org.gradle.internal.os.OperatingSystem = org.gradle.internal.os.OperatingSystem.current()
@@ -19,11 +17,13 @@ version = project.extra["project.version"].toString()
 description = project.extra["project.description"].toString()
 
 plugins {
+    java
     application
-    kotlin("jvm") version "1.6.21"
-
-    id("org.javamodularity.moduleplugin") version ("1.8.11")
-    id("org.beryx.jlink") version ("2.25.0")
+    kotlin("jvm")
+    kotlin("plugin.serialization")
+    id("org.javamodularity.moduleplugin")
+    id("org.beryx.jlink")
+    id("de.comahe.i18n4k")
 }
 
 repositories {
@@ -33,26 +33,32 @@ repositories {
 dependencies {
     implementation(kotlin("reflect"))
     implementation(project(":util"))
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-properties:1.5.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+    implementation("de.comahe.i18n4k:i18n4k-core:0.5.0")
+    implementation("de.comahe.i18n4k:i18n4k-core-jvm:0.5.0")
+}
+
+i18n4k {
+    sourceCodeLocales = listOf("en", "ru")
+    inputDirectory = "src/main/resources"
 }
 
 tasks.compileJava {
     modularity.inferModulePath.set(true)
-    sourceCompatibility = javaVersion
-    targetCompatibility = javaVersion
     options.encoding = Charsets.UTF_8.toString()
 }
 
 tasks.compileKotlin {
     destinationDirectory.set(tasks.compileJava.get().destinationDirectory)
-    targetCompatibility = javaVersion
     kotlinOptions {
-        jvmTarget = javaVersion
+//        languageVersion = "1.9"
     }
 }
 
 tasks.compileTestKotlin {
     kotlinOptions {
-        jvmTarget = javaVersion
     }
 }
 
@@ -74,6 +80,8 @@ tasks.processResources {
             line.replace(Regex("\\$\\{([^}]+)\\}"), transform).replace(Regex("@([^@]+)@"), transform)
         }
     }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    dependsOn(tasks.named("generateI18n4kFiles"))
 }
 
 tasks.jar {
@@ -87,7 +95,6 @@ tasks.build {
 
 application {
     mainClass.set(appMainClass)
-    mainModule.set(appModule)
 }
 
 jlink {

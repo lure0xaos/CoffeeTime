@@ -1,9 +1,12 @@
 package gargoyle.ct.config
 
+import gargoyle.ct.config.convert.impl.CTConfigsConverter
+import kotlinx.serialization.Serializable
 import java.text.MessageFormat
 import java.util.*
 
-open class CTConfigs : Any {
+@Serializable(with = CTConfigsConverter::class)
+open class CTConfigs {
     private val configs: MutableMap<String, CTConfig> = LinkedHashMap()
 
     constructor(vararg configs: CTConfig) {

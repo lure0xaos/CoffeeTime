@@ -1,14 +1,20 @@
 package gargoyle.ct.config.convert.impl
 
-import gargoyle.ct.config.convert.CTUnitConverter
-import java.util.concurrent.TimeUnit
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 
-class CTConfigsDataConverter : CTUnitConverter<Array<String>> {
-    override fun format(unit: TimeUnit, data: Array<String>): String = data.joinToString(NEWLINE)
+class CTConfigsDataConverter : KSerializer<List<LongArray>> {
 
-    override fun parse(data: String): Array<String> = data.split(NEWLINE).toTypedArray()
+    private val serializer: KSerializer<List<LongArray>> = ListSerializer(CTConfigDataConverter())
 
-    companion object {
-        private val NEWLINE = System.getProperty("line.separator", "\n")
-    }
+    override val descriptor: SerialDescriptor = serializer.descriptor
+
+    override fun deserialize(decoder: Decoder): List<LongArray> = decoder.decodeSerializableValue(serializer)
+
+    override fun serialize(encoder: Encoder, value: List<LongArray>) =
+        encoder.encodeSerializableValue(serializer, value)
+
 }

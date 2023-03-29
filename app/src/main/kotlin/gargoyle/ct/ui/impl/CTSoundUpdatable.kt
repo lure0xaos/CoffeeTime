@@ -3,17 +3,17 @@ package gargoyle.ct.ui.impl
 import gargoyle.ct.preferences.CTPreferences
 import gargoyle.ct.ui.CTApp
 import gargoyle.ct.ui.CTStateUpdatable
-import gargoyle.ct.util.pref.prop.CTPrefProperty
 import gargoyle.ct.util.sound.Audio
 import gargoyle.ct.util.sound.AudioClip
 import gargoyle.ct.util.util.getResource
+import kotlin.reflect.KMutableProperty0
 
 class CTSoundUpdatable(preferences: CTPreferences) : CTStateUpdatable() {
     private val clip: AudioClip
-    private val sound: CTPrefProperty<Boolean>
+    private val sound: KMutableProperty0<Boolean>
 
     init {
-        sound = preferences.sound()
+        sound = preferences::sound
         clip = Audio.load(CTApp::class.getResource(LOC_SOUND))
     }
 

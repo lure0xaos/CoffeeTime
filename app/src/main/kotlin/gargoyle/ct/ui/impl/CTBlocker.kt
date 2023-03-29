@@ -70,7 +70,7 @@ class CTBlocker private constructor(private val preferences: CTPreferences, devi
 
     override fun doUpdate(task: CTTask, currentMillis: Long) {
         content.doUpdate(task, currentMillis)
-        val block = preferences.block().get()
+        val block = preferences.block
         val visible = block && textProvider.isVisible(task, currentMillis)
         isVisible = visible
         content.isVisible = visible

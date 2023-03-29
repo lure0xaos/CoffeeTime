@@ -1,21 +1,17 @@
 package gargoyle.ct.messages.locale
 
-import gargoyle.ct.ui.prop.CTComponentLocaleProperty
 import gargoyle.ct.util.messages.LocaleProvider
-import gargoyle.ct.util.messages.SupportedLocales
-import gargoyle.ct.util.prop.CTObservableProperty
+import gargoyle.ct.util.prop.PropertyObservableDelegate
 import java.awt.Component
 import java.util.*
 
-class CTComponentLocaleProvider private constructor(private val locale: CTObservableProperty<SupportedLocales>) :
-    LocaleProvider {
-    constructor(component: Component) : this(CTComponentLocaleProperty(component))
+class CTComponentLocaleProvider(private val component: Component) : LocaleProvider {
 
-    override fun getLocale(): Locale = locale.get().locale
+    private var componentLocale: Locale
+        get() = component.locale
+        set(value) {
+            component.locale = value
+        }
 
-    override fun setLocale(locale: Locale) {
-        SupportedLocales.forLocale(locale)?.let { this.locale.set(it) }
-    }
-
-    override fun locale(): CTObservableProperty<SupportedLocales> = locale
+    override var locale: Locale by PropertyObservableDelegate(this::componentLocale)
 }

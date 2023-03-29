@@ -1,13 +1,20 @@
 package gargoyle.ct.config.convert.impl
 
 import gargoyle.ct.config.CTConfig
-import gargoyle.ct.config.convert.CTUnitConverter
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import java.util.concurrent.TimeUnit
 
-class CTConfigConverter : CTUnitConverter<CTConfig> {
-    private val configDataConverter = CTConfigDataConverter()
-    override fun format(unit: TimeUnit, data: CTConfig): String =
-        configDataConverter.format(TimeUnit.MINUTES, data.whole, data.block, data.warn)
+class CTConfigConverter : KSerializer<CTConfig> {
+    private val configDataConverter = CTConfigDataConverter(TimeUnit.MINUTES)
 
-    override fun parse(data: String): CTConfig = configDataConverter.parse(data).let { CTConfig(it[0], it[1], it[2]) }
+    override val descriptor: SerialDescriptor = configDataConverter.descriptor
+
+    override fun deserialize(decoder: Decoder): CTConfig =
+        configDataConverter.deserialize(decoder).let { CTConfig(it[0], it[1], it[2]) }
+
+    override fun serialize(encoder: Encoder, value: CTConfig) =
+        configDataConverter.serialize(encoder, longArrayOf(value.whole, value.block, value.warn))
 }

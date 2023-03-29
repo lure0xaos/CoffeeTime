@@ -1,32 +1,35 @@
 package gargoyle.ct.config
 
+import gargoyle.ct.config.convert.impl.CTConfigConverter
 import gargoyle.ct.util.util.CTTimeUtil
-import java.io.ObjectInputValidation
+import kotlinx.serialization.Serializable
 import java.text.MessageFormat
 import java.util.concurrent.TimeUnit
 
-class CTConfig : ObjectInputValidation {
-    val block: Long
-    var name: String
-        private set
-    val warn: Long
+@Serializable(with = CTConfigConverter::class)
+data class CTConfig(
+    val block: Long,
+    var name: String,
+    val warn: Long,
     val whole: Long
+) {
 
-    constructor() {
-        whole = 0L
-        block = 0L
-        warn = 0L
+    constructor() : this(
+        whole = 0L,
+        block = 0L,
+        warn = 0L,
         name = STR_INVALID
-    }
+    )
 
     fun getWhole(unit: TimeUnit): Long = CTTimeUtil.fromMillis(unit, whole)
 
-    constructor(whole: Long, block: Long, warn: Long) {
-        require(isValid(whole, block, warn)) { "$MSG_NOT_VALID ($whole, $block, $warn)" }
-        this.whole = whole
-        this.block = block
-        this.warn = warn
+    constructor(whole: Long, block: Long, warn: Long) : this(
+        whole = whole,
+        block = block,
+        warn = warn,
         name = name(TimeUnit.MINUTES, whole, block)
+    ) {
+        require(isValid(whole, block, warn)) { "$MSG_NOT_VALID ($whole, $block, $warn)" }
     }
 
     constructor(unit: TimeUnit, whole: Long, block: Long, warn: Long) : this(
@@ -63,7 +66,7 @@ class CTConfig : ObjectInputValidation {
 
     fun name(unit: TimeUnit): String = name(unit, whole, block)
 
-    override fun validateObject() {
+    init {
         require(isValid) { "invalid configuration" }
     }
 

@@ -1,35 +1,22 @@
 package gargoyle.ct.config.convert.impl
 
-import gargoyle.ct.config.convert.CTUnitConverter
 import gargoyle.ct.util.util.CTTimeUtil
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import java.text.MessageFormat
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 
-class CTConfigDataConverter : CTUnitConverter<LongArray> {
-    override fun format(unit: TimeUnit, vararg data: Long): String {
-        val unitChar: String = when (unit) {
-            TimeUnit.HOURS -> UNIT_HOURS
-            TimeUnit.MINUTES -> UNIT_MINUTES
-            TimeUnit.SECONDS -> UNIT_SECONDS
-            TimeUnit.DAYS, TimeUnit.MILLISECONDS, TimeUnit.MICROSECONDS, TimeUnit.NANOSECONDS ->
-                throw UnsupportedOperationException("Cannot parse line, invalid time unit ${unit.name}")
+class CTConfigDataConverter(private val unit: TimeUnit = TimeUnit.MINUTES) : KSerializer<LongArray> {
 
-            else ->
-                throw UnsupportedOperationException("Cannot parse line, invalid time unit ${unit.name}")
-        }
-        return MessageFormat.format(
-            PATTERN_FORMAT,
-            CTTimeUtil.fromMillis(unit, data[0]),
-            unitChar,
-            CTTimeUtil.fromMillis(unit, data[1]),
-            unitChar,
-            CTTimeUtil.fromMillis(unit, data[2]),
-            unitChar
-        )
-    }
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("ConfigData", PrimitiveKind.STRING)
 
-    override fun parse(data: String): LongArray {
+    override fun deserialize(decoder: Decoder): LongArray {
+        val data = decoder.decodeString()
         require(data.isNotBlank()) { MSG_EMPTY_LINE }
         val trimmedLine = data.trim()
         require(!COMMENTS.contains(trimmedLine[0])) { ("Commented line: $data") }
@@ -45,7 +32,7 @@ class CTConfigDataConverter : CTUnitConverter<LongArray> {
                     UNIT_HOURS -> TimeUnit.HOURS
                     UNIT_MINUTES -> TimeUnit.MINUTES
                     UNIT_SECONDS -> TimeUnit.SECONDS
-                    else -> throw IllegalArgumentException("Cannot parse line: ${data}, invalid time unit $u")
+                    else -> throw IllegalArgumentException("Cannot parse line: $data, invalid time unit $u")
                 }
                 try {
                     longs[g / 2] = CTTimeUtil.toMillis(unit, q.toLong())
@@ -58,6 +45,31 @@ class CTConfigDataConverter : CTUnitConverter<LongArray> {
             throw IllegalArgumentException(data)
         }
         return longs
+    }
+
+
+    override fun serialize(encoder: Encoder, value: LongArray) {
+        val unitChar: String = when (unit) {
+            TimeUnit.HOURS -> UNIT_HOURS
+            TimeUnit.MINUTES -> UNIT_MINUTES
+            TimeUnit.SECONDS -> UNIT_SECONDS
+            TimeUnit.DAYS, TimeUnit.MILLISECONDS, TimeUnit.MICROSECONDS, TimeUnit.NANOSECONDS ->
+                throw UnsupportedOperationException("Cannot parse line, invalid time unit ${TimeUnit.MINUTES.name}")
+
+            else ->
+                throw UnsupportedOperationException("Cannot parse line, invalid time unit ${TimeUnit.MINUTES.name}")
+        }
+        return encoder.encodeString(
+            MessageFormat.format(
+                PATTERN_FORMAT,
+                CTTimeUtil.fromMillis(TimeUnit.MINUTES, value[0]),
+                unitChar,
+                CTTimeUtil.fromMillis(TimeUnit.MINUTES, value[1]),
+                unitChar,
+                CTTimeUtil.fromMillis(TimeUnit.MINUTES, value[2]),
+                unitChar
+            )
+        )
     }
 
     companion object {

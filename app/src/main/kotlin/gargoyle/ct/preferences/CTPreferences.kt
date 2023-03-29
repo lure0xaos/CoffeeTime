@@ -2,18 +2,17 @@ package gargoyle.ct.preferences
 
 import gargoyle.ct.config.CTConfig
 import gargoyle.ct.util.messages.Described
-import gargoyle.ct.util.messages.SupportedLocales
-import gargoyle.ct.util.pref.CTPreferencesManager
-import gargoyle.ct.util.pref.prop.CTPrefProperty
+import java.util.*
 
-interface CTPreferences : CTPreferencesManager {
-    fun block(): CTPrefProperty<Boolean>
-    fun config(): CTPrefProperty<CTConfig>
-    fun iconStyle(): CTPrefProperty<IconStyle>
-    fun sound(): CTPrefProperty<Boolean>
-    fun supportedLocales(): CTPrefProperty<SupportedLocales>
-    fun transparency(): CTPrefProperty<Boolean>
-    fun transparencyLevel(): CTPrefProperty<Int>
+interface CTPreferences {
+    var block: Boolean
+    var config: CTConfig
+    var iconStyle: IconStyle
+    var sound: Boolean
+    var supportedLocales: Locale
+    var transparency: Boolean
+    var transparencyLevel: Int
+
     enum class IconStyle(val path: String, override val description: String) : Described {
         BW("bw", "icon-style.bw"), WB("wb", "icon-style.wb");
 

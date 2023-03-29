@@ -8,15 +8,15 @@ import gargoyle.ct.ui.CTDialog
 import gargoyle.ct.ui.util.CTDragHelper
 import gargoyle.ct.ui.util.CTLayoutBuilder
 import gargoyle.ct.util.messages.MessageProviderEx
-import gargoyle.ct.util.messages.SupportedLocales
 import gargoyle.ct.util.messages.impl.CTMessages
-import gargoyle.ct.util.prop.CTProperty
+import gargoyle.ct.util.messages.locales
 import gargoyle.ct.util.util.getResourceBundle
 import java.awt.Container
 import java.awt.Window
 import javax.swing.ImageIcon
 import javax.swing.JDialog
 import javax.swing.JSlider
+import kotlin.reflect.KMutableProperty0
 
 class CTPreferencesDialog(app: CTApp, owner: Window?) : JDialog(owner, ModalityType.MODELESS), CTDialog<Unit> {
     init {
@@ -37,11 +37,11 @@ class CTPreferencesDialog(app: CTApp, owner: Window?) : JDialog(owner, ModalityT
         title = messages.getMessage(STR_TITLE)
         layoutBuilder.addLabeledControl(
             layoutBuilder.createLocalizableLabel(messages, STR_BLOCK, STR_BLOCK_TOOLTIP),
-            layoutBuilder.createCheckBox(preferences.block())
+            layoutBuilder.createCheckBox(preferences::block)
         )
         layoutBuilder.addLabeledControl(
             layoutBuilder.createLocalizableLabel(messages, STR_SOUND, STR_SOUND_TOOLTIP),
-            layoutBuilder.createCheckBox(preferences.sound())
+            layoutBuilder.createCheckBox(preferences::sound)
         )
         layoutBuilder.addLabeledControl(
             layoutBuilder.createLocalizableLabel(
@@ -49,7 +49,7 @@ class CTPreferencesDialog(app: CTApp, owner: Window?) : JDialog(owner, ModalityT
                 STR_TRANSPARENCY,
                 STR_TRANSPARENCY_TOOLTIP
             ),
-            layoutBuilder.createCheckBox(preferences.transparency())
+            layoutBuilder.createCheckBox(preferences::transparency)
         )
         layoutBuilder.addLabeledControl(
             layoutBuilder.createLocalizableLabel(
@@ -57,7 +57,7 @@ class CTPreferencesDialog(app: CTApp, owner: Window?) : JDialog(owner, ModalityT
                 STR_TRANSPARENCY_LEVEL,
                 STR_TRANSPARENCY_LEVEL_TOOLTIP
             ),
-            createTransparencyLevelControl(layoutBuilder, preferences.transparencyLevel())
+            createTransparencyLevelControl(layoutBuilder, preferences::transparencyLevel)
         )
         layoutBuilder.addLabeledControl(
             layoutBuilder.createLocalizableLabel(
@@ -67,7 +67,7 @@ class CTPreferencesDialog(app: CTApp, owner: Window?) : JDialog(owner, ModalityT
             ),
             layoutBuilder.createComboBox(
                 messages, IconStyle::class,
-                preferences.iconStyle(),
+                preferences::iconStyle,
                 false
             )
         )
@@ -78,9 +78,9 @@ class CTPreferencesDialog(app: CTApp, owner: Window?) : JDialog(owner, ModalityT
                 STR_SUPPORTED_LOCALES_TOOLTIP
             ),
             layoutBuilder.createComboBox(
-                messages, SupportedLocales::class,
-                preferences.supportedLocales(),
-                false
+                messages, locales,
+                preferences::supportedLocales,
+                false,
             )
         )
         layoutBuilder.build()
@@ -110,7 +110,7 @@ class CTPreferencesDialog(app: CTApp, owner: Window?) : JDialog(owner, ModalityT
 
         private fun createTransparencyLevelControl(
             layoutBuilder: CTLayoutBuilder,
-            property: CTProperty<Int>
+            property: KMutableProperty0<Int>
         ): JSlider {
             val maxOpacity: Int = CTPreferences.OPACITY_PERCENT
             val control = layoutBuilder.createSlider(property, 0, maxOpacity)

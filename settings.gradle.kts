@@ -1,3 +1,2 @@
 rootProject.name = "CoffeeTime"
-include("util")
-include("app")
+include("util", "app")
